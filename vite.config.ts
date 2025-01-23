@@ -14,8 +14,6 @@ import eslint from "vite-plugin-eslint";
 // - https://esbuild.github.io/api/#target
 const targets = ["chrome92", "edge92", "firefox91", "safari14"];
 
-const sampleSites = ["samples/map-sample", "samples/i18n-howto"];
-
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
     const devMode = mode === "development";
@@ -45,12 +43,7 @@ export default defineConfig(({ mode }) => {
                 rootSite: true,
 
                 // Additional directories to include as html (must contain index.html files)
-                sites: [
-                    "sites/empty",
-
-                    // Include sample sites in the build
-                    ...sampleSites
-                ],
+                sites: [],
 
                 // Apps to distribute as .js files for embedded use cases
                 apps: []
