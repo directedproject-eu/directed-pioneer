@@ -43,7 +43,12 @@ export default defineConfig(({ mode }) => {
                 rootSite: true,
 
                 // Additional directories to include as html (must contain index.html files)
-                sites: [],
+                sites: [
+                    "apps/rwl_copenhagen",
+                    "apps/rwl_danube",
+                    "apps/rwl_emilia_romagna",
+                    "apps/rwl_rhine_erft"
+                ],
 
                 // Apps to distribute as .js files for embedded use cases
                 apps: []
