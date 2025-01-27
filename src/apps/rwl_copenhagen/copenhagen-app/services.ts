@@ -5,8 +5,112 @@ import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 import View from "ol/View.js";
+import { Map } from "ol";
 
 export const MAP_ID = "main";
+
+// //BEGIN test
+// export const MAP_ID_LEFT = "main";
+// export const MAP_ID_RIGHT = "mapRight";
+
+// export class SharedViewMapProvider implements MapConfigProvider {
+//     mapId = MAP_ID_LEFT; //primary map ID, initialize left map
+
+//     private createTileLayer(source: TileWMS | OSM, title: string, isBaseLayer: boolean) {
+//         return new SimpleLayer({
+//             title,
+//             olLayer: new TileLayer({
+//                 source,
+//                 properties: { title },
+//             }),
+//             isBaseLayer,
+//         });
+//     }
+
+//     async getMapConfig(): Promise<MapConfig> {
+//         const sharedView = new View({
+//             center: [1373573, 7503364],
+//             zoom: 11,
+//             projection: "EPSG:3857",
+//         });
+
+//         //map configurations
+//         const baseOSMLayer = this.createTileLayer(new OSM(), "OpenStreetMap", true);
+
+//         const wmsLayer = this.createTileLayer(
+//             new TileWMS({
+//                 url: "https://directed.dev.52north.org/geoserver/directed/wms",
+//                 params: {
+//                     LAYERS: "directed:Coastal_100yPresent_wd_max",
+//                     FORMAT: "image/png",
+//                     TRANSPARENT: true,
+//                 },
+//             }),
+//             "Coastal_100yPresent_wd_max",
+//             false
+//         );
+
+//         //configure both maps to use the shared view
+//         return {
+//             initialView: {
+//                 kind: "custom",
+//                 customView: sharedView,
+//             },
+//             projection: "EPSG:3857",
+//             layers: [baseOSMLayer, wmsLayer],
+//         };
+//     }
+
+//     setupSideBySide(containerLeft: HTMLElement, containerRight: HTMLElement) {
+//         const sharedView = new View({
+//             center: [1373573, 7503364],
+//             zoom: 11,
+//             projection: "EPSG:3857",
+//         });
+
+//         const leftMap = new Map({
+//             target: containerLeft,
+//             view: sharedView,
+//             layers: [
+//                 new TileLayer({
+//                     source: new OSM(),
+//                 }),
+//                 new TileLayer({
+//                     source: new TileWMS({
+//                         url: "https://directed.dev.52north.org/geoserver/directed/wms",
+//                         params: {
+//                             LAYERS: "directed:Coastal_100yPresent_wd_max",
+//                             FORMAT: "image/png",
+//                             TRANSPARENT: true,
+//                         },
+//                     }),
+//                 }),
+//             ],
+//         });
+
+//         const rightMap = new Map({
+//             target: containerRight,
+//             view: sharedView,
+//             layers: [ //define layers first, and then add the var names here?
+//                 new TileLayer({
+//                     source: new OSM(),
+//                 }),
+//                 new TileLayer({
+//                     source: new TileWMS({
+//                         url: "https://directed.dev.52north.org/geoserver/directed/wms",
+//                         params: {
+//                             LAYERS: "directed:Coastal_100ySSP2-4.5_wd_max",
+//                             FORMAT: "image/png",
+//                             TRANSPARENT: true,
+//                         },
+//                     }),
+//                 }),
+//             ],
+//         });
+//     }
+// }
+// ///END test
+
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
 

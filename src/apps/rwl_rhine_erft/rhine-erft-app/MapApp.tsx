@@ -12,6 +12,7 @@ import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
+import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services";
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
@@ -86,6 +87,18 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                             )}
+                            {/*add Table of Contents (Toc) */}
+                            <Box
+                                backgroundColor="white"
+                                borderWidth="1px"
+                                borderRadius="lg"
+                                padding={2}
+                                boxShadow="lg"
+                                role="dialog"
+                                aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                            >
+                                <Toc mapId={MAP_ID} />
+                            </Box>
                         </MapAnchor>
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <Box

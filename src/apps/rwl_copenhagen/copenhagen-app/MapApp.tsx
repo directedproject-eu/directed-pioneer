@@ -13,7 +13,7 @@ import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
-import { MAP_ID } from "./services";
+import { MAP_ID } from "./services"; //add MAP_ID for original working code, replace ALL instances MAP_ID_LEFT, MAP_ID_RIGHT
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
