@@ -8,6 +8,9 @@ export default defineBuildConfig({
     services: {
         MainMapProvider: {
             provides: ["map.MapConfigProvider"]
+        },
+        SecondMapProvider: {
+            provides: ["map.MapConfigProvider"]
         }
     }
 });
