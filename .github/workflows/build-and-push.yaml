@@ -27,8 +27,8 @@ on:
 
 jobs:
   build_and_push_app_to_docker_hub:
-    name: "Open Pioneer Trails app: build, publish and scan container image"
     timeout-minutes: 5
+    name: "Open Pioneer Trails app: build, publish, scan container image, trigger redeployment"
     runs-on: ubuntu-latest
     steps:
     -
@@ -68,55 +68,55 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha
-#    -
-#      name: Run Trivy vulnerability scanner
-#      uses: aquasecurity/trivy-action@master
-#      env:
-#        TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
-#        TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
-#      with:
-#        image-ref: "${{ env.IMAGE_TAG }}"
-#        format: 'table'
-#        output: 'trivy-results.txt'
-#        exit-code: '0'
-#        ignore-unfixed: true
-#        vuln-type: 'os,library'
-#        severity: 'CRITICAL,HIGH'
-#    -
-#      name: remove empty results
-#      run: |
-#        ls -lhA trivy-results.txt; \
-#        find trivy-results.txt -type f -empty -delete -print
-#    -
-#      if: ${{ hashFiles('trivy-results.txt') != '' }}
-#      name: remove "no HIGH or CRITICAL CVEs found" results
-#      run: |
-#        if [[ -s trivy-results.txt ]] \
-#          && [[ $(wc -l trivy-results.txt| awk '{print $1}') -eq 5 ]] \
-#          && [[ $(grep -rc "Total: 0 (HIGH: 0, CRITICAL: 0)" trivy-results.txt) -eq 1 ]]; then \
-#            rm -v trivy-results.txt; \
-#        fi
-#    -
-#      if: ${{ hashFiles('trivy-results.txt') != '' }}
-#      name: Upload to 52N slack
-#      uses: MeilCli/slack-upload-file@v4
-#      with:
-#        slack_token: ${{ secrets.SLACK_TOKEN_52N }}
-#        file_path: trivy-results.txt
-#        file_type: text/plain
-#        title: trivy scan results of ${{ github.repository }}
-#        channel_id: ${{ secrets.SLACK_CHANNEL_ID_52N }}
-#        initial_comment: "Trivy Results for '${{ env.IMAGE_TAG }}' from '${{ github.repository }}' uploaded. Please review: https://github.com/${{ github.repository }}/actions"
-#    -
-#      name: Trigger redeployment
-#      uses: actions/github-script@v7
-#      with:
-#        github-token: ${{ secrets.GHA_WORKFLOW_TRIGGER }}
-#        script: |
-#          const result = await github.rest.actions.createWorkflowDispatch({
-#            owner: '${{ secrets.TRIGGER_ORGA }}',
-#            repo: '${{ secrets.TRIGGER_REPO }}',
-#            workflow_id: '${{ secrets.TRIGGER_WORKFLOW }}',
-#            ref: '${{ secrets.TRIGGER_REF }}'
-#          })
-#          console.log(result)
+    -
+     name: Run Trivy vulnerability scanner
+     uses: aquasecurity/trivy-action@master
+     env:
+       TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+       TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
+     with:
+       image-ref: "${{ env.IMAGE_TAG }}"
+       format: 'table'
+       output: 'trivy-results.txt'
+       exit-code: '0'
+       ignore-unfixed: true
+       vuln-type: 'os,library'
+       severity: 'CRITICAL,HIGH'
+    -
+     name: remove empty results
+     run: |
+       ls -lhA trivy-results.txt; \
+       find trivy-results.txt -type f -empty -delete -print
+    -
+     if: ${{ hashFiles('trivy-results.txt') != '' }}
+     name: remove "no HIGH or CRITICAL CVEs found" results
+     run: |
+       if [[ -s trivy-results.txt ]] \
+         && [[ $(wc -l trivy-results.txt| awk '{print $1}') -eq 5 ]] \
+         && [[ $(grep -rc "Total: 0 (HIGH: 0, CRITICAL: 0)" trivy-results.txt) -eq 1 ]]; then \
+           rm -v trivy-results.txt; \
+       fi
+    -
+     if: ${{ hashFiles('trivy-results.txt') != '' }}
+     name: Upload to 52N slack
+     uses: MeilCli/slack-upload-file@v4
+     with:
+       slack_token: ${{ secrets.SLACK_TOKEN_52N }}
+       file_path: trivy-results.txt
+       file_type: text/plain
+       title: trivy scan results of ${{ github.repository }}
+       channel_id: ${{ secrets.SLACK_CHANNEL_ID_52N }}
+       initial_comment: "Trivy Results for '${{ env.IMAGE_TAG }}' from '${{ github.repository }}' uploaded. Please review: https://github.com/${{ github.repository }}/actions"
+    -
+     name: Trigger redeployment
+     uses: actions/github-script@v7
+     with:
+       github-token: ${{ secrets.GHA_WORKFLOW_TRIGGER }}
+       script: |
+         const result = await github.rest.actions.createWorkflowDispatch({
+           owner: '${{ secrets.TRIGGER_ORGA }}',
+           repo: '${{ secrets.TRIGGER_REPO }}',
+           workflow_id: '${{ secrets.TRIGGER_WORKFLOW }}',
+           ref: '${{ secrets.TRIGGER_REF }}'
+         })
+         console.log(result)
