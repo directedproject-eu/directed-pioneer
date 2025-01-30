@@ -27,10 +27,9 @@ on:
 
 jobs:
   build_and_push_app_to_docker_hub:
-
     name: "Open Pioneer Trails app: build, publish and scan container image"
+    timeout-minutes: 5
     runs-on: ubuntu-latest
-
     steps:
     -
       name: Checkout Repository
