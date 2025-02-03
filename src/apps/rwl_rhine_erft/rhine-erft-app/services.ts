@@ -29,14 +29,15 @@ export class MainMapProvider implements MapConfigProvider {
 
                 //WMS layer
                 new SimpleLayer({
-                    title: "hb_fr_extreme",
+                    title: "nw_geschw_agw",
                     olLayer: new TileLayer({
                         source: new TileWMS({
-                            url: "https://directed.dev.52north.org/geoserver/directed/wms?service=WMS&version=1.1.0&request=GetMap&layers=directed%3Ahb_fr_extrem&bbox=465435.0%2C5873585.0%2C499355.0%2C5940185.0&width=391&height=768&srs=EPSG%3A25832&styles=&format=application/openlayers",
+                            url: "https://sgx.geodatenzentrum.de/wms_starkregen",
                             params: {
-                                LAYERS: "hb_fr_extreme",
+                                LAYERS: "nw_geschw_agw",
                                 FORMAT: "image/png",
-                                TRANSPARENT: true
+                                TRANSPARENT: true,
+                                CRS: "EPSG:4326"
                             }
                         }),
                         properties: { title: "WMS Layer" }

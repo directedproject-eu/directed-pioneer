@@ -48,7 +48,7 @@ export function MapApp() {
                         textAlign="center"
                         py={1}
                     >
-                        <SectionHeading size={"md"}>RWL - Emilia Romagna Region</SectionHeading>
+                        {/* <SectionHeading size={"md"}>RWL - Emilia Romagna Region</SectionHeading> */}
                     </Box>
                 }
             >

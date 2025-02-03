@@ -49,7 +49,7 @@ export function MapApp() {
                         textAlign="center"
                         py={1}
                     >
-                        <SectionHeading size={"md"}>RWL - Rhine-Erft Region</SectionHeading>
+                        {/* <SectionHeading size={"md"}>RWL - Rhine-Erft Region</SectionHeading> */}
                     </Box>
                 }
             >

@@ -14,6 +14,7 @@ import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID1, MAP_ID2 } from "./services";
+import { MainMapProvider, SecondMapProvider } from "./services";
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
@@ -49,9 +50,9 @@ export function MapApp() {
                         textAlign="center"
                         py={1}
                     >
-                        <SectionHeading size={"md"}>
+                        {/* <SectionHeading size={"md"}>
                             RWL - The Capital Region of Denmark
-                        </SectionHeading>
+                        </SectionHeading> */}
                     </Box>
                 }
             >
@@ -207,8 +208,8 @@ export function MapApp() {
                                 role="top-right"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
                             >
-                                <OverviewMap mapId={MAP_ID2} olLayer={overviewMapLayer} />
-                                <Divider mt={4} />
+                                {/* <OverviewMap mapId={MAP_ID2} olLayer={overviewMapLayer} /> */}
+                                {/* <Divider mt={4} />
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
@@ -216,7 +217,7 @@ export function MapApp() {
                                         </Text>
                                     </FormLabel>
                                     <BasemapSwitcher mapId={MAP_ID2} allowSelectingEmptyBasemap />
-                                </FormControl>
+                                </FormControl> */}
                             </Box>
                         </MapAnchor>
                         <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>

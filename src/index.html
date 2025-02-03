@@ -3,34 +3,83 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Directed project</title>
-        <style>
-            body {
-                max-width: 600px;
-                margin: auto;
-            }
-        </style>
+        <title>DIRECTED Data Fabric</title>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <link
+            rel="icon"
+            href="./images/Logos/PNG/Directed-Project-Logo-D.png"
+            type="image/x-icon"
+        />
+        <!-- <style>
+    </style> -->
     </head>
+
     <body>
-        <h1>Directed project - Data fabric</h1>
+        <!-- <header class="header"> old nav bar location
+    </header> -->
 
-        <p>Welcome to the data fabric of the Directed project!</p>
+        <div id="nav-placeholder"></div>
 
-        <h2>Real World Labs (RWL)</h2>
-        <p>Follow one of the links below to see some information on each RWL.</p>
-        <ul>
-            <li>
-                <a href="./apps/rwl_copenhagen/">The Capital Region of Denmark</a>
-            </li>
-            <li>
-                <a href="./apps/rwl_emilia_romagna/">Emilia Romagna Region</a>
-            </li>
-            <li>
-                <a href="./apps/rwl_danube/">Danube Region</a>
-            </li>
-            <li>
-                <a href="./apps/rwl_rhine_erft/">Rhine-Erft Region</a>
-            </li>
-        </ul>
+        <script>
+            //loads nav bar from nav.hmtl
+            $(function () {
+                $("#nav-placeholder").load("nav_landing.html");
+            });
+        </script>
+
+        <main>
+            <div class="image-container">
+                <img src="./images/Fig.1 - FRB Niederberg.jpg" alt="image test" />
+                <div class="text-overlay-title">
+                    Fostering disaster-resilience with the DIRECTED Data Fabric
+                </div>
+                <div class="text-overlay-body">
+                    Welcome to the Data Fabric platform! Get started by interacting with the Real
+                    World Labs.
+                </div>
+            </div>
+        </main>
+
+        <script>
+            //mobile toggle
+            const hamburger = document.querySelector(".hamburger");
+            const navMenu = document.querySelector(".nav-menu");
+            const dropdown = document.querySelector(".dropdown");
+
+            hamburger.addEventListener("click", () => {
+                navMenu.classList.toggle("active");
+            });
+
+            //mobile view dropdown
+            dropdown.addEventListener("click", (event) => {
+                event.stopPropagation(); //do not close when clicked
+                dropdown.classList.toggle("active");
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!dropdown.contains(event.target)) {
+                    dropdown.classList.remove("active");
+                }
+            });
+        </script>
+
+        <footer>
+            <div class="footer-container">
+                <p>&copy; 2024 copyright:</p>
+                <p>
+                    <a href="https://52north.org/" class="footer-link"
+                        >52°North Spatial Information Research GmbH</a
+                    >
+                </p>
+                <span class="separator">|</span>
+                <p>
+                    <a href="https://52north.org/about-us/contact-us/" class="footer-link"
+                        >Contact Us</a
+                    >
+                </p>
+                <span class="separator">|</span>
+                <p><a href="" class="footer-link">Legal Notice</a></p>
+            </div>
+        </footer>
     </body>
 </html>

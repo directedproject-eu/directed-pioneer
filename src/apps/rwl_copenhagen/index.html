@@ -3,26 +3,42 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>RWL - The Capital Region of Denmark</title>
+        <link
+            rel="icon"
+            href="../../images/Logos/PNG/Directed-Project-Logo-D.png"
+            type="image/x-icon"
+        />
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <style>
             html,
             body {
-                margin: 0px;
+                margin: 0;
             }
 
             .full-height {
                 height: 100%;
                 max-height: 100%;
             }
+
+            h1 {
+                text-align: left;
+                color: #2e9ecc;
+                margin: 20px;
+                font-size: 20px;
+            }
         </style>
     </head>
 
     <body class="full-height">
+        <div id="nav-placeholder"></div>
+        <script>
+            //loads nav bar from nav_rwl.hmtl so can use in each RWL app
+            $(function () {
+                $("#nav-placeholder").load("nav_rwl.html");
+            });
+        </script>
+        <h1>RWL - The Capital Region of Denmark</h1>
         <ol-map-app class="full-height" id="test"></ol-map-app>
         <script type="module" src="./copenhagen-app/app.ts"></script>
-        <div style="display: flex; height: 100%">
-            <div id="mapLeft" style="width: 50%"></div>
-            <div id="mapRight" style="width: 50%"></div>
-        </div>
     </body>
 </html>
