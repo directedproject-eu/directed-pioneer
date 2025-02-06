@@ -20,7 +20,7 @@ import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
-// import { navbar } from "navbar";
+import { Navbar } from "navbar";
 
 export function MapApp() {
     const intl = useIntl();
@@ -41,7 +41,7 @@ export function MapApp() {
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
-            {/* <navbar /> */}
+            <Navbar />
             <Notifier position="bottom" />
             <TitledSection
                 title={

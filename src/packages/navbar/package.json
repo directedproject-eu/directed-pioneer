@@ -1,5 +1,10 @@
 {
     "name": "navbar",
     "private": true,
-    "main": "Navbar.js"
+    "dependencies": {
+        "@open-pioneer/runtime": "catalog:"
+    },
+    "devDependencies": {
+        "@open-pioneer/test-utils": "catalog:"
+    }
 }

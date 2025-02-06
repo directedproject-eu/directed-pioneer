@@ -18,7 +18,7 @@ import {
     MenuList,
     MenuItem,
     Button
-} from "@chakra-ui/react";
+} from "@open-pioneer/chakra-integration";
 import { HamburgerIcon, ChevronDownIcon } from "@chakra-ui/icons";
 
 export function Navbar() {
