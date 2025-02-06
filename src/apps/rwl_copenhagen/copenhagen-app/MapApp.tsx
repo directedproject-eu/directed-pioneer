@@ -14,13 +14,13 @@ import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID1, MAP_ID2 } from "./services";
-import { MainMapProvider, SecondMapProvider } from "./services";
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
+// import { navbar } from "navbar";
 
 export function MapApp() {
     const intl = useIntl();
@@ -41,6 +41,7 @@ export function MapApp() {
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
+            {/* <navbar /> */}
             <Notifier position="bottom" />
             <TitledSection
                 title={

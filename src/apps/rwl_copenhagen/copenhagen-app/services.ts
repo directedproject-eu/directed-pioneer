@@ -5,7 +5,14 @@ import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 import View from "ol/View.js";
-import { Map } from "ol";
+// import { Map } from "ol";
+
+// import { useEffect } from "react";
+// import { useMap } from "@open-pioneer/map"; //hook to access map
+// import { useMapLayer } from "@open-pioneer/map"; //hook to access layers
+// import { Extent } from "ol/extent";
+// import { Feature } from "ol";
+// import { Layer } from "ol/layer";
 
 export const MAP_ID1 = "main";
 export const MAP_ID2 = "second";
@@ -431,6 +438,11 @@ const pluvial_100yRCP4_5_wd_max2 = new SimpleLayer({
     }),
     isBaseLayer: false
 });
+
+// export const zoomToLayer = (map: MainMapProvider, layer: Layer) => {
+//     const layerExtent = layer.getSource().getExtent();  // get extent of layer's source
+//     map.getView().fit(layerExtent, { padding: [50, 50, 50, 50] });  // Zoom to layer extent with padding
+// };
 
 //////////////////////
 /// MAPS FROM .tsx ///
