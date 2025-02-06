@@ -28,34 +28,57 @@ export function Navbar() {
         <Box position="sticky" top={0} zIndex={10} bg="white" boxShadow="md" p={4}>
             <Flex alignItems="center" maxW="1200px" mx="auto">
                 {/*logo*/}
-                <Image src="/logo.png" alt="Logo" boxSize="40px" />
+                <Box>
+                    <Image
+                        src="/images/Directed-Project-Logo-Blue-White_Background.png"
+                        alt="Directed Project Data Fabric"
+                        height="50px"
+                        maxWidth="200px"
+                        objectFit="contain"
+                    />
+                </Box>
 
                 <Spacer />
 
                 {/*desktop links*/}
                 <Flex display={{ base: "none", md: "flex" }} gap={4}>
-                    <Link href="#">Home</Link>
+                    <Link href="../index.html" color="#2e9ecc">
+                        Home
+                    </Link>
                     <Menu>
-                        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                        <MenuButton
+                            as={Button}
+                            rightIcon={<ChevronDownIcon />}
+                            color="#2e9ecc"
+                            variant="ghost"
+                        >
                             Real World Labs
                         </MenuButton>
                         <MenuList>
-                            <MenuItem as={Link} href="../rwl_copenhagen/index.html">
+                            <MenuItem as={Link} href="../rwl_copenhagen/index.html" color="#2e9ecc">
                                 The Capital Region of Denmark
                             </MenuItem>
-                            <MenuItem as={Link} href="../rwl_emilia_romagna/index.html">
+                            <MenuItem
+                                as={Link}
+                                href="../rwl_emilia_romagna/index.html"
+                                color="#2e9ecc"
+                            >
                                 Emilia Romagna Region
                             </MenuItem>
-                            <MenuItem as={Link} href="../rwl_danube/index.html">
+                            <MenuItem as={Link} href="../rwl_danube/index.html" color="#2e9ecc">
                                 Danube Region
                             </MenuItem>
-                            <MenuItem as={Link} href="../rwl_rhine_erft/index.html">
+                            <MenuItem as={Link} href="../rwl_rhine_erft/index.html" color="#2e9ecc">
                                 Rhine-Erft Region
                             </MenuItem>
                         </MenuList>
                     </Menu>
-                    <Link href="#">Github Organization</Link>
-                    <Link href="#">Directed Project Website</Link>
+                    <Link href="https://github.com/directedproject-eu" color="#2e9ecc">
+                        Github Organization
+                    </Link>
+                    <Link href="https://directedproject.eu/" color="#2e9ecc">
+                        Directed Project Website
+                    </Link>
                 </Flex>
 
                 {/*mobile menu button*/}
@@ -93,8 +116,10 @@ export function Navbar() {
                                 </MenuItem>
                             </MenuList>
                         </Menu>
-                        <Link href="#">Github Organization</Link>
-                        <Link href="#">Directed Project Website</Link>
+                        <Link href="https://github.com/directedproject-eu">
+                            Github Organization
+                        </Link>
+                        <Link href="https://directedproject.eu/">Directed Project Website</Link>
                     </VStack>
                 </DrawerContent>
             </Drawer>

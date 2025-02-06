@@ -19,6 +19,7 @@ import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
+import { Navbar } from "navbar";
 
 export function MapApp() {
     const intl = useIntl();
@@ -39,16 +40,19 @@ export function MapApp() {
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
+            <Navbar />
             <Notifier position="bottom" />
             <TitledSection
                 title={
                     <Box
                         role="region"
                         aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
-                        textAlign="center"
+                        textAlign="left"
                         py={1}
                     >
-                        {/* <SectionHeading size={"md"}>RWL - Emilia Romagna Region</SectionHeading> */}
+                        <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
+                            RWL The Emilia Romagna Region
+                        </SectionHeading>
                     </Box>
                 }
             >

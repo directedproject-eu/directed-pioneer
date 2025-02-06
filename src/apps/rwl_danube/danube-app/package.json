@@ -24,6 +24,7 @@
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
-        "react-use": "catalog:"
+        "react-use": "catalog:",
+        "navbar": "workspace:*"
     }
 }

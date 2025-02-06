@@ -4,9 +4,6 @@ import { createCustomElement } from "@open-pioneer/runtime";
 import { theme } from "@open-pioneer/theme";
 import * as appMetadata from "open-pioneer:app";
 import { MapApp } from "./MapApp";
-// import { Navbar } from "navbar";
-
-// Navbar();
 
 const element = createCustomElement({
     component: MapApp,

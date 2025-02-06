@@ -48,12 +48,12 @@ export function MapApp() {
                     <Box
                         role="region"
                         aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
-                        textAlign="center"
+                        textAlign="left"
                         py={1}
                     >
-                        {/* <SectionHeading size={"md"}>
-                            RWL - The Capital Region of Denmark
-                        </SectionHeading> */}
+                        <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
+                            RWL The Capital Region of Denmark
+                        </SectionHeading>
                     </Box>
                 }
             >

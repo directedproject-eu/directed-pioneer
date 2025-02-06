@@ -8,7 +8,6 @@
             href="../../images/Logos/PNG/Directed-Project-Logo-D.png"
             type="image/x-icon"
         />
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <style>
             html,
             body {
@@ -19,24 +18,10 @@
                 height: 100%;
                 max-height: 100%;
             }
-            h1 {
-                text-align: left;
-                color: #2e9ecc;
-                margin: 20px;
-                font-size: 20px;
-            }
         </style>
     </head>
 
     <body class="full-height">
-        <div id="nav-placeholder"></div>
-        <script>
-            //loads nav bar from nav_rwl.hmtl so can use in each RWL app
-            $(function () {
-                $("#nav-placeholder").load("nav_rwl.html");
-            });
-        </script>
-        <h1>RWL - Rhine Erft Region</h1>
         <ol-map-app class="full-height" id="test"></ol-map-app>
         <script type="module" src="./rhine-erft-app/app.ts"></script>
     </body>
