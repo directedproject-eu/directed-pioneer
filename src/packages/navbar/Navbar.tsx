@@ -3,126 +3,335 @@
 import {
     Box,
     Flex,
+    Stack,
     IconButton,
-    useDisclosure,
-    Drawer,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-    VStack,
-    Link,
-    Spacer,
     Image,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    Button
+    useDisclosure,
+    Button,
+    useColorModeValue,
+    useBreakpointValue,
+    PopoverTrigger,
+    PopoverContent,
+    Collapse,
+    Icon,
+    Popover
 } from "@open-pioneer/chakra-integration";
-import { HamburgerIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
 
 export function Navbar() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen, onToggle } = useDisclosure();
 
     return (
-        <Box position="sticky" top={0} zIndex={10} bg="white" boxShadow="md" p={4}>
-            <Flex alignItems="center" maxW="1200px" mx="auto">
-                {/*logo*/}
-                <Box>
+        <Box>
+            <Flex
+                bg={"white"}
+                color={useColorModeValue("#2e9ecc", "gray.200")}
+                minH={"60px"}
+                py={{ base: 2 }}
+                px={{ base: 4 }}
+                borderBottom={1}
+                borderStyle={"none"}
+                borderColor={useColorModeValue("gray.200", "gray.900")}
+                align={"center"}
+            >
+                <Flex
+                    flex={{ base: 1, md: "auto" }}
+                    ml={{ base: -2 }}
+                    display={{ base: "flex", md: "none" }}
+                >
+                    <IconButton
+                        onClick={onToggle}
+                        icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
+                        variant={"ghost"}
+                        aria-label={"Toggle Navigation"}
+                    />
+                </Flex>
+                <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align="center">
                     <Image
                         src="/images/Directed-Project-Logo-Blue-White_Background.png"
                         alt="Directed Project Data Fabric"
-                        height="50px"
-                        maxWidth="200px"
-                        objectFit="contain"
+                        height="55px"
                     />
-                </Box>
-
-                <Spacer />
-
-                {/*desktop links*/}
-                <Flex display={{ base: "none", md: "flex" }} gap={4}>
-                    <Link href="../index.html" color="#2e9ecc">
-                        Home
-                    </Link>
-                    <Menu>
-                        <MenuButton
-                            as={Button}
-                            rightIcon={<ChevronDownIcon />}
-                            color="#2e9ecc"
-                            variant="ghost"
-                        >
-                            Real World Labs
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem as={Link} href="../rwl_copenhagen/index.html" color="#2e9ecc">
-                                The Capital Region of Denmark
-                            </MenuItem>
-                            <MenuItem
-                                as={Link}
-                                href="../rwl_emilia_romagna/index.html"
-                                color="#2e9ecc"
-                            >
-                                Emilia Romagna Region
-                            </MenuItem>
-                            <MenuItem as={Link} href="../rwl_danube/index.html" color="#2e9ecc">
-                                Danube Region
-                            </MenuItem>
-                            <MenuItem as={Link} href="../rwl_rhine_erft/index.html" color="#2e9ecc">
-                                Rhine-Erft Region
-                            </MenuItem>
-                        </MenuList>
-                    </Menu>
-                    <Link href="https://github.com/directedproject-eu" color="#2e9ecc">
-                        Github Organization
-                    </Link>
-                    <Link href="https://directedproject.eu/" color="#2e9ecc">
-                        Directed Project Website
-                    </Link>
+                    <Flex display={{ base: "none", md: "flex" }} ml={10}>
+                        <DesktopNav />
+                    </Flex>
                 </Flex>
 
-                {/*mobile menu button*/}
-                <IconButton
-                    aria-label="Open menu"
-                    icon={<HamburgerIcon />}
-                    display={{ base: "flex", md: "none" }}
-                    onClick={onOpen}
-                />
+                <Stack flex={{ base: 1, md: 0 }} justify={"flex-end"} direction={"row"} spacing={6}>
+                    <Button
+                        as={"a"}
+                        fontSize={"md"}
+                        fontWeight={400}
+                        color={"#2e9ecc"}
+                        _hover={{ textDecoration: "none", color: "gray" }}
+                        variant={"link"}
+                        href={"#"}
+                    >
+                        Login
+                    </Button>
+                    <Button
+                        as={"a"}
+                        display={{ base: "none", md: "inline-flex" }}
+                        fontSize={"md"}
+                        fontWeight={600}
+                        color={"white"}
+                        bg={"#2e9ecc"}
+                        href={"#"}
+                        _hover={{
+                            bg: "gray"
+                        }}
+                    >
+                        Sign Up
+                    </Button>
+                </Stack>
             </Flex>
 
-            {/*drawer mobile menu*/}
-            <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <VStack spacing={4} p={5} align="start">
-                        <Link href="#">Home</Link>
-                        <Menu>
-                            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                                Real World Labs
-                            </MenuButton>
-                            <MenuList>
-                                <MenuItem as={Link} href="../rwl_copenhagen/index.html">
-                                    The Capital Region of Denmark
-                                </MenuItem>
-                                <MenuItem as={Link} href="../rwl_emilia_romagna/index.html">
-                                    Emilia Romagna Region
-                                </MenuItem>
-                                <MenuItem as={Link} href="../rwl_danube/index.html">
-                                    Danube Region
-                                </MenuItem>
-                                <MenuItem as={Link} href="../rwl_rhine_erft/index.html">
-                                    Rhine-Erft Region
-                                </MenuItem>
-                            </MenuList>
-                        </Menu>
-                        <Link href="https://github.com/directedproject-eu">
-                            Github Organization
-                        </Link>
-                        <Link href="https://directedproject.eu/">Directed Project Website</Link>
-                    </VStack>
-                </DrawerContent>
-            </Drawer>
+            <Collapse in={isOpen} animateOpacity>
+                <MobileNav />
+            </Collapse>
         </Box>
     );
 }
+
+const DesktopNav = () => {
+    return (
+        <Stack direction={"row"} spacing={4}>
+            {NAV_ITEMS.map((navItem) => (
+                <Box key={navItem.label}>
+                    <Popover trigger={"hover"} placement={"bottom-start"}>
+                        <PopoverTrigger>
+                            <Box
+                                as="a"
+                                p={2}
+                                href={navItem.href ?? "#"}
+                                fontSize={"md"}
+                                fontWeight={500}
+                                color={"#2e9ecc"}
+                                _hover={{ textDecoration: "none", color: "gray" }}
+                            >
+                                {navItem.label}
+                            </Box>
+                        </PopoverTrigger>
+                        {navItem.children && (
+                            <PopoverContent
+                                border={0}
+                                boxShadow={"xl"}
+                                p={4}
+                                rounded={"xl"}
+                                minW={"sm"}
+                            >
+                                <Stack>
+                                    {navItem.children.map((child) => (
+                                        <DesktopSubNav key={child.label} {...child} />
+                                    ))}
+                                </Stack>
+                            </PopoverContent>
+                        )}
+                    </Popover>
+                </Box>
+            ))}
+        </Stack>
+    );
+};
+
+const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
+    return (
+        <Box
+            as="a"
+            href={href}
+            p={2}
+            rounded={"md"}
+            _hover={{ bg: useColorModeValue("gray.200", "gray.900") }}
+        >
+            <Stack direction={"row"} align={"center"}>
+                <Box>
+                    <Flex fontWeight={500}>{label}</Flex>
+                    <Flex fontSize={"md"}>{subLabel}</Flex>
+                </Box>
+                <Flex justify={"flex-end"} align={"center"} flex={1}>
+                    <Icon color={"#2e9ecc"} w={5} h={5} as={ChevronRightIcon} />
+                </Flex>
+            </Stack>
+        </Box>
+    );
+};
+
+const MobileNav = () => {
+    return (
+        <Stack p={4} display={{ md: "none" }}>
+            {NAV_ITEMS.map((navItem) => (
+                <MobileNavItem key={navItem.label} {...navItem} />
+            ))}
+        </Stack>
+    );
+};
+
+const MobileNavItem = ({ label, children, href }: NavItem) => {
+    const { isOpen, onToggle } = useDisclosure();
+
+    return (
+        <Stack spacing={4} onClick={children && onToggle}>
+            <Box py={2} as="a" href={href ?? "#"}>
+                <Flex fontWeight={600}>{label}</Flex>
+                {children && (
+                    <Icon
+                        as={ChevronDownIcon}
+                        w={6}
+                        h={6}
+                        transform={isOpen ? "rotate(180deg)" : ""}
+                    />
+                )}
+            </Box>
+            <Collapse in={isOpen} animateOpacity>
+                <Stack mt={2} pl={4} borderLeft={1} align={"start"}>
+                    {children?.map((child) => (
+                        <Box as="a" key={child.label} py={2} href={child.href}>
+                            {child.label}
+                        </Box>
+                    ))}
+                </Stack>
+            </Collapse>
+        </Stack>
+    );
+};
+
+interface NavItem {
+    label: string;
+    subLabel?: string;
+    children?: Array<NavItem>;
+    href?: string;
+}
+
+const NAV_ITEMS: Array<NavItem> = [
+    {
+        label: "Real World Labs",
+        children: [
+            { label: "The Capital Region of Denmark", href: "../rwl_copenhagen/index.html" },
+            { label: "Emilia Romagna Region", href: "../rwl_emilia_romagna/index.html" },
+            { label: "Danube Region", href: "../rwl_danube/index.html" },
+            { label: "Rhine Erft Region", href: "../rwl_rhine_erft/index.html" }
+        ]
+    },
+    { label: "Directed Project Website", href: "https://directedproject.eu/" },
+    { label: "Github Organization", href: "https://github.com/directedproject-eu" }
+];
+
+//OLD working code
+// export function Navbar() {
+//     const { isOpen, onOpen, onClose } = useDisclosure();
+
+//     return (
+//         <Box position="sticky" top={0} zIndex={10} bg="white" p={4}>
+//             <Flex alignItems="center" maxW="1200px">
+//                 {/*logo*/}
+//                 <Image
+//                     src="/images/Directed-Project-Logo-Blue-White_Background.png"
+//                     alt="Directed Project Data Fabric"
+//                     height="50px"
+//                     maxWidth="200px"
+//                     objectFit="contain"
+//                 />
+
+//                 <Spacer />
+
+//                 {/*desktop links*/}
+//                 {/* <Flex gap={10} justifyContent="space-between"> */}
+//                 <Flex  gap= {10} justify="flex-end">
+//                     <Link href="../index.html" color="#2e9ecc">
+//                         Home
+//                     </Link>
+//                     <Menu>
+//                         <MenuButton
+//                             as={Button}
+//                             rightIcon={<ChevronDownIcon />}
+//                             color="#2e9ecc"
+//                             variant="ghost"
+//                         >
+//                             Real World Labs
+//                         </MenuButton>
+//                         <MenuList>
+//                             <MenuItem as={Link} href="../rwl_copenhagen/index.html" color="#2e9ecc">
+//                                 The Capital Region of Denmark
+//                             </MenuItem>
+//                             <MenuItem
+//                                 as={Link}
+//                                 href="../rwl_emilia_romagna/index.html"
+//                                 color="#2e9ecc"
+//                             >
+//                                 Emilia Romagna Region
+//                             </MenuItem>
+//                             <MenuItem as={Link} href="../rwl_danube/index.html" color="#2e9ecc">
+//                                 Danube Region
+//                             </MenuItem>
+//                             <MenuItem as={Link} href="../rwl_rhine_erft/index.html" color="#2e9ecc">
+//                                 Rhine-Erft Region
+//                             </MenuItem>
+//                         </MenuList>
+//                     </Menu>
+//                     {/* <Link href="https://github.com/directedproject-eu" color="#2e9ecc">
+//                         Github Organization
+//                     </Link> */}
+//                     <Link
+//                         href="https://github.com/directedproject-eu"
+//                         color="#2e9ecc"
+//                         textAlign="center"
+//                         _hover={{
+//                             textDecoration: "none",
+//                             bg: "#2e9ecc20",
+//                             borderRadius: "8px",
+//                             // padding: "2px",
+//                         }}
+//                     >
+//                         Github Organization
+//                     </Link>
+
+//                     <Link href="https://directedproject.eu/" color="#2e9ecc">
+//                         Directed Project Website
+//                     </Link>
+//                 </Flex>
+
+//                 {/*mobile menu button*/}
+//                 <IconButton
+//                     aria-label="Open menu"
+//                     icon={<HamburgerIcon />}
+//                     display={{ base: "flex", md: "none" }}
+//                     onClick={onOpen}
+//                 />
+//             </Flex>
+
+//             {/*drawer mobile menu*/}
+//             <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+//                 <DrawerOverlay />
+//                 <DrawerContent>
+//                     <DrawerCloseButton />
+//                     <VStack spacing={4} p={5} align="start">
+//                         <Link href="../index.html">Home</Link>
+//                         <Menu>
+//                             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+//                                 Real World Labs
+//                             </MenuButton>
+//                             <MenuList>
+//                                 <MenuItem as={Link} href="../rwl_copenhagen/index.html">
+//                                     The Capital Region of Denmark
+//                                 </MenuItem>
+//                                 <MenuItem as={Link} href="../rwl_emilia_romagna/index.html">
+//                                     Emilia Romagna Region
+//                                 </MenuItem>
+//                                 <MenuItem as={Link} href="../rwl_danube/index.html">
+//                                     Danube Region
+//                                 </MenuItem>
+//                                 <MenuItem as={Link} href="../rwl_rhine_erft/index.html">
+//                                     Rhine-Erft Region
+//                                 </MenuItem>
+//                             </MenuList>
+//                         </Menu>
+//                         <Link href="https://github.com/directedproject-eu">
+//                             Github Organization
+//                         </Link>
+//                         <Link href="https://directedproject.eu/">Directed Project Website</Link>
+//                     </VStack>
+//                 </DrawerContent>
+//             </Drawer>
+//         </Box>
+//     );
+// }
