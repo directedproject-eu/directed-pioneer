@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
         plugins: [
             pioneer({
                 // Whether to include src/index.html in the built output
-                rootSite: true,
+                rootSite: false,
 
                 // Additional directories to include as html (must contain index.html files)
                 sites: [
@@ -91,6 +91,7 @@ export default defineConfig(({ mode }) => {
 
         // prettier-ignore
         server: {
+            open: "apps/landing/index.html"
             // Use this option if your development setup uses hostnames other than localhost.
             // See also https://vite.dev/config/server-options.html#server-allowedhosts
             // allowedHosts: [".example.com"],

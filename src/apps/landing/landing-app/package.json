@@ -1,0 +1,9 @@
+{
+    "name": "landing-app",
+    "private": true,
+    "dependencies": {
+        "@open-pioneer/chakra-integration": "catalog:",
+        "@open-pioneer/runtime": "catalog:",
+        "navbar": "workspace:*"
+    }
+}

@@ -9,7 +9,6 @@ import {
     useDisclosure,
     Button,
     useColorModeValue,
-    useBreakpointValue,
     PopoverTrigger,
     PopoverContent,
     Collapse,
@@ -50,7 +49,7 @@ export function Navbar() {
                     <Image
                         src="/images/Directed-Project-Logo-Blue-White_Background.png"
                         alt="Directed Project Data Fabric"
-                        height="55px"
+                        height="60px"
                     />
                     <Flex display={{ base: "none", md: "flex" }} ml={10}>
                         <DesktopNav />
@@ -203,7 +202,7 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-    { label: "Home", href: "../index.html" },
+    { label: "Home", href: "../landing/index.html" },
     {
         label: "Real World Labs",
         children: [
