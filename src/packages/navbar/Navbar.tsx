@@ -16,6 +16,20 @@ import {
     Popover
 } from "@open-pioneer/chakra-integration";
 import { HamburgerIcon, CloseIcon, ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
+export const BASE_URL = import.meta.env.DEV
+    ? import.meta.env.VITE_DEV_URL
+    : import.meta.env.VITE_PROD_URL;
+
+console.info("base url: " + BASE_URL);
+console.info("mode: " + import.meta.env.MODE);
+
+if(!BASE_URL){
+    if(import.meta.env.DEV){
+        throw new Error("variable import.meta.env.VITE_DEV_URL is not set");
+    }else{
+        throw new Error("variable import.meta.env.VITE_PROD_URL is not set");
+    }
+}
 
 export function Navbar() {
     const { isOpen, onToggle } = useDisclosure();
@@ -202,14 +216,14 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-    { label: "Home", href: "./index.html" },
+    { label: "Home", href: `${BASE_URL}`},
     {
         label: "Real World Labs",
         children: [
-            { label: "The Capital Region of Denmark", href: "./apps/rwl_copenhagen/index.html" },
-            { label: "Emilia Romagna Region", href: "./apps/rwl_emilia_romagna/index.html" },
-            { label: "Danube Region", href: "./apps/rwl_danube/index.html" },
-            { label: "Rhine Erft Region", href: "./apps/rwl_rhine_erft/index.html" }
+            { label: "The Capital Region of Denmark", href:  `${BASE_URL}apps/rwl_copenhagen/index.html` },
+            { label: "Emilia Romagna Region", href: `${BASE_URL}apps/rwl_emilia_romagna/index.html` },
+            { label: "Danube Region", href: `${BASE_URL}apps/rwl_danube/index.html` },
+            { label: "Rhine Erft Region", href: `${BASE_URL}apps/rwl_rhine_erft/index.html` }
         ]
     },
     { label: "Directed Project Website", href: "https://directedproject.eu/" },

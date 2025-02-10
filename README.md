@@ -18,6 +18,13 @@ Point your browser at it and start programming!
 
 Additional in-depth information on OpenPioneer can be found in the [Documentation](https://open-pioneer.github.io/trails-demo/starter/docs/README.md).
 
+### Configure Base URL
+
+The variables `VITE_DEV_URL` and `VITE_PROD_URL` must be configured in the `<root>/.env` file. By default `pnpm dev` uses `VITE_DEV_URL` and `pnpm build` uses `VITE_PROD_URL`. If the development server does not run on `localhost:5137` the `VITE_DEV_URL` variable must be updated accordingly. The variable `VITE_PROD_URL` is the URL of the landing page in a production deployment (or preview with `pnpm preview`).
+If the variables are not set correctly the application might not work as expected (e.g. hyperlinks in the navbar).
+
+see Vite documentation for details: https://vite.dev/guide/env-and-mode.html#html-constant-replacement
+
 ## Docker
 
 **Build** the image with:
