@@ -59,7 +59,8 @@ const Coastal_100yPresent_wd_max = new SimpleLayer({
             params: {
                 LAYERS: "Coastal_100yPresent_wd_max",
                 FORMAT: "image/png",
-                TRANSPARENT: true
+                TRANSPARENT: true,
+                INFO_FORMAT: "text/html"
             }
         }),
         properties: { title: "WMS Layer" }

@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
         plugins: [
             pioneer({
                 // Whether to include src/index.html in the built output
-                rootSite: false,
+                rootSite: true,
 
                 // Additional directories to include as html (must contain index.html files)
                 sites: [
@@ -87,19 +87,19 @@ export default defineConfig(({ mode }) => {
                     inline: [/@open-pioneer[/\\]/]
                 }
             }
-        },
+        }
 
         // prettier-ignore
-        server: {
-            open: "apps/landing/index.html"
-            // Use this option if your development setup uses hostnames other than localhost.
-            // See also https://vite.dev/config/server-options.html#server-allowedhosts
-            // allowedHosts: [".example.com"],
-                        
-            // disable hot reloading
-            // in dev mode press "r" to trigger reload and make changes active
-            // See also: https://vitejs.dev/config/server-options.html#server-hmr
-            // hmr: false
-        }
+        // server: {
+        //     open: "apps/landing/"
+        // Use this option if your development setup uses hostnames other than localhost.
+        // See also https://vite.dev/config/server-options.html#server-allowedhosts
+        // allowedHosts: [".example.com"],
+
+        // disable hot reloading
+        // in dev mode press "r" to trigger reload and make changes active
+        // See also: https://vitejs.dev/config/server-options.html#server-hmr
+        // hmr: false
+        // }
     };
 });

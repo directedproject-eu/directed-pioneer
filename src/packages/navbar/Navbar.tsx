@@ -47,7 +47,7 @@ export function Navbar() {
                 </Flex>
                 <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align="center">
                     <Image
-                        src="/images/Directed-Project-Logo-Blue-White_Background.png"
+                        src="Directed-Project-Logo-Blue-White_Background.png"
                         alt="Directed Project Data Fabric"
                         height="60px"
                     />
@@ -202,14 +202,14 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-    { label: "Home", href: "../landing/index.html" },
+    { label: "Home", href: "./index.html" },
     {
         label: "Real World Labs",
         children: [
-            { label: "The Capital Region of Denmark", href: "../rwl_copenhagen/index.html" },
-            { label: "Emilia Romagna Region", href: "../rwl_emilia_romagna/index.html" },
-            { label: "Danube Region", href: "../rwl_danube/index.html" },
-            { label: "Rhine Erft Region", href: "../rwl_rhine_erft/index.html" }
+            { label: "The Capital Region of Denmark", href: "./apps/rwl_copenhagen/index.html" },
+            { label: "Emilia Romagna Region", href: "./apps/rwl_emilia_romagna/index.html" },
+            { label: "Danube Region", href: "./apps/rwl_danube/index.html" },
+            { label: "Rhine Erft Region", href: "./apps/rwl_rhine_erft/index.html" }
         ]
     },
     { label: "Directed Project Website", href: "https://directedproject.eu/" },
