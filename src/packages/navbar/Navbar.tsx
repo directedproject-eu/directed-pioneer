@@ -23,10 +23,10 @@ export const BASE_URL = import.meta.env.DEV
 console.info("base url: " + BASE_URL);
 console.info("mode: " + import.meta.env.MODE);
 
-if(!BASE_URL){
-    if(import.meta.env.DEV){
+if (!BASE_URL) {
+    if (import.meta.env.DEV) {
         throw new Error("variable import.meta.env.VITE_DEV_URL is not set");
-    }else{
+    } else {
         throw new Error("variable import.meta.env.VITE_PROD_URL is not set");
     }
 }
@@ -61,7 +61,7 @@ export function Navbar() {
                 </Flex>
                 <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align="center">
                     <Image
-                        src="Directed-Project-Logo-Blue-White_Background.png"
+                        src="/Directed-Project-Logo-Blue-White_Background.png"
                         alt="Directed Project Data Fabric"
                         height="60px"
                     />
@@ -216,12 +216,18 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-    { label: "Home", href: `${BASE_URL}`},
+    { label: "Home", href: `${BASE_URL}` },
     {
         label: "Real World Labs",
         children: [
-            { label: "The Capital Region of Denmark", href:  `${BASE_URL}apps/rwl_copenhagen/index.html` },
-            { label: "Emilia Romagna Region", href: `${BASE_URL}apps/rwl_emilia_romagna/index.html` },
+            {
+                label: "The Capital Region of Denmark",
+                href: `${BASE_URL}apps/rwl_copenhagen/index.html`
+            },
+            {
+                label: "Emilia Romagna Region",
+                href: `${BASE_URL}apps/rwl_emilia_romagna/index.html`
+            },
             { label: "Danube Region", href: `${BASE_URL}apps/rwl_danube/index.html` },
             { label: "Rhine Erft Region", href: `${BASE_URL}apps/rwl_rhine_erft/index.html` }
         ]
