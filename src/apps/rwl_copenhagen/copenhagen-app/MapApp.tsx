@@ -1,6 +1,14 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-import { Box, Divider, Flex, FormControl, FormLabel, Text } from "@open-pioneer/chakra-integration";
+import {
+    Box,
+    Container,
+    Divider,
+    Flex,
+    FormControl,
+    FormLabel,
+    Text
+} from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
@@ -21,6 +29,7 @@ import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
+import ExpandleBox from "./Components/ExpandleBox";
 
 export function MapApp() {
     const intl = useIntl();
@@ -65,33 +74,40 @@ export function MapApp() {
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                            {measurementIsActive && (
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    role="top-left"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
-                                >
-                                    <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                        <TitledSection
-                                            title={
-                                                <SectionHeading
-                                                    id={measurementTitleId}
-                                                    size="md"
-                                                    mb={2}
-                                                >
-                                                    {intl.formatMessage({ id: "measurementTitle" })}
-                                                </SectionHeading>
-                                            }
-                                        >
-                                            <Measurement mapId={MAP_ID1} />
-                                        </TitledSection>
+                            <Flex>
+                                {measurementIsActive && (
+                                    <Box
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        role="top-left"
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                    >
+                                        <Box role="dialog" aria-labelledby={measurementTitleId}>
+                                            <TitledSection
+                                                title={
+                                                    <SectionHeading
+                                                        id={measurementTitleId}
+                                                        size="md"
+                                                        mb={2}
+                                                    >
+                                                        {intl.formatMessage({
+                                                            id: "measurementTitle"
+                                                        })}
+                                                    </SectionHeading>
+                                                }
+                                            >
+                                                <Measurement mapId={MAP_ID1} />
+                                            </TitledSection>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            )}
+                                )}
+                                <ExpandleBox title="Analysis">
+                                    <>Example Analysis Text</>
+                                </ExpandleBox>
+                            </Flex>
                             {/*add Table of Contents (Toc) */}
                             <Box
                                 backgroundColor="white"
@@ -186,7 +202,6 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                             )}
-                            {/*add Table of Contents (Toc) */}
                             <Box
                                 backgroundColor="white"
                                 borderWidth="1px"
