@@ -27,10 +27,7 @@ const starkregen_nw_geschw_agw = new SimpleLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
             params: {
-                LAYERS: "nw_geschw_agw",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:4326"
+                LAYERS: "nw_geschw_agw"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -44,10 +41,7 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
             params: {
-                LAYERS: "nw_geschw_extrem",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:4326"
+                LAYERS: "nw_geschw_extrem"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -61,10 +55,7 @@ const starkregen_nw_tiefe_agw = new SimpleLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
             params: {
-                LAYERS: "nw_tiefe_agw",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:4326"
+                LAYERS: "nw_tiefe_agw"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -78,10 +69,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
             params: {
-                LAYERS: "nw_tiefe_extrem",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:4326"
+                LAYERS: "nw_tiefe_extrem"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -121,10 +109,7 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
             params: {
-                LAYERS: "wms_nw_dhm-ubersicht",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:7837"
+                LAYERS: "wms_nw_dhm-ubersicht"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -138,10 +123,7 @@ const wms_nw_gelaendeneigung = new SimpleLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
             params: {
-                LAYERS: "wms_nw_gelaendeneigung",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:7837"
+                LAYERS: "wms_nw_gelaendeneigung"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -155,10 +137,7 @@ const wms_nw_gelaendestufen = new SimpleLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
             params: {
-                LAYERS: "wms_nw_gelaendestufen",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:7837"
+                LAYERS: "wms_nw_gelaendestufen"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -172,10 +151,7 @@ const wms_nw_dgm_schummerung = new SimpleLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
             params: {
-                LAYERS: "wms_nw_dgm-schummerung",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:7837"
+                LAYERS: "wms_nw_dgm-schummerung"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -189,10 +165,7 @@ const wms_nw_hoehenschichten = new SimpleLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
             params: {
-                LAYERS: "wms_nw_hoehenschichten",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                CRS: "EPSG:7837"
+                LAYERS: "wms_nw_hoehenschichten"
             }
         }),
         properties: { title: "WMS Layer" }
