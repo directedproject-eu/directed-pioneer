@@ -36,7 +36,8 @@ export class MainMapProvider implements MapConfigProvider {
                             params: {
                                 LAYERS: "WD_RAIN172645",
                                 FORMAT: "image/png",
-                                TRANSPARENT: true
+                                TRANSPARENT: true,
+                                INFO_FORMAT: "application/json"
                             }
                         }),
                         properties: { title: "WMS Layer" }
@@ -53,7 +54,8 @@ export class MainMapProvider implements MapConfigProvider {
                             params: {
                                 LAYERS: "WD_RAIN110828",
                                 FORMAT: "image/png",
-                                TRANSPARENT: true
+                                TRANSPARENT: true,
+                                INFO_FORMAT: "application/json"
                             }
                         }),
                         properties: { title: "WMS Layer" }
@@ -70,7 +72,8 @@ export class MainMapProvider implements MapConfigProvider {
                             params: {
                                 LAYERS: "WD_RAIN095830",
                                 FORMAT: "image/png",
-                                TRANSPARENT: true
+                                TRANSPARENT: true,
+                                INFO_FORMAT: "application/json"
                             }
                         }),
                         properties: { title: "WMS Layer" }
@@ -87,7 +90,8 @@ export class MainMapProvider implements MapConfigProvider {
                             params: {
                                 LAYERS: "DMG_RIVER111745",
                                 FORMAT: "image/png",
-                                TRANSPARENT: true
+                                TRANSPARENT: true,
+                                INFO_FORMAT: "application/json"
                             }
                         }),
                         properties: { title: "WMS Layer" }
@@ -104,7 +108,8 @@ export class MainMapProvider implements MapConfigProvider {
                             params: {
                                 LAYERS: "DMG_RAIN110828",
                                 FORMAT: "image/png",
-                                TRANSPARENT: true
+                                TRANSPARENT: true,
+                                INFO_FORMAT: "application/json"
                             }
                         }),
                         properties: { title: "WMS Layer" }

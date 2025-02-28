@@ -30,6 +30,7 @@ const starkregen_nw_geschw_agw = new SimpleLayer({
                 LAYERS: "nw_geschw_agw",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:4326"
             }
         }),
@@ -47,6 +48,7 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
                 LAYERS: "nw_geschw_extrem",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:4326"
             }
         }),
@@ -64,6 +66,7 @@ const starkregen_nw_tiefe_agw = new SimpleLayer({
                 LAYERS: "nw_tiefe_agw",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:4326"
             }
         }),
@@ -81,6 +84,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
                 LAYERS: "nw_tiefe_extrem",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:4326"
             }
         }),
@@ -124,6 +128,7 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
                 LAYERS: "wms_nw_dhm-ubersicht",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:7837"
             }
         }),
@@ -141,6 +146,7 @@ const wms_nw_gelaendeneigung = new SimpleLayer({
                 LAYERS: "wms_nw_gelaendeneigung",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:7837"
             }
         }),
@@ -158,6 +164,7 @@ const wms_nw_gelaendestufen = new SimpleLayer({
                 LAYERS: "wms_nw_gelaendestufen",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:7837"
             }
         }),
@@ -175,6 +182,7 @@ const wms_nw_dgm_schummerung = new SimpleLayer({
                 LAYERS: "wms_nw_dgm-schummerung",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:7837"
             }
         }),
@@ -192,6 +200,7 @@ const wms_nw_hoehenschichten = new SimpleLayer({
                 LAYERS: "wms_nw_hoehenschichten",
                 FORMAT: "image/png",
                 TRANSPARENT: true,
+                INFO_FORMAT: "text/html",
                 CRS: "EPSG:7837"
             }
         }),

@@ -5,12 +5,18 @@ import { defineBuildConfig } from "@open-pioneer/build-support";
 export default defineBuildConfig({
     styles: "./app.css",
     i18n: ["en", "de"],
+    ui: {
+        references: ["app.LayerZoom"]
+    },
     services: {
         MainMapProvider: {
             provides: ["map.MapConfigProvider"]
         },
-        SecondMapProvider: {
-            provides: ["map.MapConfigProvider"]
+        // SecondMapProvider: {
+        //     provides: ["map.MapConfigProvider"]
+        // },
+        LayerZoomImpl: {
+            provides: ["app.LayerZoom"]
         }
     }
 });

@@ -100,7 +100,7 @@ export function MapApp() {
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                             >
-                                <Toc mapId={MAP_ID} />
+                                <Toc mapId={MAP_ID} showTools={true} showBasemapSwitcher={false} />
                             </Box>
                         </MapAnchor>
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>

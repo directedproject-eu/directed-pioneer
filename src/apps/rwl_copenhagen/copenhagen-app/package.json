@@ -1,6 +1,7 @@
 {
     "name": "copenhagen-app",
     "private": true,
+    "main": "services.ts",
     "dependencies": {
         "@chakra-ui/icons": "catalog:",
         "@emotion/react": "catalog:",
@@ -25,6 +26,8 @@
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
-        "navbar": "workspace:*"
+        "navbar": "workspace:*",
+        "layerswipe": "workspace:*",
+        "featureinfo": "workspace:*"
     }
 }
