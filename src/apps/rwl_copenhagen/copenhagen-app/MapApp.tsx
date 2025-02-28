@@ -35,6 +35,7 @@ import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
 import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
+import ExpandleBox from "./Components/ExpandleBox";
 
 export function MapApp() {
     const intl = useIntl();
@@ -128,34 +129,41 @@ export function MapApp() {
                         )}
 
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                            {measurementIsActive && (
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    role="top-left"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
-                                >
-                                    <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                        <TitledSection
-                                            title={
-                                                <SectionHeading
-                                                    id={measurementTitleId}
-                                                    size="md"
-                                                    mb={2}
-                                                >
-                                                    {intl.formatMessage({ id: "measurementTitle" })}
-                                                </SectionHeading>
-                                            }
-                                        >
-                                            <Measurement mapId={MAP_ID1} />
-                                        </TitledSection>
+                            <Flex>
+                                {measurementIsActive && (
+                                    <Box
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        role="top-left"
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                    >
+                                        <Box role="dialog" aria-labelledby={measurementTitleId}>
+                                            <TitledSection
+                                                title={
+                                                    <SectionHeading
+                                                        id={measurementTitleId}
+                                                        size="md"
+                                                        mb={2}
+                                                    >
+                                                        {intl.formatMessage({
+                                                            id: "measurementTitle"
+                                                        })}
+                                                    </SectionHeading>
+                                                }
+                                            >
+                                                <Measurement mapId={MAP_ID1} />
+                                            </TitledSection>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            )}
-                            {/*Table of Contents (Toc)*/}
+                                )}
+                                <ExpandleBox title="Analysis">
+                                    <>Example Analysis Text</>
+                                </ExpandleBox>
+                            </Flex>
+                            {/*add Table of Contents (Toc) */}
                             <Box
                                 backgroundColor="white"
                                 borderWidth="1px"

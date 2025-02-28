@@ -4,6 +4,14 @@ import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
+// import { Map } from "ol";
+
+// import { useEffect } from "react";
+// import { useMap } from "@open-pioneer/map"; //hook to access map
+// import { useMapLayer } from "@open-pioneer/map"; //hook to access layers
+// import { Extent } from "ol/extent";
+// import { Feature } from "ol";
+// import { Layer } from "ol/layer";
 // import View from "ol/View.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
@@ -57,14 +65,10 @@ const Coastal_100yPresent_wd_max = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "Coastal_100yPresent_wd_max",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "text/html" //application/json
-            },
-            crossOrigin: "anonymous"
+                LAYERS: "Coastal_100yPresent_wd_max"
+            }
         }),
         properties: { title: "WMS Layer" }
     }),
@@ -79,12 +83,9 @@ const Coastal_100ySSP2_4_5_wd_max = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "Coastal_100ySSP2-4.5_wd_max",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "Coastal_100ySSP2-4.5_wd_max"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -99,12 +100,9 @@ const Coastal_2013Storm_wd_max = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "Coastal_2013Storm_wd_max",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "Coastal_2013Storm_wd_max"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -119,12 +117,9 @@ const DMG_COAST094722 = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "DMG_COAST094722",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "DMG_COAST094722"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -139,12 +134,9 @@ const WD_COAST093900 = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "WD_COAST093900",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "WD_COAST093900"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -159,12 +151,9 @@ const WD_COAST094028 = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "WD_COAST094028",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "WD_COAST094028"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -179,12 +168,9 @@ const WD_COAST094226 = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "WD_COAST094226",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "WD_COAST094226"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -199,12 +185,9 @@ const WD_COAST094722 = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "WD_COAST094722",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "WD_COAST094722"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -219,12 +202,9 @@ const WD_RIVER111745 = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "WD_RIVER111745",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "WD_RIVER111745"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -239,12 +219,9 @@ const Barrier = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "barrier",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "barrier"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -259,12 +236,9 @@ const pluvial_100yPresent_wd_max = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "pluvial_100yPresent_wd_max",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "pluvial_100yPresent_wd_max"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -280,12 +254,9 @@ const pluvial_100yRCP4_5_wd_max = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+            url: "https://directed.dev.52north.org/geoserver/directed/wms",
             params: {
-                LAYERS: "pluvial_100yRCP4-5_wd_max",
-                FORMAT: "image/png",
-                TRANSPARENT: true,
-                INFO_FORMAT: "application/json"
+                LAYERS: "pluvial_100yRCP4-5_wd_max"
             }
         }),
         properties: { title: "WMS Layer" }
@@ -426,11 +397,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "Coastal_100yPresent_wd_max",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "Coastal_100yPresent_wd_max",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "Coastal_100yPresent_wd_max"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -442,11 +411,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "Coastal_100ySSP2-4.5_wd_max",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "Coastal_100ySSP2-4.5_wd_max",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "Coastal_100ySSP2-4.5_wd_max"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -458,11 +425,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "Coastal_2013Storm_wd_max",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "Coastal_2013Storm_wd_max",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "Coastal_2013Storm_wd_max"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -474,11 +439,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "DMG_COAST094722",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "DMG_COAST094722",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "DMG_COAST094722"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -490,11 +453,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "WD_COAST093900",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "WD_COAST093900",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "WD_COAST093900"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -506,11 +467,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "WD_COAST094028",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "WD_COAST094028",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "WD_COAST094028"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -522,11 +481,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "WD_COAST094226",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "WD_COAST094226",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "WD_COAST094226"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -538,11 +495,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "WD_COAST094722",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "WD_COAST094722",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "WD_COAST094722"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -554,11 +509,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "WD_RIVER111745",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "WD_RIVER111745",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "WD_RIVER111745"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -570,11 +523,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "Barrier",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "barrier",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "barrier"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -586,11 +537,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "pluvial_100yPresent_wd_max",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "pluvial_100yPresent_wd_max",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "pluvial_100yPresent_wd_max"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
@@ -602,11 +551,9 @@ const roskilde_municipality = new SimpleLayer({
 //     title: "pluvial_100yRCP4-5_wd_max",
 //     olLayer: new TileLayer({
 //         source: new TileWMS({
-//             url: "https://directed.dev.52north.org/geoserver/directed/wms?",
+//             url: "https://directed.dev.52north.org/geoserver/directed/wms",
 //             params: {
-//                 LAYERS: "pluvial_100yRCP4-5_wd_max",
-//                 FORMAT: "image/png",
-//                 TRANSPARENT: true
+//                 LAYERS: "pluvial_100yRCP4-5_wd_max"
 //             }
 //         }),
 //         properties: { title: "WMS Layer" }
