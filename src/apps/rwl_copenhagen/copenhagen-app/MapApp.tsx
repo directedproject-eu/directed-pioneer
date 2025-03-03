@@ -33,7 +33,7 @@ import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
-import { FeatureInfo } from "featureinfo";
+// import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
 import ExpandleBox from "./Components/ExpandleBox";
 
@@ -120,13 +120,13 @@ export function MapApp() {
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
                         {/* featureinfo */}
-                        {mapModel.map && (
+                        {/*mapModel.map && (
                             <FeatureInfo
                                 mapModel={mapModel.map}
                                 layerId={MAP_ID1}
                                 projection="EPSG:3857"
                             />
-                        )}
+                        )*/}
 
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                             <Flex>
