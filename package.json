@@ -65,10 +65,7 @@
         "auditConfig": {
             "ignoreCves": []
         },
-        "patchedDependencies": {
-            "react-select@5.8.0": "patches/react-select@5.8.0.patch",
-            "@chakra-ui/hooks@2.4.3": "patches/@chakra-ui__hooks.patch"
-        },
+        "patchedDependencies": {},
         "peerDependencyRules": {}
     },
     "devDependencies": {
