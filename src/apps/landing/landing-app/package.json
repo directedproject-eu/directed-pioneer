@@ -4,6 +4,6 @@
     "dependencies": {
         "@open-pioneer/chakra-integration": "catalog:",
         "@open-pioneer/runtime": "catalog:",
-        "navbar": "workspace:*"
+        "navbar": "workspace:^"
     }
 }

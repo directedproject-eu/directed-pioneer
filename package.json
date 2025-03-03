@@ -60,12 +60,16 @@
             "vite-plugin-eslint>rollup": ">=3.29.5",
             "cross-spawn@<7.0.5": ">=7.0.5",
             "nanoid@<3.3.8": "^3.3.8",
-            "esbuild@<0.25.0": ">=0.25.0"
+            "esbuild@<0.25.0": ">=0.25.0",
+            "react-select": "5.8.0"
         },
         "auditConfig": {
             "ignoreCves": []
         },
-        "patchedDependencies": {},
+        "patchedDependencies": {
+            "react-select@5.8.0": "patches/react-select@5.8.0.patch",
+            "@chakra-ui/hooks@2.4.4": "patches/@chakra-ui__hooks.patch"
+        },
         "peerDependencyRules": {}
     },
     "devDependencies": {

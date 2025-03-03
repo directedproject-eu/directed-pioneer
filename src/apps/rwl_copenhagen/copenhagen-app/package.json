@@ -26,7 +26,7 @@
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
-        "navbar": "workspace:*",
-        "layerswipe": "workspace:*"
+        "navbar": "workspace:^",
+        "layerswipe": "workspace:^"
     }
 }
