@@ -18,5 +18,8 @@ export default defineBuildConfig({
         LayerZoomImpl: {
             provides: ["app.LayerZoom"]
         }
+    },
+    properties: {
+        userConfig: {}
     }
 });

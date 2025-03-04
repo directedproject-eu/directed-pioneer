@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
+import { ServiceOptions } from "@open-pioneer/runtime";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
@@ -264,131 +265,6 @@ const pluvial_100yRCP4_5_wd_max = new SimpleLayer({
     isBaseLayer: false
 });
 
-const frederikssund_municipality = new SimpleLayer({
-    id: "frederikssund_municipality",
-    title: "Frederikssund Municipality",
-    description:
-        "This layer shows the boundaries of Frederikssund Municipality in the Copenhagen Capital Region of Denmark",
-    visible: true,
-    olLayer: new VectorLayer({
-        source: new VectorSource({
-            url: "/frederikssund.geojson",
-            format: new GeoJSON({
-                dataProjection: "EPSG:4096",
-                featureProjection: "EPSG:4096" //ETRS89
-            })
-        }),
-        style: new Style({
-            stroke: new Stroke({
-                color: "#2e9ecc",
-                width: 2
-            })
-        }),
-        properties: { title: "GeoJSON Layer" }
-    }),
-    isBaseLayer: false
-});
-
-const egedal_municipality = new SimpleLayer({
-    id: "egedal_municipality",
-    title: "Egedal Municipality",
-    description:
-        "This layer shows the boundaries of Egedal Municipality in the Copenhagen Capital Region of Denmark",
-    visible: true,
-    olLayer: new VectorLayer({
-        source: new VectorSource({
-            url: "/egedal.geojson",
-            format: new GeoJSON({
-                dataProjection: "EPSG:4096",
-                featureProjection: "EPSG:4096" //ETRS89
-            })
-        }),
-        style: new Style({
-            stroke: new Stroke({
-                color: "#2e9ecc",
-                width: 2
-            })
-        }),
-        properties: { title: "GeoJSON Layer" }
-    }),
-    isBaseLayer: false
-});
-
-const halsnaes_municipality = new SimpleLayer({
-    id: "halsnaes_municipality",
-    title: "Halsnaes Municipality",
-    description:
-        "This layer shows the boundaries of Halsnaes Municipality in the Copenhagen Capital Region of Denmark",
-    visible: true,
-    olLayer: new VectorLayer({
-        source: new VectorSource({
-            url: "/halsnaes.geojson",
-            format: new GeoJSON({
-                dataProjection: "EPSG:4096",
-                featureProjection: "EPSG:4096" //ETRS89
-            })
-        }),
-        style: new Style({
-            stroke: new Stroke({
-                color: "#2e9ecc",
-                width: 2
-            })
-        }),
-        properties: { title: "GeoJSON Layer" }
-    }),
-    isBaseLayer: false
-});
-
-const lejre_municipality = new SimpleLayer({
-    id: "lejre_municipality",
-    title: "Lejre Municipality",
-    description:
-        "This layer shows the boundaries of Lejre Municipality in the Copenhagen Capital Region of Denmark",
-    visible: true,
-    olLayer: new VectorLayer({
-        source: new VectorSource({
-            url: "/lejre.geojson",
-            format: new GeoJSON({
-                dataProjection: "EPSG:4096",
-                featureProjection: "EPSG:4096" //ETRS89
-            })
-        }),
-        style: new Style({
-            stroke: new Stroke({
-                color: "#2e9ecc",
-                width: 2
-            })
-        }),
-        properties: { title: "GeoJSON Layer" }
-    }),
-    isBaseLayer: false
-});
-
-const roskilde_municipality = new SimpleLayer({
-    id: "roskilde_municipality",
-    title: "Roskilde Municipality",
-    description:
-        "This layer shows the boundaries of Roskilde Municipality in the Copenhagen Capital Region of Denmark",
-    visible: true,
-    olLayer: new VectorLayer({
-        source: new VectorSource({
-            url: "/roskilde.geojson",
-            format: new GeoJSON({
-                dataProjection: "EPSG:4096",
-                featureProjection: "EPSG:4096" //ETRS89
-            })
-        }),
-        style: new Style({
-            stroke: new Stroke({
-                color: "#2e9ecc",
-                width: 2
-            })
-        }),
-        properties: { title: "GeoJSON Layer" }
-    }),
-    isBaseLayer: false
-});
-
 //////////////////////////
 /// MAP_ID2 WMS LAYERS///
 ////////////////////////
@@ -570,8 +446,46 @@ const roskilde_municipality = new SimpleLayer({
 /// MAPS FROM .tsx ///
 /////////////////////
 
+interface Config {
+    pygeoapiBaseUrl: string;
+}
+
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID1;
+    pygeoapiBaseUrl: string;
+
+    constructor(serviceOptions: ServiceOptions) {
+        const config = serviceOptions.properties.userConfig as Config;
+        this.pygeoapiBaseUrl = config.pygeoapiBaseUrl;
+    }
+
+    capitalizeFirstLetter(word: string) {
+        return String(word).charAt(0).toUpperCase() + String(word).slice(1);
+    }
+
+    createMunicipalityLayer(municipalityID: string) {
+        const municipalityLayer = new SimpleLayer({
+            id: `${municipalityID}_municipality`,
+            title: `${this.capitalizeFirstLetter(municipalityID)} municipality`,
+            description: `This layer shows the boundaries of ${this.capitalizeFirstLetter(municipalityID)} municipality in the Copenhagen Capital Region of Denmark`,
+            visible: true,
+            olLayer: new VectorLayer({
+                source: new VectorSource({
+                    url: `${this.pygeoapiBaseUrl}/collections/denmark_municipalities/items/${municipalityID}?f=json`,
+                    format: new GeoJSON()
+                }),
+                style: new Style({
+                    stroke: new Stroke({
+                        color: "#2e9ecc",
+                        width: 3
+                    })
+                }),
+                properties: { title: "GeoJSON Layer" }
+            }),
+            isBaseLayer: false
+        });
+        return municipalityLayer;
+    }
 
     async getMapConfig(): Promise<MapConfig> {
         return {
@@ -595,11 +509,11 @@ export class MainMapProvider implements MapConfigProvider {
                 Barrier,
                 pluvial_100yPresent_wd_max,
                 pluvial_100yRCP4_5_wd_max,
-                frederikssund_municipality,
-                egedal_municipality,
-                halsnaes_municipality,
-                lejre_municipality,
-                roskilde_municipality
+                this.createMunicipalityLayer("frederikssund"),
+                this.createMunicipalityLayer("egedal"),
+                this.createMunicipalityLayer("halsnaes"),
+                this.createMunicipalityLayer("lejre"),
+                this.createMunicipalityLayer("roskilde")
             ]
 
             // advanced: {
