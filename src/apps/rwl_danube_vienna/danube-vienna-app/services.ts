@@ -13,8 +13,8 @@ export class MainMapProvider implements MapConfigProvider {
         return {
             initialView: {
                 kind: "position",
-                center: { x: 1836934, y: 6113739 },
-                zoom: 8
+                center: { x: 1836934, y: 6145000 },
+                zoom: 11
             },
             projection: "EPSG:3857",
             layers: [

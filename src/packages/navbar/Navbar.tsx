@@ -228,10 +228,26 @@ const NAV_ITEMS: Array<NavItem> = [
                 label: "Emilia Romagna Region",
                 href: `${BASE_URL}apps/rwl_emilia_romagna/index.html`
             },
-            { label: "Danube Region", href: `${BASE_URL}apps/rwl_danube/index.html` },
-            { label: "Rhine Erft Region", href: `${BASE_URL}apps/rwl_rhine_erft/index.html` }
+            {
+                label: "Danube Region - Vienna",
+                href: `${BASE_URL}apps/rwl_danube_vienna/index.html`
+            },
+            {
+                label: "Danube Region - Zala",
+                href: `${BASE_URL}apps/rwl_danube_zala/index.html`
+            },
+            {
+                label: "Rhine Erft Region",
+                href: `${BASE_URL}apps/rwl_rhine_erft/index.html`
+            }
         ]
     },
-    { label: "Directed Project Website", href: "https://directedproject.eu/" },
-    { label: "Github Organization", href: "https://github.com/directedproject-eu" }
+    {
+        label: "Directed Project Website",
+        href: "https://directedproject.eu/"
+    },
+    {
+        label: "Github Organization",
+        href: "https://github.com/directedproject-eu"
+    }
 ];

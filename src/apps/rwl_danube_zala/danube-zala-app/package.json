@@ -1,5 +1,5 @@
 {
-    "name": "danube-app",
+    "name": "danube-zala-app",
     "private": true,
     "dependencies": {
         "@chakra-ui/icons": "catalog:",

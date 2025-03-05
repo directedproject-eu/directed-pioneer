@@ -45,7 +45,8 @@ export default defineConfig(({ mode }) => {
                 // Additional directories to include as html (must contain index.html files)
                 sites: [
                     "apps/rwl_copenhagen",
-                    "apps/rwl_danube",
+                    "apps/rwl_danube_vienna",
+                    "apps/rwl_danube_zala",
                     "apps/rwl_emilia_romagna",
                     "apps/rwl_rhine_erft"
                 ],
