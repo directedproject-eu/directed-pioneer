@@ -7,7 +7,13 @@ export default defineBuildConfig({
     i18n: ["en", "de"],
     services: {
         MainMapProvider: {
-            provides: ["map.MapConfigProvider"]
+            provides: ["map.MapConfigProvider"],
+            references: {
+                authService: "authentication.AuthService"
+            }
         }
+    },
+    ui: {
+        references: ["authentication.AuthService", "http.HttpService"]
     }
 });

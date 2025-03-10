@@ -41,15 +41,25 @@ docker run -p 80:8080 --rm --name open-pioneer-trails 52north/directed-open-pion
 
 **Access** the application in your browser <http://localhost/>.
 
+## Authentication
+
+For local testing, start a Keycloak instance:
+
+```shell
+docker run --rm -it -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:latest start-dev
+```
+
+A complete example can be found in the [keycloak-sample app](https://github.com/open-pioneer/trails-core-packages/tree/main/src/samples/keycloak-sample).
+
 ## License
 
 Apache-2.0 (see `LICENSE` file)
 
 ## Open Pioneer Links
 
--   [Open Pioneer::API Documentation](https://open-pioneer.github.io/trails-demo/core-packages/docs/)
--   [Open Pioneer::User manual](https://github.com/open-pioneer/trails-starter/tree/main/docs#readme)
--   [Open Pioneer::GitHub Organization](https://github.com/open-pioneer/)
--   [Open Pioneer::Core packages](https://github.com/open-pioneer/trails-core-packages)
--   [Open Pioneer::OpenLayers base packages](https://github.com/open-pioneer/trails-openlayers-base-packages)
--   [Open Pioneer::Build tools](https://github.com/open-pioneer/trails-build-tools)
+- [Open Pioneer::API Documentation](https://open-pioneer.github.io/trails-demo/core-packages/docs/)
+- [Open Pioneer::User manual](https://github.com/open-pioneer/trails-starter/tree/main/docs#readme)
+- [Open Pioneer::GitHub Organization](https://github.com/open-pioneer/)
+- [Open Pioneer::Core packages](https://github.com/open-pioneer/trails-core-packages)
+- [Open Pioneer::OpenLayers base packages](https://github.com/open-pioneer/trails-openlayers-base-packages)
+- [Open Pioneer::Build tools](https://github.com/open-pioneer/trails-build-tools)

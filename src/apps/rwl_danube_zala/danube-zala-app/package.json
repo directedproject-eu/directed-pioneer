@@ -5,6 +5,8 @@
         "@chakra-ui/icons": "catalog:",
         "@emotion/react": "catalog:",
         "@emotion/styled": "catalog:",
+        "@open-pioneer/authentication": "catalog:",
+        "@open-pioneer/authentication-keycloak": "catalog:",
         "@open-pioneer/basemap-switcher": "catalog:",
         "@open-pioneer/chakra-integration": "catalog:",
         "@open-pioneer/coordinate-viewer": "catalog:",
