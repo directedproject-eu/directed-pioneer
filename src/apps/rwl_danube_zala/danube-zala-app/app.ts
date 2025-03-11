@@ -24,9 +24,9 @@ const element = createCustomElement({
                         pkceMethod: "S256"
                     },
                     keycloakConfig: {
-                        url: "http://localhost:8080",
-                        realm: "master",
-                        clientId: "trails"
+                        url: import.meta.env.VITE_KEYCLOAK_CONFIG_URL,
+                        realm: import.meta.env.VITE_KEYCLOAK_CONFIG_REALM,
+                        clientId: import.meta.env.VITE_KEYCLOAK_CONFIG_CLIENT_ID
                     }
                 }
             } satisfies KeycloakProperties
