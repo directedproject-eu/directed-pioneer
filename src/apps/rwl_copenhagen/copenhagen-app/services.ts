@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
+import { MapConfig, MapConfigProvider, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import { ServiceOptions } from "@open-pioneer/runtime";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
@@ -18,6 +18,7 @@ import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
 import GeoJSON from "ol/format/GeoJSON.js";
 import { Stroke, Style } from "ol/style";
+import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
 
 export const MAP_ID1 = "main";
 // export const MAP_ID2 = "second";
@@ -71,8 +72,16 @@ const Coastal_100yPresent_wd_max = new SimpleLayer({
                 LAYERS: "Coastal_100yPresent_wd_max"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: { 
+            title: "WMS Layer",
+            id: "coastal_100ypresent_wd_max" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -89,8 +98,16 @@ const Coastal_100ySSP2_4_5_wd_max = new SimpleLayer({
                 LAYERS: "Coastal_100ySSP2-4.5_wd_max"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: { 
+            title: "WMS Layer",
+            id: "coastal_100yssp2-4_5_wd_max" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -106,8 +123,16 @@ const Coastal_2013Storm_wd_max = new SimpleLayer({
                 LAYERS: "Coastal_2013Storm_wd_max"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: { 
+            title: "WMS Layer", 
+            id: "coastal_2013storm_wd_max" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -123,7 +148,10 @@ const DMG_COAST094722 = new SimpleLayer({
                 LAYERS: "DMG_COAST094722"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: { 
+            title: "WMS Layer",
+            id: "dmg_coast094722" 
+        }
     }),
     isBaseLayer: false
 });
@@ -140,8 +168,16 @@ const WD_COAST093900 = new SimpleLayer({
                 LAYERS: "WD_COAST093900"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: { 
+            title: "WMS Layer", 
+            id: "wd_coast093900" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -157,8 +193,16 @@ const WD_COAST094028 = new SimpleLayer({
                 LAYERS: "WD_COAST094028"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "WMS Layer", 
+            id: "wd_coast094028" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -174,8 +218,16 @@ const WD_COAST094226 = new SimpleLayer({
                 LAYERS: "WD_COAST094226"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "WMS Layer", 
+            id: "wd_coast094226" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -191,8 +243,16 @@ const WD_COAST094722 = new SimpleLayer({
                 LAYERS: "WD_COAST094722"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "WMS Layer", 
+            id: "wd_coast094722" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -208,7 +268,10 @@ const WD_RIVER111745 = new SimpleLayer({
                 LAYERS: "WD_RIVER111745"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "WMS Layer", 
+            id: "wd_river111745" 
+        }
     }),
     isBaseLayer: false
 });
@@ -225,7 +288,10 @@ const Barrier = new SimpleLayer({
                 LAYERS: "barrier"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "WMS Layer", 
+            id: "barrier" 
+        }
     }),
     isBaseLayer: false
 });
@@ -242,8 +308,16 @@ const pluvial_100yPresent_wd_max = new SimpleLayer({
                 LAYERS: "pluvial_100yPresent_wd_max"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "WMS Layer", 
+            id: "pluvial_100ypresent_wd_max" 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -260,8 +334,16 @@ const pluvial_100yRCP4_5_wd_max = new SimpleLayer({
                 LAYERS: "pluvial_100yRCP4-5_wd_max"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: { 
+            title: "WMS Layer", 
+            id: "pluvial_100yrcp4-5_wd_max" //need to add id to raw ol instance for feature info 
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WaterLevelLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -496,26 +578,64 @@ export class MainMapProvider implements MapConfigProvider {
             },
             projection: "EPSG:3857",
             layers: [
+                new GroupLayer({
+                    title: "Municipalities",
+                    id: "municipal_layers",
+                    layers: [
+                        this.createMunicipalityLayer("frederikssund"),
+                        this.createMunicipalityLayer("egedal"),
+                        this.createMunicipalityLayer("halsnaes"),
+                        this.createMunicipalityLayer("lejre"),
+                        this.createMunicipalityLayer("roskilde")
+                    ]
+                }),
+                // new GroupLayer({
+                //     title: "Coastal Flooding",
+                //     visible: false,
+                //     id: "coastal_flooding_layers",
+                //     layers: [
+                //         Coastal_100yPresent_wd_max,
+                //         Coastal_100ySSP2_4_5_wd_max,
+                //         Coastal_2013Storm_wd_max,
+                //         WD_COAST093900,
+                //         WD_COAST094028,
+                //         WD_COAST094226,
+                //         WD_COAST094722,
+                //     ],
+                //     attributes: {
+                //         "legend": {
+                //             Component: WaterLevelLegend
+                //         }
+                //     },
+                // }),
+                // new GroupLayer({
+                //     title: "Pluvial Flooding",
+                //     visible: false,
+                //     id: "pluvial_flooding_layers",
+                //     layers: [
+                //         pluvial_100yPresent_wd_max,
+                //         pluvial_100yRCP4_5_wd_max,
+                //     ],
+                //     attributes: {
+                //         "legend": {
+                //             Component: WaterLevelLegend
+                //         }
+                //     },
+                // }),
                 Basemap,
-                Coastal_100yPresent_wd_max,
-                Coastal_100ySSP2_4_5_wd_max,
-                Coastal_2013Storm_wd_max,
                 DMG_COAST094722,
-                WD_COAST093900,
-                WD_COAST094028,
-                WD_COAST094226,
-                WD_COAST094722,
                 WD_RIVER111745,
                 Barrier,
                 pluvial_100yPresent_wd_max,
                 pluvial_100yRCP4_5_wd_max,
-                this.createMunicipalityLayer("frederikssund"),
-                this.createMunicipalityLayer("egedal"),
-                this.createMunicipalityLayer("halsnaes"),
-                this.createMunicipalityLayer("lejre"),
-                this.createMunicipalityLayer("roskilde")
+                Coastal_100yPresent_wd_max,
+                Coastal_100ySSP2_4_5_wd_max,
+                Coastal_2013Storm_wd_max,
+                WD_COAST093900,
+                WD_COAST094028,
+                WD_COAST094226,
+                WD_COAST094722
             ]
-
             // advanced: {
             //     view: view //add shared view
             // }

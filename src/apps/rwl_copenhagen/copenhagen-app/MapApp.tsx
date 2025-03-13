@@ -33,19 +33,17 @@ import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
-// import { FeatureInfo } from "featureinfo";
+import { FeatureInfo } from "featureinfo"; //feature info test
 import { useService } from "open-pioneer:react-hooks";
-import ExpandleBox from "./Components/ExpandleBox";
+// import ExpandleBox from "./Components/ExpandleBox";
+import { Legend } from "@open-pioneer/legend";
 
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
     const mapModel = useMapModel("main");
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
-    //feature info test
-    // const [featureInfo, setFeatureInfo] = useState<Record<string, any> | null>(null);
-    // const layerId = "pluvial_100ypresent_wd_ma";
-    // const projection = "EPSG:3857"; //web mercator
+    // const [featureInfo, setFeatureInfo] = useState<Record<string, any> | null>(null); //feature info test
 
     //////////////////
     /// LayerSwipe ///
@@ -119,15 +117,6 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
-                        {/* featureinfo */}
-                        {/*mapModel.map && (
-                            <FeatureInfo
-                                mapModel={mapModel.map}
-                                layerId={MAP_ID1}
-                                projection="EPSG:3857"
-                            />
-                        )*/}
-
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                             <Flex>
                                 {measurementIsActive && (
@@ -159,12 +148,14 @@ export function MapApp() {
                                         </Box>
                                     </Box>
                                 )}
-                                <ExpandleBox title="Analysis">
+                                {/* <ExpandleBox title="Analysis">
                                     <>Example Analysis Text</>
-                                </ExpandleBox>
+                                </ExpandleBox> */}
                             </Flex>
-                            {/*add Table of Contents (Toc) */}
+                            {/*add Table of Contents (Toc) and legend */}
                             <Box
+                                display="flex"
+                                flexDirection="column"
                                 backgroundColor="white"
                                 borderWidth="1px"
                                 borderRadius="lg"
@@ -176,9 +167,9 @@ export function MapApp() {
                                 overflow="auto"
                             >
                                 <Toc mapId={MAP_ID1} showTools={true} showBasemapSwitcher={false} />
+                                <Legend mapId={MAP_ID1} />
                             </Box>
                         </MapAnchor>
-
                         {/* zoom to municipalities */}
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <VStack align="stretch" spacing={2}>
@@ -205,8 +196,14 @@ export function MapApp() {
                                 </Button>
                                 ;
                             </VStack>
-                        </MapAnchor>
 
+                            <FeatureInfo
+                                mapModel={mapModel.map!}
+                                layerId="pluvial_100yrcp4-5_wd_max"
+                                projection="EPSG:3857"
+                            />
+
+                        </MapAnchor>
                         {/*layerswipe layers & overview map*/}
                         <MapAnchor position="bottom-left" horizontalGap={5} verticalGap={10}>
                             <Box
@@ -274,7 +271,6 @@ export function MapApp() {
                                 </FormControl>
                             </Box>
                         </MapAnchor>
-
                         <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
                             <Flex
                                 role="bottom-right"
@@ -299,7 +295,7 @@ export function MapApp() {
                     {/*END MAP1*/}
                 </Flex>
 
-                {/* add layerswipe below map container  */}
+                {/* add layerswipe slider below map container  */}
                 <Box
                     position="absolute"
                     bottom={0}
