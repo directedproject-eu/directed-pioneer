@@ -33,7 +33,7 @@ import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
-import { FeatureInfo } from "featureinfo"; //feature info test
+import { FeatureInfo } from "featureinfo"; 
 import { useService } from "open-pioneer:react-hooks";
 // import ExpandleBox from "./Components/ExpandleBox";
 import { Legend } from "@open-pioneer/legend";
@@ -43,7 +43,7 @@ export function MapApp() {
     const measurementTitleId = useId();
     const mapModel = useMapModel("main");
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
-    // const [featureInfo, setFeatureInfo] = useState<Record<string, any> | null>(null); //feature info test
+    const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
 
     //////////////////
     /// LayerSwipe ///
@@ -67,6 +67,21 @@ export function MapApp() {
             }),
         []
     );
+
+    ///////////////////
+    ///FeatureInfo////
+    /////////////////
+
+    useEffect(() => {
+        if (mapModel?.map) {
+            const layers = mapModel.map.layers.getAllLayers() as SimpleLayer[];
+            const activeLayers = layers
+                .filter((layer: SimpleLayer) => layer.olLayer.getVisible()) 
+                .map((layer: SimpleLayer) => layer.olLayer.get("title")); 
+
+            setActiveLayerIds(activeLayers);
+        }
+    }, [mapModel]);
 
     //////////////////
     /// LayerSwipe ///
@@ -111,7 +126,7 @@ export function MapApp() {
                 }
             >
                 <Flex flex="1" direction="column" position="relative">
-                    {/*MAP1*/}
+                    {/*MAP_ID1*/}
                     <MapContainer
                         mapId={MAP_ID1}
                         role="main"
@@ -197,11 +212,24 @@ export function MapApp() {
                                 ;
                             </VStack>
 
-                            <FeatureInfo
-                                mapModel={mapModel.map!}
-                                layerId="pluvial_100yrcp4-5_wd_max"
-                                projection="EPSG:3857"
-                            />
+                            {/* {mapModel && (
+                                <FeatureInfo
+                                    mapModel={mapModel.map!}
+                                    layerId="pluvial_100yrcp4-5_wd_max"
+                                    projection="EPSG:3857"
+                                />
+                            )} */}
+
+                            {mapModel &&
+                                activeLayerIds.length > 0 &&
+                                activeLayerIds.map((layerId) => (
+                                    <FeatureInfo
+                                        key={layerId}
+                                        mapModel={mapModel.map!}
+                                        layerId={layerId}
+                                        projection="EPSG:3857"
+                                    />
+                                ))}
 
                         </MapAnchor>
                         {/*layerswipe layers & overview map*/}
@@ -292,7 +320,7 @@ export function MapApp() {
                             </Flex>
                         </MapAnchor>
                     </MapContainer>
-                    {/*END MAP1*/}
+                    {/*END MAP_ID1*/}
                 </Flex>
 
                 {/* add layerswipe slider below map container  */}
@@ -323,103 +351,6 @@ export function MapApp() {
                     )}
                 </Box>
 
-                {/* <Flex flex="1" direction="column" position="relative"> */}
-                {/*MAP2*/}
-                {/* <MapContainer
-                        mapId={MAP_ID2}
-                        role="second"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
-                    > */}
-                {/*pixel feature info*/}
-                {/* <FeatureInfo mapId={MAP_ID2} /> */}
-
-                {/* <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                            {measurementIsActive && (
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    role="top-left"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
-                                >
-                                    <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                        <TitledSection
-                                            title={
-                                                <SectionHeading
-                                                    id={measurementTitleId}
-                                                    size="md"
-                                                    mb={2}
-                                                >
-                                                    {intl.formatMessage({ id: "measurementTitle" })}
-                                                </SectionHeading>
-                                            }
-                                        >
-                                            <Measurement mapId={MAP_ID2} />
-                                        </TitledSection>
-                                    </Box>
-                                </Box>
-                            )} */}
-                {/*add Table of Contents (Toc) */}
-                {/* <Box
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="dialog"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                            >
-                                <Toc mapId={MAP_ID2} showTools={true} showBasemapSwitcher={false} />
-                            </Box> */}
-                {/* </MapAnchor> */}
-                {/* <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                            <Box
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="top-right"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                            >
-                                <OverviewMap mapId={MAP_ID2} olLayer={overviewMapLayer} />
-                                <Divider mt={4} />
-                                <FormControl>
-                                    <FormLabel mt={2}>
-                                        <Text as="b">
-                                            {intl.formatMessage({ id: "basemapLabel" })}
-                                        </Text>
-                                    </FormLabel>
-                                    <BasemapSwitcher mapId={MAP_ID2} allowSelectingEmptyBasemap />
-                                </FormControl>
-                            </Box>
-                        </MapAnchor> */}
-                {/* <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
-                            <Flex
-                                role="bottom-right"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
-                                direction="column"
-                                gap={1}
-                                padding={1}
-                            >
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "measurementTitle" })}
-                                    icon={<PiRulerLight />}
-                                    isActive={measurementIsActive}
-                                    onClick={toggleMeasurement}
-                                />
-                                <Geolocation mapId={MAP_ID2} />
-                                <InitialExtent mapId={MAP_ID2} />
-                                <ZoomIn mapId={MAP_ID2} />
-                                <ZoomOut mapId={MAP_ID2} />
-                            </Flex>
-                        </MapAnchor>
-                    </MapContainer> */}
-                {/*END MAP2*/}
-                {/* </Flex> */}
-
                 <Flex
                     role="region"
                     aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
@@ -431,18 +362,6 @@ export function MapApp() {
                     <ScaleBar mapId={MAP_ID1} />
                     <ScaleViewer mapId={MAP_ID1} />
                 </Flex>
-
-                {/* <Flex
-                    role="region"
-                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
-                    gap={3}
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <CoordinateViewer mapId={MAP_ID2} precision={2} />
-                    <ScaleBar mapId={MAP_ID2} />
-                    <ScaleViewer mapId={MAP_ID2} />
-                </Flex> */}
             </TitledSection>
         </Flex>
     );
