@@ -16,6 +16,7 @@
         "@open-pioneer/map-ui-components": "catalog:",
         "@open-pioneer/measurement": "catalog:",
         "@open-pioneer/notifier": "catalog:",
+        "@open-pioneer/ogc-features": "catalog:",
         "@open-pioneer/overview-map": "catalog:",
         "@open-pioneer/runtime": "catalog:",
         "@open-pioneer/scale-bar": "catalog:",

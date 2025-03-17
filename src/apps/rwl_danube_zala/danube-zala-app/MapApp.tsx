@@ -1,6 +1,15 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-import { Box, Divider, Flex, FormControl, FormLabel, Text } from "@open-pioneer/chakra-integration";
+import {
+    Box,
+    Button,
+    Container,
+    Divider,
+    Flex,
+    FormControl,
+    FormLabel,
+    Text
+} from "@open-pioneer/chakra-integration";
 import { AuthService, ForceAuth, useAuthState } from "@open-pioneer/authentication";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
@@ -48,8 +57,13 @@ export function MapApp() {
 
     return (
         <ForceAuth>
-            <Text>Logged in as: {userName}</Text>
             <Flex height="100%" direction="column" overflow="hidden">
+                <Container p={5}>
+                    <Flex pt={5} gap="10" flexDirection="row" justifyContent="center">
+                        <Text>Logged in as: {userName}</Text>
+                        <Button onClick={() => authService.logout()}>Logout</Button>
+                    </Flex>
+                </Container>
                 <Navbar />
                 <Notifier position="bottom" />
                 <TitledSection
