@@ -1,11 +1,17 @@
 // SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
+<<<<<<< HEAD
+
+export { MainMapProvider } from "./services/MapProvider";
+export { LayerHandlerImpl } from "./services/LayerHandler";
+=======
 import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { ServiceOptions } from "@open-pioneer/runtime";
 import TileLayer from "ol/layer/Tile";
 import { Vector as VectorLayer } from "ol/layer.js";
 import OSM from "ol/source/OSM";
+export { TokenInterceptor } from "./TokenInterceptor";
 
 interface References {
     vectorSourceFactory: OgcFeaturesVectorSourceFactory;
@@ -104,3 +110,4 @@ export class MainMapProvider implements MapConfigProvider {
         };
     }
 }
+>>>>>>> main

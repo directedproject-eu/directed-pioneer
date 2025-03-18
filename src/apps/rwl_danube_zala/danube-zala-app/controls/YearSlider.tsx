@@ -6,11 +6,9 @@ import {
     SliderTrack,
     SliderFilledTrack,
     SliderThumb,
-    VStack,
-    HStack,
-    Select
+    VStack
 } from "@open-pioneer/chakra-integration";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { LayerHandler } from "../services/LayerHandler";
 import { useService } from "open-pioneer:react-hooks";
 

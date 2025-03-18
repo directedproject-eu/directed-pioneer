@@ -48,7 +48,7 @@ export const Legend = (props: legendmetaData) => {
     ];
 
     return (
-        <Box bg={"white"} p={2} borderRadius="md" boxShadow="md">
+        <Box bg={"white"} p={2} borderRadius="md" boxShadow="md" mt="1em">
             <Text fontWeight="bold" mb={0}>
                 {legend_text[props.metaData.variable]}
             </Text>
