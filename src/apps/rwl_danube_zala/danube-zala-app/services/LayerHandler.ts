@@ -81,6 +81,7 @@ export class LayerHandlerImpl implements LayerHandler {
                     olLayer: this.layer
                 })
             );
+            this.layer.setZIndex(0);
         });
     }
 
