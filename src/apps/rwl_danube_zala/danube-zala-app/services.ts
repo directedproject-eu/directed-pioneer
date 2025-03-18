@@ -4,11 +4,7 @@ import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { ServiceOptions } from "@open-pioneer/runtime";
 import TileLayer from "ol/layer/Tile";
-import TileWMS from "ol/source/TileWMS";
 import { Vector as VectorLayer } from "ol/layer.js";
-import { Vector as VectorSource } from "ol/source.js";
-import GeoJSON from "ol/format/GeoJSON.js";
-import { Stroke, Style, Text } from "ol/style";
 import OSM from "ol/source/OSM";
 export { TokenInterceptor } from "./TokenInterceptor";
 

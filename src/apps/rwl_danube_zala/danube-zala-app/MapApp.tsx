@@ -58,13 +58,13 @@ export function MapApp() {
     return (
         <ForceAuth>
             <Flex height="100%" direction="column" overflow="hidden">
+                <Navbar />
                 <Container p={5}>
                     <Flex pt={5} gap="10" flexDirection="row" justifyContent="center">
                         <Text>Logged in as: {userName}</Text>
                         <Button onClick={() => authService.logout()}>Logout</Button>
                     </Flex>
                 </Container>
-                <Navbar />
                 <Notifier position="bottom" />
                 <TitledSection
                     title={
