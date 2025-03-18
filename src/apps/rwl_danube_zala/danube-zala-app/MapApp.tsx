@@ -13,7 +13,7 @@ import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
-import { MAP_ID } from "./services";
+import { MAP_ID } from "./services/MapProvider";
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
@@ -21,6 +21,14 @@ import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
+import { LayerSelector } from "./controls/LayerSelector";
+import Selector from "./controls/Selector";
+import { ScenarioSelector } from "./controls/ScenarioSelector";
+import { ModelSelector } from "./controls/ModelSelector";
+import { VariableSelector } from "./controls/VariableSelector";
+import { Legend } from "./controls/Legend";
+import { useService } from "open-pioneer:react-hooks";
+import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
 export function MapApp() {
     const intl = useIntl();
@@ -37,6 +45,14 @@ export function MapApp() {
                 source: new OSM()
             }),
         []
+    );
+    const prepSrvc = useService<LayerHandler>("app.LayerHandler");
+
+    const { legendMetadata } = useReactiveSnapshot(
+        () => ({
+            legendMetadata: prepSrvc.legendMetadata
+        }),
+        [prepSrvc]
     );
 
     return (
@@ -63,7 +79,23 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
+                        <MapAnchor position="top-left" horizontalGap={10} verticalGap={10}>
+                            <div
+                                style={{
+                                    width: window.innerWidth * 0.6,
+                                    marginLeft: window.innerWidth * 0.2,
+                                    marginRight: window.innerWidth * 0.2,
+                                    borderRadius: "10px",
+                                    backgroundColor: "rgba(255, 255, 255, 0.5)"
+                                }}
+                            >
+                                <LayerSelector />
+                            </div>
+                        </MapAnchor>
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                            <ScenarioSelector />
+                            <ModelSelector />
+                            <VariableSelector />
                             {measurementIsActive && (
                                 <Box
                                     backgroundColor="white"
@@ -144,6 +176,9 @@ export function MapApp() {
                                 <ZoomIn mapId={MAP_ID} />
                                 <ZoomOut mapId={MAP_ID} />
                             </Flex>
+                        </MapAnchor>
+                        <MapAnchor position="bottom-left" horizontalGap={10} verticalGap={30}>
+                            <Legend metaData={legendMetadata}></Legend>
                         </MapAnchor>
                     </MapContainer>
                 </Flex>
