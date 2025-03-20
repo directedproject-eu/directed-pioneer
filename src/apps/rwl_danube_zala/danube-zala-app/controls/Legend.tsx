@@ -7,8 +7,7 @@ interface legendmetaData {
     range: number[];
     variable: string;
 }
-export const Legend = (props: legendmetaData) => {
-    console.log(props.metaData);
+const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
     const legend_text = {
         hurs: "Near-Surface Relative Humidity in %",
         pr: "Precipitation in kg·m⁻²·s⁻¹",
@@ -30,35 +29,60 @@ export const Legend = (props: legendmetaData) => {
         red: "#832525BC",
         dark_red: "#53050aBC" //rgba(83,5,10,0.74)
     };
-    const increment = (props.metaData.range[1] - props.metaData.range[0]) / 8;
+    const increment = (range[1] - range[0]) / 8;
 
     const to_display = [
-        { label: props.metaData.range[0].toFixed(2), color: tempColors.black },
-        { label: (props.metaData.range[0] + increment * 1).toFixed(2), color: tempColors.pink },
+        { label: range[0].toFixed(2), color: tempColors.black },
+        { label: (range[0] + increment * 1).toFixed(2), color: tempColors.pink },
         {
-            label: (props.metaData.range[0] + increment * 2).toFixed(2),
+            label: (range[0] + increment * 2).toFixed(2),
             color: tempColors.cold_blue
         },
-        { label: (props.metaData.range[0] + increment * 3).toFixed(2), color: tempColors.ice_blue },
-        { label: (props.metaData.range[0] + increment * 4).toFixed(2), color: tempColors.green },
-        { label: (props.metaData.range[0] + increment * 5).toFixed(2), color: tempColors.yellow },
-        { label: (props.metaData.range[0] + increment * 6).toFixed(2), color: tempColors.orange },
-        { label: (props.metaData.range[0] + increment * 7).toFixed(2), color: tempColors.red },
-        { label: (props.metaData.range[0] + increment * 8).toFixed(2), color: tempColors.dark_red }
+        { label: (range[0] + increment * 3).toFixed(2), color: tempColors.ice_blue },
+        { label: (range[0] + increment * 4).toFixed(2), color: tempColors.green },
+        { label: (range[0] + increment * 5).toFixed(2), color: tempColors.yellow },
+        { label: (range[0] + increment * 6).toFixed(2), color: tempColors.orange },
+        { label: (range[0] + increment * 7).toFixed(2), color: tempColors.red },
+        { label: (range[0] + increment * 8).toFixed(2), color: tempColors.dark_red }
+    ];
+    const to_display_circles = [
+        { label: "Timber Cutting", color: "green" },
+        { label: "Forest and vegetation fire", color: "red" },
+        { label: "Water damage", color: "blue" },
+        { label: "Storm damage", color: "black" }
     ];
 
     return (
         <Box bg={"white"} p={2} borderRadius="md" boxShadow="md" mt="1em">
             <Text fontWeight="bold" mb={0}>
-                {legend_text[props.metaData.variable]}
+                {legend_text[variable]}
             </Text>
-
-            {to_display.map((item, index) => (
-                <Box key={index} display="flex" alignItems="center" mb={1}>
-                    <Box width="12px" height="12px" bg={item.color} mr={2} />
-                    <Box>{item.label}</Box>
+            <Box display="flex" justifyContent="center" alignItems="center">
+                <div style={{ marginRight: "3em" }}>
+                    {to_display.map((item, index) => (
+                        <Box key={index} display="flex" alignItems="center" mb={1}>
+                            <Box width="12px" height="12px" bg={item.color} mr={2} />
+                            <Box>{item.label}</Box>
+                        </Box>
+                    ))}
+                </div>
+                <Box height="100%">
+                    {to_display_circles.map((item, index) => (
+                        <Box key={index} display="flex" alignItems="center" mb={1}>
+                            <Box
+                                width="15px"
+                                height="15px"
+                                bg={item.color}
+                                color="white"
+                                borderRadius={"50%"}
+                                mr={2}
+                            />
+                            <Box>{item.label}</Box>
+                        </Box>
+                    ))}
                 </Box>
-            ))}
+            </Box>
         </Box>
     );
 };
+export default Legend;

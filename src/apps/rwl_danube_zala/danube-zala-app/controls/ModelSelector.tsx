@@ -4,6 +4,7 @@
 import { useService } from "open-pioneer:react-hooks";
 import { LayerHandler } from "../services/LayerHandler";
 import Selector from "./Selector";
+import ExpandleBox from "./ExpandleBox";
 
 export function ModelSelector() {
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
@@ -13,21 +14,22 @@ export function ModelSelector() {
     };
 
     return (
-        <Selector
-            options={[
-                "canesm5",
-                "cnrm-cm6-1",
-                "cnrm-esm2-1",
-                "ec-earth3",
-                "gfdl-esm4",
-                "ipsl-cm6a-lr",
-                "miroc6",
-                "mpi-esm1-2-hr",
-                "mri-esm2-0",
-                "ukesm1-0-ll"
-            ]}
-            setSelected={setSelected}
-            heading={"Select a model"}
-        ></Selector>
+        <ExpandleBox title="Select a model" marginBottom="10px">
+            <Selector
+                options={[
+                    "canesm5",
+                    "cnrm-cm6-1",
+                    "cnrm-esm2-1",
+                    "ec-earth3",
+                    "gfdl-esm4",
+                    "ipsl-cm6a-lr",
+                    "miroc6",
+                    "mpi-esm1-2-hr",
+                    "mri-esm2-0",
+                    "ukesm1-0-ll"
+                ]}
+                setSelected={setSelected}
+            ></Selector>
+        </ExpandleBox>
     );
 }

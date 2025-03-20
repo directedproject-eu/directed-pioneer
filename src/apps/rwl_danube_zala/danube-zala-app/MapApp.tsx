@@ -36,7 +36,7 @@ import { LayerSelector } from "./controls/LayerSelector";
 import { ScenarioSelector } from "./controls/ScenarioSelector";
 import { ModelSelector } from "./controls/ModelSelector";
 import { VariableSelector } from "./controls/VariableSelector";
-import { Legend } from "./controls/Legend";
+import Legend from "./controls/Legend";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
 export function MapApp() {
@@ -188,7 +188,10 @@ export function MapApp() {
                                         />
                                     </FormControl>
                                 </Box>
-                                <Legend metaData={legendMetadata}></Legend>
+                                <Legend
+                                    range={legendMetadata.range}
+                                    variable={legendMetadata.variable}
+                                ></Legend>
                             </MapAnchor>
                             <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
                                 <Flex

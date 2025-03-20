@@ -11,13 +11,22 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 
 import chroma from "chroma-js";
 
+const legend_text = {
+    hurs: "Near-Surface Relative Humidity in %",
+    pr: "Precipitation in kg·m⁻²·s⁻¹",
+    rsds: "Surface Downwelling Shortwave Radiation in W/m²",
+    sfcwind: "Near-Surface Wind Speed in m/s",
+    tas: "Near-Surface Air Temperature in K",
+    tasmax: "Daily Maximum Near-Surface Air Temperature in K",
+    tasmin: "Daily Minimum Near-Surface Air Temperature in K"
+};
+
 async function getRangeFromGeoTiff(url: string): Promise<number[]> {
     try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
 
         const tiff = await GeoTIFFJS.fromArrayBuffer(arrayBuffer);
-        console.log(tiff);
         const image = await tiff.getImage();
 
         const rasterData = await image.readRasters();
@@ -76,6 +85,8 @@ export class LayerHandlerImpl implements LayerHandler {
             });
             model?.layers.addLayer(
                 new SimpleLayer({
+                    id: "isimip",
+                    description: legend_text["hurs"],
                     title: this.#selectedVariable.value,
                     isBaseLayer: false,
                     olLayer: this.layer
@@ -107,6 +118,7 @@ export class LayerHandlerImpl implements LayerHandler {
         this.#selectedVariable.value = newVariable;
         this.layer?.setSource(this.updateSource());
         this.updateStyle();
+        this.changeTitleOfLayer(this.#selectedVariable.value);
     }
     setModel(newModel: string): void {
         this.#selectedModel.value = newModel;
@@ -142,6 +154,7 @@ export class LayerHandlerImpl implements LayerHandler {
                     range: range,
                     variable: this.#selectedVariable.value
                 };
+
                 this.layer?.setStyle({
                     color: this.createColorGradiant([range[0], range[1]])
                 });
@@ -199,5 +212,13 @@ export class LayerHandlerImpl implements LayerHandler {
             ...boundaries_temp.flatMap((boundary) => [boundary, colorScale_temp(boundary).hex()])
         ];
         return tempColorGradient;
+    }
+    private changeTitleOfLayer(newTitle: string) {
+        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+            model?.layers.getLayerById("isimip")?.setTitle(newTitle);
+            model?.layers
+                .getLayerById("isimip")
+                ?.setDescription(legend_text[this.#selectedVariable.value]);
+        });
     }
 }
