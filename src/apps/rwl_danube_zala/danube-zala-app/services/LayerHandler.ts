@@ -16,6 +16,7 @@ const legend_text = {
     pr: "Precipitation in kg·m⁻²·s⁻¹",
     rsds: "Surface Downwelling Shortwave Radiation in W/m²",
     sfcwind: "Near-Surface Wind Speed in m/s",
+    spei12: "SPEI drought index",
     tas: "Near-Surface Air Temperature in K",
     tasmax: "Daily Maximum Near-Surface Air Temperature in K",
     tasmin: "Daily Minimum Near-Surface Air Temperature in K"

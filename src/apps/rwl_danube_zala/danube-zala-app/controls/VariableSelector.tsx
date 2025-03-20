@@ -15,7 +15,7 @@ export function VariableSelector() {
     return (
         <ExpandleBox title="Select a variable" marginBottom="10px">
             <Selector
-                options={["hurs", "pr", "rsds", "sfcwind", "tasmax", "tasmin", "tas"]}
+                options={["hurs", "pr", "rsds", "sfcwind", "spei12", "tasmax", "tasmin", "tas"]}
                 setSelected={setSelected}
             ></Selector>
         </ExpandleBox>
