@@ -9,8 +9,9 @@ Then execute the following commands to get started:
 ```shell
 git clone https://github.com/directedproject-eu/directed-pioneer # Clone this repository
 cd directed-pioneer
-pnpm install                                          # Install dependencies
-pnpm run dev                                          # Launch development server
+corepack use pnpm@9.x                                            # Install pnpm 9^
+pnpm install                                                     # Install dependencies
+pnpm run dev                                                     # Launch development server
 ```
 
 Vite will print the project's local address (usually <http://localhost:5173/>).
@@ -23,7 +24,7 @@ Additional in-depth information on OpenPioneer can be found in the [Documentatio
 The variables `VITE_DEV_URL` and `VITE_PROD_URL` must be configured in the `<root>/.env` file. By default `pnpm dev` uses `VITE_DEV_URL` and `pnpm build` uses `VITE_PROD_URL`. If the development server does not run on `localhost:5137` the `VITE_DEV_URL` variable must be updated accordingly. The variable `VITE_PROD_URL` is the URL of the landing page in a production deployment (or preview with `pnpm preview`).
 If the variables are not set correctly the application might not work as expected (e.g. hyperlinks in the navbar).
 
-see Vite documentation for details: https://vite.dev/guide/env-and-mode.html#html-constant-replacement
+See Vite documentation for details: <https://vite.dev/guide/env-and-mode.html#html-constant-replacement>
 
 ## Docker
 
