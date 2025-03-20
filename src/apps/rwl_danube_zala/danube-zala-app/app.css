@@ -24,3 +24,50 @@
     left: unset;
     right: 0.5em;
 }
+
+.selector-container {
+    position: relative;
+    width: 200px;
+    font-family: Arial, sans-serif;
+}
+
+.selector-header {
+    padding: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.arrow {
+    transition: transform 0.2s;
+}
+
+.arrow.open {
+    transform: rotate(180deg);
+}
+
+.selector-options {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    list-style: none;
+    padding: 0;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.selector-option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.selector-option:hover {
+    background: #f0f0f0;
+}

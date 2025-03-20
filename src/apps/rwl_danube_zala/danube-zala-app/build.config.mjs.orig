@@ -5,27 +5,34 @@ import { defineBuildConfig } from "@open-pioneer/build-support";
 export default defineBuildConfig({
     styles: "./app.css",
     i18n: ["en", "de"],
+    ui: {
+        references: ["app.LayerHandler"]
+    },
     services: {
         MainMapProvider: {
-            provides: ["map.MapConfigProvider"],
-            references: {
-                vectorSourceFactory: "ogc-features.VectorSourceFactory"
-            }
+<<<<<<< HEAD
+            provides: ["map.MapConfigProvider"]
         },
+
         LayerHandlerImpl: {
             provides: ["app.LayerHandler"],
             references: {
                 mapRegistry: "map.MapRegistry"
+=======
+            provides: ["map.MapConfigProvider"],
+            references: {
+                vectorSourceFactory: "ogc-features.VectorSourceFactory"
             }
         },
         TokenInterceptor: {
             provides: ["http.Interceptor"],
             references: {
                 authService: "authentication.AuthService"
+>>>>>>> main
             }
         }
     },
     ui: {
-        references: ["authentication.AuthService", "http.HttpService", "app.LayerHandler"]
+        references: ["authentication.AuthService", "http.HttpService"]
     }
 });
