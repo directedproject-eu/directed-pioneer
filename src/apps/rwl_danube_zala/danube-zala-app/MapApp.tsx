@@ -24,6 +24,7 @@ import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
+import { FeatureInfo } from "./services/FeatureInfo";
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
@@ -38,12 +39,28 @@ import { ModelSelector } from "./controls/ModelSelector";
 import { VariableSelector } from "./controls/VariableSelector";
 import Legend from "./controls/Legend";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
+import { Selection } from "@open-pioneer/selection";
 
 export function MapApp() {
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
     const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
     const userName = sessionInfo?.attributes?.userName as string;
+
+    const featureInfoService = useService<FeatureInfo>("app.FeatureInfo");
+    const currentListContainer = useReactiveSnapshot(
+        () => featureInfoService.listContainer,
+        [featureInfoService]
+    );
+    const viewPadding = useMemo(() => {
+        // adjust map view whether list container (bottom = height of list component)
+        return {
+            left: 0,
+            right: 0,
+            bottom: currentListContainer != null ? 400 : 0,
+            top: 0
+        };
+    }, [currentListContainer]);
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -192,6 +209,11 @@ export function MapApp() {
                                     range={legendMetadata.range}
                                     variable={legendMetadata.variable}
                                 ></Legend>
+                                <Selection
+                                    mapId={MAP_ID}
+                                    sources={featureInfoService.getSelectionSources()}
+                                    onSelectionComplete={featureInfoService.onSelectionComplete}
+                                />
                             </MapAnchor>
                             <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
                                 <Flex
@@ -213,6 +235,21 @@ export function MapApp() {
                                     <ZoomOut mapId={MAP_ID} />
                                 </Flex>
                             </MapAnchor>
+                            {currentListContainer && (
+                                <Box
+                                    className="list-container"
+                                    position="absolute"
+                                    bottom="0"
+                                    backgroundColor="white"
+                                    width="100%"
+                                    height="400px"
+                                    zIndex={1 /* above map */}
+                                    borderTop="2px solid"
+                                    borderColor="trails.100"
+                                >
+                                    {currentListContainer}
+                                </Box>
+                            )}
                         </MapContainer>
                     </Flex>
                     <Flex

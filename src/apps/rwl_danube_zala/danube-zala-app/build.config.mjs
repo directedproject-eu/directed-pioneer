@@ -23,9 +23,21 @@ export default defineBuildConfig({
             references: {
                 authService: "authentication.AuthService"
             }
+        },
+        FeatureInfo: {
+            provides: ["app.FeatureInfo"],
+            references: {
+                mapRegistry: "map.MapRegistry",
+                vectorSelectionSourceFactory: "selection.VectorSelectionSourceFactory"
+            }
         }
     },
     ui: {
-        references: ["authentication.AuthService", "http.HttpService", "app.LayerHandler"]
+        references: [
+            "authentication.AuthService",
+            "http.HttpService",
+            "app.LayerHandler",
+            "app.FeatureInfo"
+        ]
     }
 });
