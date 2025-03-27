@@ -8,7 +8,7 @@ interface legendmetaData {
     variable: string;
 }
 const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
-    const legend_text = {
+    const legend_text: Record<string, string> = {
         hurs: "Near-Surface Relative Humidity in %",
         pr: "Precipitation in kg·m⁻²·s⁻¹",
         rsds: "Surface Downwelling Shortwave Radiation in W/m²",
