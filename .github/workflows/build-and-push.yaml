@@ -98,6 +98,8 @@ jobs:
        TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
        TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
        TRIVY_DISABLE_VEX_NOTICE: disable_vex_notice
+       TRIVY_FORMAT: table
+       TRIVY_OUTPUT: trivy-results.txt
      with:
        image-ref: "${{ env.IMAGE_TAG }}"
        format: 'table'

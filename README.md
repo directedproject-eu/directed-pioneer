@@ -9,7 +9,7 @@ Then execute the following commands to get started:
 ```shell
 git clone https://github.com/directedproject-eu/directed-pioneer # Clone this repository
 cd directed-pioneer
-corepack use pnpm@9.x                                            # Install pnpm 9^
+corepack cache clean && corepack use pnpm@9.x                    # Install pnpm 9^
 pnpm install                                                     # Install dependencies
 pnpm run dev                                                     # Launch development server
 ```
@@ -28,13 +28,28 @@ See Vite documentation for details: <https://vite.dev/guide/env-and-mode.html#ht
 
 ## Docker
 
-**Build** the image with:
+### Build
 
 ```shell
 docker build -t 52north/directed-open-pioneer-trails:latest .
 ```
 
-**Run** the image with:
+### Scan the image for vulnerabilities
+
+```shell
+docker run -ti --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /tmp/aquasec-trivy-cache:/root/.cache/ \
+    aquasec/trivy:latest \
+    image \
+        --scanners vuln \
+        --format table \
+        --severity CRITICAL,HIGH \
+        --ignore-unfixed \
+        52north/directed-open-pioneer-trails:latest
+```
+
+### Run
 
 ```shell
 docker run -p 80:8080 --rm --name open-pioneer-trails 52north/directed-open-pioneer-trails:latest

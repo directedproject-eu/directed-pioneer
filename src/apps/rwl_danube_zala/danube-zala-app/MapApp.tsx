@@ -100,7 +100,7 @@ export function MapApp() {
                             role="main"
                             aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                         >
-                            <MapAnchor position="top-left " horizontalGap={5} verticalGap={5}>
+                            <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                 <div
                                     style={{
                                         width: window.innerWidth * 0.6,
