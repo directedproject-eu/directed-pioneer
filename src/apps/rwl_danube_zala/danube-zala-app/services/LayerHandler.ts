@@ -58,7 +58,6 @@ export interface LayerHandler extends DeclaredService<"app.LayerHandler"> {
     setScenario(newScenario: string): void;
     setVariable(newVariable: string): void;
     setModel(newModel: string): void;
-    getLegendMetadata(): legendMetadata;
 }
 
 export class LayerHandlerImpl implements LayerHandler {

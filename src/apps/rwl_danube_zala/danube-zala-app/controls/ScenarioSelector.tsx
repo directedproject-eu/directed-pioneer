@@ -4,7 +4,7 @@
 import { useService } from "open-pioneer:react-hooks";
 import { LayerHandler } from "../services/LayerHandler";
 import Selector from "./Selector";
-import ExpandleBox from "./ExpandleBox";
+import ExpandableBox from "../components/ExpandableBox";
 
 export function ScenarioSelector() {
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
@@ -14,12 +14,12 @@ export function ScenarioSelector() {
     };
 
     return (
-        <ExpandleBox title="Select a scenario" marginBottom="10px">
+        <ExpandableBox title="Select a scenario" marginBottom="10px">
             <Selector
                 options={["ssp585", "ssp370"]}
                 heading="Select a scenario"
                 setSelected={setSelected}
             ></Selector>
-        </ExpandleBox>
+        </ExpandableBox>
     );
 }

@@ -35,7 +35,7 @@ import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
 // import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
-import ExpandleBox from "./Components/ExpandleBox";
+import ExpandableBox from "./Components/ExpandableBox";
 
 export function MapApp() {
     const intl = useIntl();
@@ -159,9 +159,9 @@ export function MapApp() {
                                         </Box>
                                     </Box>
                                 )}
-                                <ExpandleBox title="Analysis">
+                                <ExpandableBox title="Analysis">
                                     <>Example Analysis Text</>
-                                </ExpandleBox>
+                                </ExpandableBox>
                             </Flex>
                             {/*add Table of Contents (Toc) */}
                             <Box

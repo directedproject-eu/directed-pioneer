@@ -24,7 +24,7 @@ import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
@@ -33,17 +33,20 @@ import { useService } from "open-pioneer:react-hooks";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { LayerSelector } from "./controls/LayerSelector";
-import { ScenarioSelector } from "./controls/ScenarioSelector";
-import { ModelSelector } from "./controls/ModelSelector";
-import { VariableSelector } from "./controls/VariableSelector";
-import Legend from "./controls/Legend";
+import Legend from "./components/Legend";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
+import ExpandableBox from "./components/ExpandableBox";
+import StationInformation from "./components/StationInformation";
+import { StationSelector } from "./services/StationSelector";
+import { IsimipSelector } from "./controls/IsimipSelector";
 
 export function MapApp() {
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
     const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
     const userName = sessionInfo?.attributes?.userName as string;
+
+    const closableBoxRef = useRef();
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -68,17 +71,24 @@ export function MapApp() {
         }),
         [prepSrvc]
     );
+    const stationService = useService<StationSelector>("app.StationSelector");
+    const { stationData } = useReactiveSnapshot(
+        () => ({
+            stationData: stationService.stationData
+        }),
+        [prepSrvc]
+    );
 
     return (
         <ForceAuth>
             <Flex height="100%" direction="column" overflow="hidden">
-                <Navbar />
-                <Container p={5}>
-                    <Flex pt={5} gap="10" flexDirection="row" justifyContent="center">
+                <Navbar>
+                    <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
                         <Text>Logged in as: {userName}</Text>
                         <Button onClick={() => authService.logout()}>Logout</Button>
                     </Flex>
-                </Container>
+                </Navbar>
+                <Container p={5}></Container>
                 <Notifier position="bottom" />
                 <TitledSection
                     title={
@@ -115,10 +125,11 @@ export function MapApp() {
                                 </div>
                             </MapAnchor>
                             <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                                <ScenarioSelector />
-                                <ModelSelector />
-                                <VariableSelector />
+                                <IsimipSelector />
 
+                                <ExpandableBox title="Event Information" marginBottom="10px">
+                                    <StationInformation data={stationData} />
+                                </ExpandableBox>
                                 {measurementIsActive && (
                                     <Box
                                         backgroundColor="white"

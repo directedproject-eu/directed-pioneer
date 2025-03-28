@@ -18,6 +18,12 @@ export default defineBuildConfig({
                 mapRegistry: "map.MapRegistry"
             }
         },
+        StationSelectorImpl: {
+            provides: ["app.StationSelector"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
+        },
         TokenInterceptor: {
             provides: ["http.Interceptor"],
             references: {
@@ -26,6 +32,11 @@ export default defineBuildConfig({
         }
     },
     ui: {
-        references: ["authentication.AuthService", "http.HttpService", "app.LayerHandler"]
+        references: [
+            "authentication.AuthService",
+            "http.HttpService",
+            "app.LayerHandler",
+            "app.StationSelector"
+        ]
     }
 });

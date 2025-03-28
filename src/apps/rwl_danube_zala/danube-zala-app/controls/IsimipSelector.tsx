@@ -6,15 +6,23 @@ import { LayerHandler } from "../services/LayerHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
 
-export function ModelSelector() {
+export function IsimipSelector() {
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
 
-    const setSelected = (option: string) => {
+    const setModel = (option: string) => {
         prepSrvc.setModel(option);
     };
 
+    const setVariable = (option: string) => {
+        prepSrvc.setVariable(option);
+    };
+
+    const setScenario = (option: string) => {
+        prepSrvc.setScenario(option);
+    };
+
     return (
-        <ExpandableBox title="Select a model" marginBottom="10px">
+        <ExpandableBox title="Select a Layer" marginBottom="10px" overflowY="auto">
             <Selector
                 options={[
                     "canesm5",
@@ -28,7 +36,22 @@ export function ModelSelector() {
                     "mri-esm2-0",
                     "ukesm1-0-ll"
                 ]}
-                setSelected={setSelected}
+                setSelected={setModel}
+                marginBottom="5px"
+                title="Model"
+            >
+            </Selector>
+            <Selector
+                options={["ssp585", "ssp370"]}
+                setSelected={setScenario}
+                marginBottom="5px"
+                title="Scenario"
+            >
+            </Selector>
+            <Selector
+                options={["hurs", "pr", "rsds", "sfcwind", "spei12", "tasmax", "tasmin", "tas"]}
+                setSelected={setVariable}
+                title="Variable"
             ></Selector>
         </ExpandableBox>
     );

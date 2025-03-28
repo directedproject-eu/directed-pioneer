@@ -5,13 +5,15 @@ import { useState } from "react";
 import { Box, Button, Collapse, Text } from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 
-type ExpandleBoxProps = {
+type ExpandableBoxProps = {
     title: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
     marginBottom?: string;
+    overflowY?: "auto" | "scroll" | "hidden"; 
+
 };
 
-const ExpandleBox: React.FC<ExpandleBoxProps> = ({ title, children, marginBottom }) => {
+const ExpandableBox: React.FC<ExpandableBoxProps> = ({ title, children, marginBottom, overflowY }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -32,10 +34,10 @@ const ExpandleBox: React.FC<ExpandleBoxProps> = ({ title, children, marginBottom
                 </Button>
             </Box>
             <Collapse in={isExpanded} animateOpacity>
-                <Box mt={4}>{children}</Box>
+                <Box maxHeight={"15em"} overflow={overflowY} mt={4}>{children}</Box>
             </Collapse>
         </Box>
     );
 };
 
-export default ExpandleBox;
+export default ExpandableBox;

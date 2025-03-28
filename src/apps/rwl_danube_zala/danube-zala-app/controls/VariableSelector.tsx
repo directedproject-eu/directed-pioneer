@@ -3,7 +3,7 @@
 import { useService } from "open-pioneer:react-hooks";
 import { LayerHandler } from "../services/LayerHandler";
 import Selector from "./Selector";
-import ExpandleBox from "./ExpandleBox";
+import ExpandableBox from "../components/ExpandableBox";
 
 export function VariableSelector() {
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
@@ -13,11 +13,11 @@ export function VariableSelector() {
     };
 
     return (
-        <ExpandleBox title="Select a variable" marginBottom="10px">
+        <ExpandableBox title="Select a variable" marginBottom="10px">
             <Selector
                 options={["hurs", "pr", "rsds", "sfcwind", "spei12", "tasmax", "tasmin", "tas"]}
                 setSelected={setSelected}
             ></Selector>
-        </ExpandleBox>
+        </ExpandableBox>
     );
 }

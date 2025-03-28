@@ -4,3 +4,4 @@
 export { TokenInterceptor } from "./TokenInterceptor";
 export { MainMapProvider } from "./services/MapProvider";
 export { LayerHandlerImpl } from "./services/LayerHandler";
+export { StationSelectorImpl } from "./services/StationSelector";
