@@ -61,14 +61,14 @@
             "cross-spawn@<7.0.5": ">=7.0.5",
             "nanoid@<3.3.8": "^3.3.8",
             "esbuild@<0.25.0": ">=0.25.0",
-            "react-select": "5.8.0"
+            "@babel/runtime": ">=7.26.10"
         },
         "auditConfig": {
             "ignoreCves": []
         },
         "patchedDependencies": {
-            "react-select@5.8.0": "patches/react-select@5.8.0.patch",
-            "@chakra-ui/hooks@2.4.4": "patches/@chakra-ui__hooks.patch"
+            "react-select": "patches/react-select@5.8.0.patch",
+            "@chakra-ui/hooks": "patches/@chakra-ui__hooks.patch"
         },
         "peerDependencyRules": {}
     },
@@ -116,7 +116,7 @@
         "vitest": "catalog:"
     },
     "engines": {
-        "node": ">= 18",
+        "node": ">= 20",
         "pnpm": "^9"
     },
     "dependencies": {

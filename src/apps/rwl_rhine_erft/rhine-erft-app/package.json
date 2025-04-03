@@ -19,7 +19,7 @@
         "@open-pioneer/scale-bar": "catalog:",
         "@open-pioneer/scale-viewer": "catalog:",
         "@open-pioneer/theme": "catalog:",
-        "@open-pioneer/toc": "^0.8.0",
+        "@open-pioneer/toc": "catalog:",
         "ol": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
