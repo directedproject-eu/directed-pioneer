@@ -96,8 +96,8 @@ export class MainMapProvider implements MapConfigProvider {
                 this.createPastEventLayer(
                     "zala/events/timber_cutting",
                     "timber_cutting",
-                    "Timber cutting",
-                    "Timber cutting",
+                    "Tree clearing",
+                    "Tree clearing",
                     "green"
                 )
             ]

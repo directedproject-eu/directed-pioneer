@@ -47,7 +47,7 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
         { label: (range[0] + increment * 8).toFixed(2), color: tempColors.dark_red }
     ];
     const to_display_circles = [
-        { label: "Timber Cutting", color: "green" },
+        { label: "Tree clearing", color: "green" },
         { label: "Forest and vegetation fire", color: "red" },
         { label: "Water damage", color: "blue" },
         { label: "Storm damage", color: "black" }
