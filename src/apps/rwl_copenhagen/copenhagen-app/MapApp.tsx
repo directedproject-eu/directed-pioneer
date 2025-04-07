@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 import {
     Box,
-    VStack,
     Button,
     Flex,
     FormControl,
     FormLabel,
+    HStack,
     Text,
     Select
 } from "@open-pioneer/chakra-integration";
@@ -186,32 +186,7 @@ export function MapApp() {
                             </Box>
                         </MapAnchor>
                         {/* zoom to municipalities */}
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                            <VStack align="stretch" spacing={2}>
-                                <Button
-                                    onClick={() => zoomService.zoomToFrederikssund(mapModel.map!)}
-                                >
-                                    Zoom to Frederikssund
-                                </Button>
-                                ;
-                                <Button onClick={() => zoomService.zoomToEgedal(mapModel.map!)}>
-                                    Zoom to Egedal
-                                </Button>
-                                ;
-                                <Button onClick={() => zoomService.zoomToHalsnaes(mapModel.map!)}>
-                                    Zoom to Halsnaes
-                                </Button>
-                                ;
-                                <Button onClick={() => zoomService.zoomToLejre(mapModel.map!)}>
-                                    Zoom to Lejre
-                                </Button>
-                                ;
-                                <Button onClick={() => zoomService.zoomToRoskilde(mapModel.map!)}>
-                                    Zoom to Roskilde
-                                </Button>
-                                ;
-                            </VStack>
-
+                        <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
                             {/* {mapModel && (
                                 <FeatureInfo
                                     mapModel={mapModel.map!}
@@ -219,6 +194,39 @@ export function MapApp() {
                                     projection="EPSG:3857"
                                 />
                             )} */}
+
+                            <HStack align="stretch" spacing={2}>
+                                <Button
+                                    size="sm"
+                                    onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
+                                >
+                                    Zoom to Egedal
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    onClick={() => zoomService.zoomToFrederikssund(mapModel.map!)}
+                                >
+                                    Zoom to Frederikssund
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    onClick={() => zoomService.zoomToHalsnaes(mapModel.map!)}
+                                >
+                                    Zoom to Halsnaes
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    onClick={() => zoomService.zoomToLejre(mapModel.map!)}
+                                >
+                                    Zoom to Lejre
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    onClick={() => zoomService.zoomToRoskilde(mapModel.map!)}
+                                >
+                                    Zoom to Roskilde
+                                </Button>
+                            </HStack>
 
                             {mapModel &&
                                 activeLayerIds.length > 0 &&
@@ -232,7 +240,7 @@ export function MapApp() {
                                 ))}
                         </MapAnchor>
                         {/*layerswipe layers & overview map*/}
-                        <MapAnchor position="bottom-left" horizontalGap={5} verticalGap={10}>
+                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
                             <Box
                                 backgroundColor="white"
                                 borderWidth="1px"
@@ -298,7 +306,7 @@ export function MapApp() {
                                 </FormControl>
                             </Box>
                         </MapAnchor>
-                        <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
+                        <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
                             <Flex
                                 role="bottom-right"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
@@ -320,36 +328,35 @@ export function MapApp() {
                         </MapAnchor>
                     </MapContainer>
                     {/*END MAP_ID1*/}
+
+                    {/* add layerswipe slider below map container  */}
+                    <Box
+                        position="absolute"
+                        bottom={0}
+                        left={0}
+                        right={0}
+                        padding={4}
+                        backgroundColor="white"
+                        borderTop={1}
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        {leftLayers && rightLayers && mapModel.map && (
+                            <LayerSwipe
+                                map={mapModel.map}
+                                sliderValue={sliderValue}
+                                onSliderValueChanged={(newValue) => {
+                                    setSliderValue(newValue);
+                                }}
+                                leftLayers={leftLayers}
+                                rightLayers={rightLayers}
+                                style={{ width: "100%", height: "100%" }}
+                            />
+                        )}
+                    </Box>
                 </Flex>
-
-                {/* add layerswipe slider below map container  */}
-                <Box
-                    position="absolute"
-                    bottom={0}
-                    left={0}
-                    right={0}
-                    padding={4}
-                    backgroundColor="white"
-                    borderTop={1}
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="center"
-                    alignItems="center"
-                >
-                    {leftLayers && rightLayers && mapModel.map && (
-                        <LayerSwipe
-                            map={mapModel.map}
-                            sliderValue={sliderValue}
-                            onSliderValueChanged={(newValue) => {
-                                setSliderValue(newValue);
-                            }}
-                            leftLayers={leftLayers}
-                            rightLayers={rightLayers}
-                            style={{ width: "100%", height: "100%" }}
-                        />
-                    )}
-                </Box>
-
                 <Flex
                     role="region"
                     aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
