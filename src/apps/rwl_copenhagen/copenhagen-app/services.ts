@@ -24,301 +24,21 @@ const Basemap = new SimpleLayer({
     isBaseLayer: true
 });
 
-//////////////////////////
-/// MAP_ID1 WMS LAYERS///
-////////////////////////
-
-const Coastal_100yPresent_wd_max = new SimpleLayer({
-    id: "coastal_100ypresent_wd_max",
-    title: "Coastal Flooding Present",
-    description:
-        "This layer shows a 100 year coastal flooding event under current climate conditions",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "Coastal_100yPresent_wd_max"
-            }
-        }),
-        properties: {
-            title: "Coastal Flooding Present",
-            id: "coastal_100ypresent_wd_max"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const Coastal_100ySSP2_4_5_wd_max = new SimpleLayer({
-    id: "coastal_100yssp2-4_5_wd_max",
-    title: "Coastal Flooding SSP4.5",
-    description:
-        "This layer shows a 100 year coastal flooding event under SSP4.5 (Shared Socioeconomic Projection with 4.5°C global warming) ",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "Coastal_100ySSP2-4.5_wd_max"
-            }
-        }),
-        properties: {
-            title: "Coastal Flooding SSP4.5",
-            id: "coastal_100yssp2-4_5_wd_max"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const Coastal_2013Storm_wd_max = new SimpleLayer({
-    id: "coastal_2013storm_wd_max",
-    title: "Coastal Flooding Storm Bodil 2013",
-    description: "This layer shows the flooding which occurred during the 2013 Storm Bodil event",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "Coastal_2013Storm_wd_max"
-            }
-        }),
-        properties: {
-            title: "Coastal Flooding Storm Bodil 2013",
-            id: "coastal_2013storm_wd_max"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const DMG_COAST094722 = new SimpleLayer({
-    id: "dmg_coast094722",
-    title: "Coastal Damage 094722",
-    description: "This layer shows the damages incurred by a coastal flooding event",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "DMG_COAST094722"
-            }
-        }),
-        properties: {
-            title: "Coastal Damage 094722",
-            id: "dmg_coast094722"
-        }
-    }),
-    isBaseLayer: false
-});
-
-const WD_COAST093900 = new SimpleLayer({
-    id: "wd_coast093900",
-    title: "Coastal Flood 093900",
-    description: "This layer shows a coastal flooding event",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "WD_COAST093900"
-            }
-        }),
-        properties: {
-            title: "Coastal Flood 093900",
-            id: "wd_coast093900"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const WD_COAST094028 = new SimpleLayer({
-    id: "wd_coast094028",
-    title: "Coastal Flood 094028",
-    description: "This layer shows a coastal flooding event",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "WD_COAST094028"
-            }
-        }),
-        properties: {
-            title: "Coastal Flood 094028",
-            id: "wd_coast094028"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const WD_COAST094226 = new SimpleLayer({
-    id: "wd_coast094226",
-    title: "Coastal Flooding 094226",
-    description: "This layer shows a coastal flooding event",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "WD_COAST094226"
-            }
-        }),
-        properties: {
-            title: "Coastal Flooding 094226",
-            id: "wd_coast094226"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const WD_COAST094722 = new SimpleLayer({
-    id: "wd_coast094722",
-    title: "Coastal Flooding 094722",
-    description: "This layer shows coastal flooding",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "WD_COAST094722"
-            }
-        }),
-        properties: {
-            title: "Coastal Flooding 094722",
-            id: "wd_coast094722"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const WD_RIVER111745 = new SimpleLayer({
-    id: "wd_river111745",
-    title: "River Flooding 111745",
-    description: "This layer shows river flooding",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "WD_RIVER111745"
-            }
-        }),
-        properties: {
-            title: "River Flooding 111745",
-            id: "wd_river111745"
-        }
-    }),
-    isBaseLayer: false
-});
-
-const Barrier = new SimpleLayer({
-    id: "barrier",
-    title: "Barrier",
-    description: "This layer shows a barrier placed in a coastal flooding event",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "barrier"
-            }
-        }),
-        properties: {
-            title: "Barrier",
-            id: "barrier"
-        }
-    }),
-    isBaseLayer: false
-});
-
-const pluvial_100yPresent_wd_max = new SimpleLayer({
-    id: "pluvial_100ypresent_wd_max",
-    title: "Pluvial Flooding Present",
-    description: "This layer shows a pluvial flooding event under current climate conditions",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "pluvial_100yPresent_wd_max"
-            }
-        }),
-        properties: {
-            title: "Pluvial Flooding Present",
-            id: "pluvial_100ypresent_wd_max"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const pluvial_100yRCP4_5_wd_max = new SimpleLayer({
-    id: "pluvial_100yrcp4-5_wd_max",
-    title: "Pluvial Flooding RCP4.5",
-    description:
-        "This layer shows a 100 year pluvial flooding event under RCP4.5 (Representative Concentration Pathways with 4.5°C global warming)",
-    visible: false,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://directed.dev.52north.org/geoserver/directed/wms",
-            params: {
-                LAYERS: "pluvial_100yRCP4-5_wd_max"
-            }
-        }),
-        properties: {
-            title: "Pluvial Flooding RCP4.5",
-            id: "pluvial_100yrcp4-5_wd_max"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WaterLevelLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-//////////////////////
-/// MAPS FROM .tsx ///
-/////////////////////
+// [layerName, layerTitle, layerDescription]
+const wmsLayers = [
+    ["Coastal_100yPresent_wd_max", "Coastal Flooding Present", "This layer shows a 100 year coastal flooding event under current climate conditions"],
+    ["Coastal_100ySSP2-4.5_wd_max", "Coastal Flooding SSP4.5", "This layer shows a 100 year coastal flooding event under SSP4.5 (Shared Socioeconomic Projection with 4.5°C global warming)"],
+    ["Coastal_2013Storm_wd_max", "Coastal Flooding Storm Bodil 2013", "This layer shows the flooding which occurred during the 2013 Storm Bodil event"],
+    ["DMG_COAST094722", "Coastal Damage 094722", "This layer shows the damages incurred by a coastal flooding event"],
+    ["WD_COAST093900", "Coastal Flood 093900", "This layer shows a coastal flooding event"],
+    ["WD_COAST094028", "Coastal Flood 094028", "This layer shows a coastal flooding event"],
+    ["WD_COAST094226", "Coastal Flooding 094226", "This layer shows a coastal flooding event"],
+    ["WD_COAST094722", "Coastal Flooding 094722", "This layer shows coastal flooding"],
+    ["WD_RIVER111745", "River Flooding 111745", "This layer shows river flooding"],
+    ["barrier", "Barrier", "This layer shows a barrier placed in a coastal flooding event"],
+    ["pluvial_100yPresent_wd_max", "Pluvial Flooding Present", "This layer shows a pluvial flooding event under current climate conditions"],
+    ["pluvial_100yRCP4-5_wd_max", "Pluvial Flooding RCP4.5", "This layer shows a 100 year pluvial flooding event under RCP4.5 (Representative Concentration Pathways with 4.5°C global warming)"]
+];
 
 interface Config {
     pygeoapiBaseUrl: string;
@@ -361,7 +81,39 @@ export class MainMapProvider implements MapConfigProvider {
         return municipalityLayer;
     }
 
+    createWmsLayer(layerName: string, layerTitle: string, layerDescription: string) {
+        const wmsLayer = new SimpleLayer({
+            id: layerName,
+            title: layerTitle,
+            description: layerDescription,
+            visible: false,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://directed.dev.52north.org/geoserver/directed/wms",
+                    params: {
+                        LAYERS: layerName
+                    }
+                }),
+                properties: {
+                    title: layerTitle,
+                    id: layerName
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WaterLevelLegend
+                }
+            },
+            isBaseLayer: false
+        });
+        return wmsLayer;
+    }
+
     async getMapConfig(): Promise<MapConfig> {
+        const layers = [];
+        for (const x in wmsLayers) {
+            layers.push(this.createWmsLayer(wmsLayers[x][0], wmsLayers[x][1], wmsLayers[x][2]));
+        }
         return {
             initialView: {
                 kind: "position",
@@ -415,18 +167,7 @@ export class MainMapProvider implements MapConfigProvider {
                 //     },
                 // }),
                 Basemap,
-                DMG_COAST094722,
-                WD_RIVER111745,
-                Barrier,
-                pluvial_100yPresent_wd_max,
-                pluvial_100yRCP4_5_wd_max,
-                Coastal_100yPresent_wd_max,
-                Coastal_100ySSP2_4_5_wd_max,
-                Coastal_2013Storm_wd_max,
-                WD_COAST093900,
-                WD_COAST094028,
-                WD_COAST094226,
-                WD_COAST094722
+                ...layers
             ]
         };
     }
