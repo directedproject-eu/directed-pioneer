@@ -332,9 +332,9 @@ export class MainMapProvider implements MapConfigProvider {
                         this.createMunicipalityLayer("roskilde")
                     ]
                 }),
-                ...wmsLayersRim2dCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
-                ...wmsLayersRim2dPluvial.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
-                ...wmsLayersSaferPlacesCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
+                // ...wmsLayersRim2dCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
+                // ...wmsLayersRim2dPluvial.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
+                // ...wmsLayersSaferPlacesCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
                 // ...wmsLayersFrederikssundScalgoPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersFrederikssundScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersFrederikssundSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
@@ -346,40 +346,40 @@ export class MainMapProvider implements MapConfigProvider {
                 // ...wmsLayersJyllingeScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersJyllingeSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersJyllingeSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-                // new GroupLayer({
-                //     title: "Coastal Flooding",
-                //     visible: false,
-                //     id: "coastal_flooding_layers",
-                //     layers: [
-                //         new GroupLayer({
-                //             title: "SaferPlaces model",
-                //             visible: false,
-                //             id: "coastal_flooding_saferplaces",
-                //             layers: [...wmsLayersSaferPlacesCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),],
-                //             attributes: {
-                //                 "legend": {
-                //                     Component: WaterLevelLegend
-                //                 }
-                //             },
-                //         }),
-                //         new GroupLayer({
-                //             title: "RIM2D model",
-                //             visible: false,
-                //             id: "coastal_flooding_rim2d",
-                //             layers: [...wmsLayersRim2dCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),],
-                //             attributes: {
-                //                 "legend": {
-                //                     Component: WaterLevelLegend
-                //                 }
-                //             },
-                //         })
-                //     ],
-                //     attributes: {
-                //         "legend": {
-                //             Component: WaterLevelLegend
-                //         }
-                //     },
-                // }),
+                new GroupLayer({
+                    title: "Coastal Flooding",
+                    visible: false,
+                    id: "coastal_flooding_layers",
+                    layers: [
+                        new GroupLayer({
+                            title: "SaferPlaces model",
+                            visible: false,
+                            id: "coastal_flooding_saferplaces",
+                            layers: [...wmsLayersSaferPlacesCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),],
+                            attributes: {
+                                "legend": {
+                                    Component: WaterLevelLegend
+                                }
+                            },
+                        }),
+                        new GroupLayer({
+                            title: "RIM2D model",
+                            visible: false,
+                            id: "coastal_flooding_rim2d",
+                            layers: [...wmsLayersRim2dCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),],
+                            attributes: {
+                                "legend": {
+                                    Component: WaterLevelLegend
+                                }
+                            },
+                        })
+                    ],
+                    attributes: {
+                        "legend": {
+                            Component: WaterLevelLegend
+                        }
+                    },
+                }),
                 new GroupLayer({
                     title: "Pluvial flooding",
                     visible: false,
@@ -476,17 +476,17 @@ export class MainMapProvider implements MapConfigProvider {
                                 }
                             },
                         }),
-                        // new GroupLayer({
-                        //     title: "RIM2D model",
-                        //     visible: false,
-                        //     id: "pluvial_flooding_rim2d",
-                        //     layers: [...wmsLayersRim2dPluvial.map(({name, title, description}) => this.createWmsLayer(name, title, description))],
-                        //     attributes: {
-                        //         "legend": {
-                        //             Component: WaterLevelLegend
-                        //         }
-                        //     },
-                        // })
+                        new GroupLayer({
+                            title: "RIM2D model",
+                            visible: false,
+                            id: "pluvial_flooding_rim2d",
+                            layers: [...wmsLayersRim2dPluvial.map(({name, title, description}) => this.createWmsLayer(name, title, description))],
+                            attributes: {
+                                "legend": {
+                                    Component: WaterLevelLegend
+                                }
+                            },
+                        })
                     ]
                 }),
                 new GroupLayer({
