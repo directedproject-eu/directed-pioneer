@@ -14,7 +14,7 @@ export function fetchFeatureInfo(
     >
 ) {
     if (mapModel?.olMap) {
-        const allLayers = mapModel.olMap.getLayers().getArray();
+        const allLayers = mapModel.olMap.getAllLayers();
         console.log(
             "Available layers:",
             allLayers.map((l) => l.get("id"))
