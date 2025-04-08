@@ -181,7 +181,7 @@ export function MapApp() {
                                 maxHeight={500}
                                 overflow="auto"
                             >
-                                <Toc mapId={MAP_ID1} showTools={true} showBasemapSwitcher={false} />
+                                <Toc mapId={MAP_ID1} showTools={true} collapsibleGroups={true} initiallyCollapsed={true} showBasemapSwitcher={false} />
                                 <Legend mapId={MAP_ID1} />
                             </Box>
                         </MapAnchor>
