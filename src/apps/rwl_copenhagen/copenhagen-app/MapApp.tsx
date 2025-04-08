@@ -74,7 +74,7 @@ export function MapApp() {
 
     useEffect(() => {
         if (mapModel?.map) {
-            const layers = mapModel.map.layers.getAllLayers() as SimpleLayer[];
+            const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
             const activeLayers = layers
                 .filter((layer: SimpleLayer) => layer.olLayer.getVisible())
                 .map((layer: SimpleLayer) => layer.olLayer.get("title"));
@@ -88,7 +88,7 @@ export function MapApp() {
     /////////////////
     useEffect(() => {
         if (mapModel.map) {
-            const layers = mapModel.map.layers.getAllLayers() as SimpleLayer[];
+            const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
             setAvailableLayers(layers);
 
             if (selectedLeftLayer && selectedRightLayer) {
