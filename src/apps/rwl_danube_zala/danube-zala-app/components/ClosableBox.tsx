@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
 import { Box, Button, Text } from "@chakra-ui/react";
@@ -11,7 +11,7 @@ type ClosableBoxProps = {
     marginBottom?: string;
 };
 
-const ClosableBox: React.FC<ClosableBoxProps> = ({ title, closeRef, children, marginBottom}) => {
+const ClosableBox: React.FC<ClosableBoxProps> = ({ title, closeRef, children, marginBottom }) => {
     return (
         <Box
             ref={closeRef}
@@ -26,8 +26,13 @@ const ClosableBox: React.FC<ClosableBoxProps> = ({ title, closeRef, children, ma
         >
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Text fontWeight="bold">{title}</Text>
-                <Button size="sm" onClick={() => {closeRef.current.remove();}}>
-                    <CloseIcon/>
+                <Button
+                    size="sm"
+                    onClick={() => {
+                        closeRef.current.remove();
+                    }}
+                >
+                    <CloseIcon />
                 </Button>
             </Box>
             <Box mt={4}>{children}</Box>

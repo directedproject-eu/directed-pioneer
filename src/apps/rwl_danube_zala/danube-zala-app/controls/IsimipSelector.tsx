@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
 import { useService } from "open-pioneer:react-hooks";
@@ -39,15 +39,13 @@ export function IsimipSelector() {
                 setSelected={setModel}
                 marginBottom="5px"
                 title="Model"
-            >
-            </Selector>
+            ></Selector>
             <Selector
                 options={["ssp585", "ssp370"]}
                 setSelected={setScenario}
                 marginBottom="5px"
                 title="Scenario"
-            >
-            </Selector>
+            ></Selector>
             <Selector
                 options={["hurs", "pr", "rsds", "sfcwind", "spei12", "tasmax", "tasmin", "tas"]}
                 setSelected={setVariable}

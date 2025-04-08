@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
 import { useState } from "react";
@@ -9,11 +9,15 @@ type ExpandableBoxProps = {
     title: string;
     children?: React.ReactNode;
     marginBottom?: string;
-    overflowY?: "auto" | "scroll" | "hidden"; 
-
+    overflowY?: "auto" | "scroll" | "hidden";
 };
 
-const ExpandableBox: React.FC<ExpandableBoxProps> = ({ title, children, marginBottom, overflowY }) => {
+const ExpandableBox: React.FC<ExpandableBoxProps> = ({
+    title,
+    children,
+    marginBottom,
+    overflowY
+}) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -34,7 +38,9 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({ title, children, marginBo
                 </Button>
             </Box>
             <Collapse in={isExpanded} animateOpacity>
-                <Box maxHeight={"15em"} overflow={overflowY} mt={4}>{children}</Box>
+                <Box maxHeight={"15em"} overflow={overflowY} mt={4}>
+                    {children}
+                </Box>
             </Collapse>
         </Box>
     );

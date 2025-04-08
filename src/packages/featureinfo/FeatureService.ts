@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import { MapModel } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
@@ -14,7 +14,7 @@ export function fetchFeatureInfo(
     >
 ) {
     if (mapModel?.olMap) {
-        const allLayers = mapModel.olMap.getLayers().getArray();
+        const allLayers = mapModel.olMap.getAllLayers();
         console.log(
             "Available layers:",
             allLayers.map((l) => l.get("id"))
