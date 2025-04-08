@@ -6,15 +6,18 @@ export default defineBuildConfig({
     styles: "./app.css",
     i18n: ["en", "de"],
     ui: {
-        references: ["app.LayerZoom"]
+        references: ["app.LayerZoom", "app.ForecastService"]
     },
     services: {
         MainMapProvider: {
             provides: ["map.MapConfigProvider"]
         },
-        // SecondMapProvider: {
-        //     provides: ["map.MapConfigProvider"]
-        // },
+        ForecastServiceImpl: {
+            provides: ["app.ForecastService"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
+        },
         LayerZoomImpl: {
             provides: ["app.LayerZoom"]
         }

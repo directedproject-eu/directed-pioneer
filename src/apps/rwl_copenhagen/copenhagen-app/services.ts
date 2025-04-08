@@ -13,6 +13,7 @@ import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
 
 export const MAP_ID1 = "main";
 export { LayerZoomImpl } from "./services/LayerZoom";
+export { ForecastServiceImpl } from "./services/ForecastService";
 
 const Basemap = new SimpleLayer({
     id: "osm",

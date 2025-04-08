@@ -28,6 +28,7 @@
         "react-icons": "catalog:",
         "react-use": "catalog:",
         "navbar": "workspace:^",
-        "layerswipe": "workspace:^"
+        "layerswipe": "workspace:^",
+        "chroma-js": "^3.1.2"
     }
 }

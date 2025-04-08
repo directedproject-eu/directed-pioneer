@@ -37,6 +37,7 @@ import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
 // import ExpandableBox from "./Components/ExpandableBox";
 import { Legend } from "@open-pioneer/legend";
+import { Forecasts } from "./controls/Forecasts";
 
 export function MapApp() {
     const intl = useIntl();
@@ -132,6 +133,21 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
+                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                            <div
+                                style={{
+                                    width: window.innerWidth * 0.6,
+                                    marginLeft: window.innerWidth * 0.2,
+                                    marginRight: window.innerWidth * 0.2,
+                                    borderRadius: "10px",
+                                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                                    marginTop: "5px"
+                                }}
+                            >
+                                <Forecasts />
+                            </div>
+                        </MapAnchor>
+
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                             <Flex>
                                 {measurementIsActive && (
@@ -182,9 +198,10 @@ export function MapApp() {
                                 overflow="auto"
                             >
                                 <Toc mapId={MAP_ID1} showTools={true} showBasemapSwitcher={false} />
-                                <Legend mapId={MAP_ID1} />
+                                {/* <Legend mapId={MAP_ID1} /> */}
                             </Box>
                         </MapAnchor>
+
                         {/* zoom to municipalities */}
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <VStack align="stretch" spacing={2}>
@@ -210,6 +227,9 @@ export function MapApp() {
                                     Zoom to Roskilde
                                 </Button>
                                 ;
+                                <div>
+                                    <Legend mapId={MAP_ID1} />
+                                </div>
                             </VStack>
 
                             {/* {mapModel && (
