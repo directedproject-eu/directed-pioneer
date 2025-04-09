@@ -1,15 +1,14 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, SimpleLayer } from "@open-pioneer/map";
+import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
 import { SeaLevelLegend } from "../Components/Legends/SeaLevelLegend";
 import { PrecipitationLegend } from "../Components/Legends/PrecipitationLegend";
 import { PrecipitationRateLegend } from "../Components/Legends/PrecipitationRateLegend";
-
 
 interface References {
     mapRegistry: MapRegistry;
@@ -19,6 +18,7 @@ export interface ForecastService extends DeclaredService<"app.ForecastService"> 
     setFileUrl(url: string): void;
     setFileUrl2(url2: string): void;
     setFileUrl3(url3: string): void;
+    getMapModel(): Promise<MapModel | undefined>;
 }
 
 export class ForecastServiceImpl implements ForecastService {
@@ -32,12 +32,11 @@ export class ForecastServiceImpl implements ForecastService {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            
             //DKSS sea level mean deviation
             this.layer = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100])
+                    color: this.createColorGradiant([0, 100], "layer")
                 },
                 properties: { title: "Sea Level Mean Deviation Forecasts" }
             });
@@ -53,8 +52,8 @@ export class ForecastServiceImpl implements ForecastService {
                             Component: SeaLevelLegend
                         }
                     },
-                    isBaseLayer: false, 
-                    visible: false,
+                    isBaseLayer: false,
+                    visible: true
                 })
             );
 
@@ -62,7 +61,7 @@ export class ForecastServiceImpl implements ForecastService {
             this.total_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100])
+                    color: this.createColorGradiant([0, 100], "total_precip")
                 },
                 properties: { title: "Total Precipitation Forecasts" }
             });
@@ -78,8 +77,8 @@ export class ForecastServiceImpl implements ForecastService {
                             Component: PrecipitationLegend
                         }
                     },
-                    isBaseLayer: false, 
-                    visible: false,
+                    isBaseLayer: false,
+                    visible: true
                 })
             );
 
@@ -87,7 +86,7 @@ export class ForecastServiceImpl implements ForecastService {
             this.rate_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100])
+                    color: this.createColorGradiant([0, 100], "rate_precip")
                 },
                 properties: { title: "Precipitation Rate Forecasts" }
             });
@@ -103,16 +102,19 @@ export class ForecastServiceImpl implements ForecastService {
                             Component: PrecipitationRateLegend
                         }
                     },
-                    isBaseLayer: false, 
-                    visible: false,
+                    isBaseLayer: false,
+                    visible: false
                 })
             );
 
             this.layer.setZIndex(0);
             this.total_precip.setZIndex(0);
             this.rate_precip.setZIndex(0);
-
         });
+    }
+
+    async getMapModel() {
+        return await this.mapRegistry.getMapModel(this.MAP_ID);
     }
 
     setFileUrl(url: string): void {
@@ -120,23 +122,21 @@ export class ForecastServiceImpl implements ForecastService {
             //update the tile layer source with the new .tif file URL from the JSON
             const newSource = this.updateSource(url); //use geotiff source
             this.layer.setSource(newSource); //set source to layer
-            this.updateStyleForUrl(url, "layer");
+            // this.updateStyleForUrl(url, "layer");
         }
     }
 
     setFileUrl2(url2: string): void {
         if (this.total_precip) {
-            const newSource = this.updateSource(url2); 
-            this.total_precip.setSource(newSource); 
-            this.updateStyleForUrl(url2, "total_precip");
+            const newSource = this.updateSource(url2);
+            this.total_precip.setSource(newSource);
         }
     }
 
     setFileUrl3(url3: string): void {
         if (this.rate_precip) {
-            const newSource = this.updateSource(url3); 
-            this.rate_precip.setSource(newSource); 
-            this.updateStyleForUrl(url3, "rate_precip");
+            const newSource = this.updateSource(url3);
+            this.rate_precip.setSource(newSource);
         }
     }
 
@@ -153,42 +153,61 @@ export class ForecastServiceImpl implements ForecastService {
         });
     }
 
-    private createColorGradiant(range: number[]) {
-        const transparentWhite = "rgba(255, 255, 255, 0)";
-        const l_01 = "#ff958c"; //rgb (255,149,140)
-        const l_02 = "#ee85b5"; //rgb (238,133,181)
-        const l_03 = "#ca61c3"; //rgb (202,97,195)
-        const l_04 = "#883677"; //rgb (136,54,119)
-        const l_05 = "#441151"; //rgb (68,17,81)
+    private precipTotalColorMap = [
+        { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
+        { value: 0.05, color: "#af7ab3", label: "0.05" },
+        { value: 40, color: "#95649a", label: "40" },
+        { value: 60, color: "#885889", label: "60" },
+        { value: 80, color: "#674571", label: "80" },
+        { value: 100, color: "#503752", label: "100" }
+    ];
 
-        const colorMapping = [
-            { value: 0, color: transparentWhite, label: "0 m" },
-            { value: 0.05, color: l_01, label: "0.05 m" },
-            { value: 0.3, color: l_02, label: "0.30 m" },
-            { value: 0.55, color: l_03, label: "0.55 m" },
-            { value: 0.7, color: l_04, label: "0.70 m" },
-            { value: 0.95, color: l_04, label: "0.95 m" }
-        ];
+    private precipRateColorMap = [
+        { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
+        { value: 0.05, color: "#af7ab3", label: "0.05" },
+        { value: 40, color: "#95649a", label: "40" },
+        { value: 60, color: "#885889", label: "60" },
+        { value: 80, color: "#674571", label: "80" },
+        { value: 100, color: "#503752", label: "100" }
+    ];
 
-        //boundaries for each color
+    private seaLevelColorMap = [
+        { value: 0, color: "rgba(255, 255, 255, 0)", label: "0 m" },
+        { value: 0.05, color: "#ff958c", label: "0.05 m" },
+        { value: 0.3, color: "#ee85b5", label: "0.30 m" },
+        { value: 0.55, color: "#ca61c3", label: "0.55 m" },
+        { value: 0.7, color: "#883677", label: "0.70 m" },
+        { value: 0.95, color: "#441151", label: "0.95 m" }
+    ];
+
+    private createColorGradiant(
+        range: number[],
+        layerType: "layer" | "total_precip" | "rate_precip"
+    ) {
+        let colorMapping;
+
+        switch (layerType) {
+            case "total_precip":
+                colorMapping = this.precipTotalColorMap;
+                break;
+            case "rate_precip":
+                colorMapping = this.precipRateColorMap;
+                break;
+            case "layer":
+            default:
+                colorMapping = this.seaLevelColorMap;
+        }
+
         const boundaries = colorMapping.map((item) => item.value);
         const gradientColors = colorMapping.map((item) => item.color);
 
-        //color scale using chroma.js with gradient and defined bounds
         const colorScale = chroma.scale(gradientColors).domain(boundaries).mode("lab");
 
-        //color gradient with interpolation for each boundary
-        const ColorGradient = [
+        return [
             "interpolate",
             ["linear"],
             ["band", 1],
             ...boundaries.flatMap((boundary) => [boundary, colorScale(boundary).hex()])
         ];
-
-        return ColorGradient;
-    }
-
-    private updateStyleForUrl(url: string, layerType: "layer" | "total_precip" | "rate_precip" ) {
-        console.log("Update style based on URL:", url);
     }
 }

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import {
     Box,
@@ -6,7 +6,7 @@ import {
     Flex,
     FormControl,
     FormLabel,
-    HStack,
+    VStack,
     Text,
     Select
 } from "@open-pioneer/chakra-integration";
@@ -30,13 +30,13 @@ import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
+import { Legend } from "@open-pioneer/legend";
 import { Navbar } from "navbar";
 import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
 import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
 // import ExpandableBox from "./Components/ExpandableBox";
-import { Legend } from "@open-pioneer/legend";
 import { Forecasts } from "./controls/Forecasts";
 
 export function MapApp() {
@@ -136,9 +136,9 @@ export function MapApp() {
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <div
                                 style={{
-                                    width: window.innerWidth * 0.6,
-                                    marginLeft: window.innerWidth * 0.2,
-                                    marginRight: window.innerWidth * 0.2,
+                                    width: window.innerWidth * 0.4,
+                                    marginLeft: window.innerWidth * 0.3,
+                                    marginRight: window.innerWidth * 0.3,
                                     borderRadius: "10px",
                                     backgroundColor: "rgba(255, 255, 255, 0.5)",
                                     marginTop: "5px"
@@ -197,7 +197,13 @@ export function MapApp() {
                                 maxHeight={500}
                                 overflow="auto"
                             >
-                                <Toc mapId={MAP_ID1} showTools={true} collapsibleGroups={true} initiallyCollapsed={true} showBasemapSwitcher={false} />
+                                <Toc
+                                    mapId={MAP_ID1}
+                                    showTools={true}
+                                    collapsibleGroups={true}
+                                    initiallyCollapsed={true}
+                                    showBasemapSwitcher={false}
+                                />
                                 {/* <Legend mapId={MAP_ID1} /> */}
                             </Box>
                         </MapAnchor>
@@ -211,7 +217,7 @@ export function MapApp() {
                                 />
                             )} */}
 
-                            <HStack align="stretch" spacing={2}>
+                            <VStack align="stretch" spacing={2}>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
@@ -242,7 +248,7 @@ export function MapApp() {
                                 >
                                     Zoom to Roskilde
                                 </Button>
-                            </HStack>
+                            </VStack>
 
                             {mapModel &&
                                 activeLayerIds.length > 0 &&
@@ -255,7 +261,8 @@ export function MapApp() {
                                     />
                                 ))}
                         </MapAnchor>
-                        {/*layerswipe layers & overview map*/}
+
+                        {/*layerswipe layers, overview map, and legend*/}
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
                             <Box
                                 backgroundColor="white"
@@ -265,68 +272,79 @@ export function MapApp() {
                                 boxShadow="lg"
                                 role="top-right"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                                maxHeight={300}
+                                maxHeight={600}
                                 maxWidth={430}
-                                overflow="auto" //scroll for overlapping content
-                                marginBottom="60px"
+                                overflow="hidden"
+                                marginBottom={60}
                             >
-                                <Flex
-                                    direction="column"
-                                    justifyContent="center"
-                                    alignItems="center"
-                                >
-                                    <OverviewMap
-                                        mapId={MAP_ID1}
-                                        olLayer={overviewMapLayer}
-                                        width={390}
-                                    />
-                                </Flex>
-                                <Text fontWeight="bold" mt={4}>
-                                    {" "}
-                                    Select Layers for Comparison:{" "}
-                                </Text>
-                                {/* LayerSwipe Selector */}
-                                <Flex direction="row" gap={4} p={4}>
-                                    <Select
-                                        placeholder="Select Left Layer"
-                                        onChange={(e) => setSelectedLeftLayer(e.target.value)}
-                                    >
-                                        {availableLayers.map((layer) => (
-                                            <option key={layer.id} value={layer.id}>
-                                                {layer.title || layer.id}
-                                            </option>
-                                        ))}
-                                    </Select>
-
-                                    <Select
-                                        placeholder="Select Right Layer"
-                                        onChange={(e) => setSelectedRightLayer(e.target.value)}
-                                    >
-                                        {availableLayers.map((layer) => (
-                                            <option key={layer.id} value={layer.id}>
-                                                {layer.title || layer.id}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                </Flex>
-                                <FormControl>
-                                    <FormLabel mt={2}>
-                                        <Text as="b">
-                                            {intl.formatMessage({ id: "basemapLabel" })}
+                                <Flex direction="column" gap={4}>
+                                    {/* overview map box */}
+                                    <Box maxHeight={300} overflow="auto">
+                                        <Flex
+                                            direction="column"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                        >
+                                            <OverviewMap
+                                                mapId={MAP_ID1}
+                                                olLayer={overviewMapLayer}
+                                                width={390}
+                                            />
+                                        </Flex>
+                                        <Text fontWeight="bold" mt={4}>
+                                            Select Layers for Comparison:
                                         </Text>
-                                    </FormLabel>
-                                    <BasemapSwitcher
-                                        mapId={MAP_ID1}
-                                        allowSelectingEmptyBasemap={true}
-                                    />
-                                </FormControl>
+                                        <Flex direction="row" gap={4} p={4}>
+                                            <Select
+                                                placeholder="Select Left Layer"
+                                                onChange={(e) =>
+                                                    setSelectedLeftLayer(e.target.value)
+                                                }
+                                            >
+                                                {availableLayers.map((layer) => (
+                                                    <option key={layer.id} value={layer.id}>
+                                                        {layer.title || layer.id}
+                                                    </option>
+                                                ))}
+                                            </Select>
+
+                                            <Select
+                                                placeholder="Select Right Layer"
+                                                onChange={(e) =>
+                                                    setSelectedRightLayer(e.target.value)
+                                                }
+                                            >
+                                                {availableLayers.map((layer) => (
+                                                    <option key={layer.id} value={layer.id}>
+                                                        {layer.title || layer.id}
+                                                    </option>
+                                                ))}
+                                            </Select>
+                                        </Flex>
+                                        <FormControl>
+                                            <FormLabel mt={2}>
+                                                <Text as="b">
+                                                    {intl.formatMessage({ id: "basemapLabel" })}
+                                                </Text>
+                                            </FormLabel>
+                                            <BasemapSwitcher
+                                                mapId={MAP_ID1}
+                                                allowSelectingEmptyBasemap={true}
+                                            />
+                                        </FormControl>
+                                    </Box>
+                                    <Box maxHeight={300} overflow="auto">
+                                        <Legend mapId={MAP_ID1} />
+                                    </Box>
+                                </Flex>
                             </Box>
                         </MapAnchor>
+
                         <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
                             <Flex
                                 role="bottom-right"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
-                                direction="column"
+                                direction="row"
                                 gap={1}
                                 padding={1}
                             >

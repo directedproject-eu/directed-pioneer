@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
 import { Box, Text } from "@open-pioneer/chakra-integration";
@@ -15,7 +15,7 @@ const l_05 = "#503752"; //rgb (80,55,82)
 
 const colorMapping = [
     { value: 0, color: transparentWhite, label: "0" },
-    { value: 20, color: l_01, label: "20" },
+    { value: 20, color: l_01, label: "0.05" },
     { value: 40, color: l_02, label: "40" },
     { value: 60, color: l_03, label: "60" },
     { value: 80, color: l_04, label: "80" },
