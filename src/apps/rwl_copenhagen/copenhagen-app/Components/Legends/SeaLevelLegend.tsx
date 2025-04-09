@@ -14,7 +14,7 @@ const l_04 = "#883677"; //rgb (136,54,119)
 const l_05 = "#441151"; //rgb (68,17,81)
 
 const colorMapping = [
-    { value: 0, color: transparentWhite, label: "0 m" },
+    { value: 0, color: transparentWhite, label: "0" },
     { value: 0.05, color: l_01, label: "0.05" },
     { value: 0.3, color: l_02, label: "0.30" },
     { value: 0.55, color: l_03, label: "0.55" },
