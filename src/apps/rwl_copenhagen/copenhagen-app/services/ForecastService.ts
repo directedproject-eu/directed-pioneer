@@ -78,7 +78,7 @@ export class ForecastServiceImpl implements ForecastService {
                         }
                     },
                     isBaseLayer: false,
-                    visible: true
+                    visible: false
                 })
             );
 
