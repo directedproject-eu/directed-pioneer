@@ -77,7 +77,14 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                             >
                                 {key}
                             </Th>
-                            <Td style={{ wordBreak: "break-word" }}>
+                            <Td
+                                style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    maxWidth: "200px"
+                                }}
+                            >
                                 {typeof value === "number" ? round(value) : String(value)}
                                 {/* {typeof value === "object" && value !== null
                                     ? JSON.stringify(value, null, 2)
