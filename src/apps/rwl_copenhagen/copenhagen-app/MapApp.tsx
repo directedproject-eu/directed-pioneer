@@ -8,7 +8,8 @@ import {
     FormLabel,
     VStack,
     Text,
-    Select
+    Select,
+    Divider
 } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
@@ -272,10 +273,10 @@ export function MapApp() {
                                 boxShadow="lg"
                                 role="top-right"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                                maxHeight={600}
+                                maxHeight={615}
                                 maxWidth={430}
                                 overflow="hidden"
-                                marginBottom={60}
+                                marginBottom={40}
                             >
                                 <Flex direction="column" gap={4}>
                                     {/* overview map box */}
@@ -333,6 +334,7 @@ export function MapApp() {
                                             />
                                         </FormControl>
                                     </Box>
+                                    <Divider borderColor="gray.300" />
                                     <Box maxHeight={300} overflow="auto">
                                         <Legend mapId={MAP_ID1} />
                                     </Box>

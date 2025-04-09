@@ -147,24 +147,6 @@ export const Forecasts = () => {
         }
     };
 
-    // const onChange = (val: number) => {
-    //     setSliderValue(val);
-    //     if (timestamps.length > val) {
-    //         const checkTimestamp = timestamps[val];
-    //         if (checkTimestamp !== undefined) {
-    //             const selectedTimestamp: string = checkTimestamp;
-    //             const selectedUrl = forecastData[selectedTimestamp];
-    //             if (selectedUrl && seaLayerVisible) {
-    //                 prepSrvc.setFileUrl(selectedUrl);
-    //             } else {
-    //                 console.error("No URL found or layer not visible for:", selectedTimestamp);
-    //             }
-    //         }
-    //     } else {
-    //         console.warn("Slider index out of range or timestamps not yet loaded.");
-    //     }
-    // };
-
     const onChange2 = (val: number) => {
         setSliderValue2(val);
         const selectedTimestamp2 = timestamps2[val];

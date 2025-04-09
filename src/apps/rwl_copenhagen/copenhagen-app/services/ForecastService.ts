@@ -155,20 +155,20 @@ export class ForecastServiceImpl implements ForecastService {
 
     private precipTotalColorMap = [
         { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
-        { value: 0.05, color: "#af7ab3", label: "0.05" },
-        { value: 40, color: "#95649a", label: "40" },
-        { value: 60, color: "#885889", label: "60" },
-        { value: 80, color: "#674571", label: "80" },
+        { value: 5, color: "#af7ab3", label: "5" },
+        { value: 10, color: "#95649a", label: "10" },
+        { value: 20, color: "#885889", label: "20" },
+        { value: 50, color: "#674571", label: "50" },
         { value: 100, color: "#503752", label: "100" }
     ];
 
     private precipRateColorMap = [
         { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
-        { value: 0.05, color: "#af7ab3", label: "0.05" },
-        { value: 40, color: "#95649a", label: "40" },
-        { value: 60, color: "#885889", label: "60" },
-        { value: 80, color: "#674571", label: "80" },
-        { value: 100, color: "#503752", label: "100" }
+        { value: 0.015, color: "#af7ab3", label: "0.015" },
+        { value: 0.03, color: "#95649a", label: "0.030" },
+        { value: 0.045, color: "#885889", label: "0.045" },
+        { value: 0.06, color: "#674571", label: "0.06" },
+        { value: 0.075, color: "#503752", label: "0.075" }
     ];
 
     private seaLevelColorMap = [

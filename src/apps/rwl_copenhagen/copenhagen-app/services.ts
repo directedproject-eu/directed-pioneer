@@ -425,6 +425,11 @@ export class MainMapProvider implements MapConfigProvider {
                     title: "Coastal Flooding",
                     visible: false,
                     id: "coastal_flooding_layers",
+                    attributes: {
+                        "legend": {
+                            Component: WaterLevelLegend
+                        }
+                    },
                     layers: [
                         new GroupLayer({
                             title: "SaferPlaces model",
@@ -434,12 +439,7 @@ export class MainMapProvider implements MapConfigProvider {
                                 ...wmsLayersSaferPlacesCoastal.map(({ name, title, description }) =>
                                     this.createWmsLayer(name, title, description)
                                 )
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         }),
                         new GroupLayer({
                             title: "RIM2D model",
@@ -449,24 +449,19 @@ export class MainMapProvider implements MapConfigProvider {
                                 ...wmsLayersRim2dCoastal.map(({ name, title, description }) =>
                                     this.createWmsLayer(name, title, description)
                                 )
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         })
-                    ],
-                    attributes: {
-                        "legend": {
-                            Component: WaterLevelLegend
-                        }
-                    }
+                    ]
                 }),
                 new GroupLayer({
                     title: "Pluvial flooding",
                     visible: false,
                     id: "pluvial_flooding",
+                    attributes: {
+                        "legend": {
+                            Component: WaterLevelLegend
+                        }
+                    },
                     layers: [
                         new GroupLayer({
                             title: "Frederikssund",
@@ -481,12 +476,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederikssundScalgoPluvial.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 }),
                                 new GroupLayer({
                                     title: "SaferPlaces model",
@@ -496,19 +486,9 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederikssundSaferPlacesPluvial.map(
                                             ({ name }) => this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 })
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         }),
                         new GroupLayer({
                             title: "Frederiksvaerk",
@@ -523,12 +503,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederiksvaerkScalgoPluvial.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 }),
                                 new GroupLayer({
                                     title: "SaferPlaces model",
@@ -538,12 +513,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederiksvaerkSaferPlacesPluvial.map(
                                             ({ name }) => this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 })
                             ],
                             attributes: {
@@ -565,19 +535,9 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersJyllingeSaferPlacesPluvial.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 })
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         }),
                         new GroupLayer({
                             title: "RIM2D model",
@@ -587,12 +547,7 @@ export class MainMapProvider implements MapConfigProvider {
                                 ...wmsLayersRim2dPluvial.map(({ name, title, description }) =>
                                     this.createWmsLayer(name, title, description)
                                 )
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         })
                     ]
                 }),
@@ -600,6 +555,11 @@ export class MainMapProvider implements MapConfigProvider {
                     title: "Storm",
                     visible: false,
                     id: "storm",
+                    attributes: {
+                        "legend": {
+                            Component: WaterLevelLegend
+                        }
+                    },
                     layers: [
                         new GroupLayer({
                             title: "Frederikssund",
@@ -614,12 +574,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederikssundScalgoStorm.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 }),
                                 new GroupLayer({
                                     title: "SaferPlaces model",
@@ -629,19 +584,9 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederikssundSaferPlacesStorm.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 })
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         }),
                         new GroupLayer({
                             title: "Frederiksvaerk",
@@ -656,12 +601,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederiksvaerkScalgoStorm.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 }),
                                 new GroupLayer({
                                     title: "SaferPlaces model",
@@ -671,19 +611,9 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersFrederiksvaerkSaferPlacesStorm.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 })
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         }),
                         new GroupLayer({
                             title: "Jyllinge",
@@ -698,12 +628,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersJyllingeScalgoStorm.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 }),
                                 new GroupLayer({
                                     title: "SaferPlaces model",
@@ -713,26 +638,11 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersJyllingeSaferPlacesStorm.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
-                                    ],
-                                    attributes: {
-                                        "legend": {
-                                            Component: WaterLevelLegend
-                                        }
-                                    }
+                                    ]
                                 })
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
+                            ]
                         })
-                    ],
-                    attributes: {
-                        "legend": {
-                            Component: WaterLevelLegend
-                        }
-                    }
+                    ]
                 })
             ]
         };

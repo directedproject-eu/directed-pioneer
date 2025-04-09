@@ -15,11 +15,11 @@ const l_05 = "#503752"; //rgb (80,55,82)
 
 const colorMapping = [
     { value: 0, color: transparentWhite, label: "0" },
-    { value: 20, color: l_01, label: "0.05" },
-    { value: 40, color: l_02, label: "40" },
-    { value: 60, color: l_03, label: "60" },
-    { value: 80, color: l_04, label: "80" },
-    { value: 100, color: l_04, label: "100" }
+    { value: 5, color: l_01, label: "5" },
+    { value: 10, color: l_02, label: "10" },
+    { value: 20, color: l_03, label: "20" },
+    { value: 50, color: l_04, label: "50" },
+    { value: 100, color: l_05, label: "100" }
 ];
 
 export function PrecipitationLegend(props: LegendItemComponentProps) {
