@@ -19,7 +19,7 @@ const colorMapping = [
     { value: 0.03, color: l_02, label: "0.030" },
     { value: 0.045, color: l_03, label: "0.045" },
     { value: 0.06, color: l_04, label: "0.06" },
-    { value: 0.075, color: l_04, label: "0.075" }
+    { value: 0.075, color: l_05, label: "0.075" }
 ];
 
 export function PrecipitationRateLegend(props: LegendItemComponentProps) {

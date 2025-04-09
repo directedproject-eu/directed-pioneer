@@ -19,7 +19,7 @@ const colorMapping = [
     { value: 0.3, color: l_02, label: "0.30" },
     { value: 0.55, color: l_03, label: "0.55" },
     { value: 0.7, color: l_04, label: "0.70" },
-    { value: 0.95, color: l_04, label: "0.95" }
+    { value: 0.95, color: l_05, label: "0.95" }
 ];
 
 export function SeaLevelLegend(props: LegendItemComponentProps) {
