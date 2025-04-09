@@ -183,6 +183,72 @@ const wmsLayersFrederikssundScalgoStorm = [
     { "name": "Terræn_Hav_Frederikssund_Vanddybde_Havvandstand=2_46_m" }
 ];
 
+const wmsLayersFrederikssundDamagecostStorm = [
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Agricultural_areas" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Biodiversity" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Buildings" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Human" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Industry_staff" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Public_service" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Recreative_areas" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Road_traffic" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP100_RP100__Tourism" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Agricultural_areas" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Biodiversity" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Buildings" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Human" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Industry_staff" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Public_service" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Recreative_areas" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Road_traffic" },
+    { "name": "SP_Frederikssund_Storm_Ref_RP20_RP50__Tourism" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Agricultural_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Biodiversity" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Buildings" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Human" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Industry_staff" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Public_service" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Recreative_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Road_traffic" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Tourism" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Agricultural_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Biodiversity" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Buildings" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Human" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Industry_staff" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Public_service" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Recreative_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Road_traffic" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Tourism" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Agricultural_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Biodiversity" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Buildings" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Human" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Industry_staff" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Public_service" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Recreative_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Road_traffic" },
+    { "name": "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Tourism" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Agricultural_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Biodiversity" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Buildings" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Human" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Industry_staff" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Public_service" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Recreative_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Road_traffic" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Tourism" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Agricultural_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Biodiversity" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Buildings" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Human" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Industry_staff" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Public_service" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Recreative_areas" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Road_traffic" },
+    { "name": "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Tourism" }
+];
+
 const wmsLayersJyllingeScalgoStorm = [
     { "name": "Terræn_Hav_Jyllinge_Vanddybde_Havvandstand=2_01_m" },
     { "name": "Terræn_Hav_Jyllinge_Vanddybde_Havvandstand=2_46_m" },
@@ -582,6 +648,16 @@ export class MainMapProvider implements MapConfigProvider {
                                     id: "storm_frederikssund_saferplaces",
                                     layers: [
                                         ...wmsLayersFrederikssundSaferPlacesStorm.map(({ name }) =>
+                                            this.createWmsLayer(name, name, name)
+                                        )
+                                    ]
+                                }),
+                                new GroupLayer({
+                                    title: "Damage cost model",
+                                    visible: false,
+                                    id: "storm_frederikssund_damagecost",
+                                    layers: [
+                                        ...wmsLayersFrederikssundDamagecostStorm.map(({ name }) =>
                                             this.createWmsLayer(name, name, name)
                                         )
                                     ]
