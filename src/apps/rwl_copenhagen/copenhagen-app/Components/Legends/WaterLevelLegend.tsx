@@ -12,10 +12,10 @@ const l_03 = "#08306b";
 const l_04 = "#301934";
 
 const colorMapping = [
-    { value: 0, color: l_01, label: "0 mm" },
-    { value: 0.5, color: l_02, label: "0.5 mm" },
-    { value: 1.0, color: l_03, label: "1.0 mm" },
-    { value: 11.0, color: l_04, label: "11.0 mm" }
+    { value: 0, color: l_01, label: "0" },
+    { value: 0.5, color: l_02, label: "0.5" },
+    { value: 1.0, color: l_03, label: "1.0" },
+    { value: 11.0, color: l_04, label: "11.0" }
 ];
 
 export function WaterLevelLegend(props: LegendItemComponentProps) {
@@ -30,6 +30,9 @@ export function WaterLevelLegend(props: LegendItemComponentProps) {
             <Text fontWeight="bold" mb={2}>
                 {" "}
                 {props.layer.title}{" "}
+            </Text>
+            <Text fontWeight="bold" fontSize={15} mb={2}>
+                Units mm
             </Text>
             {colorMapping.map((item, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>

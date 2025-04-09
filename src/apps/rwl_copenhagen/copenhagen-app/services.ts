@@ -487,10 +487,12 @@ export class MainMapProvider implements MapConfigProvider {
                 // ...wmsLayersJyllingeScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersJyllingeSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersJyllingeSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
+                
+                //PARENT GROUP HISTORICAL LAYERS
                 new GroupLayer({
-                    title: "Coastal Flooding",
+                    title: "Historical Layers",
                     visible: false,
-                    id: "coastal_flooding_layers",
+                    id: "historical",
                     attributes: {
                         "legend": {
                             Component: WaterLevelLegend
@@ -510,17 +512,20 @@ export class MainMapProvider implements MapConfigProvider {
                         new GroupLayer({
                             title: "RIM2D model",
                             visible: false,
-                            id: "coastal_flooding_rim2d",
+                            id: "historical_RIM2D",
                             layers: [
                                 ...wmsLayersRim2dCoastal.map(({ name, title, description }) =>
-                                    this.createWmsLayer(name, title, description)
-                                )
+                                    this.createWmsLayer(name, title, description)), 
+                                ...wmsLayersRim2dPluvial.map(({ name, title, description }) =>
+                                    this.createWmsLayer(name, title, description))
                             ]
-                        })
+                        }),
                     ]
                 }),
+
+                //PARENT GROUP PLUVIAL FLOODING
                 new GroupLayer({
-                    title: "Pluvial flooding",
+                    title: "Pluvial Flooding",
                     visible: false,
                     id: "pluvial_flooding",
                     attributes: {
@@ -605,22 +610,14 @@ export class MainMapProvider implements MapConfigProvider {
                                 })
                             ]
                         }),
-                        new GroupLayer({
-                            title: "RIM2D model",
-                            visible: false,
-                            id: "pluvial_flooding_rim2d",
-                            layers: [
-                                ...wmsLayersRim2dPluvial.map(({ name, title, description }) =>
-                                    this.createWmsLayer(name, title, description)
-                                )
-                            ]
-                        })
                     ]
                 }),
+
+                //PARENT GROUP COASTAL FLOODING 
                 new GroupLayer({
-                    title: "Storm",
+                    title: "Coastal Flooding",
                     visible: false,
-                    id: "storm",
+                    id: "coastal_flooding",
                     attributes: {
                         "legend": {
                             Component: WaterLevelLegend

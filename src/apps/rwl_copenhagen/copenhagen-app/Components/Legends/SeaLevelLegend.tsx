@@ -15,11 +15,11 @@ const l_05 = "#441151"; //rgb (68,17,81)
 
 const colorMapping = [
     { value: 0, color: transparentWhite, label: "0 m" },
-    { value: 0.05, color: l_01, label: "0.05 m" },
-    { value: 0.3, color: l_02, label: "0.30 m" },
-    { value: 0.55, color: l_03, label: "0.55 m" },
-    { value: 0.7, color: l_04, label: "0.70 m" },
-    { value: 0.95, color: l_04, label: "0.95 m" }
+    { value: 0.05, color: l_01, label: "0.05" },
+    { value: 0.3, color: l_02, label: "0.30" },
+    { value: 0.55, color: l_03, label: "0.55" },
+    { value: 0.7, color: l_04, label: "0.70" },
+    { value: 0.95, color: l_04, label: "0.95" }
 ];
 
 export function SeaLevelLegend(props: LegendItemComponentProps) {
@@ -34,6 +34,9 @@ export function SeaLevelLegend(props: LegendItemComponentProps) {
             <Text fontWeight="bold" mb={2}>
                 {" "}
                 {props.layer.title}{" "}
+            </Text>
+            <Text fontWeight="bold" fontSize={15} mb={2}>
+                Units m
             </Text>
             {colorMapping.map((item, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>
