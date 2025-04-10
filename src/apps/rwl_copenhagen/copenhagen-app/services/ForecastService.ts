@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
+import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
