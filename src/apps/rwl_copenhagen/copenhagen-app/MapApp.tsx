@@ -72,21 +72,6 @@ export function MapApp() {
         []
     );
 
-    ///////////////////
-    ///FeatureInfo////
-    /////////////////
-
-    useEffect(() => {
-        if (mapModel?.map) {
-            const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-            const activeLayers = layers
-                .filter((layer: SimpleLayer) => layer.olLayer.getVisible())
-                .map((layer: SimpleLayer) => layer.olLayer.get("title"));
-
-            setActiveLayerIds(activeLayers);
-        }
-    }, [mapModel]);
-
     //////////////////
     /// LayerSwipe ///
     /////////////////
@@ -239,14 +224,6 @@ export function MapApp() {
                         </MapAnchor>
                         {/* zoom to municipalities */}
                         <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
-                            {/* {mapModel && (
-                                <FeatureInfo
-                                    mapModel={mapModel.map!}
-                                    layerId="pluvial_100yrcp4-5_wd_max"
-                                    projection="EPSG:3857"
-                                />
-                            )} */}
-
                             <VStack align="stretch" spacing={2}>
                                 <Button
                                     size="sm"
@@ -280,7 +257,7 @@ export function MapApp() {
                                 </Button>
                             </VStack>
 
-                            {mapModel &&
+                            {/* {mapModel &&
                                 activeLayerIds.length > 0 &&
                                 activeLayerIds.map((layerId) => (
                                     <FeatureInfo
@@ -289,7 +266,15 @@ export function MapApp() {
                                         layerId={layerId}
                                         projection="EPSG:3857"
                                     />
-                                ))}
+                                ))} */}
+
+                            {mapModel && (
+                                <FeatureInfo
+                                    mapModel={mapModel.map!}
+                                    projection="EPSG:3857" layerId={""}
+                                />
+                            )}
+
                         </MapAnchor>
 
                         {/*layerswipe layers and legend*/}
