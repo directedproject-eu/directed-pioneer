@@ -192,129 +192,164 @@ export const Forecasts = () => {
     return (
         <div style={{ padding: "20px" }}>
             {seaLayerVisible && (
-                <Box mb={8}>
-                    <Text fontWeight="semibold">
-                        👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation
-                        Forecast Data
-                    </Text>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            marginBottom: "4px"
-                        }}
-                    >
-                        <span>Forecast Start Date: {formatTimestamp(timestamps[0] ?? "")}</span>
-                        <span>
-                            Forecast End Date:{" "}
-                            {formatTimestamp(timestamps[timestamps.length - 1] ?? "")}
-                        </span>
-                    </div>
-                    <Slider
-                        aria-label="date-slider"
-                        defaultValue={0}
-                        min={0}
-                        max={timestamps.length - 1}
-                        value={sliderValue}
-                        onChange={onChange}
-                        step={1}
-                    >
-                        <SliderTrack>
-                            <SliderFilledTrack />
-                        </SliderTrack>
-                        <SliderThumb />
-                    </Slider>
-                    {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
-                    <Text>
-                        Selected Date:{" "}
-                        <Text as="span" fontWeight="normal" color="black">
-                            {formatTimestamp(timestamps[sliderValue] ?? "")}
+                <div
+                    style={{
+                        width: window.innerWidth * 0.4,
+                        marginLeft: window.innerWidth * 0.3,
+                        marginRight: window.innerWidth * 0.3,
+                        borderRadius: "10px",
+                        backgroundColor: "rgba(255, 255, 255, 0.5)",
+                        marginTop: "5px"
+                    }}
+                >
+                    <Box padding={4} mb={8}>
+                        <Text fontWeight="semibold">
+                            👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation
+                            Forecasts
                         </Text>
-                    </Text>
-                </Box>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginBottom: "4px"
+                            }}
+                        >
+                            <span>Forecast Start Date: {formatTimestamp(timestamps[0] ?? "")}</span>
+                            <span>
+                                Forecast End Date:{" "}
+                                {formatTimestamp(timestamps[timestamps.length - 1] ?? "")}
+                            </span>
+                        </div>
+                        <Slider
+                            aria-label="date-slider"
+                            defaultValue={0}
+                            min={0}
+                            max={timestamps.length - 1}
+                            value={sliderValue}
+                            onChange={onChange}
+                            step={1}
+                        >
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                            <SliderThumb />
+                        </Slider>
+                        {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
+                        <Text>
+                            Selected Date:{" "}
+                            <Text as="span" fontWeight="normal" color="black">
+                                {formatTimestamp(timestamps[sliderValue] ?? "")}
+                            </Text>
+                        </Text>
+                    </Box>
+                </div>
             )}
+            
             {totalPrecipLayerVisible && (
-                <Box mb={8}>
-                    <Text fontWeight="semibold">
-                        👆Drag the Slider to Select a Date and Time for Total Precipitation
-                        Forecasts
-                    </Text>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            marginBottom: "4px"
-                        }}
-                    >
-                        <span>Forecast Start Date: {formatTimestamp(timestamps2[0] ?? "")}</span>
-                        <span>
-                            Forecast End Date:{" "}
-                            {formatTimestamp(timestamps2[timestamps2.length - 1] ?? "")}
-                        </span>
-                    </div>
-                    <Slider
-                        aria-label="date-slider-2"
-                        defaultValue={0}
-                        min={0}
-                        max={timestamps2.length - 1}
-                        value={sliderValue2}
-                        onChange={onChange2}
-                        step={1}
-                    >
-                        <SliderTrack>
-                            <SliderFilledTrack />
-                        </SliderTrack>
-                        <SliderThumb />
-                    </Slider>
-                    {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
-                    <Text>
-                        Selected Date:{" "}
-                        <Text as="span" fontWeight="normal" color="black">
-                            {formatTimestamp(timestamps2[sliderValue2] ?? "")}
+                <div
+                    style={{
+                        width: window.innerWidth * 0.4,
+                        marginLeft: window.innerWidth * 0.3,
+                        marginRight: window.innerWidth * 0.3,
+                        borderRadius: "10px",
+                        backgroundColor: "rgba(255, 255, 255, 0.5)",
+                        marginTop: "5px"
+                    }}
+                >
+                    <Box padding={4} mb={8}>
+                        <Text fontWeight="semibold">
+                            👆Drag the Slider to Select a Date and Time for Total Precipitation
+                            Forecasts
                         </Text>
-                    </Text>
-                </Box>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginBottom: "4px"
+                            }}
+                        >
+                            <span>Forecast Start Date: {formatTimestamp(timestamps2[0] ?? "")}</span>
+                            <span>
+                                Forecast End Date:{" "}
+                                {formatTimestamp(timestamps2[timestamps2.length - 1] ?? "")}
+                            </span>
+                        </div>
+                        <Slider
+                            aria-label="date-slider-2"
+                            defaultValue={0}
+                            min={0}
+                            max={timestamps2.length - 1}
+                            value={sliderValue2}
+                            onChange={onChange2}
+                            step={1}
+                        >
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                            <SliderThumb />
+                        </Slider>
+                        {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
+                        <Text>
+                            Selected Date:{" "}
+                            <Text as="span" fontWeight="normal" color="black">
+                                {formatTimestamp(timestamps2[sliderValue2] ?? "")}
+                            </Text>
+                        </Text>
+                    </Box>
+                </div>
+
             )}
             {precipRateVisible && (
-                <Box mb={8}>
-                    <Text fontWeight="semibold">
-                        👆Drag the Slider to Select a Date and Time for Precipitation Rate Forecasts
-                    </Text>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            marginBottom: "4px"
-                        }}
-                    >
-                        <span>Forecast Start Date: {formatTimestamp(timestamps3[0] ?? "")}</span>
-                        <span>
-                            Forecast End Date:{" "}
-                            {formatTimestamp(timestamps3[timestamps3.length - 1] ?? "")}
-                        </span>
-                    </div>
-                    <Slider
-                        aria-label="date-slider-3"
-                        defaultValue={0}
-                        min={0}
-                        max={timestamps3.length - 1}
-                        value={sliderValue3}
-                        onChange={onChange3}
-                        step={1}
-                    >
-                        <SliderTrack>
-                            <SliderFilledTrack />
-                        </SliderTrack>
-                        <SliderThumb />
-                    </Slider>
-                    {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
-                    <Text>
-                        Selected Date:{" "}
-                        <Text as="span" fontWeight="normal" color="black">
-                            {formatTimestamp(timestamps3[sliderValue3] ?? "")}
+                <div
+                    style={{
+                        width: window.innerWidth * 0.4,
+                        marginLeft: window.innerWidth * 0.3,
+                        marginRight: window.innerWidth * 0.3,
+                        borderRadius: "10px",
+                        backgroundColor: "rgba(255, 255, 255, 0.5)",
+                        marginTop: "5px"
+                    }}
+                >
+                    <Box padding={4} mb={8}>
+                        <Text fontWeight="semibold">
+                            👆Drag the Slider to Select a Date and Time for Precipitation Rate Forecasts
                         </Text>
-                    </Text>
-                </Box>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginBottom: "4px"
+                            }}
+                        >
+                            <span>Forecast Start Date: {formatTimestamp(timestamps3[0] ?? "")}</span>
+                            <span>
+                                Forecast End Date:{" "}
+                                {formatTimestamp(timestamps3[timestamps3.length - 1] ?? "")}
+                            </span>
+                        </div>
+                        <Slider
+                            aria-label="date-slider-3"
+                            defaultValue={0}
+                            min={0}
+                            max={timestamps3.length - 1}
+                            value={sliderValue3}
+                            onChange={onChange3}
+                            step={1}
+                        >
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                            <SliderThumb />
+                        </Slider>
+                        {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
+                        <Text>
+                            Selected Date:{" "}
+                            <Text as="span" fontWeight="normal" color="black">
+                                {formatTimestamp(timestamps3[sliderValue3] ?? "")}
+                            </Text>
+                        </Text>
+                    </Box>
+                </div>
             )}
         </div>
     );

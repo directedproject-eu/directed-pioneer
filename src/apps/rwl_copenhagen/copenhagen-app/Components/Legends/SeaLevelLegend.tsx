@@ -26,7 +26,7 @@ export function SeaLevelLegend(props: LegendItemComponentProps) {
     const intl = useIntl();
 
     return (
-        <Box position="relative" top="10px" right="10px" bg="white" p={4} borderRadius="md">
+        <Box position="relative" top="10px" right="10px" bg="white" p={4} borderRadius="md" borderWidth={1}>
             <Text fontWeight="bold" fontSize={20}>
                 {" "}
                 Legend{" "}
