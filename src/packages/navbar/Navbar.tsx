@@ -263,7 +263,32 @@ const NAV_ITEMS: Array<NavItem> = [
     {
         label: "Github Organization",
         href: "https://github.com/directedproject-eu"
-    }
+    },
+    {
+        label: "Model Documentation",
+        children: [
+            {
+                label: "SaferPlaces",
+                href: "https://saferplaces.co/"
+            },
+            {
+                label: "CLIMADA",
+                href: "https://climada-python.readthedocs.io/en/stable/tutorial/1_main_climada.html"
+            },
+            {
+                label: "RIM2D",
+                href: "https://www.rim2d.eu/was-ist-rim2d"
+            },
+            {
+                label: "Danube Model",
+                href: "https://www.sciencedirect.com/science/article/pii/S2405880717301383"
+            },
+            {
+                label: "DTU Damage-Cost Model",
+                href: "https://github.com/Skadesokonomi"
+            }
+        ]
+    },
 ];
 
 export default Navbar;
