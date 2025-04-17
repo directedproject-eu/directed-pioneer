@@ -120,6 +120,7 @@
         "pnpm": "^9"
     },
     "dependencies": {
-        "chroma-js": "^3.1.2"
+        "chroma-js": "^3.1.2", 
+        "html-react-parser": "^5.2.3"
     }
 }

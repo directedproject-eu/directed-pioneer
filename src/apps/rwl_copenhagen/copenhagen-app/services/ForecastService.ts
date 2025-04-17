@@ -161,7 +161,7 @@ export class ForecastServiceImpl implements ForecastService {
     //                         },
     //                         isBaseLayer: false,
     //                         visible: true
-    //                     }), 
+    //                     }),
     //                     new SimpleLayer({
     //                         id: "total_precipitation_forecast",
     //                         title: "Total Precipitation Forecasts",
@@ -175,7 +175,7 @@ export class ForecastServiceImpl implements ForecastService {
     //                         },
     //                         isBaseLayer: false,
     //                         visible: false
-    //                     }), 
+    //                     }),
     //                     new SimpleLayer({
     //                         id: "precipitation_rate_forecast",
     //                         title: "Precipitation Rate Forecasts",
@@ -198,7 +198,6 @@ export class ForecastServiceImpl implements ForecastService {
     //         this.rate_precip.setZIndex(0);
     //     });
     // }
-
 
     async getMapModel() {
         return await this.mapRegistry.getMapModel(this.MAP_ID);

@@ -22,7 +22,15 @@ export function WaterLevelLegend(props: LegendItemComponentProps) {
     const intl = useIntl();
 
     return (
-        <Box position="relative" top="10px" right="10px" bg="white" p={4} borderRadius="md" borderWidth={1}>
+        <Box
+            position="relative"
+            top="10px"
+            right="10px"
+            bg="white"
+            p={4}
+            borderRadius="md"
+            borderWidth={1}
+        >
             <Text fontWeight="bold" fontSize={20}>
                 {" "}
                 Legend{" "}
@@ -32,7 +40,7 @@ export function WaterLevelLegend(props: LegendItemComponentProps) {
                 {props.layer.title}{" "}
             </Text>
             <Text fontWeight="bold" fontSize={15} mb={2}>
-                Units mm
+                Units m
             </Text>
             {colorMapping.map((item, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>

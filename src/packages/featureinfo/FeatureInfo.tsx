@@ -31,7 +31,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
     const [featureInfo, setFeatureInfo] = useState<{
         features: Array<{ layerName: string; data: Record<string, unknown> }> | null;
     }>({ features: null });
-    //track click position for popup placement 
+    //track click position for popup placement
     const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null);
 
     useEffect(() => {
@@ -62,7 +62,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
 
     const round = (num: number) => num.toFixed(3);
 
-    //render properties in a table from the first feature in the feature collection 
+    //render properties in a table from the first feature in the feature collection
     const renderFeatureProperties = (featureCollection: Record<string, unknown>) => {
         const features = featureCollection?.features as Array<Record<string, unknown>> | undefined;
         if (!features || features.length === 0) return <p>No features available</p>;
@@ -75,10 +75,24 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                 <Tbody>
                     {Object.entries(properties).map(([key, value]) => (
                         <Tr key={key}>
-                            <Th style={{ textAlign: "left", whiteSpace: "nowrap", fontWeight: "bold", paddingRight: "10px" }}>
+                            <Th
+                                style={{
+                                    textAlign: "left",
+                                    whiteSpace: "nowrap",
+                                    fontWeight: "bold",
+                                    paddingRight: "10px"
+                                }}
+                            >
                                 {key}
                             </Th>
-                            <Td style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "300px" }}>
+                            <Td
+                                style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    maxWidth: "300px"
+                                }}
+                            >
                                 {typeof value === "number" ? round(value) : String(value)}
                             </Td>
                         </Tr>
@@ -88,7 +102,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
         );
     };
 
-    //render the popup 
+    //render the popup
     return featureInfo.features && clickPosition ? (
         <Popover isOpen={true}>
             <Portal>
@@ -105,20 +119,32 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                         <PopoverCloseButton onClick={() => setFeatureInfo({ features: null })} />
                         <PopoverHeader>
                             <div>
-                                <Text fontWeight={600} fontSize={14}>Selected Layers: </Text>
-                                <Text fontSize={14}> {featureInfo.features.map((f) => f.layerName).join(", ")} </Text>
+                                <Text fontWeight={600} fontSize={14}>
+                                    Selected Layers:{" "}
+                                </Text>
+                                <Text fontSize={14}>
+                                    {" "}
+                                    {featureInfo.features.map((f) => f.layerName).join(", ")}{" "}
+                                </Text>
                             </div>
                             <div>
-                                <Text fontWeight={600} fontSize={14}>Clicked Point: </Text> 
-                                <Text fontSize={14}> X: {clickPosition.x}, Y: {clickPosition.y} </Text>
+                                <Text fontWeight={600} fontSize={14}>
+                                    Clicked Point:{" "}
+                                </Text>
+                                <Text fontSize={14}>
+                                    {" "}
+                                    X: {clickPosition.x}, Y: {clickPosition.y}{" "}
+                                </Text>
                             </div>
                         </PopoverHeader>
                         {/* put table in popup, map over wms layer response  */}
                         <PopoverBody>
                             {featureInfo.features.map((f) => (
                                 <div key={f.layerName} style={{ marginBottom: "10px" }}>
-                                    <Text fontWeight={600} fontSize={14}>{f.layerName}</Text>
-                                    {renderFeatureProperties(f.data)} 
+                                    <Text fontWeight={600} fontSize={14}>
+                                        {f.layerName}
+                                    </Text>
+                                    {renderFeatureProperties(f.data)}
                                 </div>
                             ))}
                         </PopoverBody>

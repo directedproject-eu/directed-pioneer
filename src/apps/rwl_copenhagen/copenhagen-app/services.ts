@@ -487,7 +487,7 @@ export class MainMapProvider implements MapConfigProvider {
                 // ...wmsLayersJyllingeScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersJyllingeSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
                 // ...wmsLayersJyllingeSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-                
+
                 //PARENT GROUP HISTORICAL LAYERS
                 new GroupLayer({
                     title: "Historical Layers",
@@ -515,11 +515,13 @@ export class MainMapProvider implements MapConfigProvider {
                             id: "historical_RIM2D",
                             layers: [
                                 ...wmsLayersRim2dCoastal.map(({ name, title, description }) =>
-                                    this.createWmsLayer(name, title, description)), 
+                                    this.createWmsLayer(name, title, description)
+                                ),
                                 ...wmsLayersRim2dPluvial.map(({ name, title, description }) =>
-                                    this.createWmsLayer(name, title, description))
+                                    this.createWmsLayer(name, title, description)
+                                )
                             ]
-                        }),
+                        })
                     ]
                 }),
 
@@ -609,11 +611,11 @@ export class MainMapProvider implements MapConfigProvider {
                                     ]
                                 })
                             ]
-                        }),
+                        })
                     ]
                 }),
 
-                //PARENT GROUP COASTAL FLOODING 
+                //PARENT GROUP COASTAL FLOODING
                 new GroupLayer({
                     title: "Coastal Flooding",
                     visible: false,

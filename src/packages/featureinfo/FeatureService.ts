@@ -19,10 +19,10 @@ export function fetchFeatureInfo(
     if (!mapModel?.olMap) return;
 
     //get all layers in map model
-    const allLayers = mapModel.olMap.getAllLayers(); 
+    const allLayers = mapModel.olMap.getAllLayers();
 
     //filter for visible layers
-    const visibleWMSTileLayers = allLayers.filter( 
+    const visibleWMSTileLayers = allLayers.filter(
         (l) =>
             l.get("visible") &&
             l.get("id") &&

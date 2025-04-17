@@ -288,7 +288,7 @@ const NAV_ITEMS: Array<NavItem> = [
                 href: "https://github.com/Skadesokonomi"
             }
         ]
-    },
+    }
 ];
 
 export default Navbar;

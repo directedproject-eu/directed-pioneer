@@ -244,7 +244,7 @@ export const Forecasts = () => {
                     </Box>
                 </div>
             )}
-            
+
             {totalPrecipLayerVisible && (
                 <div
                     style={{
@@ -268,7 +268,9 @@ export const Forecasts = () => {
                                 marginBottom: "4px"
                             }}
                         >
-                            <span>Forecast Start Date: {formatTimestamp(timestamps2[0] ?? "")}</span>
+                            <span>
+                                Forecast Start Date: {formatTimestamp(timestamps2[0] ?? "")}
+                            </span>
                             <span>
                                 Forecast End Date:{" "}
                                 {formatTimestamp(timestamps2[timestamps2.length - 1] ?? "")}
@@ -297,7 +299,6 @@ export const Forecasts = () => {
                         </Text>
                     </Box>
                 </div>
-
             )}
             {precipRateVisible && (
                 <div
@@ -312,7 +313,8 @@ export const Forecasts = () => {
                 >
                     <Box padding={4} mb={8}>
                         <Text fontWeight="semibold">
-                            👆Drag the Slider to Select a Date and Time for Precipitation Rate Forecasts
+                            👆Drag the Slider to Select a Date and Time for Precipitation Rate
+                            Forecasts
                         </Text>
                         <div
                             style={{
@@ -321,7 +323,9 @@ export const Forecasts = () => {
                                 marginBottom: "4px"
                             }}
                         >
-                            <span>Forecast Start Date: {formatTimestamp(timestamps3[0] ?? "")}</span>
+                            <span>
+                                Forecast Start Date: {formatTimestamp(timestamps3[0] ?? "")}
+                            </span>
                             <span>
                                 Forecast End Date:{" "}
                                 {formatTimestamp(timestamps3[timestamps3.length - 1] ?? "")}

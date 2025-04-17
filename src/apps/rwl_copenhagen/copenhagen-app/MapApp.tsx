@@ -8,7 +8,7 @@ import {
     FormLabel,
     VStack,
     Text,
-    Select, 
+    Select,
     Spacer
 } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
@@ -39,6 +39,7 @@ import { useService } from "open-pioneer:react-hooks";
 import { Forecasts } from "./controls/Forecasts";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
+import { TaxonomyInfo } from "taxonomy";
 
 export function MapApp() {
     const intl = useIntl();
@@ -46,6 +47,8 @@ export function MapApp() {
     const mapModel = useMapModel("main");
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
+
 
     //////////////////
     /// LayerSwipe ///
@@ -57,7 +60,6 @@ export function MapApp() {
     const [rightLayers, setRightLayers] = useState<Layer[]>();
     const [sliderValue, setSliderValue] = useState<number>(50);
     const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
-
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     function toggleMeasurement() {
@@ -78,36 +80,32 @@ export function MapApp() {
 
     useEffect(() => {
         if (!mapModel.map) return;
-    
+
         //get all layers from the mapmodel
         const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
         setAvailableLayers(layers);
-    
+
         //set selected layers
         if (selectedLeftLayer && selectedRightLayer) {
-            const leftLayer = (
-                mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer
-            )?.olLayer as TileLayer;
-            const rightLayer = (
-                mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer
-            )?.olLayer as TileLayer;
-    
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+
             if (leftLayer && rightLayer) {
                 setLeftLayers([leftLayer]);
                 setRightLayers([rightLayer]);
             }
         }
-    
+
         //set only visible layers in the dropdowns for left and right layer
         const updateVisibleLayers = () => {
-            const visibleLayers = layers.filter(
-                (layer) => layer.olLayer?.getVisible?.() === true
-            );
+            const visibleLayers = layers.filter((layer) => layer.olLayer?.getVisible?.() === true);
             setVisibleAvailableLayers(visibleLayers);
         };
-    
+
         updateVisibleLayers(); //filter
-    
+
         const eventKeys = layers
             .map((layer) => {
                 const olLayer = layer.olLayer;
@@ -115,12 +113,11 @@ export function MapApp() {
                 return olLayer.on("change:visible", updateVisibleLayers);
             })
             .filter((k): k is EventsKey => !!k);
-    
+
         return () => {
-            eventKeys.forEach(unByKey); 
+            eventKeys.forEach(unByKey);
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
-    
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
@@ -147,7 +144,6 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
-
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <Forecasts />
                         </MapAnchor>
@@ -206,7 +202,7 @@ export function MapApp() {
                                     showTools={true}
                                     collapsibleGroups={true}
                                     initiallyCollapsed={true}
-                                    showBasemapSwitcher={false}                                    
+                                    showBasemapSwitcher={false}
                                 />
                                 <FormControl>
                                     <FormLabel mt={2}>
@@ -220,6 +216,27 @@ export function MapApp() {
                                         allowSelectingEmptyBasemap={true}
                                     />
                                 </FormControl>
+                            </Box>
+                            <Box 
+                                flexDirection="column"
+                                backgroundColor="white"
+                                borderWidth="1px"
+                                borderRadius="lg"
+                                padding={2}
+                                boxShadow="lg"
+                                role="dialog"
+                                maxHeight={100}
+                                overflow="auto"
+                            >
+                                <Text fontWeight={600}> Description </Text>
+                                <Text>
+                                    This platform serves as a way to learn about 
+                                    <Spacer></Spacer>
+                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Disaster risk")}>
+                                        disaster risk 
+                                    </Button>
+                                    {" "} in the lens of climate change. 
+                                </Text>
                             </Box>
                         </MapAnchor>
                         {/* zoom to municipalities */}
@@ -256,6 +273,7 @@ export function MapApp() {
                                     Zoom to Roskilde
                                 </Button>
                             </VStack>
+                            
 
                             {/* {mapModel &&
                                 activeLayerIds.length > 0 &&
@@ -271,10 +289,10 @@ export function MapApp() {
                             {mapModel && (
                                 <FeatureInfo
                                     mapModel={mapModel.map!}
-                                    projection="EPSG:3857" layerId={""}
+                                    projection="EPSG:3857"
+                                    layerId={""}
                                 />
                             )}
-
                         </MapAnchor>
 
                         {/*layerswipe layers and legend*/}
@@ -300,20 +318,22 @@ export function MapApp() {
                                                 direction="column"
                                                 justifyContent="center"
                                                 alignItems="center"
-                                            >
-                                            </Flex>
+                                            ></Flex>
                                             <Text fontWeight="bold" mt={4}>
-                                                    Select Layers for Comparison
+                                                Select Layers for Comparison
                                             </Text>
-                                            <Spacer/>
+                                            <Spacer />
                                             <Text fontSize={16}>
-                                                    ➡️ Only layers which have been selected in the Operational Layers are viewable for comparison
+                                                ➡️ Only layers which have been selected in the
+                                                Operational Layers are viewable for comparison
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
                                                     placeholder="Select Left Layer"
                                                     value={selectedLeftLayer ?? ""}
-                                                    onChange={(e) => setSelectedLeftLayer(e.target.value)}
+                                                    onChange={(e) =>
+                                                        setSelectedLeftLayer(e.target.value)
+                                                    }
                                                 >
                                                     {visibleAvailableLayers.map((layer) => (
                                                         <option key={layer.id} value={layer.id}>
@@ -325,7 +345,9 @@ export function MapApp() {
                                                 <Select
                                                     placeholder="Select Right Layer"
                                                     value={selectedRightLayer ?? ""}
-                                                    onChange={(e) => setSelectedRightLayer(e.target.value)}
+                                                    onChange={(e) =>
+                                                        setSelectedRightLayer(e.target.value)
+                                                    }
                                                 >
                                                     {visibleAvailableLayers.map((layer) => (
                                                         <option key={layer.id} value={layer.id}>
@@ -347,10 +369,18 @@ export function MapApp() {
                                         👇Scroll Down to View all Selected Layer Legends
                                     </Text>
                                 </Flex> */}
+                                {/* <Flex>
+                                    <TaxonomyInfo keyword="food security" />
+                                </Flex> */}
+                                {activeKeyword && (
+                                    <Flex>
+                                        <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
+                                    </Flex>
+                                )}
                                 <Flex
-                                    maxHeight={400} 
+                                    maxHeight={400}
                                     maxWidth={250}
-                                    overflow="auto" 
+                                    overflow="auto"
                                     borderRadius="md"
                                     boxShadow="lg"
                                     // marginLeft="auto"
@@ -360,7 +390,6 @@ export function MapApp() {
                                 </Flex>
                             </Flex>
                         </MapAnchor>
-
 
                         <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
                             <Flex
@@ -428,5 +457,3 @@ export function MapApp() {
         </Flex>
     );
 }
-
-
