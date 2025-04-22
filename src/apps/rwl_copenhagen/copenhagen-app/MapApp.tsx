@@ -231,11 +231,15 @@ export function MapApp() {
                                 <Text fontWeight={600}> Description </Text>
                                 <Text>
                                     This platform serves as a way to learn about 
-                                    <Spacer></Spacer>
-                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Disaster risk")}>
+                                    <Spacer/>
+                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Disaster Risk")}>
                                         disaster risk 
                                     </Button>
-                                    {" "} in the lens of climate change. 
+                                    {" "} in the lens of {" "}
+                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Climate Change")}>
+                                        climate change
+                                    </Button>
+                                    .
                                 </Text>
                             </Box>
                         </MapAnchor>

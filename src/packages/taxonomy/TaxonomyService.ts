@@ -55,7 +55,7 @@ export class TaxonomyServiceImpl implements TaxonomyService {
                 const keyword = graph[0] as KeywordInfo;
                 return keyword;
             } else {
-                console.warn("No keyword data found in @graph");
+                console.warn("No keyword data found");
                 return null;
             }
         } catch (error) {
