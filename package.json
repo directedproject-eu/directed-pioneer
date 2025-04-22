@@ -121,6 +121,6 @@
     },
     "dependencies": {
         "chroma-js": "^3.1.2", 
-        "html-react-parser": "^5.2.3"
+        "html-react-parser": "3.0.8"
     }
 }
