@@ -67,5 +67,4 @@ export class TaxonomyServiceImpl implements TaxonomyService {
     async fetchDescription(name: string): Promise<KeywordInfo | null> {
         return this.getKeywordInfo(name);
     }
-    
 }

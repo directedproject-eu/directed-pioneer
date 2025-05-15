@@ -4,6 +4,8 @@ import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pio
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
+import { WmsLegend } from "./Components/Legends/WMSLegend";
+
 
 export const MAP_ID = "main";
 
@@ -22,7 +24,8 @@ const Basemap = new SimpleLayer({
 
 //starkregen layers
 const starkregen_nw_geschw_agw = new SimpleLayer({
-    title: "nw_geschw_agw",
+    title: "NW Geschwindigkeiten AGW",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -30,13 +33,22 @@ const starkregen_nw_geschw_agw = new SimpleLayer({
                 LAYERS: "nw_geschw_agw"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "NW Geschwindigkeiten AGW",
+            id: "nw_geschw_agw"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
 const starkregen_nw_geschw_extrem = new SimpleLayer({
-    title: "nw_geschw_extrem",
+    title: "NW Geschwindigkeiten Extrem",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -44,13 +56,22 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
                 LAYERS: "nw_geschw_extrem"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "NW Geschwindigkeiten Extrem",
+            id: "nw_geschw_extrem"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
 const starkregen_nw_tiefe_agw = new SimpleLayer({
-    title: "nw_tiefe_agw",
+    title: "NW Tiefe AGW",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -58,13 +79,22 @@ const starkregen_nw_tiefe_agw = new SimpleLayer({
                 LAYERS: "nw_tiefe_agw"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "NW Tiefe AGW",
+            id: "nw_tiefe_agw"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
 const starkregen_nw_tiefe_extrem = new SimpleLayer({
-    title: "nw_tiefe_extrem",
+    title: "NW Tiefe Extrem",
+    visible: true,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -72,39 +102,72 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
                 LAYERS: "nw_tiefe_extrem"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "NW Tiefe Extrem",
+            id: "nw_tiefe_extrem"
+        }, 
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
-//starkregen groups
-const Fliessgeschwindigkeit_Ausser = new GroupLayer({
-    title: "Fliessgeschwindigkeit Außergewönlich",
-    id: "stark_regen1",
-    layers: [starkregen_nw_geschw_agw]
-});
+// starkregen groups
+// const Fliessgeschwindigkeit_Ausser = new GroupLayer({
+//     title: "Fliessgeschwindigkeit Außergewönlich",
+//     visible: false,
+//     id: "stark_regen1",
+//     layers: [starkregen_nw_geschw_agw], 
+//     attributes: {
+//         "legend": {
+//             Component: WmsLegend
+//         }
+//     }
+// });
 
-const Fliessgeschwindigkeit_Extrem = new GroupLayer({
-    title: "Fliessgeschwindigkeit extremes",
-    id: "stark_regen2",
-    layers: [starkregen_nw_geschw_extrem]
-});
+// const Fliessgeschwindigkeit_Extrem = new GroupLayer({
+//     title: "Fliessgeschwindigkeit extremes",
+//     visible: false,
+//     id: "stark_regen2",
+//     layers: [starkregen_nw_geschw_extrem], 
+//     attributes: {
+//         "legend": {
+//             Component: WmsLegend
+//         }
+//     }
+// });
 
-const Ueberflutungstiefe_Ausser = new GroupLayer({
-    title: "Überflutungstiefe Außergewöhnlich",
-    id: "stark_regen3",
-    layers: [starkregen_nw_tiefe_agw]
-});
+// const Ueberflutungstiefe_Ausser = new GroupLayer({
+//     title: "Überflutungstiefe Außergewöhnlich",
+//     visible: false,
+//     id: "stark_regen3",
+//     layers: [starkregen_nw_tiefe_agw], 
+//     attributes: {
+//         "legend": {
+//             Component: WmsLegend
+//         }
+//     }
+// });
 
-const Ueberflutungstiefe_Extrem = new GroupLayer({
-    title: "Überflutungstiefe extremes",
-    id: "stark_regen4",
-    layers: [starkregen_nw_tiefe_extrem]
-});
+// const Ueberflutungstiefe_Extrem = new GroupLayer({
+//     title: "Überflutungstiefe extremes",
+//     visible: true,
+//     id: "stark_regen4",
+//     layers: [starkregen_nw_tiefe_extrem], 
+//     attributes: {
+//         "legend": {
+//             Component: WmsLegend
+//         }
+//     }
+// });
 
 //district gov köln layers
 const wms_nw_dhm_ubersicht = new SimpleLayer({
     title: "DHM Overview",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
@@ -112,13 +175,22 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
                 LAYERS: "wms_nw_dhm-ubersicht"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "DHM Overview",
+            id: "dhm_ubersicht"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
 const wms_nw_gelaendeneigung = new SimpleLayer({
     title: "Terrain Snice",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
@@ -126,13 +198,22 @@ const wms_nw_gelaendeneigung = new SimpleLayer({
                 LAYERS: "wms_nw_gelaendeneigung"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "Terrain Snice",
+            id: "terrain_snice"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
 const wms_nw_gelaendestufen = new SimpleLayer({
     title: "Terrain Steps",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
@@ -140,13 +221,22 @@ const wms_nw_gelaendestufen = new SimpleLayer({
                 LAYERS: "wms_nw_gelaendestufen"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "Terrain Steps",
+            id: "terrain_steps"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
 const wms_nw_dgm_schummerung = new SimpleLayer({
     title: "Terrain Shading",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
@@ -154,13 +244,22 @@ const wms_nw_dgm_schummerung = new SimpleLayer({
                 LAYERS: "wms_nw_dgm-schummerung"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "Terrain Shading",
+            id: "terrain_shading"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
 const wms_nw_hoehenschichten = new SimpleLayer({
     title: "Height",
+    visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis",
@@ -168,8 +267,16 @@ const wms_nw_hoehenschichten = new SimpleLayer({
                 LAYERS: "wms_nw_hoehenschichten"
             }
         }),
-        properties: { title: "WMS Layer" }
+        properties: {
+            title: "Height",
+            id: "height"
+        }
     }),
+    attributes: {
+        "legend": {
+            Component: WmsLegend
+        }
+    },
     isBaseLayer: false
 });
 
@@ -190,10 +297,14 @@ export class MainMapProvider implements MapConfigProvider {
             projection: "EPSG:3857",
             layers: [
                 Basemap,
-                Fliessgeschwindigkeit_Ausser,
-                Fliessgeschwindigkeit_Extrem,
-                Ueberflutungstiefe_Ausser,
-                Ueberflutungstiefe_Extrem,
+                // Fliessgeschwindigkeit_Ausser,
+                // Fliessgeschwindigkeit_Extrem,
+                // Ueberflutungstiefe_Ausser,
+                // Ueberflutungstiefe_Extrem,
+                starkregen_nw_geschw_agw,
+                starkregen_nw_geschw_extrem,
+                starkregen_nw_tiefe_extrem,
+                starkregen_nw_tiefe_agw,
                 wms_nw_dhm_ubersicht,
                 wms_nw_gelaendeneigung,
                 wms_nw_gelaendestufen,
