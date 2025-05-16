@@ -20,11 +20,14 @@
         "@open-pioneer/scale-viewer": "catalog:",
         "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
+        "@open-pioneer/legend": "catalog:",
         "ol": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
-        "navbar": "workspace:^"
+        "navbar": "workspace:^",
+        "featureinfo": "workspace:^",
+        "layerswipe": "workspace:^"
     }
 }
