@@ -39,6 +39,7 @@ import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import { StationSelector } from "./services/StationSelector";
 import { IsimipSelector } from "./controls/IsimipSelector";
+import ChartComponent from "./components/ChartComponent";
 
 export function MapApp() {
     const authService = useService<AuthService>("authentication.AuthService");
@@ -92,12 +93,7 @@ export function MapApp() {
                 <Notifier position="bottom" />
                 <TitledSection
                     title={
-                        <Box
-                            role="region"
-                            aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
-                            textAlign="left"
-                            py={1}
-                        >
+                        <Box role="region" textAlign="left" py={1}>
                             <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
                                 RWL The Danube Region
                             </SectionHeading>
@@ -105,11 +101,7 @@ export function MapApp() {
                     }
                 >
                     <Flex flex="1" direction="column" position="relative">
-                        <MapContainer
-                            mapId={MAP_ID}
-                            role="main"
-                            aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
-                        >
+                        <MapContainer mapId={MAP_ID} role="main">
                             <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                 <div
                                     style={{
@@ -138,7 +130,6 @@ export function MapApp() {
                                         padding={2}
                                         boxShadow="lg"
                                         role="top-left"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
                                     >
                                         <Box role="dialog" aria-labelledby={measurementTitleId}>
                                             <TitledSection
@@ -166,7 +157,7 @@ export function MapApp() {
                                     padding={2}
                                     boxShadow="lg"
                                     role="dialog"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                    // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                 >
                                     <Toc
                                         mapId={MAP_ID}
@@ -183,7 +174,7 @@ export function MapApp() {
                                     padding={2}
                                     boxShadow="lg"
                                     role="top-right"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
+                                    // aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
                                 >
                                     <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
                                     <Divider mt={4} />
@@ -207,7 +198,7 @@ export function MapApp() {
                             <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
                                 <Flex
                                     role="bottom-right"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                    // aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
                                     direction="column"
                                     gap={1}
                                     padding={1}
@@ -228,7 +219,7 @@ export function MapApp() {
                     </Flex>
                     <Flex
                         role="region"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
+                        // aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
                         gap={3}
                         alignItems="center"
                         justifyContent="center"
@@ -239,6 +230,7 @@ export function MapApp() {
                     </Flex>
                 </TitledSection>
             </Flex>
+            <ChartComponent></ChartComponent>
         </ForceAuth>
     );
 }

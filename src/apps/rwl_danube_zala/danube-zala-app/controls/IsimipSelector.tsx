@@ -41,7 +41,7 @@ export function IsimipSelector() {
                 title="Model"
             ></Selector>
             <Selector
-                options={["ssp585", "ssp370"]}
+                options={["ssp585", "ssp370", "ssp126"]}
                 setSelected={setScenario}
                 marginBottom="5px"
                 title="Scenario"
