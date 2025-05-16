@@ -5,20 +5,24 @@ import { Box, Text } from "@open-pioneer/chakra-integration";
 import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { useIntl } from "open-pioneer:react-hooks";
 
-//water level colors
-const l_01 = "#ffffff";
-const l_02 = "#1a68ae";
-const l_03 = "#08306b";
-const l_04 = "#301934";
+//sea level colors
+const transparentWhite = "rgba(255, 255, 255, 0)";
+const l_01 = "#ff958c"; //rgb (255,149,140)
+const l_02 = "#ee85b5"; //rgb (238,133,181)
+const l_03 = "#ca61c3"; //rgb (202,97,195)
+const l_04 = "#883677"; //rgb (136,54,119)
+const l_05 = "#441151"; //rgb (68,17,81)
 
 const colorMapping = [
-    { value: 0, color: l_01, label: "0" },
-    { value: 0.5, color: l_02, label: "0.5" },
-    { value: 1.0, color: l_03, label: "1.0" },
-    { value: 11.0, color: l_04, label: "11.0" }
+    { value: 0, color: transparentWhite, label: "0" },
+    { value: 0.05, color: l_01, label: "0.05" },
+    { value: 0.3, color: l_02, label: "0.30" },
+    { value: 0.55, color: l_03, label: "0.55" },
+    { value: 0.7, color: l_04, label: "0.70" },
+    { value: 0.95, color: l_05, label: "0.95" }
 ];
 
-export function WaterLevelLegend(props: LegendItemComponentProps) {
+export function SeaLevelLegend(props: LegendItemComponentProps) {
     const intl = useIntl();
 
     return (

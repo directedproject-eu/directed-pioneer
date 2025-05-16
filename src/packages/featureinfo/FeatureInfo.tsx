@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { useEffect, useState } from "react";
 import { MapModel } from "@open-pioneer/map";
-import { setupClickHandler } from "./FeatureService";
+import { fetchFeatureInfo } from "./FeatureService";
 import {
     Popover,
     PopoverBody,
@@ -13,10 +13,12 @@ import {
     PopoverArrow,
     Table,
     Tbody,
+    Text,
     Tr,
     Td,
     Th
 } from "@open-pioneer/chakra-integration";
+import type { MapBrowserEvent } from "ol";
 
 interface FeatureInfoProps {
     mapModel: MapModel;
@@ -25,45 +27,51 @@ interface FeatureInfoProps {
 }
 
 export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
+    //store wms feature info for click position
     const [featureInfo, setFeatureInfo] = useState<{
-        layerName: string | null;
-        data: Record<string, unknown> | null;
-    }>({
-        layerName: null,
-        data: null
-    });
+        features: Array<{ layerName: string; data: Record<string, unknown> }> | null;
+    }>({ features: null });
+    //track click position for popup placement
     const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null);
 
     useEffect(() => {
-        if (mapModel && mapModel.olMap) {
-            const handleClick = (event: MouseEvent) => {
-                setClickPosition({ x: event.clientX, y: event.clientY });
-            };
+        if (!mapModel?.olMap) return;
+        //get coords on any mouse click
+        const handleViewportClick = (event: MouseEvent) => {
+            setClickPosition({ x: event.clientX, y: event.clientY });
+        };
+        //get coords and trigger feature info request
+        const handleSingleClick = (event: MapBrowserEvent<UIEvent>) => {
+            const coordinate = event.coordinate;
+            const viewResolution = mapModel.olMap.getView().getResolution();
 
-            mapModel.olMap.getViewport().addEventListener("click", handleClick);
-            setupClickHandler(mapModel, projection, setFeatureInfo);
+            if (coordinate && viewResolution) {
+                fetchFeatureInfo(mapModel, coordinate, viewResolution, projection, setFeatureInfo);
+            }
+        };
 
-            return () => {
-                mapModel.olMap.getViewport().removeEventListener("click", handleClick);
-            };
-        }
+        const olMap = mapModel.olMap;
+        olMap.getViewport().addEventListener("click", handleViewportClick);
+        olMap.on("singleclick", handleSingleClick);
+
+        return () => {
+            olMap.getViewport().removeEventListener("click", handleViewportClick);
+            olMap.un("singleclick", handleSingleClick);
+        };
     }, [mapModel, projection]);
 
-    //cut off to 3 decimal places
-    const round = (num: number) => {
-        return num.toFixed(3);
-    };
+    const round = (num: number) => num.toFixed(3);
 
-    //display only the band number and put into a table
+    //render properties in a table from the first feature in the feature collection
     const renderFeatureProperties = (featureCollection: Record<string, unknown>) => {
         const features = featureCollection?.features as Array<Record<string, unknown>> | undefined;
         if (!features || features.length === 0) return <p>No features available</p>;
 
         const properties = features[0]?.properties as Record<string, unknown> | undefined;
-        if (!properties) return <p>No properties available</p>;
+        if (!properties) return <p>No layer properties available</p>;
 
         return (
-            <Table size="md" variant="simple">
+            <Table size="sm" variant="simple">
                 <Tbody>
                     {Object.entries(properties).map(([key, value]) => (
                         <Tr key={key}>
@@ -77,11 +85,15 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                             >
                                 {key}
                             </Th>
-                            <Td style={{ wordBreak: "break-word" }}>
+                            <Td
+                                style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    maxWidth: "300px"
+                                }}
+                            >
                                 {typeof value === "number" ? round(value) : String(value)}
-                                {/* {typeof value === "object" && value !== null
-                                    ? JSON.stringify(value, null, 2)
-                                    : String(value)} */}
                             </Td>
                         </Tr>
                     ))}
@@ -90,7 +102,8 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
         );
     };
 
-    return featureInfo.data && clickPosition ? (
+    //render the popup
+    return featureInfo.features && clickPosition ? (
         <Popover isOpen={true}>
             <Portal>
                 <div
@@ -101,118 +114,43 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                         zIndex: 1000
                     }}
                 >
-                    <PopoverContent style={{ maxHeight: "300px", overflow: "auto" }}>
+                    <PopoverContent style={{ maxHeight: "400px", overflow: "auto" }}>
                         <PopoverArrow style={{ top: "-20px", left: "20px" }} />
-                        <PopoverCloseButton
-                            onClick={() => setFeatureInfo({ layerName: null, data: null })}
-                        />
+                        <PopoverCloseButton onClick={() => setFeatureInfo({ features: null })} />
                         <PopoverHeader>
                             <div>
-                                <strong>Layer: </strong>
-                                {featureInfo.layerName}
+                                <Text fontWeight={600} fontSize={14}>
+                                    Selected Layers:{" "}
+                                </Text>
+                                <Text fontSize={14}>
+                                    {" "}
+                                    {featureInfo.features.map((f) => f.layerName).join(", ")}{" "}
+                                </Text>
                             </div>
                             <div>
-                                <strong>Pixel Value at </strong> X: {clickPosition.x}, Y:{" "}
-                                {clickPosition.y}
+                                <Text fontWeight={600} fontSize={14}>
+                                    Clicked Point:{" "}
+                                </Text>
+                                <Text fontSize={14}>
+                                    {" "}
+                                    X: {clickPosition.x}, Y: {clickPosition.y}{" "}
+                                </Text>
                             </div>
                         </PopoverHeader>
-                        <PopoverBody>{renderFeatureProperties(featureInfo.data)}</PopoverBody>
+                        {/* put table in popup, map over wms layer response  */}
+                        <PopoverBody>
+                            {featureInfo.features.map((f) => (
+                                <div key={f.layerName} style={{ marginBottom: "10px" }}>
+                                    <Text fontWeight={600} fontSize={14}>
+                                        {f.layerName}
+                                    </Text>
+                                    {renderFeatureProperties(f.data)}
+                                </div>
+                            ))}
+                        </PopoverBody>
                     </PopoverContent>
                 </div>
             </Portal>
         </Popover>
     ) : null;
 }
-
-///original working for 1 layer to test
-// interface FeatureInfoProps {
-//     mapModel: MapModel;
-//     layerId: string;
-//     projection: string;
-// }
-
-// export function FeatureInfo({ mapModel, layerId, projection }: FeatureInfoProps) {
-//     const [featureInfo, setFeatureInfo] = useState<Record<string, unknown> | null>(null);
-//     const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null);
-
-//     useEffect(() => {
-//         if (mapModel && mapModel.olMap) {
-//             const handleClick = (event: MouseEvent) => {
-//                 setClickPosition({ x: event.clientX, y: event.clientY });
-//             }; //set the feature info where clicked
-
-//             mapModel.olMap.getViewport().addEventListener("click", handleClick);
-//             setupClickHandler(mapModel, layerId, projection, setFeatureInfo); //feature info retrieval
-
-//             return () => {
-//                 mapModel.olMap.getViewport().removeEventListener("click", handleClick);
-//             };
-//         }
-//     }, [mapModel, layerId, projection]);
-
-//     const renderFeatureProperties = (featureCollection: Record<string, unknown>) => {
-//         //check features array exists
-//         const features = featureCollection?.features as Array<Record<string, unknown>> | undefined;
-//         if (!features || features.length === 0) return <p>No features available</p>;
-//         //access properties of the first feature
-//         const properties = features[0]?.properties as Record<string, unknown> | undefined;
-//         if (!properties) return <p>No properties available</p>;
-
-//         return (
-//             <Table size="sm" variant="simple">
-//                 <Tbody>
-//                     {/* change back to entries(data) for entire json response in a table. remove const(s) */}
-//                     {Object.entries(properties).map(([key, value]) => (
-//                         <Tr key={key}>
-//                             <Th
-//                                 style={{
-//                                     textAlign: "left",
-//                                     whiteSpace: "nowrap",
-//                                     fontWeight: "bold",
-//                                     paddingRight: "10px",
-//                                 }}
-//                             >
-//                                 {key}
-//                             </Th>
-//                             <Td
-//                                 style={{
-//                                     wordBreak: "break-word",
-//                                 }}>
-//                                 {typeof value === "object" && value !== null
-//                                     ? JSON.stringify(value, null, 2)
-//                                     : String(value)}
-//                             </Td>
-//                         </Tr>
-//                     ))}
-//                 </Tbody>
-//             </Table>
-//         );
-//     };
-
-//     return featureInfo && clickPosition? (
-//         <Popover isOpen={true}>
-//             <Portal>
-//                 <div
-//                     style={{
-//                         position: "absolute",
-//                         top: `${clickPosition.y}px`,
-//                         left: `${clickPosition.x}px`,
-//                         zIndex: 1000,
-//                     }}
-//                 >
-//                     <PopoverContent style={{ maxHeight: "300px", overflow: "auto" }}>
-//                         <PopoverArrow style={{ top: "-20px", left: "20px" }}/>
-//                         <PopoverCloseButton onClick={() => setFeatureInfo(null)} />
-//                         <PopoverHeader>
-//                             Pixel Value at X: {clickPosition.x}, Y: {clickPosition.y}
-//                         </PopoverHeader>
-//                         <PopoverBody>
-//                             {renderFeatureProperties(featureInfo)}
-//                             {/* <pre>{JSON.stringify(featureInfo, null, 2)}</pre> */}
-//                         </PopoverBody>
-//                     </PopoverContent>
-//                 </div>
-//             </Portal>
-//         </Popover>
-//     ) : null;
-// }
