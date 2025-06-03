@@ -240,7 +240,7 @@ const NAV_ITEMS: Array<NavItem> = [
             },
             {
                 label: "Emilia Romagna Region",
-                href: `${BASE_URL}apps/rwl_emilia_romagna/index.html`
+                href: "https://directed-rwl2.saferplaces.co/"
             },
             {
                 label: "Danube Region - Vienna",
