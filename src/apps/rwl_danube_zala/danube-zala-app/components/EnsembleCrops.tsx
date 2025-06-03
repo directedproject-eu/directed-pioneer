@@ -8,7 +8,13 @@ import { useService } from "open-pioneer:react-hooks";
 import { LayerHandler } from "../services/LayerHandler";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
-const LineChart = () => {
+type EnsembleProps = {
+    regionName: string;
+    files: string[];
+    regionCode: string;
+};
+
+const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) => {
     const modelRealizations = {
         "gfdl-esm4": 0,
         "ipsl-cm6a-lr": 1,
@@ -38,30 +44,17 @@ const LineChart = () => {
         }),
         [prepSrvc]
     );
-    // const { selectedScenario } = useReactiveSnapshot(
-    //     () => ({
-    //         selectedScenario: prepSrvc.selectedScenario
-    //     }),
-    //     [prepSrvc]
-    // );
-
-    // const { selectedScenario } = useReactiveSnapshot(
-    //     () => ({
-    //         selectedScenario: prepSrvc.selectedScenario
-    //     }),
-    //     [prepSrvc]
-    // );
 
     const [data, setData] = useState({});
     const [uniqueCrops, setUniqueCrops] = useState([]);
     const grouped = {};
 
     useEffect(() => {
-        const files = [
-            "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP126.csv",
-            "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP370.csv",
-            "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP585.csv"
-        ];
+        // const files = [
+        //     "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP126.csv",
+        //     "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP370.csv",
+        //     "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP585.csv"
+        // ];
 
         Promise.all(
             files.map((file) =>
@@ -95,7 +88,7 @@ const LineChart = () => {
 
                 dataGroups[key].push([Number(row.Year), parseFloat(row["Proj.Yd"])]);
             });
-
+            console.log(dataGroups);
             setUniqueCrops(crops);
             setData(dataGroups);
         });
@@ -107,7 +100,7 @@ const LineChart = () => {
         series.push({
             name: crop,
             data: data[
-                `${crop} | Real ${modelRealizations[selectedModel] + scenarioRealization[selectedScenario]} | CMIP6:${selectedScenario.toUpperCase()} | HU22`
+                `${crop} | Real ${modelRealizations[selectedModel] + scenarioRealization[selectedScenario]} | CMIP6:${selectedScenario.toUpperCase()} | ${regionCode}`
             ],
             type: "line"
         });
@@ -115,7 +108,7 @@ const LineChart = () => {
 
     const options = {
         title: {
-            text: `Crops in the Zala region for Real ${modelRealizations[selectedModel] + scenarioRealization[selectedScenario]} CMIP6:${selectedScenario.toUpperCase()} HU22`
+            text: `Crops in the ${regionName} region for Real ${modelRealizations[selectedModel] + scenarioRealization[selectedScenario]} CMIP6:${selectedScenario.toUpperCase()} ${regionCode}`
         },
         xAxis: {
             title: { text: "Year" },
@@ -131,7 +124,8 @@ const LineChart = () => {
             ]
         },
         yAxis: {
-            title: { text: "Value" }
+            title: { text: "Value" },
+            min: 0
         },
         series: series
     };

@@ -39,7 +39,9 @@ import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import { StationSelector } from "./services/StationSelector";
 import { IsimipSelector } from "./controls/IsimipSelector";
-import ChartComponent from "./components/ChartComponent";
+import ChartComponentZala from "./components/ChartComponentZala";
+import ResizeBox from "./components/ResizeBox";
+import ChartComponentRhineErft from "./components/ChartComopnentRhineErft";
 
 export function MapApp() {
     const authService = useService<AuthService>("authentication.AuthService");
@@ -230,7 +232,14 @@ export function MapApp() {
                     </Flex>
                 </TitledSection>
             </Flex>
-            <ChartComponent></ChartComponent>
+
+            <ResizeBox title={"Zala Chart"}>
+                <ChartComponentZala></ChartComponentZala>
+            </ResizeBox>
+
+            <ResizeBox title={"Rhine - Erft Chart"}>
+                <ChartComponentRhineErft></ChartComponentRhineErft>
+            </ResizeBox>
         </ForceAuth>
     );
 }
