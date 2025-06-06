@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import {
     Box,
-    Divider,
     Flex,
     FormControl,
     FormLabel,
@@ -20,7 +19,6 @@ import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
-import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services";
 import { useId, useMemo, useState, useEffect } from "react";
@@ -36,7 +34,6 @@ import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
-
 
 export function MapApp() {
     const intl = useIntl();
@@ -175,11 +172,7 @@ export function MapApp() {
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                             >
-                                <Toc 
-                                    mapId={MAP_ID} 
-                                    showBasemapSwitcher={false}
-                                    showTools={true}
-                                />
+                                <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">

@@ -40,6 +40,8 @@ import { Forecasts } from "./controls/Forecasts";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
+import { SaferPlacesFloodMap } from "saferplaces";
+// import { ModelClient } from "modelclient";
 
 export function MapApp() {
     const intl = useIntl();
@@ -48,7 +50,6 @@ export function MapApp() {
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-
 
     //////////////////
     /// LayerSwipe ///
@@ -123,6 +124,7 @@ export function MapApp() {
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
             <Notifier position="bottom" />
+            {/* <ModelClient /> */}
             <TitledSection
                 title={
                     <Box
@@ -217,7 +219,7 @@ export function MapApp() {
                                     />
                                 </FormControl>
                             </Box>
-                            <Box 
+                            <Box
                                 flexDirection="column"
                                 backgroundColor="white"
                                 borderWidth="1px"
@@ -230,13 +232,21 @@ export function MapApp() {
                             >
                                 <Text fontWeight={600}> Description </Text>
                                 <Text>
-                                    This platform serves as a way to learn about 
-                                    <Spacer/>
-                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Disaster Risk")}>
-                                        disaster risk 
-                                    </Button>
-                                    {" "} in the lens of {" "}
-                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Climate Change")}>
+                                    This platform serves as a way to learn about
+                                    <Spacer />
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("Disaster Risk")}
+                                    >
+                                        disaster risk
+                                    </Button>{" "}
+                                    in the lens of{" "}
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("Climate Change")}
+                                    >
                                         climate change
                                     </Button>
                                     .
@@ -277,7 +287,6 @@ export function MapApp() {
                                     Zoom to Roskilde
                                 </Button>
                             </VStack>
-                            
 
                             {/* {mapModel &&
                                 activeLayerIds.length > 0 &&
@@ -378,7 +387,10 @@ export function MapApp() {
                                 </Flex> */}
                                 {activeKeyword && (
                                     <Flex>
-                                        <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
+                                        <TaxonomyInfo
+                                            keyword={activeKeyword}
+                                            onClose={() => setActiveKeyword(null)}
+                                        />
                                     </Flex>
                                 )}
                                 <Flex
@@ -403,6 +415,8 @@ export function MapApp() {
                                 gap={1}
                                 padding={1}
                             >
+                                {/* SaferPlaces flood model dialog */}
+                                <SaferPlacesFloodMap /> 
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}

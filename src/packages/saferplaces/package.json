@@ -1,0 +1,11 @@
+{
+    "name": "saferplaces",
+    "private": true,
+    "dependencies": {
+        "@open-pioneer/runtime": "catalog:",
+        "taxonomy": "workspace:^"
+    },
+    "devDependencies": {
+        "@open-pioneer/test-utils": "catalog:"
+    }
+}

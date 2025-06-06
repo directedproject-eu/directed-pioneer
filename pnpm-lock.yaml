@@ -446,6 +446,9 @@ importers:
       layerswipe:
         specifier: workspace:^
         version: link:../../../packages/layerswipe
+      modelclient:
+        specifier: workspace:^
+        version: link:../../../packages/modelclient
       navbar:
         specifier: workspace:^
         version: link:../../../packages/navbar
@@ -464,6 +467,9 @@ importers:
       react-use:
         specifier: 'catalog:'
         version: 17.6.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      saferplaces:
+        specifier: workspace:^
+        version: link:../../../packages/saferplaces
       taxonomy:
         specifier: workspace:^
         version: link:../../../packages/taxonomy
@@ -818,11 +824,34 @@ importers:
         specifier: 'catalog:'
         version: 3.1.0(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(typescript@5.8.3)
 
+  src/packages/modelclient:
+    dependencies:
+      '@open-pioneer/runtime':
+        specifier: 'catalog:'
+        version: 3.1.0(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.4)(typescript@5.8.3)
+    devDependencies:
+      '@open-pioneer/test-utils':
+        specifier: 'catalog:'
+        version: 3.1.0(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(typescript@5.8.3)
+
   src/packages/navbar:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
         version: 3.1.0(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.4)(typescript@5.8.3)
+    devDependencies:
+      '@open-pioneer/test-utils':
+        specifier: 'catalog:'
+        version: 3.1.0(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(typescript@5.8.3)
+
+  src/packages/saferplaces:
+    dependencies:
+      '@open-pioneer/runtime':
+        specifier: 'catalog:'
+        version: 3.1.0(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.4)(typescript@5.8.3)
+      taxonomy:
+        specifier: workspace:^
+        version: link:../taxonomy
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'
@@ -836,6 +865,16 @@ importers:
       taxonomy:
         specifier: workspace:^
         version: 'link:'
+    devDependencies:
+      '@open-pioneer/test-utils':
+        specifier: 'catalog:'
+        version: 3.1.0(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(typescript@5.8.3)
+
+  src/packages/tilefeatureinfo:
+    dependencies:
+      '@open-pioneer/runtime':
+        specifier: 'catalog:'
+        version: 3.1.0(@emotion/is-prop-valid@1.3.1)(@types/react@19.1.4)(typescript@5.8.3)
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'

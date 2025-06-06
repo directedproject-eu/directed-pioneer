@@ -1,11 +1,10 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
+import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 import { WmsLegend } from "./Components/Legends/WMSLegend";
-
 
 export const MAP_ID = "main";
 
@@ -105,7 +104,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
         properties: {
             title: "NW Tiefe Extrem",
             id: "nw_tiefe_extrem"
-        }, 
+        }
     }),
     attributes: {
         "legend": {
@@ -120,7 +119,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
 //     title: "Fliessgeschwindigkeit Außergewönlich",
 //     visible: false,
 //     id: "stark_regen1",
-//     layers: [starkregen_nw_geschw_agw], 
+//     layers: [starkregen_nw_geschw_agw],
 //     attributes: {
 //         "legend": {
 //             Component: WmsLegend
@@ -132,7 +131,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
 //     title: "Fliessgeschwindigkeit extremes",
 //     visible: false,
 //     id: "stark_regen2",
-//     layers: [starkregen_nw_geschw_extrem], 
+//     layers: [starkregen_nw_geschw_extrem],
 //     attributes: {
 //         "legend": {
 //             Component: WmsLegend
@@ -144,7 +143,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
 //     title: "Überflutungstiefe Außergewöhnlich",
 //     visible: false,
 //     id: "stark_regen3",
-//     layers: [starkregen_nw_tiefe_agw], 
+//     layers: [starkregen_nw_tiefe_agw],
 //     attributes: {
 //         "legend": {
 //             Component: WmsLegend
@@ -156,7 +155,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
 //     title: "Überflutungstiefe extremes",
 //     visible: true,
 //     id: "stark_regen4",
-//     layers: [starkregen_nw_tiefe_extrem], 
+//     layers: [starkregen_nw_tiefe_extrem],
 //     attributes: {
 //         "legend": {
 //             Component: WmsLegend
