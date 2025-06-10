@@ -31,7 +31,6 @@
         "layerswipe": "workspace:^",
         "chroma-js": "^3.1.2",
         "taxonomy": "workspace:^",
-        "saferplaces": "workspace:^",
-        "modelclient": "workspace:^"
+        "saferplaces": "workspace:^"
     }
 }
