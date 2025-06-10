@@ -41,7 +41,7 @@ import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
 import { SaferPlacesFloodMap } from "saferplaces";
-// import { ModelClient } from "modelclient";
+import { ModelClient } from "modelclient";
 
 export function MapApp() {
     const intl = useIntl();
@@ -124,7 +124,7 @@ export function MapApp() {
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
             <Notifier position="bottom" />
-            {/* <ModelClient /> */}
+            <ModelClient />
             <TitledSection
                 title={
                     <Box
