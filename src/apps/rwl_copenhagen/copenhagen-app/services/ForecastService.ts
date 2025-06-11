@@ -36,7 +36,7 @@ export class ForecastServiceImpl implements ForecastService {
             this.layer = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100], "layer")
+                    color: this.createColorGradient([0, 100], "layer")
                 },
                 properties: { title: "Sea Level Mean Deviation Forecasts" }
             });
@@ -57,11 +57,11 @@ export class ForecastServiceImpl implements ForecastService {
                 })
             );
 
-            //Harmonie total precip
+            //HARMONIE total precip
             this.total_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100], "total_precip")
+                    color: this.createColorGradient([0, 100], "total_precip")
                 },
                 properties: { title: "Total Precipitation Forecasts" }
             });

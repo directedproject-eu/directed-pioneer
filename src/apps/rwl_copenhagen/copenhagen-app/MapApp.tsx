@@ -373,9 +373,9 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                                 {/* <Flex>
-                                    <Text 
-                                        fontSize={14} 
-                                        fontWeight="semibold" 
+                                    <Text
+                                        fontSize={14}
+                                        fontWeight="semibold"
                                         textAlign="right"
                                         width="97%"
                                     >
@@ -416,7 +416,7 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* SaferPlaces flood model dialog */}
-                                <SaferPlacesFloodMap /> 
+                                <SaferPlacesFloodMap />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
