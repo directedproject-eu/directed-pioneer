@@ -46,7 +46,7 @@ import { SaferPlacesFloodMap } from "saferplaces";
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel("main");
+    const mapModel = useMapModel(MAP_ID1);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
@@ -134,7 +134,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            {intl.formatMessage({id: "appTitle"})}
+                            {intl.formatMessage({ id: "appTitle" })}
                         </SectionHeading>
                     </Box>
                 }
