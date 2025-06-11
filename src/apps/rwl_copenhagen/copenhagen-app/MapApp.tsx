@@ -134,7 +134,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            RWL The Capital Region of Denmark
+                            {intl.formatMessage({id: "appTitle"})}
                         </SectionHeading>
                     </Box>
                 }
@@ -209,8 +209,7 @@ export function MapApp() {
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
-                                            {/* {intl.formatMessage({ id: "basemapLabel" })} */}
-                                            Basemap
+                                            {intl.formatMessage({ id: "basemapLabel" })}
                                         </Text>
                                     </FormLabel>
                                     <BasemapSwitcher
@@ -338,7 +337,7 @@ export function MapApp() {
                                             <Spacer />
                                             <Text fontSize={16}>
                                                 ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison
+                                                Operational Layers are viewable for comparison.
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
