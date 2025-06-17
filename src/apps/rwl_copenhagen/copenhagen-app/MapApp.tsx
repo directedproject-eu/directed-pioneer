@@ -40,15 +40,16 @@ import { Forecasts } from "./controls/Forecasts";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
+import { SaferPlacesFloodMap } from "saferplaces";
+// import { ModelClient } from "modelclient";
 
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel("main");
+    const mapModel = useMapModel(MAP_ID1);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-
 
     //////////////////
     /// LayerSwipe ///
@@ -123,6 +124,7 @@ export function MapApp() {
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
             <Notifier position="bottom" />
+            {/* <ModelClient /> */}
             <TitledSection
                 title={
                     <Box
@@ -132,7 +134,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            RWL The Capital Region of Denmark
+                            {intl.formatMessage({ id: "appTitle" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -207,8 +209,7 @@ export function MapApp() {
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
-                                            {/* {intl.formatMessage({ id: "basemapLabel" })} */}
-                                            Basemap
+                                            {intl.formatMessage({ id: "basemapLabel" })}
                                         </Text>
                                     </FormLabel>
                                     <BasemapSwitcher
@@ -217,7 +218,7 @@ export function MapApp() {
                                     />
                                 </FormControl>
                             </Box>
-                            <Box 
+                            <Box
                                 flexDirection="column"
                                 backgroundColor="white"
                                 borderWidth="1px"
@@ -230,13 +231,21 @@ export function MapApp() {
                             >
                                 <Text fontWeight={600}> Description </Text>
                                 <Text>
-                                    This platform serves as a way to learn about 
-                                    <Spacer/>
-                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Disaster Risk")}>
-                                        disaster risk 
-                                    </Button>
-                                    {" "} in the lens of {" "}
-                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Climate Change")}>
+                                    This platform serves as a way to learn about
+                                    <Spacer />
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("Disaster Risk")}
+                                    >
+                                        disaster risk
+                                    </Button>{" "}
+                                    in the lens of{" "}
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("Climate Change")}
+                                    >
                                         climate change
                                     </Button>
                                     .
@@ -277,7 +286,6 @@ export function MapApp() {
                                     Zoom to Roskilde
                                 </Button>
                             </VStack>
-                            
 
                             {/* {mapModel &&
                                 activeLayerIds.length > 0 &&
@@ -329,7 +337,7 @@ export function MapApp() {
                                             <Spacer />
                                             <Text fontSize={16}>
                                                 ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison
+                                                Operational Layers are viewable for comparison.
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
@@ -364,9 +372,9 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                                 {/* <Flex>
-                                    <Text 
-                                        fontSize={14} 
-                                        fontWeight="semibold" 
+                                    <Text
+                                        fontSize={14}
+                                        fontWeight="semibold"
                                         textAlign="right"
                                         width="97%"
                                     >
@@ -378,7 +386,10 @@ export function MapApp() {
                                 </Flex> */}
                                 {activeKeyword && (
                                     <Flex>
-                                        <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
+                                        <TaxonomyInfo
+                                            keyword={activeKeyword}
+                                            onClose={() => setActiveKeyword(null)}
+                                        />
                                     </Flex>
                                 )}
                                 <Flex
@@ -403,6 +414,8 @@ export function MapApp() {
                                 gap={1}
                                 padding={1}
                             >
+                                {/* SaferPlaces flood model dialog */}
+                                <SaferPlacesFloodMap />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}

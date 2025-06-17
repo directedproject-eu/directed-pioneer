@@ -2,14 +2,14 @@
 
 ## Quick start
 
-Ensure that you have [Node](https://nodejs.org/en/) (Version 20 or later) and [pnpm](https://pnpm.io/) (Version 9.x) installed.
+Ensure that you have [Node](https://nodejs.org/en/) (Version 20 or later) and [pnpm](https://pnpm.io/) (Version 10.x) installed.
 
 Then execute the following commands to get started:
 
 ```shell
 git clone https://github.com/directedproject-eu/directed-pioneer # Clone this repository
 cd directed-pioneer
-corepack cache clean && corepack use pnpm@9.x                    # Install pnpm 9^
+corepack cache clean && corepack use pnpm@10.x                   # Install pnpm 10^
 pnpm install                                                     # Install dependencies
 pnpm run dev                                                     # Launch development server
 ```

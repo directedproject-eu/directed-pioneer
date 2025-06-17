@@ -133,17 +133,44 @@ export class LayerHandlerImpl implements LayerHandler {
         return this.#selectedVariable.value;
     }
 
+    get selectedModel(): string {
+        return this.#selectedModel.value;
+    }
+
+    get selectedScenario(): string {
+        return this.#selectedScenario.value;
+    }
+
+    get selectedYear(): number {
+        return this.#selectedYear.value;
+    }
+
     private updateSource(): GeoTIFF {
-        return new GeoTIFF({
-            projection: "EPSG:4326",
-            normalize: false,
-            sources: [
-                {
-                    url: `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`,
-                    nodata: -5.3e37
-                }
-            ]
-        });
+        if (this.#selectedScenario.value == "ssp126") {
+            this.layer?.setSource(null);
+
+            this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+                model?.layers.getLayerById("isimip")?.setDescription("No map data available");
+                model?.layers.getLayerById("isimip")?.setVisible(false);
+                model?.layers.getLayerById("isimip")?.setTitle("No map data available");
+                return null;
+            });
+        } else {
+            this.changeTitleOfLayer(this.#selectedVariable.value);
+            this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+                model?.layers.getLayerById("isimip")?.setVisible(true);
+            });
+            return new GeoTIFF({
+                projection: "EPSG:4326",
+                normalize: false,
+                sources: [
+                    {
+                        url: `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`,
+                        nodata: -5.3e37
+                    }
+                ]
+            });
+        }
     }
 
     private updateStyle(): Style {
@@ -154,13 +181,11 @@ export class LayerHandlerImpl implements LayerHandler {
                     range: range,
                     variable: this.#selectedVariable.value
                 };
-
                 this.layer?.setStyle({
                     color: this.createColorGradiant([range[0], range[1]])
                 });
             })
             .catch((error) => console.error("Error fetching max value:", error));
-
         return new Style({});
     }
     private createColorGradiant(range: number[]) {

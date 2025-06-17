@@ -11,6 +11,7 @@
         "@open-pioneer/chakra-integration": "catalog:",
         "@open-pioneer/coordinate-viewer": "catalog:",
         "@open-pioneer/geolocation": "catalog:",
+        "@open-pioneer/legend": "catalog:",
         "@open-pioneer/map": "catalog:",
         "@open-pioneer/map-navigation": "catalog:",
         "@open-pioneer/map-ui-components": "catalog:",
@@ -23,12 +24,14 @@
         "@open-pioneer/scale-viewer": "catalog:",
         "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
-        "@open-pioneer/legend": "catalog:",
+        "highcharts": "^12.1.2",
+        "highcharts-react-official": "^3.2.1",
+        "navbar": "workspace:^",
         "ol": "catalog:",
+        "papaparse": "^5.5.2",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
-        "react-use": "catalog:",
-        "navbar": "workspace:^"
+        "react-use": "catalog:"
     }
 }

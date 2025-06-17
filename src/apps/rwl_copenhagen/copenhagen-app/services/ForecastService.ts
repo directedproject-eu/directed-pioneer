@@ -36,7 +36,7 @@ export class ForecastServiceImpl implements ForecastService {
             this.layer = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100], "layer")
+                    color: this.createColorGradient([0, 100], "layer")
                 },
                 properties: { title: "Sea Level Mean Deviation Forecasts" }
             });
@@ -57,11 +57,11 @@ export class ForecastServiceImpl implements ForecastService {
                 })
             );
 
-            //Harmonie total precip
+            //HARMONIE total precip
             this.total_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100], "total_precip")
+                    color: this.createColorGradient([0, 100], "total_precip")
                 },
                 properties: { title: "Total Precipitation Forecasts" }
             });
@@ -86,7 +86,7 @@ export class ForecastServiceImpl implements ForecastService {
             this.rate_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradiant([0, 100], "rate_precip")
+                    color: this.createColorGradient([0, 100], "rate_precip")
                 },
                 properties: { title: "Precipitation Rate Forecasts" }
             });
@@ -122,7 +122,7 @@ export class ForecastServiceImpl implements ForecastService {
     //         this.layer = new WebGLTileLayer({
     //             source: this.updateSource(""),
     //             style: {
-    //                 color: this.createColorGradiant([0, 100], "layer")
+    //                 color: this.createColorGradient([0, 100], "layer")
     //             },
     //             properties: { title: "Sea Level Mean Deviation Forecasts" }
     //         });
@@ -130,7 +130,7 @@ export class ForecastServiceImpl implements ForecastService {
     //         this.total_precip = new WebGLTileLayer({
     //             source: this.updateSource(""),
     //             style: {
-    //                 color: this.createColorGradiant([0, 100], "total_precip")
+    //                 color: this.createColorGradient([0, 100], "total_precip")
     //             },
     //             properties: { title: "Total Precipitation Forecasts" }
     //         });
@@ -138,7 +138,7 @@ export class ForecastServiceImpl implements ForecastService {
     //         this.rate_precip = new WebGLTileLayer({
     //             source: this.updateSource(""),
     //             style: {
-    //                 color: this.createColorGradiant([0, 100], "rate_precip")
+    //                 color: this.createColorGradient([0, 100], "rate_precip")
     //             },
     //             properties: { title: "Precipitation Rate Forecasts" }
     //         });
@@ -266,7 +266,7 @@ export class ForecastServiceImpl implements ForecastService {
         { value: 0.95, color: "#441151", label: "0.95 m" }
     ];
 
-    private createColorGradiant(
+    private createColorGradient(
         range: number[],
         layerType: "layer" | "total_precip" | "rate_precip"
     ) {

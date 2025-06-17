@@ -39,6 +39,9 @@ import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import { StationSelector } from "./services/StationSelector";
 import { IsimipSelector } from "./controls/IsimipSelector";
+import ChartComponentZala from "./components/ChartComponentZala";
+import ResizeBox from "./components/ResizeBox";
+import ChartComponentRhineErft from "./components/ChartComopnentRhineErft";
 
 import { useMapModel } from "@open-pioneer/map";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
@@ -165,11 +168,10 @@ export function MapApp() {
     }, [authState.kind]);
 
     return (
-        //<ForceAuth>
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar>
                 {authState.kind === "authenticated" && (
-                    <Flex flexDirection="row" align="center" ml="auto" gap="2em">
+                    <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
                         <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
                         <Button onClick={() => authService.logout()}>Logout</Button>
                     </Flex>
@@ -201,7 +203,6 @@ export function MapApp() {
                 <Flex flex="1" direction="column" position="relative">
                     {authState.kind !== "pending" && (
                         <MapContainer
-                            key={authState.kind}
                             mapId={MAP_ID}
                             role="main"
                             aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
@@ -336,6 +337,13 @@ export function MapApp() {
                 </Flex>
             </TitledSection>
         </Flex>
-        //</ForceAuth>
+
+	<ResizeBox title={"Zala Chart"}>
+	    <ChartComponentZala></ChartComponentZala>
+	</ResizeBox>
+
+    	<ResizeBox title={"Rhine - Erft Chart"}>
+	    <ChartComponentRhineErft></ChartComponentRhineErft>
+    	</ResizeBox>
     );
 }

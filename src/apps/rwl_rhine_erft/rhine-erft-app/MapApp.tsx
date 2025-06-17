@@ -1,7 +1,15 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-import { Box, Divider, Flex, FormControl, FormLabel, Text } from "@open-pioneer/chakra-integration";
-import { MapAnchor, MapContainer } from "@open-pioneer/map";
+import {
+    Box,
+    Flex,
+    FormControl,
+    FormLabel,
+    Text,
+    Select,
+    Spacer
+} from "@open-pioneer/chakra-integration";
+import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -11,25 +19,88 @@ import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
-import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services";
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
+import { FeatureInfo } from "featureinfo";
+import { LayerSwipe } from "layerswipe";
+import { EventsKey } from "ol/events";
+import { unByKey } from "ol/Observable";
+import Layer from "ol/layer/Layer";
+import { Legend } from "@open-pioneer/legend";
 
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
+    const mapModel = useMapModel("main");
+    const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //wms feature info
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
     }
+
+    //////////////////
+    /// LayerSwipe ///
+    /////////////////
+    const [availableLayers, setAvailableLayers] = useState<SimpleLayer[]>([]);
+    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
+    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
+    const [leftLayers, setLeftLayers] = useState<Layer[]>();
+    const [rightLayers, setRightLayers] = useState<Layer[]>();
+    const [sliderValue, setSliderValue] = useState<number>(50);
+    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
+
+    //////////////////
+    /// LayerSwipe ///
+    /////////////////
+
+    useEffect(() => {
+        if (!mapModel.map) return;
+
+        //get all layers from the mapmodel
+        const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
+        setAvailableLayers(layers);
+
+        //set selected layers
+        if (selectedLeftLayer && selectedRightLayer) {
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+
+            if (leftLayer && rightLayer) {
+                setLeftLayers([leftLayer]);
+                setRightLayers([rightLayer]);
+            }
+        }
+
+        //set only visible layers in the dropdowns for left and right layer
+        const updateVisibleLayers = () => {
+            const visibleLayers = layers.filter((layer) => layer.olLayer?.getVisible?.() === true);
+            setVisibleAvailableLayers(visibleLayers);
+        };
+
+        updateVisibleLayers(); //filter
+
+        const eventKeys = layers
+            .map((layer) => {
+                const olLayer = layer.olLayer;
+                if (!olLayer || typeof olLayer.on !== "function") return null;
+                return olLayer.on("change:visible", updateVisibleLayers);
+            })
+            .filter((k): k is EventsKey => !!k);
+
+        return () => {
+            eventKeys.forEach(unByKey);
+        };
+    }, [mapModel, selectedLeftLayer, selectedRightLayer]);
 
     const overviewMapLayer = useMemo(
         () =>
@@ -101,36 +172,109 @@ export function MapApp() {
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                             >
-                                <Toc mapId={MAP_ID} />
-                            </Box>
-                        </MapAnchor>
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                            <Box
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="top-right"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                            >
-                                <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
-                                <Divider mt={4} />
+                                <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
-                                            {intl.formatMessage({ id: "basemapLabel" })}
+                                            {/* {intl.formatMessage({ id: "basemapLabel" })} */}
+                                            Basemap
                                         </Text>
                                     </FormLabel>
-                                    <BasemapSwitcher mapId={MAP_ID} allowSelectingEmptyBasemap />
+                                    <BasemapSwitcher
+                                        mapId={MAP_ID}
+                                        allowSelectingEmptyBasemap={true}
+                                    />
                                 </FormControl>
                             </Box>
                         </MapAnchor>
+
+                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
+                            <Flex direction="column" gap={4}>
+                                <Box
+                                    backgroundColor="white"
+                                    borderWidth="1px"
+                                    borderRadius="lg"
+                                    padding={2}
+                                    boxShadow="lg"
+                                    role="top-right"
+                                    aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
+                                    maxHeight={615}
+                                    maxWidth={430}
+                                    overflow="hidden"
+                                    marginBottom={5}
+                                >
+                                    <Box>
+                                        <Box maxHeight={300} overflow="auto">
+                                            <Flex
+                                                direction="column"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                            ></Flex>
+                                            <Text fontWeight="bold" mt={4}>
+                                                Select Layers for Comparison
+                                            </Text>
+                                            <Spacer />
+                                            <Text fontSize={16}>
+                                                ➡️ Only layers which have been selected in the
+                                                Operational Layers are viewable for comparison
+                                            </Text>
+                                            <Flex direction="row" gap={4} p={4}>
+                                                <Select
+                                                    placeholder="Select Left Layer"
+                                                    value={selectedLeftLayer ?? ""}
+                                                    onChange={(e) =>
+                                                        setSelectedLeftLayer(e.target.value)
+                                                    }
+                                                >
+                                                    {visibleAvailableLayers.map((layer) => (
+                                                        <option key={layer.id} value={layer.id}>
+                                                            {layer.title || layer.id}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+
+                                                <Select
+                                                    placeholder="Select Right Layer"
+                                                    value={selectedRightLayer ?? ""}
+                                                    onChange={(e) =>
+                                                        setSelectedRightLayer(e.target.value)
+                                                    }
+                                                >
+                                                    {visibleAvailableLayers.map((layer) => (
+                                                        <option key={layer.id} value={layer.id}>
+                                                            {layer.title || layer.id}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            </Flex>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Flex
+                                    maxHeight={400}
+                                    maxWidth={250}
+                                    overflow="auto"
+                                    borderRadius="md"
+                                    boxShadow="lg"
+                                    alignSelf="flex-end"
+                                >
+                                    <Legend mapId={MAP_ID} />
+                                </Flex>
+                            </Flex>
+                            {mapModel && (
+                                <FeatureInfo
+                                    mapModel={mapModel.map!}
+                                    projection="EPSG:3857"
+                                    layerId={""}
+                                />
+                            )}
+                        </MapAnchor>
+
                         <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
                             <Flex
                                 role="bottom-right"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
-                                direction="column"
+                                direction="row"
                                 gap={1}
                                 padding={1}
                             >
@@ -147,6 +291,33 @@ export function MapApp() {
                             </Flex>
                         </MapAnchor>
                     </MapContainer>
+                    {/* add layerswipe slider below map container  */}
+                    <Box
+                        position="absolute"
+                        bottom={0}
+                        left={0}
+                        right={0}
+                        padding={4}
+                        backgroundColor="white"
+                        borderTop={1}
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        {leftLayers && rightLayers && mapModel.map && (
+                            <LayerSwipe
+                                map={mapModel.map}
+                                sliderValue={sliderValue}
+                                onSliderValueChanged={(newValue) => {
+                                    setSliderValue(newValue);
+                                }}
+                                leftLayers={leftLayers}
+                                rightLayers={rightLayers}
+                                style={{ width: "100%", height: "100%" }}
+                            />
+                        )}
+                    </Box>
                 </Flex>
                 <Flex
                     role="region"

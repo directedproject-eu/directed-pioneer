@@ -5,16 +5,15 @@ import { useService } from "open-pioneer:react-hooks";
 import { SetStateAction, useEffect, useState } from "react";
 import { TaxonomyService, KeywordInfo } from "./TaxonomyService";
 import {
-    Spinner,
-    Text, 
-    Link, 
-    Spacer, 
-    Box, 
-    CloseButton, 
-    Button, 
+    Text,
+    Link,
+    Spacer,
+    Box,
+    CloseButton,
+    Button,
     Flex
 } from "@open-pioneer/chakra-integration";
-import parse from "html-react-parser"; 
+import parse from "html-react-parser";
 
 interface TaxonomyInfoProps {
     keyword: string;
@@ -41,17 +40,18 @@ export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
     //     // setShowPopup(prev => !prev);
     // };
 
-
     useEffect(() => {
         if (keyword) {
             setLoading(true);
-            taxonomyService.fetchDescription(keyword).then((data: SetStateAction<KeywordInfo | null>) => {
-                setInfo(data);
-                setLoading(false);
-            });
+            taxonomyService
+                .fetchDescription(keyword)
+                .then((data: SetStateAction<KeywordInfo | null>) => {
+                    setInfo(data);
+                    setLoading(false);
+                });
         }
     }, [keyword]);
-    
+
     return (
         <Box
             width="sm"

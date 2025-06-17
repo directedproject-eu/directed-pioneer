@@ -8,6 +8,40 @@ interface legendmetaData {
     variable: string;
 }
 const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
+    const to_display_circles = [
+        { label: "Tree clearing", color: "green" },
+        { label: "Forest and vegetation fire", color: "red" },
+        { label: "Water damage", color: "blue" },
+        { label: "Storm damage", color: "black" }
+    ];
+
+    if (Number.isNaN(range)) {
+        return (
+            <Box bg={"white"} p={2} borderRadius="md" boxShadow="md" mt="1em">
+                <Text fontWeight="bold" mb={0}>
+                    {"There is no map data for this scenario"}
+                </Text>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                    <Box height="100%">
+                        {to_display_circles.map((item, index) => (
+                            <Box key={index} display="flex" alignItems="center" mb={1}>
+                                <Box
+                                    width="15px"
+                                    height="15px"
+                                    bg={item.color}
+                                    color="white"
+                                    borderRadius={"50%"}
+                                    mr={2}
+                                />
+                                <Box>{item.label}</Box>
+                            </Box>
+                        ))}
+                    </Box>
+                </Box>
+            </Box>
+        );
+    }
+
     const legend_text: Record<string, string> = {
         hurs: "Near-Surface Relative Humidity in %",
         pr: "Precipitation in kg·m⁻²·s⁻¹",
@@ -30,6 +64,7 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
         red: "#832525BC",
         dark_red: "#53050aBC" //rgba(83,5,10,0.74)
     };
+
     const increment = (range[1] - range[0]) / 8;
 
     const to_display = [
@@ -45,12 +80,6 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
         { label: (range[0] + increment * 6).toFixed(2), color: tempColors.orange },
         { label: (range[0] + increment * 7).toFixed(2), color: tempColors.red },
         { label: (range[0] + increment * 8).toFixed(2), color: tempColors.dark_red }
-    ];
-    const to_display_circles = [
-        { label: "Tree clearing", color: "green" },
-        { label: "Forest and vegetation fire", color: "red" },
-        { label: "Water damage", color: "blue" },
-        { label: "Storm damage", color: "black" }
     ];
 
     return (
