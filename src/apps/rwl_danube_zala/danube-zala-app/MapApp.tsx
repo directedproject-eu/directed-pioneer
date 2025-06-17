@@ -168,182 +168,184 @@ export function MapApp() {
     }, [authState.kind]);
 
     return (
-        <Flex height="100%" direction="column" overflow="hidden">
-            <Navbar>
-                {authState.kind === "authenticated" && (
-                    <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
-                        <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
-                        <Button onClick={() => authService.logout()}>Logout</Button>
-                    </Flex>
-                )}
-                {authState.kind !== "authenticated" && (
-                    <Flex flexDirection="row" align="center" ml="auto" gap="2em">
-                        <Button onClick={() => authService.getLoginBehavior().login()}>
-                            Login
-                        </Button>
-                    </Flex>
-                )}
-            </Navbar>
-            <Container p={5}></Container>
-            <Notifier position="bottom" />
-            <TitledSection
-                title={
-                    <Box
-                        role="region"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
-                        textAlign="left"
-                        py={1}
-                    >
-                        <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            RWL The Danube Region
-                        </SectionHeading>
-                    </Box>
-                }
-            >
-                <Flex flex="1" direction="column" position="relative">
-                    {authState.kind !== "pending" && (
-                        <MapContainer
-                            mapId={MAP_ID}
-                            role="main"
-                            aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
+        <>
+            <Flex height="100%" direction="column" overflow="hidden">
+                <Navbar>
+                    {authState.kind === "authenticated" && (
+                        <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
+                            <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
+                            <Button onClick={() => authService.logout()}>Logout</Button>
+                        </Flex>
+                    )}
+                    {authState.kind !== "authenticated" && (
+                        <Flex flexDirection="row" align="center" ml="auto" gap="2em">
+                            <Button onClick={() => authService.getLoginBehavior().login()}>
+                                Login
+                            </Button>
+                        </Flex>
+                    )}
+                </Navbar>
+                <Container p={5}></Container>
+                <Notifier position="bottom" />
+                <TitledSection
+                    title={
+                        <Box
+                            role="region"
+                            aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
+                            textAlign="left"
+                            py={1}
                         >
-                            <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                                <div
-                                    style={{
-                                        width: window.innerWidth * 0.6,
-                                        marginLeft: window.innerWidth * 0.2,
-                                        marginRight: window.innerWidth * 0.2,
-                                        borderRadius: "10px",
-                                        backgroundColor: "rgba(255, 255, 255, 0.5)",
-                                        marginTop: "5px"
-                                    }}
-                                >
-                                    <LayerSelector />
-                                </div>
-                            </MapAnchor>
-                            <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                                <IsimipSelector />
+                            <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
+                                RWL The Danube Region
+                            </SectionHeading>
+                        </Box>
+                    }
+                >
+                    <Flex flex="1" direction="column" position="relative">
+                        {authState.kind !== "pending" && (
+                            <MapContainer
+                                mapId={MAP_ID}
+                                role="main"
+                                aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
+                            >
+                                <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                                    <div
+                                        style={{
+                                            width: window.innerWidth * 0.6,
+                                            marginLeft: window.innerWidth * 0.2,
+                                            marginRight: window.innerWidth * 0.2,
+                                            borderRadius: "10px",
+                                            backgroundColor: "rgba(255, 255, 255, 0.5)",
+                                            marginTop: "5px"
+                                        }}
+                                    >
+                                        <LayerSelector />
+                                    </div>
+                                </MapAnchor>
+                                <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                                    <IsimipSelector />
 
-                                <ExpandableBox title="Event Information" marginBottom="10px">
-                                    <StationInformation data={stationData} />
-                                </ExpandableBox>
-                                {measurementIsActive && (
+                                    <ExpandableBox title="Event Information" marginBottom="10px">
+                                        <StationInformation data={stationData} />
+                                    </ExpandableBox>
+                                    {measurementIsActive && (
+                                        <Box
+                                            backgroundColor="white"
+                                            borderWidth="1px"
+                                            borderRadius="lg"
+                                            padding={2}
+                                            boxShadow="lg"
+                                            role="top-left"
+                                            aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                        >
+                                            <Box role="dialog" aria-labelledby={measurementTitleId}>
+                                                <TitledSection
+                                                    title={
+                                                        <SectionHeading
+                                                            id={measurementTitleId}
+                                                            size="md"
+                                                            mb={2}
+                                                        >
+                                                            {intl.formatMessage({
+                                                                id: "measurementTitle"
+                                                            })}
+                                                        </SectionHeading>
+                                                    }
+                                                >
+                                                    <Measurement mapId={MAP_ID} />
+                                                </TitledSection>
+                                            </Box>
+                                        </Box>
+                                    )}
                                     <Box
                                         backgroundColor="white"
                                         borderWidth="1px"
                                         borderRadius="lg"
                                         padding={2}
                                         boxShadow="lg"
-                                        role="top-left"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                        role="dialog"
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                     >
-                                        <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                            <TitledSection
-                                                title={
-                                                    <SectionHeading
-                                                        id={measurementTitleId}
-                                                        size="md"
-                                                        mb={2}
-                                                    >
-                                                        {intl.formatMessage({
-                                                            id: "measurementTitle"
-                                                        })}
-                                                    </SectionHeading>
-                                                }
-                                            >
-                                                <Measurement mapId={MAP_ID} />
-                                            </TitledSection>
-                                        </Box>
-                                    </Box>
-                                )}
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    role="dialog"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                >
-                                    <Toc
-                                        mapId={MAP_ID}
-                                        showTools={true}
-                                        showBasemapSwitcher={false}
-                                    />
-                                </Box>
-                            </MapAnchor>
-                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    role="top-right"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                                >
-                                    <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
-                                    <Divider mt={4} />
-                                    <FormControl>
-                                        <FormLabel mt={2}>
-                                            <Text as="b">
-                                                {intl.formatMessage({ id: "basemapLabel" })}
-                                            </Text>
-                                        </FormLabel>
-                                        <BasemapSwitcher
+                                        <Toc
                                             mapId={MAP_ID}
-                                            allowSelectingEmptyBasemap
+                                            showTools={true}
+                                            showBasemapSwitcher={false}
                                         />
-                                    </FormControl>
-                                </Box>
-                                <Legend
-                                    range={legendMetadata.range}
-                                    variable={legendMetadata.variable}
-                                ></Legend>
-                            </MapAnchor>
-                            <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
-                                <Flex
-                                    role="bottom-right"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
-                                    direction="column"
-                                    gap={1}
-                                    padding={1}
-                                >
-                                    <ToolButton
-                                        label={intl.formatMessage({ id: "measurementTitle" })}
-                                        icon={<PiRulerLight />}
-                                        isActive={measurementIsActive}
-                                        onClick={toggleMeasurement}
-                                    />
-                                    <Geolocation mapId={MAP_ID} />
-                                    <InitialExtent mapId={MAP_ID} />
-                                    <ZoomIn mapId={MAP_ID} />
-                                    <ZoomOut mapId={MAP_ID} />
-                                </Flex>
-                            </MapAnchor>
-                        </MapContainer>
-                    )}
-                </Flex>
-                <Flex
-                    role="region"
-                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
-                    gap={3}
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <CoordinateViewer mapId={MAP_ID} precision={2} />
-                    <ScaleBar mapId={MAP_ID} />
-                    <ScaleViewer mapId={MAP_ID} />
-                </Flex>
-            </TitledSection>
-        </Flex>
+                                    </Box>
+                                </MapAnchor>
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                    <Box
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        role="top-right"
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
+                                    >
+                                        <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
+                                        <Divider mt={4} />
+                                        <FormControl>
+                                            <FormLabel mt={2}>
+                                                <Text as="b">
+                                                    {intl.formatMessage({ id: "basemapLabel" })}
+                                                </Text>
+                                            </FormLabel>
+                                            <BasemapSwitcher
+                                                mapId={MAP_ID}
+                                                allowSelectingEmptyBasemap
+                                            />
+                                        </FormControl>
+                                    </Box>
+                                    <Legend
+                                        range={legendMetadata.range}
+                                        variable={legendMetadata.variable}
+                                    ></Legend>
+                                </MapAnchor>
+                                <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
+                                    <Flex
+                                        role="bottom-right"
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                        direction="column"
+                                        gap={1}
+                                        padding={1}
+                                    >
+                                        <ToolButton
+                                            label={intl.formatMessage({ id: "measurementTitle" })}
+                                            icon={<PiRulerLight />}
+                                            isActive={measurementIsActive}
+                                            onClick={toggleMeasurement}
+                                        />
+                                        <Geolocation mapId={MAP_ID} />
+                                        <InitialExtent mapId={MAP_ID} />
+                                        <ZoomIn mapId={MAP_ID} />
+                                        <ZoomOut mapId={MAP_ID} />
+                                    </Flex>
+                                </MapAnchor>
+                            </MapContainer>
+                        )}
+                    </Flex>
+                    <Flex
+                        role="region"
+                        aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
+                        gap={3}
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <CoordinateViewer mapId={MAP_ID} precision={2} />
+                        <ScaleBar mapId={MAP_ID} />
+                        <ScaleViewer mapId={MAP_ID} />
+                    </Flex>
+                </TitledSection>
+            </Flex>
+            <ResizeBox title={"Zala Chart"}>
+                <ChartComponentZala></ChartComponentZala>
+            </ResizeBox>
+        
+            <ResizeBox title={"Rhine - Erft Chart"}>
+                <ChartComponentRhineErft></ChartComponentRhineErft>
+            </ResizeBox>
+        </>
 
-	<ResizeBox title={"Zala Chart"}>
-	    <ChartComponentZala></ChartComponentZala>
-	</ResizeBox>
-
-    	<ResizeBox title={"Rhine - Erft Chart"}>
-	    <ChartComponentRhineErft></ChartComponentRhineErft>
-    	</ResizeBox>
     );
 }
