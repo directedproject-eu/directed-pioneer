@@ -10,7 +10,7 @@ import {
     FormLabel,
     Text
 } from "@open-pioneer/chakra-integration";
-import { AuthService, ForceAuth, useAuthState } from "@open-pioneer/authentication";
+import { AuthService, useAuthState } from "@open-pioneer/authentication";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
@@ -24,7 +24,7 @@ import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
-import { useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
@@ -40,13 +40,21 @@ import StationInformation from "./components/StationInformation";
 import { StationSelector } from "./services/StationSelector";
 import { IsimipSelector } from "./controls/IsimipSelector";
 
+import { useMapModel } from "@open-pioneer/map";
+import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
+import { Vector as VectorLayer } from "ol/layer.js";
+import { SimpleLayer } from "@open-pioneer/map";
+
 export function MapApp() {
+    const mapModel = useMapModel(MAP_ID);
+    const vectorSourceFactory = useService<OgcFeaturesVectorSourceFactory>(
+        "ogc-features.VectorSourceFactory"
+    );
+
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
     const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
     const userName = sessionInfo?.attributes?.userName as string;
-
-    const closableBoxRef = useRef();
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -79,33 +87,121 @@ export function MapApp() {
         [prepSrvc]
     );
 
+    function createPastEventLayer(
+        collectionId: string,
+        id: string,
+        title: string,
+        description: string,
+        color: string
+    ) {
+        const pastEventLayer = new SimpleLayer({
+            id: `${id}`,
+            title: `${title}`,
+            description: `${description}`,
+            visible: true,
+            olLayer: new VectorLayer({
+                source: vectorSourceFactory.createVectorSource({
+                    baseUrl: "https://directed.dev.52north.org/protected",
+                    collectionId: collectionId,
+                    crs: "http://www.opengis.net/def/crs/EPSG/0/3857",
+                    limit: 5000,
+                    additionalOptions: {}
+                }),
+                style: {
+                    "circle-radius": 8.0,
+                    "circle-fill-color": color,
+                    "circle-stroke-color": "white",
+                    "circle-stroke-width": 0.5
+                },
+                properties: { title: "GeoJSON Layer" }
+            }),
+            isBaseLayer: false
+        });
+        return pastEventLayer;
+    }
+
+    useEffect(() => {
+        if (authState.kind !== "authenticated") return;
+        const map = mapModel?.map?.olMap;
+
+        if (!map) return;
+
+        mapModel.map?.layers.addLayer(
+            createPastEventLayer(
+                "zala/events/damage/storm",
+                "storm_damage",
+                "Storm damage",
+                "Storm damage",
+                "black"
+            )
+        );
+        mapModel.map?.layers.addLayer(
+            createPastEventLayer(
+                "zala/events/damage/water",
+                "water_damage",
+                "Water damage",
+                "Water damage",
+                "blue"
+            )
+        );
+        mapModel.map?.layers.addLayer(
+            createPastEventLayer(
+                "zala/events/fires/forest_vegetation",
+                "forest_vegetation_fires",
+                "Forest and vegetation fires",
+                "Forest and vegetation fires",
+                "red"
+            )
+        );
+        mapModel.map?.layers.addLayer(
+            createPastEventLayer(
+                "zala/events/timber_cutting",
+                "timber_cutting",
+                "Tree clearing",
+                "Tree clearing",
+                "green"
+            )
+        );
+    }, [authState.kind]);
+
     return (
-        <ForceAuth>
-            <Flex height="100%" direction="column" overflow="hidden">
-                <Navbar>
-                    <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
-                        <Text>Logged in as: {userName}</Text>
+        //<ForceAuth>
+        <Flex height="100%" direction="column" overflow="hidden">
+            <Navbar>
+                {authState.kind === "authenticated" && (
+                    <Flex flexDirection="row" align="center" ml="auto" gap="2em">
+                        <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
                         <Button onClick={() => authService.logout()}>Logout</Button>
                     </Flex>
-                </Navbar>
-                <Container p={5}></Container>
-                <Notifier position="bottom" />
-                <TitledSection
-                    title={
-                        <Box
-                            role="region"
-                            aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
-                            textAlign="left"
-                            py={1}
-                        >
-                            <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                                RWL The Danube Region
-                            </SectionHeading>
-                        </Box>
-                    }
-                >
-                    <Flex flex="1" direction="column" position="relative">
+                )}
+                {authState.kind !== "authenticated" && (
+                    <Flex flexDirection="row" align="center" ml="auto" gap="2em">
+                        <Button onClick={() => authService.getLoginBehavior().login()}>
+                            Login
+                        </Button>
+                    </Flex>
+                )}
+            </Navbar>
+            <Container p={5}></Container>
+            <Notifier position="bottom" />
+            <TitledSection
+                title={
+                    <Box
+                        role="region"
+                        aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
+                        textAlign="left"
+                        py={1}
+                    >
+                        <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
+                            RWL The Danube Region
+                        </SectionHeading>
+                    </Box>
+                }
+            >
+                <Flex flex="1" direction="column" position="relative">
+                    {authState.kind !== "pending" && (
                         <MapContainer
+                            key={authState.kind}
                             mapId={MAP_ID}
                             role="main"
                             aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
@@ -225,20 +321,21 @@ export function MapApp() {
                                 </Flex>
                             </MapAnchor>
                         </MapContainer>
-                    </Flex>
-                    <Flex
-                        role="region"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
-                        gap={3}
-                        alignItems="center"
-                        justifyContent="center"
-                    >
-                        <CoordinateViewer mapId={MAP_ID} precision={2} />
-                        <ScaleBar mapId={MAP_ID} />
-                        <ScaleViewer mapId={MAP_ID} />
-                    </Flex>
-                </TitledSection>
-            </Flex>
-        </ForceAuth>
+                    )}
+                </Flex>
+                <Flex
+                    role="region"
+                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
+                    gap={3}
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <CoordinateViewer mapId={MAP_ID} precision={2} />
+                    <ScaleBar mapId={MAP_ID} />
+                    <ScaleViewer mapId={MAP_ID} />
+                </Flex>
+            </TitledSection>
+        </Flex>
+        //</ForceAuth>
     );
 }
