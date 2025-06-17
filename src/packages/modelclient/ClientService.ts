@@ -17,12 +17,22 @@ interface JobStatusResponse {
 
 // }
 
-interface ProcessExecution {
-    inputs: Map<string, string>;
-    synchronous: boolean;
-    processId: string;
+interface OutputOptions {
+    mediaType: string;
+    transmissionMode: "value" | "reference";
 }
 
+interface ProcessExecution {
+    inputs: Map<string, string>;
+    outputs?: Map<string, OutputOptions>;
+    synchronous: boolean;
+    processId: string;
+    response?: "document" | "raw";
+}
+
+interface JobResult {
+
+}
 
 
 export const ClientService = () => {
@@ -30,84 +40,30 @@ export const ClientService = () => {
         ? "http://localhost:5000"
         : import.meta.env.VITE_PROD_URL;
 
-    // const API_HELLO_WORLD_URL = `${API_BASE_URL}/processes/hello-world/execution`;
-
     //execution endpoint
     const API_PROCESS_EXECUTION_URL = (processID: string) =>
         `${API_BASE_URL}/processes/${processID}/execution`;
 
-    //job status endpoint
-    const API_JOB_STATUS_URL = (processID: string, jobID: string) =>
-        `${API_BASE_URL}/processes/${processID}/jobs/${jobID}`;
-
-    /**
-     * submits an asynchronous job to the hello-world pygeoapi endpoint to display a greeting
-     *
-     * @param {string} processID the ID of the process to execute
-     * @param {object} inputs the inputs for the process
-     * @returns {Promise<JobStatusResponse>} a Promise that resolves with the initial job status response.
-     */
-    // const sayHello = (name: string): Promise<string | null> => {
-    //     return new Promise((resolve, reject) => {
-    //         fetch(API_HELLO_WORLD_URL, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify({
-    //                 inputs: {
-    //                     name: name
-    //                 }
-    //             })
-    //         })
-    //             .then((response) => {
-    //                 if (!response.ok) {
-    //                     console.error(
-    //                         `Error calling hello-world: ${response.status} - ${response.statusText}`
-    //                     );
-    //                     response
-    //                         .json()
-    //                         .then((errorData) => {
-    //                             console.error("Error details:", errorData);
-    //                             reject(null); //reject with null or the error data
-    //                         })
-    //                         .catch(() => {
-    //                             reject(null); //reject if error details cannot be parsed
-    //                         });
-    //                 } else {
-    //                     response
-    //                         .json()
-    //                         .then((responseData) => {
-    //                             if (
-    //                                 responseData &&
-    //                                 responseData.outputs &&
-    //                                 responseData.outputs.message
-    //                             ) {
-    //                                 resolve(responseData.outputs.message);
-    //                             } else if (responseData && responseData.value) {
-    //                                 resolve(responseData.value); //handle "echo" response
-    //                             } else {
-    //                                 console.error(
-    //                                     "Unexpected response structure from hello-world."
-    //                                 );
-    //                                 reject(null);
-    //                             }
-    //                         })
-    //                         .catch((error) => {
-    //                             console.error("Error parsing JSON response:", error);
-    //                             reject(null);
-    //                         });
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 console.error("An error occurred while calling hello-world:", error);
-    //                 reject(null);
-    //             });
-    //     });
-    // };
-
-    const submitJob = (jobDescription: ProcessExecution): Promise<JobStatusResponse> => {
+    const submitJob = (jobDescription: ProcessExecution): Promise<JobResult> => {
         console.log(jobDescription.inputs);
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const body = {
+            inputs: Object.fromEntries(jobDescription.inputs)
+        } as any;
+        if (jobDescription.outputs && jobDescription.outputs.size > 0) {
+            body["outputs"] = {};
+            for (const [key, output] of jobDescription.outputs) {
+                body["outputs"][key] = {
+                    format: {
+                        mediaType: output.mediaType
+                    },
+                    transmissionMode: output.transmissionMode
+                };
+            }
+        }
+        if (jobDescription.response) {
+            body["response"] = jobDescription.response;
+        }
         return new Promise((resolve, reject) => {
             const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
@@ -117,16 +73,27 @@ export const ClientService = () => {
             fetch(API_PROCESS_EXECUTION_URL(jobDescription.processId), {
                 method: "POST",
                 headers: myHeaders,
-                body: JSON.stringify({
-                    inputs: Object.fromEntries(jobDescription.inputs),
-                    mode: jobDescription.synchronous?"sync" : "async", //explicitly request asynchronous execution
-                })
+                body: JSON.stringify(body)
             })
                 .then((response) => {
                     if (!response.ok) {
                         console.error(
                             `Error submitting job: ${response.status} - ${response.statusText}`
                         );
+
+                        // 200/204 = sync, 201 = async
+                        if (response.status === 201) {
+                            // if (!jobDescription.synchronous && response.headers.has("Preference-Applied")) {
+                            // if (response.headers.get("Preference-Applied")?.toLowerCase() == "respond-async") {
+                            if (response.headers.has("Location")) {
+                                const url = response.headers.get("Location");
+                                pollJobStatus(url!);
+                            } else {
+                                throw new Error(`Missing Location header. Cannot poll job status for process ${jobDescription}.`);
+                            }
+                        }
+
+                        // FIXME: consider the response type (raw, document) and the transmission mode (value, reference, mixed)
                         return response
                             .json()
                             .then((errorData) => {
@@ -156,13 +123,12 @@ export const ClientService = () => {
     };
 
     const pollJobStatus = (
-        processId: string,
-        jobId: string,
+        job_url: string,
         delayMs: number = 2000
     ): Promise<JobStatusResponse> => {
         return new Promise((resolve, reject) => {
             const checkStatus = () => {
-                fetch(API_JOB_STATUS_URL(processId, jobId))
+                fetch(job_url)
                     .then((response) => {
                         if (!response.ok) {
                             console.error(
@@ -179,7 +145,7 @@ export const ClientService = () => {
                         return response.json();
                     })
                     .then((statusResponse: JobStatusResponse) => {
-                        console.log(`Job ${jobId} status: ${statusResponse.status}`);
+                        console.log(`Job ${statusResponse.jobID} status: ${statusResponse.status}`);
                         if (statusResponse.status === "successful") {
                             resolve(statusResponse); //job completed successfully
                         } else if (
@@ -194,7 +160,7 @@ export const ClientService = () => {
                     })
                     .catch((error) => {
                         console.error(
-                            `An error occurred during job status polling for ${jobId}:`,
+                            "An error occurred during job status polling.",
                             error
                         );
                         reject(error);

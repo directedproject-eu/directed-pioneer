@@ -29,13 +29,18 @@ export function ModelClient() {
         inputs.set("name", "julia");
         inputs.set("message", "hello");
         console.log(inputs);
+        const outputs = new Map();
+        outputs.set("echo", {mediaType: "application/json", transmissionMode: "value"});
+        console.log(outputs);
 
         try {
             //submit the asynchronous job
             const initialJobResponse = await submitJob({
                 inputs: inputs,
-                synchronous: false,
-                processId: "hello-world"
+                outputs: outputs,
+                synchronous: true,
+                processId: "hello-world",
+                response: "document"
             });
             const { jobID } = initialJobResponse;
 
