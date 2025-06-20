@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 interface JobStatusResponse {
-    jobID: string;
+    jobID?: string;
+    id?: string;
     status: "accepted" | "running" | "successful" | "failed" | "dismissed";
     progress?: number;
     message?: string;
     outputs?: string;
+    // presigned_url?: string; //saferplaces
     // outputs?: {
     //     [key: string]: any; //outputs from the successful job
     // };
@@ -16,6 +18,17 @@ interface JobStatusResponse {
 // interface ProcessInputs {
 
 // }
+
+//interface for what submitJob ultimately resolves with (after polling for async)
+//make sure submitJob's promise resolves with a final outcome
+interface FinalProcessOutcome {
+    status: "successful" | "failed" | "dismissed"; //final status
+    message?: string;
+    // outputs?: { [key: string]: any };
+    outputs?: string; //process outputs
+    // presigned_url?: string; //for SaferPlaces output
+    jobID?: string; //if async job
+}
 
 interface OutputOptions {
     mediaType: string;
@@ -30,10 +43,11 @@ interface ProcessExecution {
     response?: "document" | "raw";
 }
 
-interface JobResult {
+// interface JobResult {
 
-}
-
+// }
+//update JobResult to be specific as it is outcome of submitJob
+type JobResult = FinalProcessOutcome;
 
 export const ClientService = () => {
     const API_BASE_URL = import.meta.env.DEV
@@ -44,6 +58,8 @@ export const ClientService = () => {
     const API_PROCESS_EXECUTION_URL = (processID: string) =>
         `${API_BASE_URL}/processes/${processID}/execution`;
 
+    //submitJob returns a Promise that resolves after the final outcome of the job
+    //for async, waits for polling to complete
     const submitJob = (jobDescription: ProcessExecution): Promise<JobResult> => {
         console.log(jobDescription.inputs);
         /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -64,56 +80,174 @@ export const ClientService = () => {
         if (jobDescription.response) {
             body["response"] = jobDescription.response;
         }
+        //mode for sync/async control
+        body["mode"] = jobDescription.synchronous ? "sync" : "async";
+
         return new Promise((resolve, reject) => {
             const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
-            if (!jobDescription.synchronous){
+            if (!jobDescription.synchronous) {
                 myHeaders.append("Prefer", "respond-async");
+            } else {
+                myHeaders.append("Prefer", "respond-sync"); //explicity request sync
             }
             fetch(API_PROCESS_EXECUTION_URL(jobDescription.processId), {
                 method: "POST",
                 headers: myHeaders,
                 body: JSON.stringify(body)
             })
-                .then((response) => {
-                    if (!response.ok) {
-                        console.error(
-                            `Error submitting job: ${response.status} - ${response.statusText}`
+                .then(async (response) => {
+                    // HANDLE ASYNC RESPONSE //
+                    if (response.status === 201) {
+                        console.log(
+                            `Async job for '${jobDescription.processId}' accepted (HTTP 201)`
                         );
+                        const locationHeader = response.headers.get("Location");
 
-                        // 200/204 = sync, 201 = async
-                        if (response.status === 201) {
-                            // if (!jobDescription.synchronous && response.headers.has("Preference-Applied")) {
-                            // if (response.headers.get("Preference-Applied")?.toLowerCase() == "respond-async") {
-                            if (response.headers.has("Location")) {
-                                const url = response.headers.get("Location");
-                                pollJobStatus(url!);
-                            } else {
-                                throw new Error(`Missing Location header. Cannot poll job status for process ${jobDescription}.`);
-                            }
+                        //if 201 but no location header, error
+                        if (!locationHeader) {
+                            throw new Error(
+                                `Async job accepted (201), but missing "Location" header for job status. Cannot poll.`
+                            );
                         }
 
-                        // FIXME: consider the response type (raw, document) and the transmission mode (value, reference, mixed)
-                        return response
-                            .json()
-                            .then((errorData) => {
-                                console.error("Error details:", errorData);
-                                reject(errorData); //reject with error data
-                            })
-                            .catch(() => reject(new Error("Failed to parse error response.")));
+                        // 200/204 = sync, 201 = async
+                        // if (response.status === 201) {
+                        //     // if (!jobDescription.synchronous && response.headers.has("Preference-Applied")) {
+                        //     // if (response.headers.get("Preference-Applied")?.toLowerCase() == "respond-async") {
+                        //     if (response.headers.has("Location")) {
+                        //         const url = response.headers.get("Location");
+                        //         pollJobStatus(url!);
+                        //     } else {
+                        //         throw new Error(`Missing Location header. Cannot poll job status for process ${jobDescription}.`);
+                        //     }
+                        // }
+
+                        let initialJobBody: JobStatusResponse | null = null;
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            try {
+                                const textBody = await response.text();
+                                // Parse body only if it's not empty or "null" literal
+                                if (textBody.trim() !== "" && textBody.trim() !== "null") {
+                                    initialJobBody = JSON.parse(textBody);
+                                }
+                            } catch (jsonParseError) {
+                                console.warn(
+                                    `201 response body was not valid JSON for process '${jobDescription.processId}'. Proceeding with Location header`,
+                                    jsonParseError
+                                );
+                            }
+                        }
+                        //determine the job ID. prefer body 'id' and then 'jobID' then parse from Location Header
+                        const jobID =
+                            initialJobBody?.id ||
+                            initialJobBody?.jobID ||
+                            locationHeader.split("/").pop();
+                        if (!jobID) {
+                            throw new Error(
+                                "Could not determine job ID from 201 response or Location Header"
+                            );
+                        }
+
+                        console.log(`Polling for async job '${jobID}' at: ${locationHeader}`);
+                        //await the pollJobStatus; submitJob promise resolves with final polling outcome
+                        try {
+                            const finalResult = await pollJobStatus(locationHeader);
+                            resolve(finalResult); //resolve submitJob's promise with final outcome
+                        } catch (pollingError) {
+                            reject(pollingError); //if polling rejects, reject the submitJob promise
+                        }
+                        return;
                     }
-                    return response.json(); //JSON response with jobID and status
-                })
-                .then((responseData) => {
-                    if (responseData && responseData.jobID && responseData.status) {
-                        resolve(responseData);
-                    } else {
-                        console.error(
-                            "Unexpected job submission response structure:",
-                            responseData
+
+                    // SYNCHRONOUS SUCCESS (HTTP 200 OK / 204 No content) //
+                    else if (response.ok) {
+                        console.log(
+                            `Process '${jobDescription.processId}' executed synchronously (HTTP ${response.status})`
                         );
-                        reject(new Error("Invalid job submission response."));
+                        const contentType = response.headers.get("content-type");
+
+                        if (response.status === 204) {
+                            resolve({
+                                status: "successful",
+                                message: "Process completeted successfully with no direct outputs"
+                            });
+                            return;
+                        }
+
+                        if (contentType && contentType.includes("application/json")) {
+                            try {
+                                const responseData: JobStatusResponse = await response.json();
+                                resolve({
+                                    status: "successful",
+                                    message: responseData.message,
+                                    outputs: responseData.outputs
+                                    // presigned_url: responseData.presigned_url //saferplaces
+                                });
+                            } catch (jsonError) {
+                                console.error(
+                                    `Failed to parse JSON for synchronous OK response for '${jobDescription.processId}' :`,
+                                    jsonError
+                                );
+                                reject(
+                                    new Error(
+                                        `API returned OK status but invalid JSON response for synchronous process`
+                                    )
+                                );
+                            }
+                        } else {
+                            //if 200 OK but not a JSON file, i.e. raw, handle response
+                            //treat raw response, non JSON files, as error for now..
+                            const rawText = await response.text();
+                            console.warn(
+                                `Synchronous OK response for '${jobDescription.processId}' is not JSON. Raw body:`,
+                                rawText.substring(0, 500)
+                            );
+                            reject(
+                                new Error(
+                                    `Synchronous process returned non-JSON response (status ${response.status})`
+                                )
+                            );
+                        }
+                        return;
                     }
+                    // FOR OTHER NON-OK, NON-201 Status Codes & Errors, i.e. 4xx, 5xx //
+                    else {
+                        let errorData: any;
+                        try {
+                            errorData = await response.json(); //attempt to parse JSON error body
+                        } catch (e) {
+                            errorData = await response.text(); //fallback to raw text
+                        }
+                        console.error(
+                            `API Error for process '${jobDescription.processId}': ${response.status} - ${response.statusText} `,
+                            errorData
+                        );
+                        reject(errorData); //reject promise with parsed error data or text
+                    }
+
+                    // FIXME: consider the response type (raw, document) and the transmission mode (value, reference, mixed)
+                    //                     return response
+                    //                         .json()
+                    //                         .then((errorData) => {
+                    //                             console.error("Error details:", errorData);
+                    //                             reject(errorData); //reject with error data
+                    //                         })
+                    //                         .catch(() => reject(new Error("Failed to parse error response.")));
+                    //                 }
+                    //                 return response.json(); //JSON response with jobID and status
+                    //             })
+                    //             .then((responseData) => {
+                    //                 if (responseData && responseData.jobID && responseData.status) {
+                    //                     resolve(responseData);
+                    //                 } else {
+                    //                     console.error(
+                    //                         "Unexpected job submission response structure:",
+                    //                         responseData
+                    //                     );
+                    //                     reject(new Error("Invalid job submission response."));
+                    //                 }
                 })
                 .catch((error) => {
                     console.error("Error while submitting job:", error);
@@ -125,47 +259,78 @@ export const ClientService = () => {
     const pollJobStatus = (
         job_url: string,
         delayMs: number = 2000
-    ): Promise<JobStatusResponse> => {
+    ): Promise<FinalProcessOutcome> => {
         return new Promise((resolve, reject) => {
             const checkStatus = () => {
+                console.log(`Polling attempt for job at URL: ${job_url}`); //log the job url where polling is occurring
                 fetch(job_url)
-                    .then((response) => {
+                    .then(async (response) => {
                         if (!response.ok) {
                             console.error(
                                 `Error polling job status: ${response.status} - ${response.statusText}`
                             );
-                            return response
-                                .json()
-                                .then((errorData) => {
-                                    console.error("Error details:", errorData);
-                                    reject(errorData);
-                                })
-                                .catch(() => reject(new Error("Failed to parse error response.")));
+                            let errorData: any;
+                            try {
+                                errorData = await response.json();
+                            } catch (e) {
+                                errorData = await response.text();
+                            }
+                            clearInterval(intervalId);
+                            reject(
+                                new Error(
+                                    `Polling failed: ${response.status} - ${errorData?.message || response.statusText}`
+                                )
+                            );
+                            return;
+                            // return response
+                            //     .json()
+                            //     .then((errorData) => {
+                            //         console.error("Error details:", errorData);
+                            //         reject(errorData);
+                            //     })
+                            //     .catch(() => reject(new Error("Failed to parse error response.")));
                         }
                         return response.json();
                     })
                     .then((statusResponse: JobStatusResponse) => {
-                        console.log(`Job ${statusResponse.jobID} status: ${statusResponse.status}`);
+                        console.log(
+                            `Job ${statusResponse.jobID || statusResponse.id || "unknown"} status: ${statusResponse.status}`
+                        );
                         if (statusResponse.status === "successful") {
-                            resolve(statusResponse); //job completed successfully
+                            clearInterval(intervalId); //clear interval on sucess
+                            // resolve(statusResponse); //job completed successfully
+                            resolve({
+                                status: "successful",
+                                jobID: statusResponse.jobID || statusResponse.jobID,
+                                message: statusResponse.message,
+                                outputs: statusResponse.outputs
+                                // presigned_url: statusResponse.presigned_url //saferplaces
+                            });
                         } else if (
                             statusResponse.status === "failed" ||
                             statusResponse.status === "dismissed"
                         ) {
-                            reject(statusResponse); //job failed or dismissed
+                            // reject(statusResponse); //job failed or dismissed
+                            clearInterval(intervalId); //clear interval on failure
+                            reject({
+                                status: statusResponse.status,
+                                jobID: statusResponse.jobID || statusResponse.jobID,
+                                message: statusResponse.message,
+                                outputs: statusResponse.outputs
+                                // presigned_url: statusResponse.presigned_url //saferplaces
+                            });
                         } else {
                             //job is still running or accepted, poll again after delay
                             setTimeout(checkStatus, delayMs);
                         }
                     })
                     .catch((error) => {
-                        console.error(
-                            "An error occurred during job status polling.",
-                            error
-                        );
+                        console.error("An error occurred during job status polling.", error);
+                        clearInterval(intervalId); //clear on unhandled error
                         reject(error);
                     });
             };
+            const intervalId = window.setInterval(() => {}, 1); //initialize intervalId to avoid TS error
 
             checkStatus(); //start polling
         });
@@ -174,7 +339,6 @@ export const ClientService = () => {
     return {
         submitJob,
         pollJobStatus
-        // sayHello
     };
 };
 
