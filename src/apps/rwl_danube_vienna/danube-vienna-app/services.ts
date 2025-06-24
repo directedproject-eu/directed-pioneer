@@ -29,7 +29,9 @@ export class MainMapProvider implements MapConfigProvider {
 
                 //WMS layer
                 new SimpleLayer({
+                    id: "WD_RAIN172645",
                     title: "WD_RAIN172645",
+                    description: "WD_RAIN172645",
                     olLayer: new TileLayer({
                         source: new TileWMS({
                             url: "https://directed.dev.52north.org/geoserver/directed/wms",
@@ -37,14 +39,20 @@ export class MainMapProvider implements MapConfigProvider {
                                 LAYERS: "WD_RAIN172645"
                             }
                         }),
-                        properties: { title: "WMS Layer" }
+                        properties: {
+                            title: "WD_RAIN172645",
+                            id: "WD_RAIN172645"
+                        }
                     }),
-                    isBaseLayer: false
+                    isBaseLayer: false,
+                    visible: true
                 }),
 
                 //WMS layer
                 new SimpleLayer({
+                    id: "WD_RAIN110828",
                     title: "WD_RAIN110828",
+                    description: "WD_RAIN110828",
                     olLayer: new TileLayer({
                         source: new TileWMS({
                             url: "https://directed.dev.52north.org/geoserver/directed/wms",
@@ -52,29 +60,41 @@ export class MainMapProvider implements MapConfigProvider {
                                 LAYERS: "WD_RAIN110828"
                             }
                         }),
-                        properties: { title: "WMS Layer" }
+                        properties: {
+                            title: "WD_RAIN110828",
+                            id: "WD_RAIN110828"
+                        }
                     }),
-                    isBaseLayer: false
+                    isBaseLayer: false,
+                    visible: false
                 }),
 
                 //WMS layer
                 new SimpleLayer({
+                    id: "WD_RAIN095830",
                     title: "WD_RAIN095830",
+                    description: "WD_RAIN095830",
                     olLayer: new TileLayer({
                         source: new TileWMS({
                             url: "https://directed.dev.52north.org/geoserver/directed/wms",
                             params: {
-                                LAYERS: "WD_RAIN110828"
+                                LAYERS: "WD_RAIN095830"
                             }
                         }),
-                        properties: { title: "WMS Layer" }
+                        properties: {
+                            title: "WD_RAIN095830",
+                            id: "WD_RAIN095830"
+                        }
                     }),
-                    isBaseLayer: false
+                    isBaseLayer: false,
+                    visible: false
                 }),
 
                 //WMS layer
                 new SimpleLayer({
+                    id: "DMG_RIVER111745",
                     title: "DMG_RIVER111745",
+                    description: "DMG_RIVER111745",
                     olLayer: new TileLayer({
                         source: new TileWMS({
                             url: "https://directed.dev.52north.org/geoserver/directed/wms",
@@ -82,14 +102,20 @@ export class MainMapProvider implements MapConfigProvider {
                                 LAYERS: "DMG_RIVER111745"
                             }
                         }),
-                        properties: { title: "WMS Layer" }
+                        properties: {
+                            title: "DMG_RIVER111745",
+                            id: "DMG_RIVER111745"
+                        }
                     }),
-                    isBaseLayer: false
+                    isBaseLayer: false,
+                    visible: false
                 }),
 
                 //WMS layer
                 new SimpleLayer({
+                    id: "DMG_RAIN110828",
                     title: "DMG_RAIN110828",
+                    description: "DMG_RAIN110828",
                     olLayer: new TileLayer({
                         source: new TileWMS({
                             url: "https://directed.dev.52north.org/geoserver/directed/wms",
@@ -97,9 +123,13 @@ export class MainMapProvider implements MapConfigProvider {
                                 LAYERS: "DMG_RAIN110828"
                             }
                         }),
-                        properties: { title: "WMS Layer" }
+                        properties: {
+                            title: "DMG_RAIN110828",
+                            id: "DMG_RAIN110828",
+                        }
                     }),
-                    isBaseLayer: false
+                    isBaseLayer: false,
+                    visible: false
                 })
             ]
         };

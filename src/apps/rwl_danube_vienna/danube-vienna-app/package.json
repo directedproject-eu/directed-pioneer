@@ -1,6 +1,7 @@
 {
     "name": "danube-vienna-app",
     "private": true,
+    "main": "services.ts",
     "dependencies": {
         "@chakra-ui/icons": "catalog:",
         "@emotion/react": "catalog:",
@@ -26,6 +27,7 @@
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
+        "layerswipe": "workspace:^",
         "navbar": "workspace:^"
     }
 }
