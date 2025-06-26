@@ -164,8 +164,8 @@ export function MapApp() {
                                 <Toc
                                     mapId={MAP_ID}
                                     showTools={true}
-                                    // collapsibleGroups={true}
-                                    // initiallyCollapsed={true}
+                                    collapsibleGroups={true}
+                                    initiallyCollapsed={true}
                                     showBasemapSwitcher={false}
                                 />
                                 <FormControl>
