@@ -34,6 +34,97 @@ const wmsLayersHistorical = [
     }
 ];
 
+const wmsPluvialFloodingLayersRef = [
+    {
+        "name": "Vienna_WD_RAIN152452_Ref_RP25",
+        "title": "Vienna_WD_RAIN152452_Ref_RP25",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164659_Ref_RP50",
+        "title": "Vienna_WD_RAIN164659_Ref_RP50",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164612_Ref_RP100",
+        "title": "Vienna_WD_RAIN164612_Ref_RP100",
+        "description": "Water depth caused by pluvial flooding"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP2452050 = [
+    {
+        "name": "Vienna_WD_RAIN164413_SSP245_RP25_2050",
+        "title": "Vienna_WD_RAIN164413_SSP245_RP25_2050",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164745_SSP245_RP50_2050",
+        "title": "Vienna_WD_RAIN164745_SSP245_RP50_2050",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164825_SSP245_RP100_2050",
+        "title": "Vienna_WD_RAIN164825_SSP245_RP100_2050",
+        "description": "Water depth caused by pluvial flooding"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP5852050 = [
+    {
+        "name": "Vienna_WD_RAIN164413_SSP585_RP25_2050",
+        "title": "Vienna_WD_RAIN164413_SSP585_RP25_2050",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164323_SSP585_RP50_2050",
+        "title": "Vienna_WD_RAIN164323_SSP585_RP50_2050",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164223_SSP585_RP100_2050",
+        "title": "Vienna_WD_RAIN164223_SSP585_RP100_2050",
+        "description": "Water depth caused by pluvial flooding"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP2452080 = [
+    {
+        "name": "Vienna_WD_RAIN164413_SSP245_RP25_2080",
+        "title": "Vienna_WD_RAIN164413_SSP245_RP25_2080",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164323_SSP245_RP50_2080",
+        "title": "Vienna_WD_RAIN164323_SSP245_RP50_2080",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164223_SSP245_RP100_2080",
+        "title": "Vienna_WD_RAIN164223_SSP245_RP100_2080",
+        "description": "Water depth caused by pluvial flooding"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP5852080 = [
+    {
+        "name": "Vienna_WD_RAIN164323_SSP585_RP25_2080",
+        "title": "Vienna_WD_RAIN164323_SSP585_RP25_2080",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN164223_SSP585_RP50_2080",
+        "title": "Vienna_WD_RAIN164223_SSP585_RP50_2080",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "Vienna_WD_RAIN115927_SSP585_RP100_2080",
+        "title": "Vienna_WD_RAIN115927_SSP585_RP100_2080",
+        "description": "Water depth caused by pluvial flooding"
+    }
+];
+
+
 export const MAP_ID = "main";
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
@@ -75,7 +166,98 @@ export class MainMapProvider implements MapConfigProvider {
             },
             projection: "EPSG:3857",
             layers: [
-                // GROUP HISTORICAL LAYERS
+                // Pluvial flood layers
+                new GroupLayer({
+                    title: "Pluvial Flooding",
+                    visible: false,
+                    id: "pluvial_flooding",
+                    layers: [
+                        // Reference
+                        new GroupLayer({
+                            title: "Reference",
+                            visible: false,
+                            id: "pluvial_flooding_historical",
+                            layers: [
+                                ...wmsPluvialFloodingLayersRef.map(({ name, title, description }) =>
+                                    this.createWmsLayer(name, title, description)
+                                )
+                            ]
+                        }),
+                        // 2050
+                        new GroupLayer({
+                            title: "2050",
+                            visible: false,
+                            id: "2050",
+                            layers: [
+                                // Pluvial flood layers
+                                new GroupLayer({
+                                    title: "SSP245",
+                                    visible: false,
+                                    id: "2050_ssp245",
+                                    layers: [
+                                        ...wmsPluvialFloodingLayersSSP2452050.map(({ name, title, description }) =>
+                                            this.createWmsLayer(name, title, description)
+                                        )
+                                    ]
+                                }),
+                                // Pluvial flood layers
+                                new GroupLayer({
+                                    title: "SSP585",
+                                    visible: false,
+                                    id: "2050_ssp585",
+                                    layers: [
+                                        ...wmsPluvialFloodingLayersSSP5852050.map(({ name, title, description }) =>
+                                            this.createWmsLayer(name, title, description)
+                                        )
+                                    ]
+                                })
+                            ]
+                        }),
+                        // 2080
+                        new GroupLayer({
+                            title: "2080",
+                            visible: false,
+                            id: "2080",
+                            layers: [
+                                // Pluvial flood layers
+                                new GroupLayer({
+                                    title: "SSP245",
+                                    visible: false,
+                                    id: "2080_ssp245",
+                                    layers: [
+                                        ...wmsPluvialFloodingLayersSSP2452080.map(({ name, title, description }) =>
+                                            this.createWmsLayer(name, title, description)
+                                        )
+                                    ]
+                                }),
+                                // Pluvial flood layers
+                                new GroupLayer({
+                                    title: "SSP585",
+                                    visible: false,
+                                    id: "2080_ssp585",
+                                    layers: [
+                                        ...wmsPluvialFloodingLayersSSP5852080.map(({ name, title, description }) =>
+                                            this.createWmsLayer(name, title, description)
+                                        )
+                                    ]
+                                })
+                            ]
+                        }),
+                        // Base data
+                        new GroupLayer({
+                            title: "Base Data",
+                            visible: false,
+                            id: "pluvial_flooding_base_data",
+                            layers: [
+                                this.createWmsLayer("Vienna_lidar_2m_ViennaCenter_32633", "Lidar", "Lidar elevation map with 2 m resolution"),
+                                this.createWmsLayer("Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021", "Soil clay content", "Soil clay content"),
+                                this.createWmsLayer("Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021", "Soil sand content", "Soil sand content"),
+                                this.createWmsLayer("osm_buildings_162014", "OSM Buildings", "OSM Buildings")
+                            ]
+                        })
+                    ]
+                }),
+                // Historical layers
                 new GroupLayer({
                     title: "Historical Layers",
                     visible: false,
@@ -86,6 +268,7 @@ export class MainMapProvider implements MapConfigProvider {
                         )
                     ]
                 }),
+                // OSM basemap
                 new SimpleLayer({
                     title: "OpenStreetMap",
                     olLayer: new TileLayer({
