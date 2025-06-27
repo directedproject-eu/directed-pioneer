@@ -257,6 +257,15 @@ export class MainMapProvider implements MapConfigProvider {
                         })
                     ]
                 }),
+                // Fluvial flood layers
+                new GroupLayer({
+                    title: "Fluvial Flooding",
+                    visible: false,
+                    id: "fluvial_flooding",
+                    layers: [
+                        this.createWmsLayer("euh_danube_bigrivers_10", "10-year flood height", "10-year flood height from 1974 to 2023, the attribute 'b_flddph' denotes the flood height in m")
+                    ]
+                }),
                 // Historical layers
                 new GroupLayer({
                     title: "Historical Layers",
@@ -268,6 +277,7 @@ export class MainMapProvider implements MapConfigProvider {
                         )
                     ]
                 }),
+                this.createWmsLayer("euh_danube_wsurf_gt1km2_c", "Large dams and lakes", "Large dams and lakes in the Danube region"),
                 // OSM basemap
                 new SimpleLayer({
                     title: "OpenStreetMap",
