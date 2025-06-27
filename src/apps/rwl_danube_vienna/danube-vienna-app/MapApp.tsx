@@ -1,5 +1,12 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
+import { useEffect, useId, useState } from "react";
+import { PiRulerLight } from "react-icons/pi";
+import { EventsKey } from "ol/events";
+import Layer from "ol/layer/Layer";
+import { unByKey } from "ol/Observable";
+import TileLayer from "ol/layer/Tile";
+import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import {
     Box,
     Flex,
@@ -9,29 +16,23 @@ import {
     Spacer,
     Text
 } from "@open-pioneer/chakra-integration";
-import { MapAnchor, MapContainer, SimpleLayer, useMapModel } from "@open-pioneer/map";
-import { ScaleBar } from "@open-pioneer/scale-bar";
-import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
-import { useIntl } from "open-pioneer:react-hooks";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
-import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
-import { ToolButton } from "@open-pioneer/map-ui-components";
-import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
-import { Notifier } from "@open-pioneer/notifier";
-import { Toc } from "@open-pioneer/toc";
-import { MAP_ID } from "./services";
-import { useEffect, useId, useState } from "react";
-import { EventsKey } from "ol/events";
-import Layer from "ol/layer/Layer";
-import { unByKey } from "ol/Observable";
-import TileLayer from "ol/layer/Tile";
+import { Legend } from "@open-pioneer/legend";
+import { MapAnchor, MapContainer, SimpleLayer, useMapModel } from "@open-pioneer/map";
+import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
+import { ToolButton } from "@open-pioneer/map-ui-components";
 import { Measurement } from "@open-pioneer/measurement";
-import { PiRulerLight } from "react-icons/pi";
-import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
+import { Notifier } from "@open-pioneer/notifier";
+import { useIntl } from "open-pioneer:react-hooks";
+import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
+import { ScaleBar } from "@open-pioneer/scale-bar";
+import { ScaleViewer } from "@open-pioneer/scale-viewer";
+import { Toc } from "@open-pioneer/toc";
 import { FeatureInfo } from "featureinfo";
 import { LayerSwipe } from "layerswipe";
 import { Navbar } from "navbar";
+import { MAP_ID } from "./services";
 
 export function MapApp() {
     const intl = useIntl();
@@ -257,6 +258,17 @@ export function MapApp() {
                                         </Box>
                                     </Box>
                                 </Box>
+                                <Flex
+                                    maxHeight={400}
+                                    maxWidth={250}
+                                    overflow="auto"
+                                    borderRadius="md"
+                                    boxShadow="lg"
+                                    // marginLeft="auto"
+                                    alignSelf="flex-end"
+                                >
+                                    <Legend mapId={MAP_ID} />
+                                </Flex>
                             </Flex>
                         </MapAnchor>
 
