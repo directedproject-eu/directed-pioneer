@@ -40,18 +40,18 @@ const wmsLayersHistorical = [
 const wmsPluvialFloodingLayersRef = [
     {
         "name": "Vienna_WD_RAIN152452_Ref_RP25",
-        "title": "Reference - RP25 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - Reference period - 25 years return period  - Vienna - Simulated with SaferPlaces"
+        "title": "Reference (1989-2018) - RP25 - Vienna - SaferPlaces",
+        "description": "Water depth caused by pluvial flooding - Reference period (1989-2018) - 25 years return period  - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164659_Ref_RP50",
-        "title": "Reference - RP50 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - Reference period - 50 years return period - Vienna - Simulated with SaferPlaces"
+        "title": "Reference (1989-2018) - RP50 - Vienna - SaferPlaces",
+        "description": "Water depth caused by pluvial flooding - Reference period (1989-2018) - 50 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164612_Ref_RP100",
-        "title": "Reference - RP100 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - Reference period - 100 years return period - Vienna - Simulated with SaferPlaces"
+        "title": "Reference (1989-2018) - RP100 - Vienna - SaferPlaces",
+        "description": "Water depth caused by pluvial flooding - Reference period (1989-2018) - 100 years return period - Vienna - Simulated with SaferPlaces"
     }
 ];
 
@@ -172,7 +172,7 @@ export class MainMapProvider implements MapConfigProvider {
                     layers: [
                         // Reference
                         new GroupLayer({
-                            title: "Reference",
+                            title: "Reference (1989-2018)",
                             visible: false,
                             id: "pluvial_flooding_historical",
                             layers: [
@@ -285,7 +285,11 @@ export class MainMapProvider implements MapConfigProvider {
                     visible: false,
                     id: "fluvial_flooding",
                     layers: [
-                        new SimpleLayer({...this.createWmsLayer("euh_danube_bigrivers_10", "10-year flood height", "10-year flood height from 1974 to 2023, the attribute 'b_flddph' denotes the flood height in m")})
+                        new SimpleLayer({...this.createWmsLayer(
+                            "euh_danube_bigrivers_10",
+                            "10-year flood depth",
+                            "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
+                        )})
                     ],
                     attributes: {
                         "legend": {
@@ -304,7 +308,7 @@ export class MainMapProvider implements MapConfigProvider {
                         )
                     ]
                 }),
-                new SimpleLayer({...this.createWmsLayer("euh_danube_wsurf_gt1km2_c", "Large dams and lakes", "Large dams and lakes in the Danube region")}),
+                new SimpleLayer({...this.createWmsLayer("euh_danube_wsurf_gt1km2_c", "Large reservoirs and lakes", "Large reservoirs and lakes in the Danube region")}),
                 // OSM basemap
                 new SimpleLayer({
                     title: "OpenStreetMap",

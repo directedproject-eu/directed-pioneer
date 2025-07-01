@@ -6,19 +6,16 @@ import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { useIntl } from "open-pioneer:react-hooks";
 
 // water level colors
-const l_01 = "#1919A4";
-const l_02 = "#4E6ABF";
-const l_03 = "#84BCDA";
-const l_04 = "#82CFA8";
-const l_05 = "#80E377";
-const l_06 = "#B6D341";
-const l_07 = "#ECC30B";
-const l_08 = "#EF9D29";
-const l_09 = "#F37748";
-const l_10 = "#F65D3A";
-const l_11 = "#F9432C";
-const l_12 = "#FC291E";
-const l_13 = "#FF1010";
+const l_01 = "#F7E225";
+const l_02 = "#FEB92C";
+const l_03 = "#F89440";
+const l_04 = "#E97357";
+const l_05 = "#D6556C";
+const l_06 = "#BE3884";
+const l_07 = "#A11B9A";
+const l_08 = "#7D03A8";
+const l_09 = "#5601A4";
+const l_10 = "#2B0593";
 
 const colorMapping = [
     { color: l_01, label: "0 - 1 m" },
@@ -30,10 +27,7 @@ const colorMapping = [
     { color: l_07, label: "6 - 7 m" },
     { color: l_08, label: "7 - 8 m" },
     { color: l_09, label: "8 - 9 m" },
-    { color: l_10, label: "9 - 10 m" },
-    { color: l_11, label: "10 - 11 m" },
-    { color: l_12, label: "11 - 12 m" },
-    { color: l_13, label: "12 - 13 m" }
+    { color: l_10, label: "> 9 m" }
 ];
 
 export function FluvialFloodLegend(props: LegendItemComponentProps) {
