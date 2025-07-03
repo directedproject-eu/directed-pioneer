@@ -7,11 +7,15 @@ interface JobStatusResponse {
     status: "accepted" | "running" | "successful" | "failed" | "dismissed";
     progress?: number;
     message?: string;
-    outputs?: string;
-    // presigned_url?: string; //saferplaces
-    // outputs?: {
-    //     [key: string]: any; //outputs from the successful job
-    // };
+    // outputs?: string;
+    presigned_url?: string; //saferplaces
+    outputs?: {
+        [key: string]: {
+            href: string;
+            title?: string;
+            type?: string;
+        };
+    }; //saferplaces
     //can add other properties as per pygeoapi's Job JSON structure
 }
 
@@ -25,8 +29,15 @@ interface FinalProcessOutcome {
     status: "successful" | "failed" | "dismissed"; //final status
     message?: string;
     // outputs?: { [key: string]: any };
-    outputs?: string; //process outputs
-    // presigned_url?: string; //for SaferPlaces output
+    // outputs?: string; //process outputs //original
+    outputs?: {
+        [key: string]: {
+            href: string;
+            title?: string;
+            type?: string;
+        };
+    }; //saferplaces
+    presigned_url?: string; //for SaferPlaces output
     jobID?: string; //if async job
 }
 
@@ -36,7 +47,8 @@ interface OutputOptions {
 }
 
 interface ProcessExecution {
-    inputs: Map<string, string>;
+    // inputs: Map<string, string>;
+    inputs: Map<string, string | number | boolean>; //saferplaces, boolean for presigned, number for rain
     outputs?: Map<string, OutputOptions>;
     synchronous: boolean;
     processId: string;
@@ -51,7 +63,8 @@ type JobResult = FinalProcessOutcome;
 
 export const ClientService = () => {
     const API_BASE_URL = import.meta.env.DEV
-        ? "http://localhost:5000"
+        // ? "http://localhost:5000"
+        ? "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"
         : import.meta.env.VITE_PROD_URL;
 
     //execution endpoint
@@ -182,8 +195,8 @@ export const ClientService = () => {
                                 resolve({
                                     status: "successful",
                                     message: responseData.message,
-                                    outputs: responseData.outputs
-                                    // presigned_url: responseData.presigned_url //saferplaces
+                                    outputs: responseData.outputs,
+                                    presigned_url: responseData.presigned_url //saferplaces
                                 });
                             } catch (jsonError) {
                                 console.error(
@@ -261,7 +274,7 @@ export const ClientService = () => {
         delayMs: number = 2000
     ): Promise<FinalProcessOutcome> => {
         return new Promise((resolve, reject) => {
-            const checkStatus = () => {
+            const checkStatus = async () => {
                 console.log(`Polling attempt for job at URL: ${job_url}`); //log the job url where polling is occurring
                 fetch(job_url)
                     .then(async (response) => {
@@ -303,8 +316,8 @@ export const ClientService = () => {
                                 status: "successful",
                                 jobID: statusResponse.jobID || statusResponse.jobID,
                                 message: statusResponse.message,
-                                outputs: statusResponse.outputs
-                                // presigned_url: statusResponse.presigned_url //saferplaces
+                                outputs: statusResponse.outputs,
+                                presigned_url: statusResponse.presigned_url //saferplaces
                             });
                         } else if (
                             statusResponse.status === "failed" ||
@@ -316,8 +329,8 @@ export const ClientService = () => {
                                 status: statusResponse.status,
                                 jobID: statusResponse.jobID || statusResponse.jobID,
                                 message: statusResponse.message,
-                                outputs: statusResponse.outputs
-                                // presigned_url: statusResponse.presigned_url //saferplaces
+                                outputs: statusResponse.outputs,
+                                presigned_url: statusResponse.presigned_url //saferplaces
                             });
                         } else {
                             //job is still running or accepted, poll again after delay

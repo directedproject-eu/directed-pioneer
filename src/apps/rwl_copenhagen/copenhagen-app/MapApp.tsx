@@ -61,6 +61,7 @@ export function MapApp() {
     const [rightLayers, setRightLayers] = useState<Layer[]>();
     const [sliderValue, setSliderValue] = useState<number>(50);
     const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
+    const [isLayerSwipeActive, setIsLayerSwipeActive] = useState<boolean>(false); //new render layerswipe
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     function toggleMeasurement() {
@@ -86,19 +87,6 @@ export function MapApp() {
         const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
         setAvailableLayers(layers);
 
-        //set selected layers
-        if (selectedLeftLayer && selectedRightLayer) {
-            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-
-            if (leftLayer && rightLayer) {
-                setLeftLayers([leftLayer]);
-                setRightLayers([rightLayer]);
-            }
-        }
-
         //set only visible layers in the dropdowns for left and right layer
         const updateVisibleLayers = () => {
             const visibleLayers = layers.filter((layer) => layer.olLayer?.getVisible?.() === true);
@@ -115,10 +103,53 @@ export function MapApp() {
             })
             .filter((k): k is EventsKey => !!k);
 
+        //set selected layers & set back to initial state if "select left layer" & "select right layer" in dropdowns
+        if (selectedLeftLayer && selectedRightLayer) {
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+
+            if (leftLayer && rightLayer) {
+                setLeftLayers([leftLayer]);
+                setRightLayers([rightLayer]);
+                setIsLayerSwipeActive(true); //activate layerswipe
+                leftLayer.setVisible(true);
+                rightLayer.setVisible(true);
+            } else {
+                setLeftLayers([]);
+                setRightLayers([]);
+                setIsLayerSwipeActive(false); //deactivate if layers not selected
+            }
+        } else {
+            setLeftLayers([]);
+            setRightLayers([]);
+            setIsLayerSwipeActive(false);
+        }
+
         return () => {
             eventKeys.forEach(unByKey);
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
+
+    ///layerswipe test///
+
+    // const {
+    //     selectedLeftLayer,
+    //     setSelectedLeftLayer,
+    //     selectedRightLayer,
+    //     setSelectedRightLayer,
+    //     sliderValue,
+    //     onSliderValueChanged,
+    //     visibleAvailableLayers,
+    //     leftLayers,
+    //     rightLayers,
+    //     isLayerSwipeActive
+    // } = useLayerSwipe();
+
+    // function onSliderValueChanged(value: number): void {
+    //     throw new Error("Function not implemented.");
+    // }
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
@@ -416,7 +447,7 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* SaferPlaces flood model dialog */}
-                                <SaferPlacesFloodMap /> 
+                                <SaferPlacesFloodMap />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
@@ -432,33 +463,36 @@ export function MapApp() {
                     </MapContainer>
                     {/*END MAP_ID1*/}
 
-                    {/* add layerswipe slider below map container  */}
-                    <Box
-                        position="absolute"
-                        bottom={0}
-                        left={0}
-                        right={0}
-                        padding={4}
-                        backgroundColor="white"
-                        borderTop={1}
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        {leftLayers && rightLayers && mapModel.map && (
-                            <LayerSwipe
-                                map={mapModel.map}
-                                sliderValue={sliderValue}
-                                onSliderValueChanged={(newValue) => {
-                                    setSliderValue(newValue);
-                                }}
-                                leftLayers={leftLayers}
-                                rightLayers={rightLayers}
-                                style={{ width: "100%", height: "100%" }}
-                            />
-                        )}
-                    </Box>
+                    {/* add layerswipe slider below map container, & conditionally render only when layers are selected  */}
+                    {isLayerSwipeActive && mapModel.map && leftLayers && rightLayers && (
+                        <Box
+                            position="absolute"
+                            bottom={0}
+                            left={0}
+                            right={0}
+                            padding={4}
+                            backgroundColor="white"
+                            borderTop={1}
+                            display="flex"
+                            flexDirection="row"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            {leftLayers && rightLayers && mapModel.map && (
+                                <LayerSwipe
+                                    map={mapModel.map}
+                                    sliderValue={sliderValue}
+                                    onSliderValueChanged={(newValue) => {
+                                        setSliderValue(newValue);
+                                    }}
+                                    // onSliderValueChanged={onSliderValueChanged}
+                                    leftLayers={leftLayers}
+                                    rightLayers={rightLayers}
+                                    style={{ width: "100%", height: "100%" }}
+                                />
+                            )}
+                        </Box>
+                    )}
                 </Flex>
                 <Flex
                     role="region"
