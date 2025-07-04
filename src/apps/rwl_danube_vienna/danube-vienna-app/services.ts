@@ -7,6 +7,7 @@ import OSM from "ol/source/OSM";
 import { FluvialFloodLegend } from "./Components/Legends/FluvialFloodLegend";
 import { LidarLegend } from "./Components/Legends/LidarLegend ";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
+export { GeosphereServiceImpl } from "./services/GeosphereService";
 
 
 const wmsLayersHistorical = [

@@ -33,6 +33,7 @@ import { FeatureInfo } from "featureinfo";
 import { LayerSwipe } from "layerswipe";
 import { Navbar } from "navbar";
 import { MAP_ID } from "./services";
+import { TimeSlider } from "./controls/TimeSlider";
 
 export function MapApp() {
     const intl = useIntl();
@@ -137,6 +138,10 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
+                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                            <TimeSlider />
+                        </MapAnchor>
+
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                             {measurementIsActive && (
                                 <Box
