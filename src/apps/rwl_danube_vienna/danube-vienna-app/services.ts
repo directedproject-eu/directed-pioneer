@@ -4,6 +4,7 @@ import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pio
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
+import { BuildingDamageLegend } from "./Components/Legends/BuildingDamageLegend";
 import { FluvialFloodLegend } from "./Components/Legends/FluvialFloodLegend";
 import { LidarLegend } from "./Components/Legends/LidarLegend ";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
@@ -32,12 +33,12 @@ const wmsLayersHistoricalDamage = [
     {
         "name": "DMG_RIVER111745",
         "title": "Damage By Fluvial Flooding (DMG_RIVER111745)",
-        "description": "Damage caused by fluvial flooding"
+        "description": "Damage caused by fluvial flooding. This layer is only meant for demonstration purposes!"
     },
     {
         "name": "DMG_RAIN110828",
         "title": "Damage By Pluvial Flooding (DMG_RAIN110828)",
-        "description": "Damage caused by pluvial flooding"
+        "description": "Damage caused by pluvial flooding. This layer is only meant for demonstration purposes!"
     }
 ];
 
@@ -330,7 +331,12 @@ export class MainMapProvider implements MapConfigProvider {
                                 ...wmsLayersHistoricalDamage.map(({ name, title, description }) =>
                                     new SimpleLayer({...this.createWmsLayer(name, title, description)})
                                 )
-                            ]
+                            ],
+                            attributes: {
+                                "legend": {
+                                    Component: BuildingDamageLegend
+                                }
+                            }
                         })
                     ]
                 }),
