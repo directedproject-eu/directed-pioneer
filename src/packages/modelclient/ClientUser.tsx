@@ -1,16 +1,39 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import ClientService from "./ClientService";
+import {
+    Box,
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    FormLabel,
+    FormControl,
+    Input,
+    Select,
+    useDisclosure
+} from "@open-pioneer/chakra-integration";
+import { ToolButton } from "@open-pioneer/map-ui-components";
+import { FaWater } from "react-icons/fa";
 
 export function ModelClient() {
     // const [name, setName] = useState("");
-    const [rainIntensity, setRainIntensity] = useState("10");
+    const [selectedLocation, setSelectedLocation] = useState<string>("");
+    const [rainIntensity, setRainIntensity] = useState("10"); 
+    const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null); 
+    const [model, setModel] = useState<string>("");
     const [jobStatus, setJobStatus] = useState("Idle");
     const [jobMessage, setJobMessage] = useState("");
     const [downloadLink, setDownloadLink] = useState("");
     const { submitJob } = ClientService();
+    const { isOpen, onOpen, onClose } = useDisclosure(); //for model dialog
+
     // const { submitJob, pollJobStatus } = ClientService();
     // const [greeting, setGreeting] = useState("");
     // const { sayHello } = ClientService();
@@ -19,11 +42,33 @@ export function ModelClient() {
     //     setName(event.target.value);
     // };
 
+    const locationDemFiles: Record<string, { dem: string; seamask: string }> = {
+        Vienna: {
+            dem: "s3://s3-directed/api_data/c5298b37096499d3c8bcfc49e449b393/dem_building.tif",
+            seamask: "s3://s3-directed/api_data/c5298b37096499d3c8bcfc49e449b393/seamask.tif"
+        },
+        Esbjerg: {
+            dem: "s3://s3-directed/api_data/b0d2dfae6d7dfe22594c58a28b00e183/dem_building.tif",
+            seamask: "s3://s3-directed/api_data/b0d2dfae6d7dfe22594c58a28b00e183/seamask.tif"
+        }
+    };
+
+    const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setSelectedLocation(event.target.value);
+    };
+
     const handleRainIntensityChange = (event: {
         target: { value: React.SetStateAction<string> };
     }) => {
         setRainIntensity(event.target.value);
     }; //saferplaces
+
+    const handleESLChange = (event: ChangeEvent<HTMLInputElement>) => {
+        //if input is empty, set state to null, otherwise parse to float
+        const value = event.target.value;
+        setExtremeSeaLevel(value === "" ? null : parseFloat(value));
+    };
+
 
     // const handleSayHelloClick = async () => {
     //     setJobStatus("Submitting job");
@@ -42,37 +87,87 @@ export function ModelClient() {
         setJobMessage(""); //clear previous messages
         setDownloadLink(""); // Clear previous download link
 
-        const processId = "safer-rain-process"; //set the process ID to safer-rain-process
+        // const processId = "safer-rain-process"; //set the process ID to safer-rain-process
 
         const s3Bucket = "s3-directed";
-        const outputRain = `watermap_rain_${Date.now()}.tif`; //dynamic output file name
         const user = "saferplaces";
         const token = "S4fer_api_token";
-        const demFile =
-            "s3://s3-directed/api_data/c5298b37096499d3c8bcfc49e449b393/dem_building.tif"; //from jupyter
+        const selectedDemFile = locationDemFiles[selectedLocation]?.dem;
+        const selectedSeamaskFile = locationDemFiles[selectedLocation]?.seamask;
+        
 
-        //saferplaces safer-rain-process test
+        if (!selectedLocation || !selectedDemFile) {
+            setJobStatus("Failed");
+            setJobMessage("Please select a valid location.");
+            return;
+        }
+
+        let processId = "";
         const inputs = new Map<string, string | number | boolean>();
-        inputs.set("dem", demFile);
-        inputs.set("rain", parseInt(rainIntensity, 10)); //ensure rain is a number
-        inputs.set("water", `s3://${s3Bucket}/api_data/${outputRain}`);
-        inputs.set("presigned_url_out", true);
-        inputs.set("sync", true); //request execution mode
-        inputs.set("user", user);
-        inputs.set("token", token);
-        inputs.set("debug", true);
-        console.log("Inputs prepared:", inputs);
-
         // const outputs = new Map();
         const outputs = new Map<
             string,
             { mediaType: string; transmissionMode: "value" | "reference" }
         >();
         // outputs.set("echo", { mediaType: "application/json", transmissionMode: "value" }); //original
-        outputs.set("water_depth_file", {
-            mediaType: "application/json",
-            transmissionMode: "reference"
-        }); //saferplaces
+
+        if (model === "safer_rain") {
+            if (!rainIntensity) {
+                setJobStatus("Failed"); 
+                setJobMessage("Please provie a Rain Intensity value");
+                return;
+            }
+            processId = "safer-rain-process";
+            const outputRain = `watermap_rain_${Date.now()}.tif`; 
+
+            inputs.set("dem", selectedDemFile);
+            inputs.set("rain", parseInt(rainIntensity, 10)); //ensure rain is a number
+            inputs.set("water", `s3://${s3Bucket}/api_data/${outputRain}`);
+            inputs.set("presigned_url_out", true);
+            inputs.set("sync", true); //request execution mode
+            inputs.set("user", user);
+            inputs.set("token", token);
+            inputs.set("debug", true);
+            console.log("Inputs prepared:", inputs);
+            outputs.set("water_depth_file", {
+                mediaType: "application/json",
+                transmissionMode: "reference"
+            }); 
+        } else if (model === "safer_coast") {
+            if (extremeSeaLevel === null || extremeSeaLevel <= 0) {
+                setJobStatus("Failed");
+                setJobMessage("Extreme Sea Level must be a postive number");
+                return;
+            }
+            if (!selectedSeamaskFile) {
+                setJobStatus("Failed");
+                setJobMessage("Seamask file not found for the selected location");
+                return;
+            }
+            processId = "safer-coast-process";
+            const outputCoast = `watermap_coast_${Date.now()}.tif`;
+
+            inputs.set("file_dem", selectedDemFile);
+            inputs.set("file_seamask", selectedSeamaskFile);
+            inputs.set("esl", extremeSeaLevel);
+            inputs.set("barrier", null); //assume barrier null for now
+            inputs.set("file_water", `s3://${s3Bucket}/api_data/${outputCoast}`);
+            inputs.set("presigned_url_out", true);
+            inputs.set("user", user);
+            inputs.set("token", token);
+            inputs.set("debug", true);
+
+            outputs.set("water_depth_file", {
+                mediaType: "application/json",
+                transmissionMode: "reference"
+            });
+        } else {
+            setJobStatus("Failed");
+            setJobMessage("Please select a model to run.");
+            return;
+        }
+
+        console.log("Inputs prepared:", inputs);
         console.log("Outputs requested:", outputs);
 
         const preferSynchronous = false; //set true for sync, false async
@@ -152,33 +247,109 @@ export function ModelClient() {
     };
 
     return (
-        <div>
-            <h2>Safer Rain Process Client</h2>
-            {/* <label htmlFor="nameInput">Enter your name:</label> */}
-            <label htmlFor="rainInput">Rain Intensity (mm):</label>
-            <input
-                type="number"
-                id="rainInput"
-                value={rainIntensity}
-                onChange={handleRainIntensityChange}
-            />
-            {/* <input type="text" id="nameInput" value={name} onChange={handleInputChange} /> */}
-            {/* <button onClick={handleSayHelloClick}>Say Hello</button> */}
-            <button onClick={handleGenerateMapClick}>Generate Flood Map</button>
-            {/* {greeting && <p>Greeting: {greeting}</p>} */}
-            <div>
-                <h3>Job Status: {jobStatus}</h3>
-                {jobMessage && <p>Message: {jobMessage}</p>}
-                {downloadLink && (
-                    <p>
-                        Download Link:{" "}
-                        <a href={downloadLink} target="_blank" rel="noopener noreferrer">
-                            {downloadLink}
-                        </a>
-                    </p>
-                )}
-            </div>
-        </div>
+        <Box>
+            <ToolButton label="Run Flood Models" icon={<FaWater />} onClick={onOpen} />
+            <Modal closeOnOverlayClick={true} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Flood Modeling</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <FormLabel padding={2}> Location </FormLabel>
+                        <Select
+                            id="location"
+                            value={selectedLocation}
+                            onChange={handleLocationChange}
+                        >
+                            <option value="">Select a Location</option>
+                            {Object.keys(locationDemFiles).map((locationName) => (
+                                <option key={locationName} value={locationName}>
+                                    {locationName}
+                                </option>
+                            ))}
+                        </Select>
+
+                        <FormLabel padding={2}> Model </FormLabel>
+                        <Select
+                            id="model"
+                            value={model}
+                            placeholder="Select a Model"
+                            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                                setModel(e.target.value)
+                            }
+                        >
+                            <option value="safer_rain">Safer Rain</option>
+                            <option value="safer_coast">Safer Coast</option>
+                        </Select>
+
+                        {model === "safer_rain" && (
+                            <>
+                                <FormControl>
+                                    <FormLabel padding={2} htmlFor="rain">
+                                        Rain Intensity (mm){" "}
+                                    </FormLabel>
+                                    <Input
+                                        type="text"
+                                        id="rain"
+                                        value={rainIntensity}
+                                        onChange={handleRainIntensityChange}
+                                        placeholder="Input Value, e.g. 10"
+                                        variant="outline"
+                                    />
+                                </FormControl>
+                            </>
+                        )}
+
+                        {model === "safer_coast" && (
+                            <>
+                                <FormControl>
+                                    <FormLabel padding={2} htmlFor="esl">
+                                        Extreme Sea Level (m)
+                                    </FormLabel>
+                                    <Input
+                                        type="number"
+                                        id="esl"
+                                        value={extremeSeaLevel === null ? "" : extremeSeaLevel}
+                                        onChange={handleESLChange}
+                                        placeholder="Input Value, e.g. 1"
+                                        variant="outline"
+                                    />
+                                </FormControl>
+                                {/* <div>
+                                        <label htmlFor="barrier">Barrier File:</label>
+                                        <input type="file" id="barrier" onChange={handleBarrierFileChange} />
+                                    </div> */}
+                            </>
+                        )}
+                        {jobStatus && <p>Status: {jobStatus}</p>}
+                        {jobMessage && <p style={{ color: "red" }}>Message: {jobMessage}</p>}
+                        {downloadLink && (
+                            <Button color={"white"} bg={"#2e9ecc"}>
+                                {" "}
+                                <a href={downloadLink} target="_blank" rel="noopener noreferrer">
+                                    Download Flood Map
+                                </a>
+                            </Button>
+                        )}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            color={"white"}
+                            bg={"#2e9ecc"}
+                            onClick={handleGenerateMapClick}
+                            disabled={
+                                !selectedLocation ||
+                                (model === "safer_rain" && !rainIntensity) || //only rainIntensity for safer_rain
+                                (model === "safer_coast" && extremeSeaLevel === 0) || //only ESL for safer_coast
+                                jobStatus.includes("Submitting") //disable button when job is being submitted
+                            }
+                        >
+                            Run Model
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </Box>
     );
 }
 

@@ -35,13 +35,14 @@ import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
 import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
-// import ExpandableBox from "./Components/ExpandableBox";
+import ExpandableBox from "./Components/ExpandableBox";
 import { Forecasts } from "./controls/Forecasts";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
-import { SaferPlacesFloodMap } from "saferplaces";
+// import { SaferPlacesFloodMap } from "saferplaces";
 import { ModelClient } from "modelclient";
+import { RankDistributionViewer } from "mcagraph";
 
 export function MapApp() {
     const intl = useIntl();
@@ -155,7 +156,6 @@ export function MapApp() {
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
             <Notifier position="bottom" />
-            <ModelClient />
             <TitledSection
                 title={
                     <Box
@@ -217,6 +217,10 @@ export function MapApp() {
                                 </ExpandableBox>
                             </Flex> */}
                             {/*add Table of Contents (Toc) and legend */}
+                            <ExpandableBox title="MCDM Analysis">
+                                {/* <>Example Analysis Text</> */}
+                                <RankDistributionViewer />
+                            </ExpandableBox>
                             <Box
                                 display="flex"
                                 flexDirection="column"
@@ -447,7 +451,8 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* SaferPlaces flood model dialog */}
-                                <SaferPlacesFloodMap />
+                                {/* <SaferPlacesFloodMap /> */}
+                                <ModelClient />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}

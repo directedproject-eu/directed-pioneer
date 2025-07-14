@@ -48,7 +48,7 @@ interface OutputOptions {
 
 interface ProcessExecution {
     // inputs: Map<string, string>;
-    inputs: Map<string, string | number | boolean>; //saferplaces, boolean for presigned, number for rain
+    inputs: Map<string, string | number | boolean | null>; //saferplaces, boolean for presigned, number for rain, null barrier
     outputs?: Map<string, OutputOptions>;
     synchronous: boolean;
     processId: string;
