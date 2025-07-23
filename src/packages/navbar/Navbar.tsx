@@ -13,13 +13,17 @@ import {
     PopoverContent,
     Collapse,
     Icon,
-    Popover
+    Popover,
+    Text
 } from "@open-pioneer/chakra-integration";
 import { HamburgerIcon, CloseIcon, ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import React from "react";
 export const BASE_URL = import.meta.env.DEV
     ? import.meta.env.VITE_DEV_URL
     : import.meta.env.VITE_PROD_URL;
+
+import { AuthService } from "@open-pioneer/authentication";
+import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
 console.info("base url: " + BASE_URL);
 console.info("mode: " + import.meta.env.MODE);
@@ -33,10 +37,16 @@ if (!BASE_URL) {
 }
 type NavbarProps = {
     children?: React.ReactNode;
+    authService?: AuthService;
 };
 
-const Navbar: React.FC<NavbarProps> = ({ children }) => {
+const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
     const { isOpen, onToggle } = useDisclosure();
+
+    const authState = useReactiveSnapshot(
+        () => (authService ? authService.getAuthState() : undefined),
+        [authService]
+    );
 
     return (
         <Box>
@@ -73,44 +83,27 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
                         <DesktopNav />
                     </Flex>
                 </Flex>
-                {children ? (
-                    <Stack flex={1} direction={"row"} spacing={6} align={"end"}>
-                        {children}
-                    </Stack>
-                ) : (
-                    <Stack
-                        flex={{ base: 1, md: 0 }}
-                        justify={"flex-end"}
-                        direction={"row"}
-                        spacing={6}
-                    >
-                        <Button
-                            as={"a"}
-                            fontSize={"md"}
-                            fontWeight={400}
-                            color={"#2e9ecc"}
-                            _hover={{ textDecoration: "none", color: "gray" }}
-                            variant={"link"}
-                            href={"#"}
-                        >
+                {authService && authState?.kind === "authenticated" ? (
+                    <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
+                        <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
+                        <Button onClick={() => authService.logout()}>Logout</Button>
+                    </Flex>
+                ) : authService ? (
+                    <Flex flexDirection="row" align="center" ml="auto" gap="2em">
+                        <Button onClick={() => authService.getLoginBehavior().login()}>
                             Login
                         </Button>
                         <Button
-                            as={"a"}
-                            display={{ base: "none", md: "inline-flex" }}
-                            fontSize={"md"}
+                            fontSize="md"
                             fontWeight={600}
-                            color={"white"}
-                            bg={"#2e9ecc"}
-                            href={"#"}
-                            _hover={{
-                                bg: "gray"
-                            }}
+                            color="white"
+                            bg="#2e9ecc"
+                            _hover={{ bg: "gray" }}
                         >
                             Sign Up
                         </Button>
-                    </Stack>
-                )}
+                    </Flex>
+                ) : null}
             </Flex>
 
             <Collapse in={isOpen} animateOpacity>

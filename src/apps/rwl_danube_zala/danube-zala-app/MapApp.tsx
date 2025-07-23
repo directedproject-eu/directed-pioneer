@@ -170,8 +170,8 @@ export function MapApp() {
     return (
         <>
             <Flex height="100%" direction="column" overflow="hidden">
-                <Navbar>
-                    {authState.kind === "authenticated" && (
+                <Navbar authService={authService}>
+                    {/* {authState.kind === "authenticated" && (
                         <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
                             <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
                             <Button onClick={() => authService.logout()}>Logout</Button>
@@ -183,7 +183,7 @@ export function MapApp() {
                                 Login
                             </Button>
                         </Flex>
-                    )}
+                    )} */}
                 </Navbar>
                 <Container p={5}></Container>
                 <Notifier position="bottom" />
@@ -236,7 +236,9 @@ export function MapApp() {
                                             padding={2}
                                             boxShadow="lg"
                                             role="top-left"
-                                            aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                            aria-label={intl.formatMessage({
+                                                id: "ariaLabel.topLeft"
+                                            })}
                                         >
                                             <Box role="dialog" aria-labelledby={measurementTitleId}>
                                                 <TitledSection
@@ -281,7 +283,9 @@ export function MapApp() {
                                         padding={2}
                                         boxShadow="lg"
                                         role="top-right"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.topRight"
+                                        })}
                                     >
                                         <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
                                         <Divider mt={4} />
@@ -302,10 +306,16 @@ export function MapApp() {
                                         variable={legendMetadata.variable}
                                     ></Legend>
                                 </MapAnchor>
-                                <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
+                                <MapAnchor
+                                    position="bottom-right"
+                                    horizontalGap={10}
+                                    verticalGap={30}
+                                >
                                     <Flex
                                         role="bottom-right"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.bottomRight"
+                                        })}
                                         direction="column"
                                         gap={1}
                                         padding={1}
@@ -341,11 +351,10 @@ export function MapApp() {
             <ResizeBox title={"Zala Chart"}>
                 <ChartComponentZala></ChartComponentZala>
             </ResizeBox>
-        
+
             <ResizeBox title={"Rhine - Erft Chart"}>
                 <ChartComponentRhineErft></ChartComponentRhineErft>
             </ResizeBox>
         </>
-
     );
 }
