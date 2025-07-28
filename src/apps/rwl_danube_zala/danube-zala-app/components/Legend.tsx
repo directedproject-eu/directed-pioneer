@@ -2,17 +2,33 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Box, Text } from "@open-pioneer/chakra-integration";
+import { useIntl } from "open-pioneer:react-hooks";
 
 interface legendmetaData {
     range: number[];
     variable: string;
 }
 const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
+    const intl = useIntl();
     const to_display_circles = [
-        { label: "Tree clearing", color: "green" },
-        { label: "Forest and vegetation fire", color: "red" },
-        { label: "Water damage", color: "blue" },
-        { label: "Storm damage", color: "black" }
+        {
+            label: intl.formatMessage({ id: "map.legend.event_variables.tree_clearing" }),
+            color: "green"
+        },
+        {
+            label: intl.formatMessage({
+                id: "map.legend.event_variables.forest_and_vegetation_fire"
+            }),
+            color: "red"
+        },
+        {
+            label: intl.formatMessage({ id: "map.legend.event_variables.water_damage" }),
+            color: "blue"
+        },
+        {
+            label: intl.formatMessage({ id: "map.legend.event_variables.storm_damage" }),
+            color: "black"
+        }
     ];
 
     if (Number.isNaN(range)) {

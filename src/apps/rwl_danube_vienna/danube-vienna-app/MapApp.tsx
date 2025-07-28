@@ -34,6 +34,8 @@ import { LayerSwipe } from "layerswipe";
 import { Navbar } from "navbar";
 import { MAP_ID } from "./services";
 import { TimeSlider } from "./controls/TimeSlider";
+import { AuthService, useAuthState } from "@open-pioneer/authentication";
+import { useService } from "open-pioneer:react-hooks";
 
 export function MapApp() {
     const intl = useIntl();
@@ -112,7 +114,6 @@ export function MapApp() {
             eventKeys.forEach(unByKey);
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
-
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">

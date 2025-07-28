@@ -1,0 +1,67 @@
+messages:
+  auth-error: "hun:An error occured during authentication."
+  global:
+    year: "hun:Year"
+    month: "hun:Month"
+    day: "hun:Day"
+    months:
+      jan: "hun:January"
+      feb: "hun:February"
+      mar: "hun:March"
+      apr: "hun:April"
+      may: "hun:May"
+      jun: "hun:June"
+      jul: "hun:July"
+      aug: "hun:August"
+      sep: "hun:September"
+      oct: "hun:October"
+      nov: "hun:November"
+      dec: "hun:December"
+  navbar:
+    home: "hun:Home"
+    rwl: "hun:Real World Labs"
+    directed_website: "hun:Directed Project Website"
+    github: "hun:GitHub Organization"
+    model: "hun:Model Documentation"
+    login: "hun:Login"
+    logout: "hun:Logout"
+    sign_up: "hun:Sign Up"
+  heading: "hun:RWL The Danube Region"
+  map:
+    layer_select:
+      heading: "hun:Select a Layer"
+      model: "hun:Model"
+      scenario: "hun:Scenario"
+      variable: "hun:Variable"
+    station_information:
+      heading: "hun:Event Information"
+      description: "hun:Select an ebent on the map to see more information."
+      attributes:
+        address: "hun:Address:"
+        settlement: "hun:Settlement"
+        type_of_intervention: "hun:Type of intervention"
+        event_type: "hun:Type of event"
+        location_type: "hun:Type of location"
+        date_reported: "hun:Date reported"
+        damage_type: "hun:Type of damage"
+        county: "hun:County (abbr.)"
+    measurement:
+      heading: "hun:Measurement"
+    operational_layers: "hun:Operational Layers"
+    select_basemap: "hun:Select basemap"
+    legend:
+      event_variables:
+        tree_clearing: "hun:Tree Clearing"
+        forest_and_vegetation_fire: "hun:Forest and vegetation fire"
+        water_damage: "hun:Water Damage"
+        storm_damage: "hun:Storm Damage"
+  charts:
+    title_chart1: "hun:Crops in Zala region for "
+  ariaLabel:
+    header: "hun:Header bar"
+    footer: "hun:Base bar with scale information, spatial reference system and coordinate display"
+    map: "hun:Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."
+    topLeft: "hun:Measurement"
+    topRight: "hun:Overview map and basemap switcher"
+    bottomRight: "hun:Maptools"
+  measurementTitle: "hun:Measurement"

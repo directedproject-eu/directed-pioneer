@@ -11,26 +11,28 @@ import {
 import { useState } from "react";
 import { LayerHandler } from "../services/LayerHandler";
 import { useService } from "open-pioneer:react-hooks";
+import { useIntl } from "open-pioneer:react-hooks";
 
 export function MonthSlider() {
+    const intl = useIntl();
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
 
     const [sliderValue, setSliderValue] = useState(0);
-    const [displayDate, setDisplayDate] = useState("Jan");
+    const [displayDate, setDisplayDate] = useState(intl.formatMessage({ id: "global.months.jan" }));
 
     const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
+        intl.formatMessage({ id: "global.months.jan" }),
+        intl.formatMessage({ id: "global.months.feb" }),
+        intl.formatMessage({ id: "global.months.mar" }),
+        intl.formatMessage({ id: "global.months.apr" }),
+        intl.formatMessage({ id: "global.months.may" }),
+        intl.formatMessage({ id: "global.months.jun" }),
+        intl.formatMessage({ id: "global.months.jul" }),
+        intl.formatMessage({ id: "global.months.aug" }),
+        intl.formatMessage({ id: "global.months.sep" }),
+        intl.formatMessage({ id: "global.months.oct" }),
+        intl.formatMessage({ id: "global.months.nov" }),
+        intl.formatMessage({ id: "global.months.dec" })
     ];
 
     function onChange(val: number): void {

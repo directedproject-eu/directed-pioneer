@@ -24,13 +24,13 @@ const element = createCustomElement({
                         pkceMethod: "S256"
                     },
                     keycloakConfig: {
-                        url: "https://directed.dev.52north.org/auth/",
-                        realm: "directed",
-                        clientId: "4XVoPpeRyh3S5RynkHLPvHum49aj39Ti"
+                        // url: "https://directed.dev.52north.org/auth/",
+                        // realm: "directed",
+                        // clientId: "4XVoPpeRyh3S5RynkHLPvHum49aj39Ti"
                         // uncomment for local development (need to create .env.local)
-                        // url: import.meta.env.VITE_KEYCLOAK_CONFIG_URL,
-                        // realm: import.meta.env.VITE_KEYCLOAK_CONFIG_REALM,
-                        // clientId: import.meta.env.VITE_KEYCLOAK_CONFIG_CLIENT_ID
+                        url: import.meta.env.VITE_KEYCLOAK_CONFIG_URL,
+                        realm: import.meta.env.VITE_KEYCLOAK_CONFIG_REALM,
+                        clientId: import.meta.env.VITE_KEYCLOAK_CONFIG_CLIENT_ID
                     }
                 }
             } satisfies KeycloakProperties

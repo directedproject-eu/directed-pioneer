@@ -99,7 +99,7 @@ export function MapApp() {
     ) {
         const pastEventLayer = new SimpleLayer({
             id: `${id}`,
-            title: `${title}`,
+            title: intl.formatMessage({ id: `map.legend.event_variables.${title}` }),
             description: `${description}`,
             visible: true,
             olLayer: new VectorLayer({
@@ -133,7 +133,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/damage/storm",
                 "storm_damage",
-                "Storm damage",
+                "storm_damage",
                 "Storm damage",
                 "black"
             )
@@ -142,7 +142,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/damage/water",
                 "water_damage",
-                "Water damage",
+                "water_damage",
                 "Water damage",
                 "blue"
             )
@@ -151,7 +151,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/fires/forest_vegetation",
                 "forest_vegetation_fires",
-                "Forest and vegetation fires",
+                "forest_and_vegetation_fire",
                 "Forest and vegetation fires",
                 "red"
             )
@@ -160,7 +160,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/timber_cutting",
                 "timber_cutting",
-                "Tree clearing",
+                "tree_clearing",
                 "Tree clearing",
                 "green"
             )
@@ -196,7 +196,7 @@ export function MapApp() {
                             py={1}
                         >
                             <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                                RWL The Danube Region
+                                {intl.formatMessage({ id: "heading" })}
                             </SectionHeading>
                         </Box>
                     }
@@ -225,7 +225,12 @@ export function MapApp() {
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                     <IsimipSelector />
 
-                                    <ExpandableBox title="Event Information" marginBottom="10px">
+                                    <ExpandableBox
+                                        title={intl.formatMessage({
+                                            id: "map.station_information.heading"
+                                        })}
+                                        marginBottom="10px"
+                                    >
                                         <StationInformation data={stationData} />
                                     </ExpandableBox>
                                     {measurementIsActive && (
@@ -292,7 +297,9 @@ export function MapApp() {
                                         <FormControl>
                                             <FormLabel mt={2}>
                                                 <Text as="b">
-                                                    {intl.formatMessage({ id: "basemapLabel" })}
+                                                    {intl.formatMessage({
+                                                        id: "map.select_basemap"
+                                                    })}
                                                 </Text>
                                             </FormLabel>
                                             <BasemapSwitcher
