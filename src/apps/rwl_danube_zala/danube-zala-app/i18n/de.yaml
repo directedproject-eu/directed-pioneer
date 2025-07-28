@@ -1,10 +1,68 @@
 messages:
+  global:
+    year: "Jahr"
+    month: "Monat"
+    day: "Tag"
+    months:
+      jan: "Januar"
+      feb: "Februar"
+      mar: "März"
+      apr: "April"
+      may: "Mai"
+      jun: "Juni"
+      jul: "Juli"
+      aug: "August"
+      sep: "September"
+      oct: "Oktober"
+      nov: "November"
+      dec: "Dezember"
+  navbar:
+    home: "Startseite"
+    rwl: "Real World Labs"
+    directed_website: "Projektwebseite"
+    github: "GitHub-Organisation"
+    model: "Modelldokumentation"
+    login: "Anmelden"
+    logout: "Abmelden"
+    sign_up: "Registrieren"
+  heading: "RWL Donau-Region"
+  map:
+    layer_select:
+      heading: "Layer auswählen"
+      model: "Modell"
+      scenario: "Szenario"
+      variable: "Variable"
+    station_information:
+      heading: "Ereignisinformationen"
+      description: "Wähle ein Ereignis auf der Karte aus, um weitere Informationen zu sehen."
+      attributes:
+        address: "Adresse:"
+        settlement: "Ort"
+        type_of_intervention: "Art der Maßnahme"
+        event_type: "Ereignistyp"
+        location_type: "Standorttyp"
+        date_reported: "Meldedatum"
+        damage_type: "Schadensart"
+        county: "Bezirk (Abk.)"
+    measurement:
+      heading: "Messung"
+
+    operational_layers: "Operationale Layer"
+    select_basemap: "Grundkarte auswählen"
+    legend:
+      event_variables:
+        tree_clearing: "Baumfällung"
+        forest_and_vegetation_fire: "Wald- und Vegetationsbrand"
+        water_damage: "Wasserschaden"
+        storm_damage: "Sturmschaden"
+  charts:
+    title_chart1: "Anbauflächen in der Region Zala für "
+
   ariaLabel:
-    header: "Kopfleiste"
-    footer: "Fussleiste mit Maßstabsangabe, Raumbezugssystem und Koordinatenanzeige"
-    map: "Karte. Mit den Pfeiltasten kannst du die Karte bewegen. Mit der Plus Taste hineinzoomen und mit der Minus Taste herauszoomen."
-    topLeft: "Messen"
-    topRight: "Übersichtskarte und Auswahl der Hintergrundkarte"
-    bottomRight: "Kartenwerkzeuge"
-  basemapLabel: "Hintergrundkarte auswählen:"
-  measurementTitle: "Messen"
+    header: "Kopfzeile"
+    footer: "Fußzeile mit Maßstabsinformationen, Koordinatensystem und Koordinatenanzeige"
+    map: "Karte. Mit den Pfeiltasten kannst du die Karte verschieben. Mit der Plus-Taste hineinzoomen und mit der Minus-Taste herauszoomen."
+    topLeft: "Messung"
+    topRight: "Übersichtskarte und Grundkartenauswahl"
+    bottomRight: "Werkzeuge"
+  measurementTitle: "Messung"

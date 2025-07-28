@@ -224,15 +224,17 @@ export function MapApp() {
                                 </MapAnchor>
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                     <IsimipSelector />
-
-                                    <ExpandableBox
-                                        title={intl.formatMessage({
-                                            id: "map.station_information.heading"
-                                        })}
-                                        marginBottom="10px"
-                                    >
-                                        <StationInformation data={stationData} />
-                                    </ExpandableBox>
+                                    
+                                    {authState.kind === "authenticated" && (
+                                        <ExpandableBox
+                                            title={intl.formatMessage({
+                                                id: "map.station_information.heading"
+                                            })}
+                                            marginBottom="10px"
+                                        >
+                                            <StationInformation data={stationData} />
+                                        </ExpandableBox>
+                                    )}
                                     {measurementIsActive && (
                                         <Box
                                             backgroundColor="white"
@@ -311,6 +313,7 @@ export function MapApp() {
                                     <Legend
                                         range={legendMetadata.range}
                                         variable={legendMetadata.variable}
+                                        isAuthenticated={authState.kind === "authenticated"}
                                     ></Legend>
                                 </MapAnchor>
                                 <MapAnchor
