@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState, ChangeEvent } from "react";
-import ClientService from "./ClientService";
+import { ClientService } from "./ClientService";
 import {
     Box,
     Button,
@@ -21,17 +21,19 @@ import {
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater } from "react-icons/fa";
+import { useService } from "open-pioneer:react-hooks";
 
 export function ModelClient() {
     // const [name, setName] = useState("");
+    const clientService = useService<ClientService>("app.ClientService");
     const [selectedLocation, setSelectedLocation] = useState<string>("");
-    const [rainIntensity, setRainIntensity] = useState("10"); 
-    const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null); 
+    const [rainIntensity, setRainIntensity] = useState("10");
+    const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null);
     const [model, setModel] = useState<string>("");
     const [jobStatus, setJobStatus] = useState("Idle");
     const [jobMessage, setJobMessage] = useState("");
     const [downloadLink, setDownloadLink] = useState("");
-    const { submitJob } = ClientService();
+    // const { submitJob } = ClientService();
     const { isOpen, onOpen, onClose } = useDisclosure(); //for model dialog
 
     // const { submitJob, pollJobStatus } = ClientService();
@@ -69,7 +71,6 @@ export function ModelClient() {
         setExtremeSeaLevel(value === "" ? null : parseFloat(value));
     };
 
-
     // const handleSayHelloClick = async () => {
     //     setJobStatus("Submitting job");
     //     setJobMessage(""); //clear previous messages
@@ -94,7 +95,6 @@ export function ModelClient() {
         const token = "S4fer_api_token";
         const selectedDemFile = locationDemFiles[selectedLocation]?.dem;
         const selectedSeamaskFile = locationDemFiles[selectedLocation]?.seamask;
-        
 
         if (!selectedLocation || !selectedDemFile) {
             setJobStatus("Failed");
@@ -113,12 +113,12 @@ export function ModelClient() {
 
         if (model === "safer_rain") {
             if (!rainIntensity) {
-                setJobStatus("Failed"); 
+                setJobStatus("Failed");
                 setJobMessage("Please provie a Rain Intensity value");
                 return;
             }
             processId = "safer-rain-process";
-            const outputRain = `watermap_rain_${Date.now()}.tif`; 
+            const outputRain = `watermap_rain_${Date.now()}.tif`;
 
             inputs.set("dem", selectedDemFile);
             inputs.set("rain", parseInt(rainIntensity, 10)); //ensure rain is a number
@@ -132,7 +132,7 @@ export function ModelClient() {
             outputs.set("water_depth_file", {
                 mediaType: "application/json",
                 transmissionMode: "reference"
-            }); 
+            });
         } else if (model === "safer_coast") {
             if (extremeSeaLevel === null || extremeSeaLevel <= 0) {
                 setJobStatus("Failed");
@@ -173,11 +173,10 @@ export function ModelClient() {
         const preferSynchronous = false; //set true for sync, false async
 
         try {
-            //submit the asynchronous job; synchronous resolves immediately with result
-            const finalResult = await submitJob({
+            const finalResult = await clientService.submitJob({
                 inputs: inputs,
                 outputs: outputs,
-                synchronous: preferSynchronous, //pass the execution mode
+                synchronous: preferSynchronous,
                 processId: processId,
                 response: "document"
             });
@@ -204,14 +203,60 @@ export function ModelClient() {
                 if (finalResult.presigned_url) {
                     downloadUrl = finalResult.presigned_url;
                     displayMessage = `Job successful. Download available via presigned URL.`;
-                } else if (finalResult.outputs && finalResult.outputs.water_depth_file) {
-                    const s3OutputUrl = finalResult.outputs.water_depth_file.href;
-                    // Convert S3 URL to HTTPS if necessary for direct download
-                    downloadUrl = s3OutputUrl.startsWith("s3://")
-                        ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                        : s3OutputUrl;
-                    displayMessage = `Job successful. Download available for water_depth_file.`;
+                } else if (finalResult.outputs) {
+                    if (Array.isArray(finalResult.outputs)) {
+                        if (finalResult.outputs.length > 0) {
+                            const outputItem = finalResult.outputs[0];
+                            if (outputItem) {
+                                if (outputItem.presigned_url) {
+                                    downloadUrl = outputItem.presigned_url;
+                                    displayMessage = `Job successful. Download available via presigned URL from output item.`;
+                                } else if (
+                                    "water_depth_file" in outputItem &&
+                                    outputItem.water_depth_file
+                                ) {
+                                    const s3OutputUrl = outputItem.water_depth_file;
+                                    downloadUrl = s3OutputUrl.startsWith("s3://")
+                                        ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
+                                        : s3OutputUrl;
+                                    displayMessage = `Job successful. Download available for water_depth_file.`;
+                                } else if (outputItem.href) {
+                                    const genericHref = outputItem.href;
+                                    downloadUrl = genericHref.startsWith("s3://")
+                                        ? genericHref.replace("s3://", "https://s3.amazonaws.com/")
+                                        : genericHref;
+                                    displayMessage = `Job successful. Download available via generic link from output item.`;
+                                } else {
+                                    console.warn(
+                                        "No specific download link found in the first output item."
+                                    );
+                                }
+                            } else {
+                                console.warn(
+                                    "Outputs array contained a null/undefined item at index 0."
+                                );
+                            }
+                        }
+                    } else if (
+                        typeof finalResult.outputs === "object" &&
+                        "water_depth_file" in finalResult.outputs
+                    ) {
+                        const specificOutput = (
+                            finalResult.outputs as {
+                                water_depth_file: { href: string };
+                            }
+                        ).water_depth_file;
+
+                        if (specificOutput?.href) {
+                            const s3OutputUrl = specificOutput.href;
+                            downloadUrl = s3OutputUrl.startsWith("s3://")
+                                ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
+                                : s3OutputUrl;
+                            displayMessage = `Job successful. Download available for water_depth_file.`;
+                        }
+                    }
                 }
+
                 setJobMessage(displayMessage);
                 setDownloadLink(downloadUrl);
             } else {
@@ -220,31 +265,31 @@ export function ModelClient() {
                     `Error: ${finalResult.message || JSON.stringify(finalResult, null, 2)}`
                 );
             }
-
-            // setJobStatus(`Job ${jobID} submitted. Polling status...`);
-
-            // //poll for job status until completion
-            // const finalJobStatus = await pollJobStatus("hello-world", jobID);
-
-            // //handle successful job completion
-            // if (finalJobStatus.status === "successful") {
-            //     const message =
-            //         finalJobStatus.outputs?.message ||
-            //         "Job successful, no specific output message.";
-            //     setJobStatus("Job Completed Successfully!");
-            //     setJobMessage(message);
-            // } else {
-            //     //case to be caught when pollJobStatus's rejects
-            //     setJobStatus("Job finished with unexpected status.");
-            //     setJobMessage(JSON.stringify(finalJobStatus, null, 2));
-            // }
         } catch (error: unknown) {
             console.error("Job execution failed:", error);
             setJobStatus("Job Failed!");
-            //display error message if available
-            // setJobMessage(`Error: ${error.message || JSON.stringify(error)}`);
+            const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+            setJobMessage(`Error: ${errorMessage}`);
         }
     };
+
+    // setJobStatus(`Job ${jobID} submitted. Polling status...`);
+
+    // //poll for job status until completion
+    // const finalJobStatus = await pollJobStatus("hello-world", jobID);
+
+    // //handle successful job completion
+    // if (finalJobStatus.status === "successful") {
+    //     const message =
+    //         finalJobStatus.outputs?.message ||
+    //         "Job successful, no specific output message.";
+    //     setJobStatus("Job Completed Successfully!");
+    //     setJobMessage(message);
+    // } else {
+    //     //case to be caught when pollJobStatus's rejects
+    //     setJobStatus("Job finished with unexpected status.");
+    //     setJobMessage(JSON.stringify(finalJobStatus, null, 2));
+    // }
 
     return (
         <Box>
@@ -352,5 +397,4 @@ export function ModelClient() {
         </Box>
     );
 }
-
-export default ModelClient;
+// export default ModelClient

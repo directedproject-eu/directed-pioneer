@@ -2,7 +2,8 @@
     "name": "modelclient",
     "private": true,
     "dependencies": {
-        "@open-pioneer/runtime": "catalog:"
+        "@open-pioneer/runtime": "catalog:",
+        "modelclient": "workspace:^"
     },
     "devDependencies": {
         "@open-pioneer/test-utils": "catalog:"
