@@ -93,15 +93,6 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                         <Button onClick={() => authService.getLoginBehavior().login()}>
                             Login
                         </Button>
-                        <Button
-                            fontSize="md"
-                            fontWeight={600}
-                            color="white"
-                            bg="#2e9ecc"
-                            _hover={{ bg: "gray" }}
-                        >
-                            Sign Up
-                        </Button>
                     </Flex>
                 ) : null}
             </Flex>
