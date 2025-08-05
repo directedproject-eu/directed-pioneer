@@ -21,7 +21,6 @@ import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
-import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
@@ -33,7 +32,7 @@ import { useService } from "open-pioneer:react-hooks";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { LayerSelector } from "./controls/LayerSelector";
-import Legend from "./components/Legend";
+import Legend from "./components/legends/Legend";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
@@ -280,36 +279,20 @@ export function MapApp() {
                                             showTools={true}
                                             showBasemapSwitcher={false}
                                         />
-                                    </Box>
-                                </MapAnchor>
-                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                                    <Box
-                                        backgroundColor="white"
-                                        borderWidth="1px"
-                                        borderRadius="lg"
-                                        padding={2}
-                                        boxShadow="lg"
-                                        role="top-right"
-                                        aria-label={intl.formatMessage({
-                                            id: "ariaLabel.topRight"
-                                        })}
-                                    >
-                                        <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
-                                        <Divider mt={4} />
                                         <FormControl>
                                             <FormLabel mt={2}>
                                                 <Text as="b">
-                                                    {intl.formatMessage({
-                                                        id: "map.select_basemap"
-                                                    })}
+                                                    {intl.formatMessage({ id: "basemapLabel" })}
                                                 </Text>
                                             </FormLabel>
                                             <BasemapSwitcher
                                                 mapId={MAP_ID}
-                                                allowSelectingEmptyBasemap
+                                                allowSelectingEmptyBasemap={true}
                                             />
                                         </FormControl>
                                     </Box>
+                                </MapAnchor>
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                     <Legend
                                         range={legendMetadata.range}
                                         variable={legendMetadata.variable}

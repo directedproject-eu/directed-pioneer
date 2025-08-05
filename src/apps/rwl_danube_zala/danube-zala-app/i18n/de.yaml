@@ -1,4 +1,5 @@
 messages:
+  basemapLabel: "Hintergrundkarte auswählen:"
   global:
     year: "Jahr"
     month: "Monat"

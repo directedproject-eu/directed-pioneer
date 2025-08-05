@@ -1,4 +1,5 @@
 messages:
+  basemapLabel: "hun:Select basemap:"
   auth-error: "hun:An error occured during authentication."
   global:
     year: "hun:Year"

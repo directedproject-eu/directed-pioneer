@@ -1,4 +1,5 @@
 messages:
+  basemapLabel: "Select basemap:"
   global:
     year: "Year"
     month: "Month"

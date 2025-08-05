@@ -41,5 +41,8 @@ export default defineBuildConfig({
             "ogc-features.VectorSourceFactory",
             "ogc-features.SearchSourceFactory"
         ]
+    },
+    properties: {
+        userConfig: {}
     }
 });
