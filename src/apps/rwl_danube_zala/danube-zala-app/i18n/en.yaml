@@ -35,7 +35,7 @@ messages:
       variable: "Variable"
     station_information:
       heading: "Event Information"
-      description: "Select an ebent on the map to see more information."
+      description: "Select an event on the map to see more information."
       attributes:
         address: "Address:"
         settlement: "Settlement"
@@ -58,7 +58,11 @@ messages:
         storm_damage: "Storm Damage"
   charts:
     title_chart1: "Crops in Zala region for "
-  
+  welcome_window:
+    header: "Welcome to the Zala app of the DIRECTED Data Fabric!"
+    body: "The Zala app is part of the Data Fabric which is developed within the EU-funded DIRECTED project. 
+           Goal of the app is to support stakeholders in disaster risk reduction and climate change adaptation.
+           Please note that the app is still work in progress."
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"
