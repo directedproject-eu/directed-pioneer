@@ -32,7 +32,6 @@
         "chroma-js": "^3.1.2",
         "taxonomy": "workspace:^",
         "saferplaces": "workspace:^",
-        "mcagraph": "workspace:^",
         "modelclient": "workspace:^"
     }
 }

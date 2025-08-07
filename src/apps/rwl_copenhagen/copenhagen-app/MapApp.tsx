@@ -42,7 +42,6 @@ import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
 // import { SaferPlacesFloodMap } from "saferplaces";
 import { ModelClient } from "modelclient";
-import { RankDistributionViewer } from "mcagraph";
 
 export function MapApp() {
     const intl = useIntl();
@@ -198,10 +197,6 @@ export function MapApp() {
                                 </ExpandableBox>
                             </Flex> */}
                             {/*add Table of Contents (Toc) and legend */}
-                            <ExpandableBox title="MCDM Analysis">
-                                {/* <>Example Analysis Text</> */}
-                                <RankDistributionViewer />
-                            </ExpandableBox>
                             <Box
                                 display="flex"
                                 flexDirection="column"
