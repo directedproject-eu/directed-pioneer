@@ -12,21 +12,50 @@ interface StationData {
     county: string;
 }
 
+import { useIntl } from "open-pioneer:react-hooks";
+
 const StationInformation = (data: StationData) => {
+    const intl = useIntl();
     const stationData: StationData = data.data;
     if (Object.keys(stationData).length == 0) {
-        return <>Select an event on the map</>;
+        return <>{intl.formatRichMessage({ id: "map.station_information.description" })}</>;
     }
     return (
         <>
-            <div>Cím: {stationData.adress}</div>
-            <div>Település: {stationData.settlement}</div>
-            <div>Beavatkozás típusa: {stationData.type}</div>
-            <div>Esemény típus: {stationData.eventType}</div>
-            <div>Helyszín típusa: {stationData.locationType}</div>
-            <div>Jelzés dátuma: {stationData.date}</div>
-            <div>Káreset fajtája: {stationData.damageType}</div>
-            <div>Megye (mk.): {stationData.county}</div>
+            <div>
+                {intl.formatMessage({ id: "map.station_information.attributes.address" })}:{" "}
+                {stationData.adress}
+            </div>
+            <div>
+                {intl.formatMessage({ id: "map.station_information.attributes.settlement" })}:{" "}
+                {stationData.settlement}
+            </div>
+            <div>
+                {intl.formatMessage({
+                    id: "map.station_information.attributes.type_of_intervention"
+                })}
+                : {stationData.type}
+            </div>
+            <div>
+                {intl.formatMessage({ id: "map.station_information.attributes.event_type" })}:{" "}
+                {stationData.eventType}
+            </div>
+            <div>
+                {intl.formatMessage({ id: "map.station_information.attributes.location_type" })}:{" "}
+                {stationData.locationType}
+            </div>
+            <div>
+                {intl.formatMessage({ id: "map.station_information.attributes.date_reported" })}:{" "}
+                {stationData.date}
+            </div>
+            <div>
+                {intl.formatMessage({ id: "map.station_information.attributes.damage_type" })}:{" "}
+                {stationData.damageType}
+            </div>
+            <div>
+                {intl.formatMessage({ id: "map.station_information.attributes.county" })}:{" "}
+                {stationData.county}
+            </div>
         </>
     );
 };

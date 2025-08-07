@@ -47,7 +47,7 @@ import { RankDistributionViewer } from "mcagraph";
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel("main");
+    const mapModel = useMapModel(MAP_ID1);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
@@ -133,25 +133,6 @@ export function MapApp() {
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
 
-    ///layerswipe test///
-
-    // const {
-    //     selectedLeftLayer,
-    //     setSelectedLeftLayer,
-    //     selectedRightLayer,
-    //     setSelectedRightLayer,
-    //     sliderValue,
-    //     onSliderValueChanged,
-    //     visibleAvailableLayers,
-    //     leftLayers,
-    //     rightLayers,
-    //     isLayerSwipeActive
-    // } = useLayerSwipe();
-
-    // function onSliderValueChanged(value: number): void {
-    //     throw new Error("Function not implemented.");
-    // }
-
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
@@ -165,7 +146,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            RWL The Capital Region of Denmark
+                            {intl.formatMessage({ id: "appTitle" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -244,8 +225,7 @@ export function MapApp() {
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
-                                            {/* {intl.formatMessage({ id: "basemapLabel" })} */}
-                                            Basemap
+                                            {intl.formatMessage({ id: "basemapLabel" })}
                                         </Text>
                                     </FormLabel>
                                     <BasemapSwitcher
@@ -373,7 +353,7 @@ export function MapApp() {
                                             <Spacer />
                                             <Text fontSize={16}>
                                                 ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison
+                                                Operational Layers are viewable for comparison.
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
@@ -408,9 +388,9 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                                 {/* <Flex>
-                                    <Text 
-                                        fontSize={14} 
-                                        fontWeight="semibold" 
+                                    <Text
+                                        fontSize={14}
+                                        fontWeight="semibold"
                                         textAlign="right"
                                         width="97%"
                                     >

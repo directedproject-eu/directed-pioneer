@@ -6,5 +6,6 @@ messages:
     topLeft: "Messen"
     topRight: "Übersichtskarte und Auswahl der Hintergrundkarte"
     bottomRight: "Kartenwerkzeuge"
-  basemapLabel: "Hintergrundkarte auswählen:"
+  basemapLabel: "Hintergrundkarte"
   measurementTitle: "Messen"
+  appTitle:  "RWL \"Die Hauptstadt-Region Dänemarks\""
