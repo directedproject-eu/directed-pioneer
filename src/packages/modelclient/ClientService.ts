@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
+import { ServiceOptions, DeclaredService } from "@open-pioneer/runtime";
+
 interface JobStatusResponse {
     jobID?: string;
     id?: string;
@@ -9,14 +11,24 @@ interface JobStatusResponse {
     message?: string;
     // outputs?: string;
     presigned_url?: string; //saferplaces
-    outputs?: {
-        [key: string]: {
-            href: string;
-            title?: string;
-            type?: string;
-        };
-    }; //saferplaces
-    //can add other properties as per pygeoapi's Job JSON structure
+    outputs?:
+        | {
+              // Object structure (for general processes)
+              [key: string]: {
+                  href: string;
+                  title?: string;
+                  type?: string;
+              };
+          }
+        | Array<{
+              // Array structure (for SaferPlaces API polling response)
+              id?: string;
+              presigned_url?: string; // presigned_url *inside* the array item
+              water_depth_file?: string;
+              href?: string;
+              title?: string;
+              type?: string;
+          }>;
 }
 
 // interface ProcessInputs {
@@ -28,17 +40,26 @@ interface JobStatusResponse {
 interface FinalProcessOutcome {
     status: "successful" | "failed" | "dismissed"; //final status
     message?: string;
+    presigned_url?: string; //saferplaces
     // outputs?: { [key: string]: any };
     // outputs?: string; //process outputs //original
-    outputs?: {
-        [key: string]: {
-            href: string;
-            title?: string;
-            type?: string;
-        };
-    }; //saferplaces
-    presigned_url?: string; //for SaferPlaces output
-    jobID?: string; //if async job
+    outputs?:
+        | {
+              [key: string]: {
+                  href: string;
+                  title?: string;
+                  type?: string;
+              };
+          }
+        | Array<{
+              id?: string;
+              presigned_url?: string;
+              water_depth_file?: string;
+              href?: string;
+              title?: string;
+              type?: string;
+          }>;
+    jobID?: string;
 }
 
 interface OutputOptions {
@@ -61,19 +82,43 @@ interface ProcessExecution {
 //update JobResult to be specific as it is outcome of submitJob
 type JobResult = FinalProcessOutcome;
 
-export const ClientService = () => {
-    const API_BASE_URL = import.meta.env.DEV
-        // ? "http://localhost:5000"
-        ? "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"
-        : import.meta.env.VITE_PROD_URL;
+// service interface
+export interface ClientService extends DeclaredService<"app.ClientService"> {
+    submitJob(jobDescription: ProcessExecution): Promise<JobResult>;
+    pollJobStatus(job_url: string, delayMs?: number): Promise<FinalProcessOutcome>;
+}
 
-    //execution endpoint
-    const API_PROCESS_EXECUTION_URL = (processID: string) =>
-        `${API_BASE_URL}/processes/${processID}/execution`;
+interface Config {
+    apiBaseUrl: string;
+}
+
+export class ClientServiceImpl implements ClientService {
+    private readonly API_BASE_URL: string;
+
+    constructor(options: ServiceOptions) {
+        const config = options.properties.userConfig as Config;
+        if (!config.apiBaseUrl) {
+            throw new Error("ClientServiceImpl requires 'apiBaseUrl' in userConfig");
+        }
+        this.API_BASE_URL = config.apiBaseUrl;
+    }
+
+    private getProcessExecutionUrl(processID: string): string {
+        return `${this.API_BASE_URL}/processes/${processID}/execution`;
+    }
+
+    // const API_BASE_URL = import.meta.env.DEV
+    //     // ? "http://localhost:5000"
+    //     ? "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"
+    //     : import.meta.env.VITE_PROD_URL;
+
+    // //execution endpoint
+    // const API_PROCESS_EXECUTION_URL = (processID: string) =>
+    //     `${this.API_BASE_URL}/processes/${processID}/execution`;
 
     //submitJob returns a Promise that resolves after the final outcome of the job
     //for async, waits for polling to complete
-    const submitJob = (jobDescription: ProcessExecution): Promise<JobResult> => {
+    submitJob = (jobDescription: ProcessExecution): Promise<JobResult> => {
         console.log(jobDescription.inputs);
         /* eslint-disable @typescript-eslint/no-explicit-any */
         const body = {
@@ -104,7 +149,8 @@ export const ClientService = () => {
             } else {
                 myHeaders.append("Prefer", "respond-sync"); //explicity request sync
             }
-            fetch(API_PROCESS_EXECUTION_URL(jobDescription.processId), {
+            fetch(this.getProcessExecutionUrl(jobDescription.processId), {
+                // use private helper function
                 method: "POST",
                 headers: myHeaders,
                 body: JSON.stringify(body)
@@ -166,7 +212,7 @@ export const ClientService = () => {
                         console.log(`Polling for async job '${jobID}' at: ${locationHeader}`);
                         //await the pollJobStatus; submitJob promise resolves with final polling outcome
                         try {
-                            const finalResult = await pollJobStatus(locationHeader);
+                            const finalResult = await this.pollJobStatus(locationHeader);
                             resolve(finalResult); //resolve submitJob's promise with final outcome
                         } catch (pollingError) {
                             reject(pollingError); //if polling rejects, reject the submitJob promise
@@ -269,13 +315,10 @@ export const ClientService = () => {
         });
     };
 
-    const pollJobStatus = (
-        job_url: string,
-        delayMs: number = 2000
-    ): Promise<FinalProcessOutcome> => {
+    pollJobStatus = (job_url: string, delayMs: number = 2000): Promise<FinalProcessOutcome> => {
         return new Promise((resolve, reject) => {
             const checkStatus = async () => {
-                console.log(`Polling attempt for job at URL: ${job_url}`); //log the job url where polling is occurring
+                console.log(`Polling attempt for job at URL: ${job_url}`); // Log the job url where polling is occurring
                 fetch(job_url)
                     .then(async (response) => {
                         if (!response.ok) {
@@ -349,10 +392,10 @@ export const ClientService = () => {
         });
     };
 
-    return {
-        submitJob,
-        pollJobStatus
-    };
-};
+    // return {
+    //     submitJob,
+    //     pollJobStatus
+    // };
+}
 
-export default ClientService;
+// export default ClientService;
