@@ -37,6 +37,9 @@ import { TimeSlider } from "./controls/TimeSlider";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
 import { useService } from "open-pioneer:react-hooks";
 
+import Swipe from "ol-ext/control/Swipe";
+import Layer from "ol/layer/Layer";
+
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -58,6 +61,8 @@ export function MapApp() {
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
     }
+
+    const [swipeControl, setSwipeControl] = useState<Swipe | null>(null);
 
     //////////////////
     /// LayerSwipe ///
@@ -112,6 +117,36 @@ export function MapApp() {
 
         return () => {
             eventKeys.forEach(unByKey);
+        };
+    }, [mapModel, selectedLeftLayer, selectedRightLayer]);
+
+    useEffect(() => {
+        if (!mapModel.map || !selectedLeftLayer || !selectedRightLayer) return;
+
+        const map = mapModel.map.olMap;
+        const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)?.olLayer as Layer;
+        const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)?.olLayer as Layer;
+
+        if (!leftLayer || !rightLayer) return;
+
+        if (swipeControl) {
+            map.removeControl(swipeControl);
+        }
+
+        const swipe = new Swipe({
+            layers: [leftLayer],
+            rightLayers: [rightLayer],
+            position: 0.5,
+            orientation: "vertical",
+            className: "ol-swipe",
+        });
+
+        map.addControl(swipe);
+        setSwipeControl(swipe);
+
+        return () => {
+            map.removeControl(swipe);
+            setSwipeControl(null);
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
 
@@ -328,7 +363,7 @@ export function MapApp() {
                             justifyContent="center"
                             alignItems="center"
                         >
-                            {leftLayers && rightLayers && mapModel.map && (
+                            {/* {leftLayers && rightLayers && mapModel.map && (
                                 <LayerSwipe
                                     map={mapModel.map}
                                     sliderValue={sliderValue}
@@ -340,7 +375,7 @@ export function MapApp() {
                                     rightLayers={rightLayers}
                                     style={{ width: "100%", height: "100%" }}
                                 />
-                            )}
+                            )} */}
                         </Box>
                     )}
                 </Flex>
