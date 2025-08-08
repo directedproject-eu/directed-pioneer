@@ -4,11 +4,18 @@ import {
     Box,
     Button,
     Container,
-    Divider,
     Flex,
     FormControl,
     FormLabel,
-    Text
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Text,
+    useDisclosure
 } from "@open-pioneer/chakra-integration";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
@@ -21,19 +28,16 @@ import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
-import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import TileLayer from "ol/layer/Tile";
+import { useEffect, useId, useState } from "react";
 import { Measurement } from "@open-pioneer/measurement";
-import OSM from "ol/source/OSM";
 import { PiRulerLight } from "react-icons/pi";
 import { useService } from "open-pioneer:react-hooks";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { LayerSelector } from "./controls/LayerSelector";
-import Legend from "./components/Legend";
+import Legend from "./components/legends/Legend";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
@@ -56,8 +60,6 @@ export function MapApp() {
 
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
-    const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
-    const userName = sessionInfo?.attributes?.userName as string;
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -67,13 +69,6 @@ export function MapApp() {
         setMeasurementIsActive(!measurementIsActive);
     }
 
-    const overviewMapLayer = useMemo(
-        () =>
-            new TileLayer({
-                source: new OSM()
-            }),
-        []
-    );
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
 
     const { legendMetadata } = useReactiveSnapshot(
@@ -89,6 +84,8 @@ export function MapApp() {
         }),
         [prepSrvc]
     );
+
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
     function createPastEventLayer(
         collectionId: string,
@@ -171,19 +168,6 @@ export function MapApp() {
         <>
             <Flex height="100%" direction="column" overflow="hidden">
                 <Navbar authService={authService}>
-                    {/* {authState.kind === "authenticated" && (
-                        <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
-                            <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
-                            <Button onClick={() => authService.logout()}>Logout</Button>
-                        </Flex>
-                    )}
-                    {authState.kind !== "authenticated" && (
-                        <Flex flexDirection="row" align="center" ml="auto" gap="2em">
-                            <Button onClick={() => authService.getLoginBehavior().login()}>
-                                Login
-                            </Button>
-                        </Flex>
-                    )} */}
                 </Navbar>
                 <Container p={5}></Container>
                 <Notifier position="bottom" />
@@ -202,6 +186,21 @@ export function MapApp() {
                     }
                 >
                     <Flex flex="1" direction="column" position="relative">
+                        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={"5xl"} isCentered={true}>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader>{intl.formatMessage({ id: "welcome_window.header" })}</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody pb={6}>
+                                    <Text as="b">
+                                        {intl.formatMessage({ id: "welcome_window.body" })}
+                                    </Text>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button onClick={onClose}>Close</Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
                         {authState.kind !== "pending" && (
                             <MapContainer
                                 mapId={MAP_ID}
@@ -278,38 +277,24 @@ export function MapApp() {
                                         <Toc
                                             mapId={MAP_ID}
                                             showTools={true}
+                                            collapsibleGroups={true}
+                                            initiallyCollapsed={true}
                                             showBasemapSwitcher={false}
                                         />
-                                    </Box>
-                                </MapAnchor>
-                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                                    <Box
-                                        backgroundColor="white"
-                                        borderWidth="1px"
-                                        borderRadius="lg"
-                                        padding={2}
-                                        boxShadow="lg"
-                                        role="top-right"
-                                        aria-label={intl.formatMessage({
-                                            id: "ariaLabel.topRight"
-                                        })}
-                                    >
-                                        <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
-                                        <Divider mt={4} />
                                         <FormControl>
                                             <FormLabel mt={2}>
                                                 <Text as="b">
-                                                    {intl.formatMessage({
-                                                        id: "map.select_basemap"
-                                                    })}
+                                                    {intl.formatMessage({ id: "basemapLabel" })}
                                                 </Text>
                                             </FormLabel>
                                             <BasemapSwitcher
                                                 mapId={MAP_ID}
-                                                allowSelectingEmptyBasemap
+                                                allowSelectingEmptyBasemap={true}
                                             />
                                         </FormControl>
                                     </Box>
+                                </MapAnchor>
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                     <Legend
                                         range={legendMetadata.range}
                                         variable={legendMetadata.variable}
