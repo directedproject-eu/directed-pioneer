@@ -2,19 +2,22 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Box, Text } from "@open-pioneer/chakra-integration";
+import { useService } from "open-pioneer:react-hooks";
+import { LayerHighlighter } from "../services/LayerHighlighter";
 
 interface legendmetaData {
     range: number[];
     variable: string;
 }
 const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
-    const to_display_circles = [
-        { label: "Tree clearing", color: "green" },
-        { label: "Forest and vegetation fire", color: "red" },
-        { label: "Water damage", color: "blue" },
-        { label: "Storm damage", color: "black" }
-    ];
+    const highlightService = useService<LayerHighlighter>("app.LayerHighlighter");
 
+    const to_display_circles = [
+        { label: "Tree clearing", color: "green", layerId: "timber_cutting" },
+        { label: "Forest and vegetation fire", color: "red", layerId: "forest_vegetation_fires" },
+        { label: "Water damage", color: "blue", layerId: "water_damage" },
+        { label: "Storm damage", color: "black", layerId: "storm_damage" }
+    ];
     if (Number.isNaN(range)) {
         return (
             <Box bg={"white"} p={2} borderRadius="md" boxShadow="md" mt="1em">
@@ -24,7 +27,23 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
                 <Box display="flex" justifyContent="center" alignItems="center">
                     <Box height="100%">
                         {to_display_circles.map((item, index) => (
-                            <Box key={index} display="flex" alignItems="center" mb={1}>
+                            <Box
+                                key={index}
+                                display="flex"
+                                alignItems="center"
+                                mb={1}
+                                onClick={() => {
+                                    console.log("test for item:", item.label);
+                                }}
+                                // Add these styles to ensure it's clickable
+                                cursor="pointer"
+                                zIndex="2" // Ensures it's on top of other elements
+                                _hover={{
+                                    // Optional: Add a hover effect for better UX
+                                    backgroundColor: "gray.100",
+                                    borderRadius: "md"
+                                }}
+                            >
                                 <Box
                                     width="15px"
                                     height="15px"
@@ -98,7 +117,22 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
                 </div>
                 <Box height="100%">
                     {to_display_circles.map((item, index) => (
-                        <Box key={index} display="flex" alignItems="center" mb={1}>
+                        <Box
+                            key={index}
+                            display="flex"
+                            alignItems="center"
+                            mb={1}
+                            onMouseEnter={() => {
+                                highlightService.highlightLayer(item.layerId);
+                            }}
+                            style={{ cursor: "pointer" }}
+                            onMouseLeave={() => {
+                                highlightService.unHighlightLayer(item.layerId);
+                            }}
+                            onClick={() => {
+                                highlightService.zoomTo(item.layerId);
+                            }}
+                        >
                             <Box
                                 width="15px"
                                 height="15px"

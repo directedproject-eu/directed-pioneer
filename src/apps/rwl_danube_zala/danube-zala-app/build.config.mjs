@@ -29,6 +29,18 @@ export default defineBuildConfig({
             references: {
                 authService: "authentication.AuthService"
             }
+        },
+        TocServiceImpl: {
+            provides: ["app.TocService"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
+        },
+        LayerHighlighterImpl: {
+            provides: ["app.LayerHighlighter"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
         }
     },
     ui: {
@@ -36,7 +48,9 @@ export default defineBuildConfig({
             "authentication.AuthService",
             "http.HttpService",
             "app.LayerHandler",
-            "app.StationSelector"
+            "app.StationSelector",
+            "app.TocService",
+            "app.LayerHighlighter"
         ]
     }
 });

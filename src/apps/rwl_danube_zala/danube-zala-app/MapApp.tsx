@@ -8,7 +8,15 @@ import {
     Flex,
     FormControl,
     FormLabel,
-    Text
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Text,
+    useDisclosure
 } from "@open-pioneer/chakra-integration";
 import { AuthService, ForceAuth, useAuthState } from "@open-pioneer/authentication";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
@@ -22,13 +30,12 @@ import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { OverviewMap } from "@open-pioneer/overview-map";
-import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
 import { useId, useMemo, useRef, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiRulerLight } from "react-icons/pi";
+import { PiRulerLight, PiChartLineUpLight } from "react-icons/pi";
 import { useService } from "open-pioneer:react-hooks";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
@@ -42,14 +49,14 @@ import { IsimipSelector } from "./controls/IsimipSelector";
 import ChartComponentZala from "./components/ChartComponentZala";
 import ResizeBox from "./components/ResizeBox";
 import ChartComponentRhineErft from "./components/ChartComopnentRhineErft";
+import { Toc } from "@open-pioneer/toc";
 
 export function MapApp() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
     const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
     const userName = sessionInfo?.attributes?.userName as string;
-
-    const closableBoxRef = useRef();
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -167,6 +174,10 @@ export function MapApp() {
                                         showBasemapSwitcher={false}
                                     />
                                 </Box>
+                                {/* <OwnToc
+                                    mapId={MAP_ID} 
+
+                                /> */}
                             </MapAnchor>
                             <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                 <Box
@@ -206,6 +217,11 @@ export function MapApp() {
                                     padding={1}
                                 >
                                     <ToolButton
+                                        label={"Crop chart"}
+                                        icon={<PiChartLineUpLight />}
+                                        onClick={onOpen}
+                                    />
+                                    <ToolButton
                                         label={intl.formatMessage({ id: "measurementTitle" })}
                                         icon={<PiRulerLight />}
                                         isActive={measurementIsActive}
@@ -233,13 +249,30 @@ export function MapApp() {
                 </TitledSection>
             </Flex>
 
-            <ResizeBox title={"Zala Chart"}>
+            {/* <ResizeBox title={"Zala Chart"}>
                 <ChartComponentZala></ChartComponentZala>
-            </ResizeBox>
+            </ResizeBox> */}
 
-            <ResizeBox title={"Rhine - Erft Chart"}>
+            <Modal isOpen={isOpen} onClose={onClose} size={"full"}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Zala Chart</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <ChartComponentZala></ChartComponentZala>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                            Close
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            {/* <ResizeBox title={"Rhine - Erft Chart"}>
                 <ChartComponentRhineErft></ChartComponentRhineErft>
-            </ResizeBox>
+            </ResizeBox> */}
         </ForceAuth>
     );
 }

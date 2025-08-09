@@ -4,7 +4,6 @@
 import { useState } from "react";
 import { Box, Button, Collapse, Text } from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
-import { isRegExp } from "util";
 
 type ResizeBoxProps = {
     title: string;

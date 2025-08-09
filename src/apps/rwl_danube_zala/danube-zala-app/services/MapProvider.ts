@@ -48,7 +48,8 @@ export class MainMapProvider implements MapConfigProvider {
                     "circle-stroke-color": "white",
                     "circle-stroke-width": 0.5
                 },
-                properties: { title: "GeoJSON Layer" }
+                properties: { title: "GeoJSON Layer" },
+                zIndex: 10
             }),
             isBaseLayer: false
         });

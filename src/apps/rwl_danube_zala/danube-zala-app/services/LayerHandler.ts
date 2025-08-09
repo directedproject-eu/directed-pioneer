@@ -23,6 +23,7 @@ const legend_text = {
 };
 
 async function getRangeFromGeoTiff(url: string): Promise<number[]> {
+    console.log(url);
     try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
@@ -77,12 +78,14 @@ export class LayerHandlerImpl implements LayerHandler {
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                source: this.updateSource(),
+                // source: this.updateSource(),
                 style: {
                     color: this.createColorGradiant([0, 100])
                 },
-                properties: { title: "Layer Title" }
+                properties: { title: "Layer Title" },
+                extent: [-2782996, 4000985, 4254277, 11753013]
             });
+            this.updateSource();
             model?.layers.addLayer(
                 new SimpleLayer({
                     id: "isimip",
@@ -92,37 +95,41 @@ export class LayerHandlerImpl implements LayerHandler {
                     olLayer: this.layer
                 })
             );
-            this.layer.setZIndex(0);
         });
     }
 
     setYear(newYear: number): void {
         this.#selectedYear.value = newYear;
-        this.layer?.setSource(this.updateSource());
+        // this.layer?.setSource(this.updateSource());
+        this.updateSource();
         this.updateStyle();
     }
 
     setMonth(newMonth: number): void {
         this.#selectedMonth.value = newMonth;
-        this.layer?.setSource(this.updateSource());
+        // this.layer?.setSource(this.updateSource());
+        this.updateSource();
         this.updateStyle();
     }
 
     setScenario(newScenario: string): void {
         this.#selectedScenario.value = newScenario;
-        this.layer?.setSource(this.updateSource());
+        // this.layer?.setSource(this.updateSource());
+        this.updateSource();
         this.updateStyle();
     }
 
     setVariable(newVariable: string): void {
         this.#selectedVariable.value = newVariable;
-        this.layer?.setSource(this.updateSource());
+        // this.layer?.setSource(this.updateSource());
+        this.updateSource();
         this.updateStyle();
         this.changeTitleOfLayer(this.#selectedVariable.value);
     }
     setModel(newModel: string): void {
         this.#selectedModel.value = newModel;
-        this.layer?.setSource(this.updateSource());
+        // this.layer?.setSource(this.updateSource());
+        this.updateSource();
         this.updateStyle();
     }
     get legendMetadata(): legendMetadata {
@@ -145,7 +152,7 @@ export class LayerHandlerImpl implements LayerHandler {
         return this.#selectedYear.value;
     }
 
-    private updateSource(): GeoTIFF {
+    private updateSource(): void {
         if (this.#selectedScenario.value == "ssp126") {
             this.layer?.setSource(null);
 
@@ -153,14 +160,14 @@ export class LayerHandlerImpl implements LayerHandler {
                 model?.layers.getLayerById("isimip")?.setDescription("No map data available");
                 model?.layers.getLayerById("isimip")?.setVisible(false);
                 model?.layers.getLayerById("isimip")?.setTitle("No map data available");
-                return null;
+                // return null;
             });
         } else {
             this.changeTitleOfLayer(this.#selectedVariable.value);
             this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
                 model?.layers.getLayerById("isimip")?.setVisible(true);
             });
-            return new GeoTIFF({
+            const newSource = new GeoTIFF({
                 projection: "EPSG:4326",
                 normalize: false,
                 sources: [
@@ -170,13 +177,15 @@ export class LayerHandlerImpl implements LayerHandler {
                     }
                 ]
             });
+            this.layer?.setSource(newSource);
         }
     }
 
-    private updateStyle(): Style {
+    private updateStyle() {
         const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`;
         getRangeFromGeoTiff(url)
             .then((range) => {
+                console.log(range);
                 this.#legendMetadata.value = {
                     range: range,
                     variable: this.#selectedVariable.value
@@ -186,7 +195,6 @@ export class LayerHandlerImpl implements LayerHandler {
                 });
             })
             .catch((error) => console.error("Error fetching max value:", error));
-        return new Style({});
     }
     private createColorGradiant(range: number[]) {
         const tempColors = {

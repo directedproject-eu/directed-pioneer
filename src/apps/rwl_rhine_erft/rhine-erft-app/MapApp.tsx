@@ -2,13 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 import {
     Box,
-    Divider,
     Flex,
     FormControl,
     FormLabel,
     Text,
     Select,
-    Spacer
+    Spacer,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalHeader,
+    ModalContent,
+    ModalBody,
+    ModalCloseButton,
+    ModalFooter
 } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
@@ -20,14 +27,13 @@ import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
-import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services";
 import { useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiRulerLight } from "react-icons/pi";
+import { PiChartLineUpLight, PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { FeatureInfo } from "featureinfo";
@@ -37,8 +43,9 @@ import { unByKey } from "ol/Observable";
 import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
 
-
 export function MapApp() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
     const intl = useIntl();
     const measurementTitleId = useId();
     const mapModel = useMapModel("main");
@@ -175,11 +182,7 @@ export function MapApp() {
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                             >
-                                <Toc 
-                                    mapId={MAP_ID} 
-                                    showBasemapSwitcher={false}
-                                    showTools={true}
-                                />
+                                <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
@@ -285,6 +288,11 @@ export function MapApp() {
                                 gap={1}
                                 padding={1}
                             >
+                                {/* <ToolButton
+                                    label={"Crop chart"}
+                                    icon={<PiChartLineUpLight/>}
+                                    onClick={onOpen}
+                                /> */}
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
@@ -338,6 +346,22 @@ export function MapApp() {
                     <ScaleViewer mapId={MAP_ID} />
                 </Flex>
             </TitledSection>
+            {/* <Modal isOpen={isOpen} onClose={onClose} size={"full"}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Zala Chart</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <ChartComponentZala></ChartComponentZala>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme='blue' mr={3} onClick={onClose}>
+                        Close
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal> */}
         </Flex>
     );
 }
