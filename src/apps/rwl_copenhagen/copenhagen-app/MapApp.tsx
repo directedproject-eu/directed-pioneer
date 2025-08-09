@@ -40,15 +40,16 @@ import { Forecasts } from "./controls/Forecasts";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
+import { SaferPlacesFloodMap } from "saferplaces";
+// import { ModelClient } from "modelclient";
 
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel("main");
+    const mapModel = useMapModel(MAP_ID1);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-
 
     //////////////////
     /// LayerSwipe ///
@@ -60,6 +61,7 @@ export function MapApp() {
     const [rightLayers, setRightLayers] = useState<Layer[]>();
     const [sliderValue, setSliderValue] = useState<number>(50);
     const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
+    const [isLayerSwipeActive, setIsLayerSwipeActive] = useState<boolean>(false); //new render layerswipe
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     function toggleMeasurement() {
@@ -85,19 +87,6 @@ export function MapApp() {
         const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
         setAvailableLayers(layers);
 
-        //set selected layers
-        if (selectedLeftLayer && selectedRightLayer) {
-            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-
-            if (leftLayer && rightLayer) {
-                setLeftLayers([leftLayer]);
-                setRightLayers([rightLayer]);
-            }
-        }
-
         //set only visible layers in the dropdowns for left and right layer
         const updateVisibleLayers = () => {
             const visibleLayers = layers.filter((layer) => layer.olLayer?.getVisible?.() === true);
@@ -114,6 +103,30 @@ export function MapApp() {
             })
             .filter((k): k is EventsKey => !!k);
 
+        //set selected layers & set back to initial state if "select left layer" & "select right layer" in dropdowns
+        if (selectedLeftLayer && selectedRightLayer) {
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as TileLayer;
+
+            if (leftLayer && rightLayer) {
+                setLeftLayers([leftLayer]);
+                setRightLayers([rightLayer]);
+                setIsLayerSwipeActive(true); //activate layerswipe
+                leftLayer.setVisible(true);
+                rightLayer.setVisible(true);
+            } else {
+                setLeftLayers([]);
+                setRightLayers([]);
+                setIsLayerSwipeActive(false); //deactivate if layers not selected
+            }
+        } else {
+            setLeftLayers([]);
+            setRightLayers([]);
+            setIsLayerSwipeActive(false);
+        }
+
         return () => {
             eventKeys.forEach(unByKey);
         };
@@ -123,6 +136,7 @@ export function MapApp() {
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
             <Notifier position="bottom" />
+            {/* <ModelClient /> */}
             <TitledSection
                 title={
                     <Box
@@ -132,7 +146,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            RWL The Capital Region of Denmark
+                            {intl.formatMessage({ id: "appTitle" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -207,8 +221,7 @@ export function MapApp() {
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
-                                            {/* {intl.formatMessage({ id: "basemapLabel" })} */}
-                                            Basemap
+                                            {intl.formatMessage({ id: "basemapLabel" })}
                                         </Text>
                                     </FormLabel>
                                     <BasemapSwitcher
@@ -217,7 +230,7 @@ export function MapApp() {
                                     />
                                 </FormControl>
                             </Box>
-                            <Box 
+                            <Box
                                 flexDirection="column"
                                 backgroundColor="white"
                                 borderWidth="1px"
@@ -230,13 +243,21 @@ export function MapApp() {
                             >
                                 <Text fontWeight={600}> Description </Text>
                                 <Text>
-                                    This platform serves as a way to learn about 
-                                    <Spacer/>
-                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Disaster Risk")}>
-                                        disaster risk 
-                                    </Button>
-                                    {" "} in the lens of {" "}
-                                    <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Climate Change")}>
+                                    This platform serves as a way to learn about
+                                    <Spacer />
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("Disaster Risk")}
+                                    >
+                                        disaster risk
+                                    </Button>{" "}
+                                    in the lens of{" "}
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("Climate Change")}
+                                    >
                                         climate change
                                     </Button>
                                     .
@@ -277,7 +298,6 @@ export function MapApp() {
                                     Zoom to Roskilde
                                 </Button>
                             </VStack>
-                            
 
                             {/* {mapModel &&
                                 activeLayerIds.length > 0 &&
@@ -329,7 +349,7 @@ export function MapApp() {
                                             <Spacer />
                                             <Text fontSize={16}>
                                                 ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison
+                                                Operational Layers are viewable for comparison.
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
@@ -364,9 +384,9 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                                 {/* <Flex>
-                                    <Text 
-                                        fontSize={14} 
-                                        fontWeight="semibold" 
+                                    <Text
+                                        fontSize={14}
+                                        fontWeight="semibold"
                                         textAlign="right"
                                         width="97%"
                                     >
@@ -378,7 +398,10 @@ export function MapApp() {
                                 </Flex> */}
                                 {activeKeyword && (
                                     <Flex>
-                                        <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
+                                        <TaxonomyInfo
+                                            keyword={activeKeyword}
+                                            onClose={() => setActiveKeyword(null)}
+                                        />
                                     </Flex>
                                 )}
                                 <Flex
@@ -403,6 +426,8 @@ export function MapApp() {
                                 gap={1}
                                 padding={1}
                             >
+                                {/* SaferPlaces flood model dialog */}
+                                <SaferPlacesFloodMap />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
@@ -419,32 +444,35 @@ export function MapApp() {
                     {/*END MAP_ID1*/}
 
                     {/* add layerswipe slider below map container  */}
-                    <Box
-                        position="absolute"
-                        bottom={0}
-                        left={0}
-                        right={0}
-                        padding={4}
-                        backgroundColor="white"
-                        borderTop={1}
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        {leftLayers && rightLayers && mapModel.map && (
-                            <LayerSwipe
-                                map={mapModel.map}
-                                sliderValue={sliderValue}
-                                onSliderValueChanged={(newValue) => {
-                                    setSliderValue(newValue);
-                                }}
-                                leftLayers={leftLayers}
-                                rightLayers={rightLayers}
-                                style={{ width: "100%", height: "100%" }}
-                            />
-                        )}
-                    </Box>
+                    {isLayerSwipeActive && mapModel.map && leftLayers && rightLayers && (
+                        <Box
+                            position="absolute"
+                            bottom={0}
+                            left={0}
+                            right={0}
+                            padding={4}
+                            backgroundColor="white"
+                            borderTop={1}
+                            display="flex"
+                            flexDirection="row"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            {leftLayers && rightLayers && mapModel.map && (
+                                <LayerSwipe
+                                    map={mapModel.map}
+                                    sliderValue={sliderValue}
+                                    onSliderValueChanged={(newValue) => {
+                                        setSliderValue(newValue);
+                                    }}
+                                    // onSliderValueChanged={onSliderValueChanged}
+                                    leftLayers={leftLayers}
+                                    rightLayers={rightLayers}
+                                    style={{ width: "100%", height: "100%" }}
+                                />
+                            )}
+                        </Box>
+                    )}
                 </Flex>
                 <Flex
                     role="region"

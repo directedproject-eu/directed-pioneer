@@ -23,6 +23,7 @@ const legend_text = {
 };
 
 async function getRangeFromGeoTiff(url: string): Promise<number[]> {
+    console.log(url);
     try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
@@ -95,7 +96,6 @@ export class LayerHandlerImpl implements LayerHandler {
                     visible: false
                 })
             );
-            this.layer.setZIndex(0);
         });
     }
 
@@ -165,10 +165,14 @@ export class LayerHandlerImpl implements LayerHandler {
             });
         } else {
             this.changeTitleOfLayer(this.#selectedVariable.value);
+<<<<<<< HEAD
             this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
                 model?.layers.getLayerById("isimip")?.setVisible(true);
             });
             const newSource = new GeoTIFF({
+=======
+            return new GeoTIFF({
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257
                 projection: "EPSG:4326",
                 normalize: false,
                 sources: [
@@ -182,6 +186,7 @@ export class LayerHandlerImpl implements LayerHandler {
         }
     }
 
+<<<<<<< HEAD
     private updateStyle() {
         const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`;
         getRangeFromGeoTiff(url)
@@ -196,7 +201,24 @@ export class LayerHandlerImpl implements LayerHandler {
                 });
             })
             .catch((error) => console.error("Error fetching max value:", error));
-
+=======
+    private updateStyle(): Style {
+        if (this.#selectedScenario.value != "ssp126") {
+            const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`;
+            getRangeFromGeoTiff(url)
+                .then((range) => {
+                    this.#legendMetadata.value = {
+                        range: range,
+                        variable: this.#selectedVariable.value
+                    };
+                    this.layer?.setStyle({
+                        color: this.createColorGradiant([range[0], range[1]])
+                    });
+                })
+                .catch((error) => console.error("Error fetching max value:", error));
+        }
+        return new Style({});
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257
     }
     private createColorGradiant(range: number[]) {
         const tempColors = {

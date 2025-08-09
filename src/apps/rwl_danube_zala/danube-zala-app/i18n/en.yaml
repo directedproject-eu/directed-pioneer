@@ -1,4 +1,68 @@
 messages:
+  basemapLabel: "Select basemap:"
+  global:
+    year: "Year"
+    month: "Month"
+    day: "Day"
+    months:
+      jan: "January"
+      feb: "February"
+      mar: "March"
+      apr: "April"
+      may: "May"
+      jun: "June"
+      jul: "July"
+      aug: "August"
+      sep: "September"
+      oct: "October"
+      nov: "November"
+      dec: "December"
+  navbar:
+    home: "Home"
+    rwl: "Real World Labs"
+    directed_website: "Directed Project Website"
+    github: "GitHub Organization"
+    model: "Model Documentation"
+    login: "Login"
+    logout: "Logout"
+    sign_up: "Sign Up"
+  heading: "RWL The Danube Region"
+  map:
+    layer_select:
+      heading: "Select a Layer"
+      model: "Model"
+      scenario: "Scenario"
+      variable: "Variable"
+    station_information:
+      heading: "Event Information"
+      description: "Select an event on the map to see more information."
+      attributes:
+        address: "Address:"
+        settlement: "Settlement"
+        type_of_intervention: "Type of intervention"
+        event_type: "Type of event"
+        location_type: "Type of location"
+        date_reported: "Date reported"
+        damage_type: "Type of damage"
+        county: "County (abbr.)"
+    measurement:
+      heading: "Measurement"
+
+    operational_layers: "Operational Layers"
+    select_basemap: "Select basemap"
+    legend:
+      event_variables:
+        tree_clearing: "Tree Clearing"
+        forest_and_vegetation_fire: "Forest and vegetation fire"
+        water_damage: "Water Damage"
+        storm_damage: "Storm Damage"
+  charts:
+    title_chart1: "Crops in Zala region for "
+  welcome_window:
+    header: "Welcome to the Zala app of the DIRECTED Data Fabric!"
+    body: "The Zala app is part of the Data Fabric which is developed within the EU-funded DIRECTED project. 
+           Goal of the app is to support stakeholders in disaster risk reduction and climate change adaptation.
+           Please note that the app is still work in progress."
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"
@@ -6,5 +70,4 @@ messages:
     topLeft: "Measurement"
     topRight: "Overview map and basemap switcher"
     bottomRight: "Maptools"
-  basemapLabel: "Select basemap:"
   measurementTitle: "Measurement"

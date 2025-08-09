@@ -5,8 +5,10 @@ import { useService } from "open-pioneer:react-hooks";
 import { LayerHandler } from "../services/LayerHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
+import { useIntl } from "open-pioneer:react-hooks";
 
 export function IsimipSelector() {
+    const intl = useIntl();
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
 
     const setModel = (option: string) => {
@@ -22,7 +24,11 @@ export function IsimipSelector() {
     };
 
     return (
-        <ExpandableBox title="Select a Layer" marginBottom="10px" overflowY="auto">
+        <ExpandableBox
+            title={intl.formatMessage({ id: "map.layer_select.heading" })}
+            marginBottom="10px"
+            overflowY="auto"
+        >
             <Selector
                 options={[
                     "canesm5",
@@ -38,18 +44,18 @@ export function IsimipSelector() {
                 ]}
                 setSelected={setModel}
                 marginBottom="5px"
-                title="Model"
+                title={intl.formatMessage({ id: "map.layer_select.model" })}
             ></Selector>
             <Selector
                 options={["ssp585", "ssp370", "ssp126"]}
                 setSelected={setScenario}
                 marginBottom="5px"
-                title="Scenario"
+                title={intl.formatMessage({ id: "map.layer_select.scenario" })}
             ></Selector>
             <Selector
                 options={["hurs", "pr", "rsds", "sfcwind", "spei12", "tasmax", "tasmin", "tas"]}
                 setSelected={setVariable}
-                title="Variable"
+                title={intl.formatMessage({ id: "map.layer_select.variable" })}
             ></Selector>
         </ExpandableBox>
     );

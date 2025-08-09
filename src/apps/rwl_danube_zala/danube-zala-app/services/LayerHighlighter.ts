@@ -22,10 +22,13 @@ export class LayerHighlighterImpl implements LayerHighlighter {
     #layers: Reactive<SimpleLayer[]> = reactive([]);
 
     constructor(options: ServiceOptions<References>) {
+        console.log("test");
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.#layers.value = model?.layers.getAllLayers();
+            console.log(this.#layers.value);
+
         });
     }
 
@@ -36,9 +39,8 @@ export class LayerHighlighterImpl implements LayerHighlighter {
             "timber_cutting": "green",
             "forest_vegetation_fires": "red"
         };
-
-        if (layerId != "") {
-            const layer = this.#layers.value.find((layer) => layer.id == layerId);
+        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+            const layer = model?.layers.getLayerById(layerId);
             layer.olLayer.setStyle({
                 "circle-radius": 10,
                 "circle-fill-color": color[layerId],
@@ -46,7 +48,8 @@ export class LayerHighlighterImpl implements LayerHighlighter {
                 "circle-stroke-width": 3
             });
             layer.olLayer.setZIndex(20);
-        }
+        });
+
     }
     unHighlightLayer(layerId: string): void {
         const color = {
@@ -55,8 +58,9 @@ export class LayerHighlighterImpl implements LayerHighlighter {
             "timber_cutting": "green",
             "forest_vegetation_fires": "red"
         };
-        if (layerId != "") {
-            const layer = this.#layers.value.find((layer) => layer.id == layerId);
+
+        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+            const layer = model?.layers.getLayerById(layerId);
             layer.olLayer.setStyle({
                 "circle-radius": 8.0,
                 "circle-fill-color": color[layerId],
@@ -64,13 +68,14 @@ export class LayerHighlighterImpl implements LayerHighlighter {
                 "circle-stroke-width": 0.5
             });
             layer.olLayer.setZIndex(15);
-        }
+        });
+
     }
     zoomTo = (layerId: string) => {
-        const layer = this.#layers.value.find((layer) => layer.id == layerId);
-
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+            const layer = model?.layers.getLayerById(layerId);
             model?.olView.fit(layer?.olLayer.getSource().getExtent());
+
         });
     };
 }

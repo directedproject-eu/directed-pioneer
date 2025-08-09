@@ -7,7 +7,6 @@ import React, { useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 
-
 export const WmsLegend: React.FC<LegendItemComponentProps> = ({ layer }) => {
     const [legendUrl, setLegendUrl] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -50,12 +49,7 @@ export const WmsLegend: React.FC<LegendItemComponentProps> = ({ layer }) => {
     }, [layer]);
 
     return (
-        <Box
-            position="relative"
-            bg="white"
-            p={3}
-            mt={2}
-        >
+        <Box position="relative" bg="white" p={3} mt={2}>
             <Text fontWeight="bold" fontSize={16} mb={2}>
                 {layer.title} Legend
             </Text>

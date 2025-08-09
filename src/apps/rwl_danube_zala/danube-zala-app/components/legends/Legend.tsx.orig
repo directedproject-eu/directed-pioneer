@@ -2,15 +2,45 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Box, Text } from "@open-pioneer/chakra-integration";
+<<<<<<< HEAD:src/apps/rwl_danube_zala/danube-zala-app/components/Legend.tsx
 import { useService } from "open-pioneer:react-hooks";
 import { LayerHighlighter } from "../services/LayerHighlighter";
+=======
+import { useIntl } from "open-pioneer:react-hooks";
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257:src/apps/rwl_danube_zala/danube-zala-app/components/legends/Legend.tsx
 
 interface legendmetaData {
     range: number[];
     variable: string;
+    isAuthenticated?: boolean;
 }
+<<<<<<< HEAD:src/apps/rwl_danube_zala/danube-zala-app/components/Legend.tsx
 const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
     const highlightService = useService<LayerHighlighter>("app.LayerHighlighter");
+=======
+const Legend: React.FC<legendmetaData> = ({ range, variable, isAuthenticated }) => {
+    const intl = useIntl();
+    const to_display_circles = [
+        {
+            label: intl.formatMessage({ id: "map.legend.event_variables.tree_clearing" }),
+            color: "green"
+        },
+        {
+            label: intl.formatMessage({
+                id: "map.legend.event_variables.forest_and_vegetation_fire"
+            }),
+            color: "red"
+        },
+        {
+            label: intl.formatMessage({ id: "map.legend.event_variables.water_damage" }),
+            color: "blue"
+        },
+        {
+            label: intl.formatMessage({ id: "map.legend.event_variables.storm_damage" }),
+            color: "black"
+        }
+    ];
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257:src/apps/rwl_danube_zala/danube-zala-app/components/legends/Legend.tsx
 
     const to_display_circles = [
         { label: "Tree clearing", color: "green", layerId: "timber_cutting" },
@@ -25,6 +55,7 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
                     {"There is no map data for this scenario"}
                 </Text>
                 <Box display="flex" justifyContent="center" alignItems="center">
+<<<<<<< HEAD:src/apps/rwl_danube_zala/danube-zala-app/components/Legend.tsx
                     <Box height="100%">
                         {to_display_circles.map((item, index) => (
                             <Box
@@ -56,6 +87,25 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
                             </Box>
                         ))}
                     </Box>
+=======
+                    {isAuthenticated && (
+                        <Box height="100%">
+                            {to_display_circles.map((item, index) => (
+                                <Box key={index} display="flex" alignItems="center" mb={1}>
+                                    <Box
+                                        width="15px"
+                                        height="15px"
+                                        bg={item.color}
+                                        color="white"
+                                        borderRadius={"50%"}
+                                        mr={2}
+                                    />
+                                    <Box>{item.label}</Box>
+                                </Box>
+                            ))}
+                        </Box>
+                    )}
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257:src/apps/rwl_danube_zala/danube-zala-app/components/legends/Legend.tsx
                 </Box>
             </Box>
         );
@@ -106,7 +156,7 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
             <Text fontWeight="bold" mb={0}>
                 {legend_text[variable]}
             </Text>
-            <Box display="flex" justifyContent="center" alignItems="center">
+            <Box display="flex" flexDirection="column" alignItems="flex-start">
                 <div style={{ marginRight: "3em" }}>
                     {to_display.map((item, index) => (
                         <Box key={index} display="flex" alignItems="center" mb={1}>
@@ -115,6 +165,7 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
                         </Box>
                     ))}
                 </div>
+<<<<<<< HEAD:src/apps/rwl_danube_zala/danube-zala-app/components/Legend.tsx
                 <Box height="100%">
                     {to_display_circles.map((item, index) => (
                         <Box
@@ -145,6 +196,25 @@ const Legend: React.FC<legendmetaData> = ({ range, variable }) => {
                         </Box>
                     ))}
                 </Box>
+=======
+                {isAuthenticated && (
+                    <Box height="100%" mt={3}>
+                        {to_display_circles.map((item, index) => (
+                            <Box key={index} display="flex" alignItems="center" mb={1}>
+                                <Box
+                                    width="15px"
+                                    height="15px"
+                                    bg={item.color}
+                                    color="white"
+                                    borderRadius={"50%"}
+                                    mr={2}
+                                />
+                                <Box>{item.label}</Box>
+                            </Box>
+                        ))}
+                    </Box>
+                )}
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257:src/apps/rwl_danube_zala/danube-zala-app/components/legends/Legend.tsx
             </Box>
         </Box>
     );

@@ -46,7 +46,18 @@ export class MainMapProvider implements MapConfigProvider {
                         width: 3
                     })
                 }),
+<<<<<<< HEAD
+                style: {
+                    "circle-radius": 8.0,
+                    "circle-fill-color": color,
+                    "circle-stroke-color": "white",
+                    "circle-stroke-width": 0.5
+                },
+                properties: { title: "GeoJSON Layer" },
+                zIndex: 10
+=======
                 properties: { title: "GeoJSON Layer" }
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257
             }),
             isBaseLayer: false
         });

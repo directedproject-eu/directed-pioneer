@@ -29,7 +29,13 @@ export default defineBuildConfig({
             provides: ["http.Interceptor"],
             references: {
                 authService: "authentication.AuthService"
-            },
+            }
+        },
+        TocServiceImpl: {
+            provides: ["app.TocService"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
         },
         LayerHighlighterImpl: {
             provides: ["app.LayerHighlighter"],
@@ -44,9 +50,13 @@ export default defineBuildConfig({
             "http.HttpService",
             "app.LayerHandler",
             "app.StationSelector",
-            "app.LayerHighlighter",
+<<<<<<< HEAD
+            "app.TocService",
+            "app.LayerHighlighter"
+=======
             "ogc-features.VectorSourceFactory",
             "ogc-features.SearchSourceFactory"
+>>>>>>> 6c1fca5e5c987decec1ef39d876eaf461f4e5257
         ]
     },
     properties: {

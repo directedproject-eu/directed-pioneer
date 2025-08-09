@@ -1,6 +1,7 @@
 {
     "name": "danube-vienna-app",
     "private": true,
+    "main": "services.ts",
     "dependencies": {
         "@chakra-ui/icons": "catalog:",
         "@emotion/react": "catalog:",
@@ -9,6 +10,7 @@
         "@open-pioneer/chakra-integration": "catalog:",
         "@open-pioneer/coordinate-viewer": "catalog:",
         "@open-pioneer/geolocation": "catalog:",
+        "@open-pioneer/legend": "catalog:",
         "@open-pioneer/map": "catalog:",
         "@open-pioneer/map-navigation": "catalog:",
         "@open-pioneer/map-ui-components": "catalog:",
@@ -20,12 +22,14 @@
         "@open-pioneer/scale-viewer": "catalog:",
         "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
-        "@open-pioneer/legend": "catalog:",
+        "chroma-js": "^3.1.2",
+        "layerswipe": "workspace:^",
+        "navbar": "workspace:^",
         "ol": "catalog:",
+        "ol-ext": "^4.0.33",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
-        "react-use": "catalog:",
-        "navbar": "workspace:^"
+        "react-use": "catalog:"
     }
 }
