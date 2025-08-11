@@ -334,13 +334,11 @@ export function MapApp() {
                                         gap={1}
                                         padding={1}
                                     >   
-                                        {authState.kind === "authenticated" && (
-                                            <ToolButton
-                                                label={intl.formatMessage({ id: "measurementTitle" })}
-                                                icon={<PiChartLineDownLight/>}
-                                                onClick={onOpenChart}
-                                            />
-                                        )}
+                                        <ToolButton
+                                            label={intl.formatMessage({ id: "charts.button_title" })}
+                                            icon={<PiChartLineDownLight/>}
+                                            onClick={onOpenChart}
+                                        />
                                         <ToolButton
                                             label={intl.formatMessage({ id: "measurementTitle" })}
                                             icon={<PiRulerLight />}

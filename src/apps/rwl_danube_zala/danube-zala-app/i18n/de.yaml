@@ -57,6 +57,7 @@ messages:
         water_damage: "Wasserschaden"
         storm_damage: "Sturmschaden"
   charts:
+    button_title: "Erntediagramm"
     title_chart1: "Anbauflächen in der Region Zala für "
   welcome_window:
     header: "Willkommen in der Zala App des DIRECTED Data Fabric!"

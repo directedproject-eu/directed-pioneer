@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import {
     Box,
+    Button,
     Flex,
     FormControl,
     FormLabel,
@@ -42,9 +43,14 @@ import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
+import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 
 export function MapApp() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { 
+        isOpen: isOpenChart, 
+        onClose: onCloseChart,
+        onOpen: onOpenChart
+    } = useDisclosure();
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -289,9 +295,9 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* <ToolButton
-                                    label={"Crop chart"}
+                                    label={intl.formatMessage({ id: "charts.button_title" })}
                                     icon={<PiChartLineUpLight/>}
-                                    onClick={onOpen}
+                                    onClick={onOpenChart}
                                 /> */}
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
@@ -346,18 +352,19 @@ export function MapApp() {
                     <ScaleViewer mapId={MAP_ID} />
                 </Flex>
             </TitledSection>
-            {/* <Modal isOpen={isOpen} onClose={onClose} size={"full"}>
+            
+            {/* <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Zala Chart</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <ChartComponentZala></ChartComponentZala>
+                        <ChartComponentRhineErft></ChartComponentRhineErft>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
+                        <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
+                            Close
                         </Button>
                     </ModalFooter>
                 </ModalContent>
