@@ -42,6 +42,7 @@ import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
 import { SaferPlacesFloodMap } from "saferplaces";
 // import { ModelClient } from "modelclient";
+import Swipe from "ol-ext/control/Swipe";
 
 export function MapApp() {
     const intl = useIntl();
@@ -51,23 +52,6 @@ export function MapApp() {
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
 
-    //////////////////
-    /// LayerSwipe ///
-    /////////////////
-    const [availableLayers, setAvailableLayers] = useState<SimpleLayer[]>([]);
-    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
-    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [leftLayers, setLeftLayers] = useState<Layer[]>();
-    const [rightLayers, setRightLayers] = useState<Layer[]>();
-    const [sliderValue, setSliderValue] = useState<number>(50);
-    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
-    const [isLayerSwipeActive, setIsLayerSwipeActive] = useState<boolean>(false); //new render layerswipe
-
-    const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
-    function toggleMeasurement() {
-        setMeasurementIsActive(!measurementIsActive);
-    }
-
     const overviewMapLayer = useMemo(
         () =>
             new TileLayer({
@@ -76,59 +60,93 @@ export function MapApp() {
         []
     );
 
+    const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
+    function toggleMeasurement() {
+        setMeasurementIsActive(!measurementIsActive);
+    }
+
     //////////////////
     /// LayerSwipe ///
     /////////////////
+    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
+    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
+    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
 
     useEffect(() => {
         if (!mapModel.map) return;
-
-        //get all layers from the mapmodel
-        const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-        setAvailableLayers(layers);
-
-        //set only visible layers in the dropdowns for left and right layer
+    
+        const map = mapModel.map.olMap;
+        const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
+    
         const updateVisibleLayers = () => {
-            const visibleLayers = layers.filter((layer) => layer.olLayer?.getVisible?.() === true);
+            const visibleLayers = allLayers.filter(
+                (layer) => layer.olLayer?.getVisible?.() === true
+            );
             setVisibleAvailableLayers(visibleLayers);
         };
-
-        updateVisibleLayers(); //filter
-
-        const eventKeys = layers
+    
+        updateVisibleLayers();
+    
+        const eventKeys: EventsKey[] = allLayers
             .map((layer) => {
                 const olLayer = layer.olLayer;
                 if (!olLayer || typeof olLayer.on !== "function") return null;
-                return olLayer.on("change:visible", updateVisibleLayers);
+                return olLayer.on("change:visible", () => {
+                    updateVisibleLayers();
+                    handleSwipeUpdate();
+                });
             })
             .filter((k): k is EventsKey => !!k);
-
-        //set selected layers & set back to initial state if "select left layer" & "select right layer" in dropdowns
-        if (selectedLeftLayer && selectedRightLayer) {
-            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-
-            if (leftLayer && rightLayer) {
-                setLeftLayers([leftLayer]);
-                setRightLayers([rightLayer]);
-                setIsLayerSwipeActive(true); //activate layerswipe
-                leftLayer.setVisible(true);
-                rightLayer.setVisible(true);
-            } else {
-                setLeftLayers([]);
-                setRightLayers([]);
-                setIsLayerSwipeActive(false); //deactivate if layers not selected
+    
+        let swipe: Swipe | null = null;
+    
+        const removeSwipe = () => {
+            if (swipe) {
+                map.removeControl(swipe);
+                swipe = null;
             }
-        } else {
-            setLeftLayers([]);
-            setRightLayers([]);
-            setIsLayerSwipeActive(false);
-        }
-
+        };
+    
+        const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
+            removeSwipe();
+            swipe = new Swipe({
+                layers: [leftLayer],
+                rightLayers: [rightLayer],
+                position: 0.5,
+                orientation: "vertical",
+                className: "ol-swipe",
+            });
+            map.addControl(swipe);
+        };
+    
+        const handleSwipeUpdate = () => {
+            if (!selectedLeftLayer || !selectedRightLayer) {
+                removeSwipe();
+                return;
+            }
+    
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+    
+            if (!leftLayer || !rightLayer) {
+                removeSwipe();
+                return;
+            }
+    
+            if (leftLayer.getVisible() && rightLayer.getVisible()) {
+                addSwipe(leftLayer, rightLayer);
+            } else {
+                removeSwipe();
+            }
+        };
+    
+        handleSwipeUpdate();
+    
         return () => {
             eventKeys.forEach(unByKey);
+            removeSwipe();
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
 
@@ -443,7 +461,7 @@ export function MapApp() {
                     </MapContainer>
                     {/*END MAP_ID1*/}
 
-                    {/* add layerswipe slider below map container  */}
+                    {/* add layerswipe slider below map container 
                     {isLayerSwipeActive && mapModel.map && leftLayers && rightLayers && (
                         <Box
                             position="absolute"
@@ -472,7 +490,7 @@ export function MapApp() {
                                 />
                             )}
                         </Box>
-                    )}
+                    )} */}
                 </Flex>
                 <Flex
                     role="region"
