@@ -77,7 +77,6 @@ export class LayerHandlerImpl implements LayerHandler {
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                // source: this.updateSource(),
                 style: {
                     color: this.createColorGradiant([0, 100])
                 },
@@ -101,35 +100,30 @@ export class LayerHandlerImpl implements LayerHandler {
 
     setYear(newYear: number): void {
         this.#selectedYear.value = newYear;
-        // this.layer?.setSource(this.updateSource());
         this.updateSource();
         this.updateStyle();
     }
 
     setMonth(newMonth: number): void {
         this.#selectedMonth.value = newMonth;
-        // this.layer?.setSource(this.updateSource());
         this.updateSource();
         this.updateStyle();
     }
 
     setScenario(newScenario: string): void {
         this.#selectedScenario.value = newScenario;
-        // this.layer?.setSource(this.updateSource());
         this.updateSource();
         this.updateStyle();
     }
 
     setVariable(newVariable: string): void {
         this.#selectedVariable.value = newVariable;
-        // this.layer?.setSource(this.updateSource());
         this.updateSource();
         this.updateStyle();
         this.changeTitleOfLayer(this.#selectedVariable.value);
     }
     setModel(newModel: string): void {
         this.#selectedModel.value = newModel;
-        // this.layer?.setSource(this.updateSource());
         this.updateSource();
         this.updateStyle();
     }
@@ -161,13 +155,9 @@ export class LayerHandlerImpl implements LayerHandler {
                 model?.layers.getLayerById("isimip")?.setDescription("No map data available");
                 model?.layers.getLayerById("isimip")?.setVisible(false);
                 model?.layers.getLayerById("isimip")?.setTitle("No map data available");
-                // return null;
             });
         } else {
             this.changeTitleOfLayer(this.#selectedVariable.value);
-            this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-                model?.layers.getLayerById("isimip")?.setVisible(true);
-            });
             const newSource = new GeoTIFF({
                 projection: "EPSG:4326",
                 normalize: false,
@@ -196,7 +186,6 @@ export class LayerHandlerImpl implements LayerHandler {
                 });
             })
             .catch((error) => console.error("Error fetching max value:", error));
-
     }
     private createColorGradiant(range: number[]) {
         const tempColors = {

@@ -542,6 +542,9 @@ importers:
       ol:
         specifier: 'catalog:'
         version: 10.5.0
+      ol-ext:
+        specifier: ^4.0.33
+        version: 4.0.33(ol@10.5.0)
       react:
         specifier: 'catalog:'
         version: 19.1.0
@@ -3435,6 +3438,11 @@ packages:
   object.values@1.2.1:
     resolution: {integrity: sha512-gXah6aZrcUxjWg2zR2MwouP2eHlCBzdV4pygudehaKXSGW4v2AsRQUK+lwwXhii6KFZcunEnmSUoYp5CXibxtA==}
     engines: {node: '>= 0.4'}
+
+  ol-ext@4.0.33:
+    resolution: {integrity: sha512-aCbgYe4tScqBMMGnheK2eM9ArjHE1u5g2LzfHKVht/Ko1ylvFNFDkzEHSwPWEVSTrrgiDqy/vtDnrqLJ+OPozw==}
+    peerDependencies:
+      ol: '>= 5.3.0'
 
   ol@10.5.0:
     resolution: {integrity: sha512-nHFx8gkGmvYImsa7iKkwUnZidd5gn1XbMZd9GNOorvm9orjW9gQvT3Naw/MjIasVJ3cB9EJUdCGR2EFAulMHsQ==}
@@ -7509,6 +7517,10 @@ snapshots:
       call-bound: 1.0.4
       define-properties: 1.2.1
       es-object-atoms: 1.1.1
+
+  ol-ext@4.0.33(ol@10.5.0):
+    dependencies:
+      ol: 10.5.0
 
   ol@10.5.0:
     dependencies:

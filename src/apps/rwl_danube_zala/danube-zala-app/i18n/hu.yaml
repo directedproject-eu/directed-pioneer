@@ -117,6 +117,7 @@ messages:
         water_damage: "hun:Water Damage"
         storm_damage: "hun:Storm Damage"
   charts:
+    button_title: "hun:Crop chart"
     title_chart1: "hun:Crops in Zala region for "
   welcome_window:
     header: "hun:Welcome to the Zala app of the DIRECTED Data Fabric!"

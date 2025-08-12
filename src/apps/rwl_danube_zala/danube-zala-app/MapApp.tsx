@@ -99,11 +99,7 @@ export function MapApp() {
         }),
         [prepSrvc]
     );
-    const { 
-        isOpen: isOpenChart, 
-        onClose: onCloseChart,
-        onOpen: onOpenChart
-    } = useDisclosure();
+    const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
     function createPastEventLayer(
@@ -186,8 +182,7 @@ export function MapApp() {
     return (
         <>
             <Flex height="100%" direction="column" overflow="hidden">
-                <Navbar authService={authService}>
-                </Navbar>
+                <Navbar authService={authService}></Navbar>
                 <Container p={5}></Container>
                 <Notifier position="bottom" />
                 <TitledSection
@@ -205,10 +200,18 @@ export function MapApp() {
                     }
                 >
                     <Flex flex="1" direction="column" position="relative">
-                        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={"5xl"} isCentered={true}>
+                        <Modal
+                            closeOnOverlayClick={false}
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            size={"5xl"}
+                            isCentered={true}
+                        >
                             <ModalOverlay />
                             <ModalContent>
-                                <ModalHeader>{intl.formatMessage({ id: "welcome_window.header" })}</ModalHeader>
+                                <ModalHeader>
+                                    {intl.formatMessage({ id: "welcome_window.header" })}
+                                </ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody pb={6}>
                                     <Text as="b">
@@ -242,7 +245,7 @@ export function MapApp() {
                                 </MapAnchor>
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                     <IsimipSelector />
-                                    
+
                                     {authState.kind === "authenticated" && (
                                         <ExpandableBox
                                             title={intl.formatMessage({
@@ -333,14 +336,14 @@ export function MapApp() {
                                         direction="column"
                                         gap={1}
                                         padding={1}
-                                    >   
-                                        {authState.kind === "authenticated" && (
-                                            <ToolButton
-                                                label={intl.formatMessage({ id: "measurementTitle" })}
-                                                icon={<PiChartLineDownLight/>}
-                                                onClick={onOpenChart}
-                                            />
-                                        )}
+                                    >
+                                        <ToolButton
+                                            label={intl.formatMessage({
+                                                id: "charts.button_title"
+                                            })}
+                                            icon={<PiChartLineDownLight />}
+                                            onClick={onOpenChart}
+                                        />
                                         <ToolButton
                                             label={intl.formatMessage({ id: "measurementTitle" })}
                                             icon={<PiRulerLight />}

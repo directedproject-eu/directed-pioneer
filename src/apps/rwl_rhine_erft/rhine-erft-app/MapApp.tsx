@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import {
     Box,
+    Button,
     Flex,
     FormControl,
     FormLabel,
@@ -42,9 +43,10 @@ import { unByKey } from "ol/Observable";
 import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
 import Swipe from "ol-ext/control/Swipe";
+import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 
 export function MapApp() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -65,19 +67,19 @@ export function MapApp() {
 
     useEffect(() => {
         if (!mapModel.map) return;
-    
+
         const map = mapModel.map.olMap;
         const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-    
+
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
                 (layer) => layer.olLayer?.getVisible?.() === true
             );
             setVisibleAvailableLayers(visibleLayers);
         };
-    
+
         updateVisibleLayers();
-    
+
         const eventKeys: EventsKey[] = allLayers
             .map((layer) => {
                 const olLayer = layer.olLayer;
@@ -88,16 +90,16 @@ export function MapApp() {
                 });
             })
             .filter((k): k is EventsKey => !!k);
-    
+
         let swipe: Swipe | null = null;
-    
+
         const removeSwipe = () => {
             if (swipe) {
                 map.removeControl(swipe);
                 swipe = null;
             }
         };
-    
+
         const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
             removeSwipe();
             swipe = new Swipe({
@@ -105,36 +107,36 @@ export function MapApp() {
                 rightLayers: [rightLayer],
                 position: 0.5,
                 orientation: "vertical",
-                className: "ol-swipe",
+                className: "ol-swipe"
             });
             map.addControl(swipe);
         };
-    
+
         const handleSwipeUpdate = () => {
             if (!selectedLeftLayer || !selectedRightLayer) {
                 removeSwipe();
                 return;
             }
-    
+
             const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
                 ?.olLayer as Layer;
             const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
                 ?.olLayer as Layer;
-    
+
             if (!leftLayer || !rightLayer) {
                 removeSwipe();
                 return;
             }
-    
+
             if (leftLayer.getVisible() && rightLayer.getVisible()) {
                 addSwipe(leftLayer, rightLayer);
             } else {
                 removeSwipe();
             }
         };
-    
+
         handleSwipeUpdate();
-    
+
         return () => {
             eventKeys.forEach(unByKey);
             removeSwipe();
@@ -318,9 +320,9 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* <ToolButton
-                                    label={"Crop chart"}
+                                    label={intl.formatMessage({ id: "charts.button_title" })}
                                     icon={<PiChartLineUpLight/>}
-                                    onClick={onOpen}
+                                    onClick={onOpenChart}
                                 /> */}
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
@@ -348,18 +350,19 @@ export function MapApp() {
                     <ScaleViewer mapId={MAP_ID} />
                 </Flex>
             </TitledSection>
-            {/* <Modal isOpen={isOpen} onClose={onClose} size={"full"}>
+
+            {/* <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Zala Chart</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <ChartComponentZala></ChartComponentZala>
+                        <ChartComponentRhineErft></ChartComponentRhineErft>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
+                        <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
+                            Close
                         </Button>
                     </ModalFooter>
                 </ModalContent>
