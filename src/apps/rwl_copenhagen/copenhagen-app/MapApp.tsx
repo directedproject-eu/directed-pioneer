@@ -40,9 +40,9 @@ import { Forecasts } from "./controls/Forecasts";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
-// import { SaferPlacesFloodMap } from "saferplaces";
 import { ModelClient } from "modelclient";
-import { RankDistributionViewer } from "mcagraph";
+import { SaferPlacesClient } from "saferplaces";
+// import { MCDM } from "mcdm";
 
 export function MapApp() {
     const intl = useIntl();
@@ -217,10 +217,9 @@ export function MapApp() {
                                 </ExpandableBox>
                             </Flex> */}
                             {/*add Table of Contents (Toc) and legend */}
-                            <ExpandableBox title="MCDM Analysis">
-                                {/* <>Example Analysis Text</> */}
+                            {/* <ExpandableBox title="MCDM Analysis">
                                 <RankDistributionViewer />
-                            </ExpandableBox>
+                            </ExpandableBox> */}
                             <Box
                                 display="flex"
                                 flexDirection="column"
@@ -452,7 +451,9 @@ export function MapApp() {
                             >
                                 {/* SaferPlaces flood model dialog */}
                                 {/* <SaferPlacesFloodMap /> */}
+                                {/* <MCDM /> */}
                                 <ModelClient />
+                                <SaferPlacesClient/>
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
