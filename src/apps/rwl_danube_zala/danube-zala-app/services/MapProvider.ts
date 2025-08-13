@@ -11,13 +11,10 @@ import { ServiceOptions } from "@open-pioneer/runtime";
 import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
 
-<<<<<<< HEAD
-=======
 interface Config {
     pygeoapiBaseUrl: string;
 }
 
->>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
 export const MAP_ID = "main";
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
