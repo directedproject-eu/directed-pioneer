@@ -9,7 +9,8 @@ export default defineBuildConfig({
         MainMapProvider: {
             provides: ["map.MapConfigProvider"],
             references: {
-                vectorSourceFactory: "ogc-features.VectorSourceFactory"
+                vectorSourceFactory: "ogc-features.VectorSourceFactory",
+                authService: "authentication.AuthService"
             }
         },
         LayerHandlerImpl: {
@@ -36,7 +37,12 @@ export default defineBuildConfig({
             "authentication.AuthService",
             "http.HttpService",
             "app.LayerHandler",
-            "app.StationSelector"
+            "app.StationSelector",
+            "ogc-features.VectorSourceFactory",
+            "ogc-features.SearchSourceFactory"
         ]
+    },
+    properties: {
+        userConfig: {}
     }
 });

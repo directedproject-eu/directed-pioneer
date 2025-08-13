@@ -9,7 +9,7 @@ Then execute the following commands to get started:
 ```shell
 git clone https://github.com/directedproject-eu/directed-pioneer # Clone this repository
 cd directed-pioneer
-corepack cache clean && corepack use pnpm@9.x                    # Install pnpm 9^
+corepack cache clean && corepack use pnpm@10.x                   # Install pnpm 10^
 pnpm install                                                     # Install dependencies
 pnpm run dev                                                     # Launch development server
 ```

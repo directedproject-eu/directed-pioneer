@@ -40,6 +40,7 @@ import { Forecasts } from "./controls/Forecasts";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
+// import { SaferPlacesFloodMap } from "saferplaces";
 import { ModelClient } from "modelclient";
 import { SaferPlacesClient } from "saferplaces";
 // import { MCDM } from "mcdm";
@@ -47,7 +48,7 @@ import { SaferPlacesClient } from "saferplaces";
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel("main");
+    const mapModel = useMapModel(MAP_ID1);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
@@ -165,7 +166,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            RWL The Capital Region of Denmark
+                            {intl.formatMessage({ id: "appTitle" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -217,9 +218,10 @@ export function MapApp() {
                                 </ExpandableBox>
                             </Flex> */}
                             {/*add Table of Contents (Toc) and legend */}
-                            {/* <ExpandableBox title="MCDM Analysis">
+                            <ExpandableBox title="MCDM Analysis">
+                                {/* <>Example Analysis Text</> */}
                                 <RankDistributionViewer />
-                            </ExpandableBox> */}
+                            </ExpandableBox>
                             <Box
                                 display="flex"
                                 flexDirection="column"
