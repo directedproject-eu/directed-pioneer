@@ -22,12 +22,12 @@
         "@open-pioneer/toc": "catalog:",
         "@open-pioneer/legend": "catalog:",
         "ol": "catalog:",
+        "ol-ext": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
         "navbar": "workspace:^",
-        "featureinfo": "workspace:^",
-        "layerswipe": "workspace:^"
+        "featureinfo": "workspace:^"
     }
 }

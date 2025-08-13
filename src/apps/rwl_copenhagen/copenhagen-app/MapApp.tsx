@@ -31,7 +31,6 @@ import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Legend } from "@open-pioneer/legend";
 import { Navbar } from "navbar";
-import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
 import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
@@ -461,36 +460,6 @@ export function MapApp() {
                     </MapContainer>
                     {/*END MAP_ID1*/}
 
-                    {/* add layerswipe slider below map container 
-                    {isLayerSwipeActive && mapModel.map && leftLayers && rightLayers && (
-                        <Box
-                            position="absolute"
-                            bottom={0}
-                            left={0}
-                            right={0}
-                            padding={4}
-                            backgroundColor="white"
-                            borderTop={1}
-                            display="flex"
-                            flexDirection="row"
-                            justifyContent="center"
-                            alignItems="center"
-                        >
-                            {leftLayers && rightLayers && mapModel.map && (
-                                <LayerSwipe
-                                    map={mapModel.map}
-                                    sliderValue={sliderValue}
-                                    onSliderValueChanged={(newValue) => {
-                                        setSliderValue(newValue);
-                                    }}
-                                    // onSliderValueChanged={onSliderValueChanged}
-                                    leftLayers={leftLayers}
-                                    rightLayers={rightLayers}
-                                    style={{ width: "100%", height: "100%" }}
-                                />
-                            )}
-                        </Box>
-                    )} */}
                 </Flex>
                 <Flex
                     role="region"

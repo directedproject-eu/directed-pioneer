@@ -32,7 +32,6 @@ import { FeatureInfo } from "featureinfo";
 import { Navbar } from "navbar";
 import { MAP_ID } from "./services";
 import { TimeSlider } from "./controls/TimeSlider";
-
 import Swipe from "ol-ext/control/Swipe";
 
 export function MapApp() {
