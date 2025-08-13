@@ -217,11 +217,7 @@ export function MapApp() {
                                     <>Example Analysis Text</>
                                 </ExpandableBox>
                             </Flex> */}
-                            {/*add Table of Contents (Toc) and legend */}
-                            <ExpandableBox title="MCDM Analysis">
-                                {/* <>Example Analysis Text</> */}
-                                <RankDistributionViewer />
-                            </ExpandableBox>
+                           
                             <Box
                                 display="flex"
                                 flexDirection="column"
