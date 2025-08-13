@@ -8,7 +8,15 @@ import {
     Flex,
     FormControl,
     FormLabel,
-    Text
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Text,
+    useDisclosure
 } from "@open-pioneer/chakra-integration";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
@@ -25,15 +33,18 @@ import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
 import { useEffect, useId, useMemo, useState } from "react";
+<<<<<<< HEAD
 import TileLayer from "ol/layer/Tile";
+=======
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiRulerLight } from "react-icons/pi";
+import { PiRulerLight, PiChartLineDownLight } from "react-icons/pi";
 import { useService } from "open-pioneer:react-hooks";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { LayerSelector } from "./controls/LayerSelector";
-import Legend from "./components/Legend";
+import Legend from "./components/legends/Legend";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
@@ -47,8 +58,11 @@ import { useMapModel } from "@open-pioneer/map";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { SimpleLayer } from "@open-pioneer/map";
+import TileLayer from "ol/layer/Tile";
+import { LayerHandler } from "./services/LayerHandler";
 
 export function MapApp() {
+    // const { isOpen, onOpen, onClose } = useDisclosure();
     const mapModel = useMapModel(MAP_ID);
     const vectorSourceFactory = useService<OgcFeaturesVectorSourceFactory>(
         "ogc-features.VectorSourceFactory"
@@ -89,6 +103,8 @@ export function MapApp() {
         }),
         [prepSrvc]
     );
+    const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
     function createPastEventLayer(
         collectionId: string,
@@ -99,7 +115,7 @@ export function MapApp() {
     ) {
         const pastEventLayer = new SimpleLayer({
             id: `${id}`,
-            title: `${title}`,
+            title: intl.formatMessage({ id: `map.legend.event_variables.${title}` }),
             description: `${description}`,
             visible: true,
             olLayer: new VectorLayer({
@@ -133,7 +149,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/damage/storm",
                 "storm_damage",
-                "Storm damage",
+                "storm_damage",
                 "Storm damage",
                 "black"
             )
@@ -142,7 +158,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/damage/water",
                 "water_damage",
-                "Water damage",
+                "water_damage",
                 "Water damage",
                 "blue"
             )
@@ -151,7 +167,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/fires/forest_vegetation",
                 "forest_vegetation_fires",
-                "Forest and vegetation fires",
+                "forest_and_vegetation_fire",
                 "Forest and vegetation fires",
                 "red"
             )
@@ -160,7 +176,7 @@ export function MapApp() {
             createPastEventLayer(
                 "zala/events/timber_cutting",
                 "timber_cutting",
-                "Tree clearing",
+                "tree_clearing",
                 "Tree clearing",
                 "green"
             )
@@ -170,6 +186,7 @@ export function MapApp() {
     return (
         <>
             <Flex height="100%" direction="column" overflow="hidden">
+<<<<<<< HEAD
                 <Navbar>
                     {authState.kind === "authenticated" && (
                         <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
@@ -187,6 +204,9 @@ export function MapApp() {
                         </Flex>
                     )}
                 </Navbar>
+=======
+                <Navbar authService={authService}></Navbar>
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
                 <Container p={5}></Container>
                 <Notifier position="bottom" />
                 <TitledSection
@@ -198,12 +218,35 @@ export function MapApp() {
                             py={1}
                         >
                             <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                                RWL The Danube Region
+                                {intl.formatMessage({ id: "heading" })}
                             </SectionHeading>
                         </Box>
                     }
                 >
                     <Flex flex="1" direction="column" position="relative">
+                        <Modal
+                            closeOnOverlayClick={false}
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            size={"5xl"}
+                            isCentered={true}
+                        >
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader>
+                                    {intl.formatMessage({ id: "welcome_window.header" })}
+                                </ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody pb={6}>
+                                    <Text as="b">
+                                        {intl.formatMessage({ id: "welcome_window.body" })}
+                                    </Text>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button onClick={onClose}>Close</Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
                         {authState.kind !== "pending" && (
                             <MapContainer
                                 mapId={MAP_ID}
@@ -227,9 +270,16 @@ export function MapApp() {
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                     <IsimipSelector />
 
-                                    <ExpandableBox title="Event Information" marginBottom="10px">
-                                        <StationInformation data={stationData} />
-                                    </ExpandableBox>
+                                    {authState.kind === "authenticated" && (
+                                        <ExpandableBox
+                                            title={intl.formatMessage({
+                                                id: "map.station_information.heading"
+                                            })}
+                                            marginBottom="10px"
+                                        >
+                                            <StationInformation data={stationData} />
+                                        </ExpandableBox>
+                                    )}
                                     {measurementIsActive && (
                                         <Box
                                             backgroundColor="white"
@@ -273,8 +323,11 @@ export function MapApp() {
                                         <Toc
                                             mapId={MAP_ID}
                                             showTools={true}
+                                            collapsibleGroups={true}
+                                            initiallyCollapsed={true}
                                             showBasemapSwitcher={false}
                                         />
+<<<<<<< HEAD
                                     </Box>
                                 </MapAnchor>
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
@@ -291,6 +344,8 @@ export function MapApp() {
                                     >
                                         <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
                                         <Divider mt={4} />
+=======
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
                                         <FormControl>
                                             <FormLabel mt={2}>
                                                 <Text as="b">
@@ -299,13 +354,16 @@ export function MapApp() {
                                             </FormLabel>
                                             <BasemapSwitcher
                                                 mapId={MAP_ID}
-                                                allowSelectingEmptyBasemap
+                                                allowSelectingEmptyBasemap={true}
                                             />
                                         </FormControl>
                                     </Box>
+                                </MapAnchor>
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                     <Legend
                                         range={legendMetadata.range}
                                         variable={legendMetadata.variable}
+                                        isAuthenticated={authState.kind === "authenticated"}
                                     ></Legend>
                                 </MapAnchor>
                                 <MapAnchor
@@ -322,6 +380,13 @@ export function MapApp() {
                                         gap={1}
                                         padding={1}
                                     >
+                                        <ToolButton
+                                            label={intl.formatMessage({
+                                                id: "charts.button_title"
+                                            })}
+                                            icon={<PiChartLineDownLight />}
+                                            onClick={onOpenChart}
+                                        />
                                         <ToolButton
                                             label={intl.formatMessage({ id: "measurementTitle" })}
                                             icon={<PiRulerLight />}
@@ -350,13 +415,33 @@ export function MapApp() {
                     </Flex>
                 </TitledSection>
             </Flex>
+
             <ResizeBox title={"Zala Chart"}>
                 <ChartComponentZala></ChartComponentZala>
             </ResizeBox>
 
+<<<<<<< HEAD
             <ResizeBox title={"Rhine - Erft Chart"}>
                 <ChartComponentRhineErft></ChartComponentRhineErft>
             </ResizeBox>
+=======
+            <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Zala Chart</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <ChartComponentZala></ChartComponentZala>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
+                            Close
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
         </>
     );
 }

@@ -4,35 +4,45 @@ import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pio
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
+import { BuildingDamageLegend } from "./Components/Legends/BuildingDamageLegend";
 import { FluvialFloodLegend } from "./Components/Legends/FluvialFloodLegend";
 import { LidarLegend } from "./Components/Legends/LidarLegend ";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
+export { GeosphereServiceImpl } from "./services/GeosphereService";
 
+<<<<<<< HEAD
 const wmsLayersHistorical = [
+=======
+
+const wmsLayersHistoricalFlooding = [
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
     {
         "name": "WD_RAIN172645",
-        "title": "WD_RAIN172645",
+        "title": "Pluvial Flooding (WD_RAIN172645)",
         "description": "Water depth caused by pluvial flooding"
     },
     {
         "name": "WD_RAIN110828",
-        "title": "WD_RAIN110828",
+        "title": "Pluvial Flooding (WD_RAIN110828)",
         "description": "Water depth caused by pluvial flooding"
     },
     {
         "name": "WD_RAIN095830",
-        "title": "WD_RAIN095830",
+        "title": "Pluvial Flooding (WD_RAIN095830)",
         "description": "Water depth caused by pluvial flooding"
-    },
+    }
+];
+
+const wmsLayersHistoricalDamage = [
     {
         "name": "DMG_RIVER111745",
-        "title": "DMG_RIVER111745",
-        "description": "Damage caused by fluvial flooding"
+        "title": "Damage By Fluvial Flooding (DMG_RIVER111745)",
+        "description": "Damage caused by fluvial flooding. This layer is only meant for demonstration purposes!"
     },
     {
         "name": "DMG_RAIN110828",
-        "title": "DMG_RAIN110828",
-        "description": "Damage caused by pluvial flooding"
+        "title": "Damage By Pluvial Flooding (DMG_RAIN110828)",
+        "description": "Damage caused by pluvial flooding. This layer is only meant for demonstration purposes!"
     }
 ];
 
@@ -301,6 +311,7 @@ export class MainMapProvider implements MapConfigProvider {
                                             Component: LidarLegend
                                         }
                                     }
+<<<<<<< HEAD
                                 }),
                                 new SimpleLayer({
                                     ...this.createWmsLayer(
@@ -323,6 +334,12 @@ export class MainMapProvider implements MapConfigProvider {
                                         "OSM Buildings"
                                     )
                                 })
+=======
+                                ),
+                                new SimpleLayer({...this.createWmsLayer("Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021", "Soil Clay Content", "Soil clay content")}),
+                                new SimpleLayer({...this.createWmsLayer("Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021", "Soil Sand Content", "Soil sand content")}),
+                                new SimpleLayer({...this.createWmsLayer("osm_buildings_162014", "OSM Buildings", "OSM Buildings")})
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
                             ]
                         })
                     ]
@@ -333,6 +350,7 @@ export class MainMapProvider implements MapConfigProvider {
                     visible: false,
                     id: "fluvial_flooding",
                     layers: [
+<<<<<<< HEAD
                         new SimpleLayer({
                             ...this.createWmsLayer(
                                 "euh_danube_bigrivers_10",
@@ -340,6 +358,13 @@ export class MainMapProvider implements MapConfigProvider {
                                 "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
                             )
                         })
+=======
+                        new SimpleLayer({...this.createWmsLayer(
+                            "euh_danube_bigrivers_10",
+                            "10-Year Flood Depth",
+                            "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
+                        )})
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
                     ],
                     attributes: {
                         "legend": {
@@ -353,6 +378,7 @@ export class MainMapProvider implements MapConfigProvider {
                     visible: false,
                     id: "historical",
                     layers: [
+<<<<<<< HEAD
                         ...wmsLayersHistorical.map(
                             ({ name, title, description }) =>
                                 new SimpleLayer({
@@ -368,6 +394,41 @@ export class MainMapProvider implements MapConfigProvider {
                         "Large reservoirs and lakes in the Danube region"
                     )
                 }),
+=======
+                        new GroupLayer({
+                            title: "Flooding",
+                            visible: false,
+                            id: "historical_flooding",
+                            layers: [
+                                ...wmsLayersHistoricalFlooding.map(({ name, title, description }) =>
+                                    new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                )
+                            ],
+                            attributes: {
+                                "legend": {
+                                    Component: WaterLevelLegend
+                                }
+                            }
+                        }),
+                        new GroupLayer({
+                            title: "Damage",
+                            visible: false,
+                            id: "historical_damage",
+                            layers: [
+                                ...wmsLayersHistoricalDamage.map(({ name, title, description }) =>
+                                    new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                )
+                            ],
+                            attributes: {
+                                "legend": {
+                                    Component: BuildingDamageLegend
+                                }
+                            }
+                        })
+                    ]
+                }),
+                new SimpleLayer({...this.createWmsLayer("euh_danube_wsurf_gt1km2_c", "Reservoirs And Lakes", "Large reservoirs and lakes in the Danube region")}),
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
                 // OSM basemap
                 new SimpleLayer({
                     title: "OpenStreetMap",

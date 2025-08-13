@@ -9,9 +9,9 @@ import EnsembleCrops from "./EnsembleCrops";
 
 const ChartComponentRhineErft = () => {
     const files = [
-        // "/crop_yield_scenarios_rwl3and4/cysz_rwl4_CMIP5_RCP8dot5.csv",
-        "/crop_yield_scenarios_rwl3and4/cysz_rwl4_CMIP6_SSP370.csv",
-        "/crop_yield_scenarios_rwl3and4/cysz_rwl4_CMIP6_SSP585.csv"
+        // "/crop_yield_scenarios_rwl3+4/cysz_rwl4_CMIP5:RCP8.5.csv",
+        "/crop_yield_scenarios_rwl3+4/cysz_rwl4_CMIP6:SSP370.csv",
+        "/crop_yield_scenarios_rwl3+4/cysz_rwl4_CMIP6:SSP585.csv"
     ];
     return (
         <>

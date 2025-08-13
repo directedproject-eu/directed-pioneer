@@ -4,7 +4,7 @@ import { defineBuildConfig } from "@open-pioneer/build-support";
 
 export default defineBuildConfig({
     styles: "./app.css",
-    i18n: ["en", "de"],
+    i18n: ["en", "de", "hu"],
     services: {
         MainMapProvider: {
             provides: ["map.MapConfigProvider"],
@@ -29,6 +29,12 @@ export default defineBuildConfig({
             provides: ["http.Interceptor"],
             references: {
                 authService: "authentication.AuthService"
+            },
+        },
+        LayerHighlighterImpl: {
+            provides: ["app.LayerHighlighter"],
+            references: {
+                mapRegistry: "map.MapRegistry"
             }
         }
     },
@@ -38,8 +44,12 @@ export default defineBuildConfig({
             "http.HttpService",
             "app.LayerHandler",
             "app.StationSelector",
+            "app.LayerHighlighter",
             "ogc-features.VectorSourceFactory",
             "ogc-features.SearchSourceFactory"
         ]
+    },
+    properties: {
+        userConfig: {}
     }
 });
