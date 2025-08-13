@@ -22,7 +22,7 @@
         "@open-pioneer/scale-viewer": "catalog:",
         "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
-        "chroma-js": "^3.1.2",
+        "chroma-js": "catalog:",
         "ol": "catalog:",
         "ol-ext": "catalog:",
         "react": "catalog:",
