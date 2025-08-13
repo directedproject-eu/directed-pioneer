@@ -33,6 +33,10 @@ import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
 import { useEffect, useId, useMemo, useState } from "react";
+<<<<<<< HEAD
+import TileLayer from "ol/layer/Tile";
+=======
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
 import { PiRulerLight, PiChartLineDownLight } from "react-icons/pi";
@@ -182,7 +186,27 @@ export function MapApp() {
     return (
         <>
             <Flex height="100%" direction="column" overflow="hidden">
+<<<<<<< HEAD
+                <Navbar>
+                    {authState.kind === "authenticated" && (
+                        <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
+                            <Text>
+                                Logged in as: {authState.sessionInfo?.userName ?? "unknown"}
+                            </Text>
+                            <Button onClick={() => authService.logout()}>Logout</Button>
+                        </Flex>
+                    )}
+                    {authState.kind !== "authenticated" && (
+                        <Flex flexDirection="row" align="center" ml="auto" gap="2em">
+                            <Button onClick={() => authService.getLoginBehavior().login()}>
+                                Login
+                            </Button>
+                        </Flex>
+                    )}
+                </Navbar>
+=======
                 <Navbar authService={authService}></Navbar>
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
                 <Container p={5}></Container>
                 <Notifier position="bottom" />
                 <TitledSection
@@ -303,6 +327,25 @@ export function MapApp() {
                                             initiallyCollapsed={true}
                                             showBasemapSwitcher={false}
                                         />
+<<<<<<< HEAD
+                                    </Box>
+                                </MapAnchor>
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                    <Box
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        role="top-right"
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.topRight"
+                                        })}
+                                    >
+                                        <OverviewMap mapId={MAP_ID} olLayer={overviewMapLayer} />
+                                        <Divider mt={4} />
+=======
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
                                         <FormControl>
                                             <FormLabel mt={2}>
                                                 <Text as="b">
@@ -377,6 +420,11 @@ export function MapApp() {
                 <ChartComponentZala></ChartComponentZala>
             </ResizeBox>
 
+<<<<<<< HEAD
+            <ResizeBox title={"Rhine - Erft Chart"}>
+                <ChartComponentRhineErft></ChartComponentRhineErft>
+            </ResizeBox>
+=======
             <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
@@ -393,6 +441,7 @@ export function MapApp() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+>>>>>>> ce53e0563ffd90cdb54c78d52228afb3144c2d06
         </>
     );
 }

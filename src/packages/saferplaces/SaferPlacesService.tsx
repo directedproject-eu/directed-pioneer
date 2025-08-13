@@ -21,7 +21,6 @@ import {
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater } from "react-icons/fa";
 
-
 //interface for the job status response
 interface JobStatusResponse {
     jobID?: string; //jobID option, might not be present for synchronous responses ?
@@ -76,7 +75,7 @@ type ProcessExecutionPayload = SaferRainPayload | SaferCoastPayload;
 export function SaferPlacesFloodMap() {
     const [selectedLocation, setSelectedLocation] = useState<string>("");
     const [rainIntensity, setRainIntensity] = useState<string>("");
-    const [extremeSeaLevel, setExtremeSeaLevel] = useState<number| null>(null);
+    const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null);
     // const [barrierFile, setBarrierFile] = useState<File | null>(null); //file object or null
     const [model, setModel] = useState<string>("");
     const [generationStatus, setGenerationStatus] = useState<string>("");
@@ -166,7 +165,7 @@ export function SaferPlacesFloodMap() {
                     setJobId(null);
                     setPollingIntervalId(null);
 
-                    //prioritize presigned_url 
+                    //prioritize presigned_url
                     if (jobStatus.presigned_url) {
                         setDownloadLink(jobStatus.presigned_url);
                     } else if (jobStatus.outputs && jobStatus.outputs.water_depth_file) {
@@ -247,7 +246,7 @@ export function SaferPlacesFloodMap() {
                     token: token
                 }
             };
-        } else if (model === "safer_coast")  {
+        } else if (model === "safer_coast") {
             if (extremeSeaLevel === null || extremeSeaLevel <= 0) {
                 setError("For the Safer Coast Model, ESL must be a positive number");
                 setGenerationStatus("Failed");
@@ -496,7 +495,9 @@ export function SaferPlacesFloodMap() {
                         {model === "safer_rain" && (
                             <>
                                 <FormControl>
-                                    <FormLabel padding={2} htmlFor="rain">Rain Intensity (mm) </FormLabel>
+                                    <FormLabel padding={2} htmlFor="rain">
+                                        Rain Intensity (mm){" "}
+                                    </FormLabel>
                                     <Input
                                         type="text"
                                         id="rain"
@@ -512,7 +513,9 @@ export function SaferPlacesFloodMap() {
                         {model === "safer_coast" && (
                             <>
                                 <FormControl>
-                                    <FormLabel padding={2} htmlFor="esl">Extreme Sea Level (m)</FormLabel>
+                                    <FormLabel padding={2} htmlFor="esl">
+                                        Extreme Sea Level (m)
+                                    </FormLabel>
                                     <Input
                                         type="number"
                                         id="esl"
