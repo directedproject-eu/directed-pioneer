@@ -42,6 +42,7 @@ import { TaxonomyInfo } from "taxonomy";
 import { SaferPlacesFloodMap } from "saferplaces";
 // import { ModelClient } from "modelclient";
 import Swipe from "ol-ext/control/Swipe";
+import { MCDM } from "mcdm"; 
 
 export function MapApp() {
     const intl = useIntl();
@@ -444,6 +445,7 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* SaferPlaces flood model dialog */}
+                                <MCDM/>
                                 <SaferPlacesFloodMap />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
