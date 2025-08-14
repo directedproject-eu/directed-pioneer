@@ -164,7 +164,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            {intl.formatMessage({ id: "appTitle" })}
+                            {intl.formatMessage({ id: "heading" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -259,24 +259,24 @@ export function MapApp() {
                                 maxHeight={100}
                                 overflow="auto"
                             >
-                                <Text fontWeight={600}> Description </Text>
+                                <Text fontWeight={600}> {intl.formatMessage({ id: "description.title" })} </Text>
                                 <Text>
-                                    This platform serves as a way to learn about
+                                    {intl.formatMessage({ id: "description.text1" })}
                                     <Spacer />
                                     <Button
                                         variant="link"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Disaster Risk")}
                                     >
-                                        disaster risk
+                                        {intl.formatMessage({ id: "description.keyword1" })}
                                     </Button>{" "}
-                                    in the lens of{" "}
+                                    {intl.formatMessage({ id: "description.text2"})}{" "}
                                     <Button
                                         variant="link"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Climate Change")}
                                     >
-                                        climate change
+                                        {intl.formatMessage({ id: "description.keyword2" })}
                                     </Button>
                                     .
                                 </Text>
@@ -289,31 +289,31 @@ export function MapApp() {
                                     size="sm"
                                     onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
                                 >
-                                    Zoom to Egedal
+                                    {intl.formatMessage({ id: "zoom_buttons.egedal" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToFrederikssund(mapModel.map!)}
                                 >
-                                    Zoom to Frederikssund
+                                    {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToHalsnaes(mapModel.map!)}
                                 >
-                                    Zoom to Halsnaes
+                                    {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToLejre(mapModel.map!)}
                                 >
-                                    Zoom to Lejre
+                                    {intl.formatMessage({ id: "zoom_buttons.lejre" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToRoskilde(mapModel.map!)}
                                 >
-                                    Zoom to Roskilde
+                                    {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
                                 </Button>
                             </VStack>
 
@@ -362,12 +362,11 @@ export function MapApp() {
                                                 alignItems="center"
                                             ></Flex>
                                             <Text fontWeight="bold" mt={4}>
-                                                Select Layers for Comparison
+                                                {intl.formatMessage({ id: "layer_swipe.title" })}
                                             </Text>
                                             <Spacer />
                                             <Text fontSize={16}>
-                                                ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison.
+                                                {intl.formatMessage({ id: "layer_swipe.description" })}
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
