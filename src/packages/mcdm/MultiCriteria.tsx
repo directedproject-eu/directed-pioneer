@@ -168,13 +168,13 @@ export function MCDM(props: RankDistributionViewerProps) {
     const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Mode for rank output option
 
     const [weights, setWeights] = useState<Weights>({
-        "measure net cost": 0.25,
-        "averted risk_aai": 0.5,
-        "approval": 0.8,
-        "feasability": 0.1,
-        "durability": 0.3,
-        "externalities": 0.4,
-        "implementation time": 0.15
+        "measure net cost": 0,
+        "averted risk_aai": 0,
+        "approval": 0,
+        "feasability": 0,
+        "durability": 0,
+        "externalities": 0,
+        "implementation time": 0
     }); //state var for weights
     
     const handleWeightChange = (criteria: keyof Weights, newValue: string) => {
