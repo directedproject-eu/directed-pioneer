@@ -4,7 +4,7 @@ import { defineBuildConfig } from "@open-pioneer/build-support";
 
 export default defineBuildConfig({
     styles: "./app.css",
-    i18n: ["en", "de"],
+    i18n: ["en", "de", "da"],
     ui: {
         references: ["app.LayerZoom", "app.ForecastService"]
     },

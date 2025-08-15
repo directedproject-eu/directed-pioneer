@@ -37,14 +37,14 @@ export function PrecipitationRateLegend(props: LegendItemComponentProps) {
         >
             <Text fontWeight="bold" fontSize={20}>
                 {" "}
-                Legend{" "}
+                {intl.formatMessage({ id: "legend.title" })}{" "}
             </Text>
             <Text fontWeight="bold" mb={2}>
                 {" "}
                 {props.layer.title}{" "}
             </Text>
             <Text fontWeight="bold" fontSize={15} mb={2}>
-                Units mm/s
+                {intl.formatMessage({ id: "legend.units" })} mm/s
             </Text>
             {colorMapping.map((item, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>

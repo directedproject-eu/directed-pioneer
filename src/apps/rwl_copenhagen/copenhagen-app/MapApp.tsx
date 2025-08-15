@@ -42,7 +42,7 @@ import { TaxonomyInfo } from "taxonomy";
 import { SaferPlacesFloodMap } from "saferplaces";
 // import { ModelClient } from "modelclient";
 import Swipe from "ol-ext/control/Swipe";
-import { MCDM } from "mcdm"; 
+import { MCDM } from "mcdm";
 
 export function MapApp() {
     const intl = useIntl();
@@ -74,19 +74,19 @@ export function MapApp() {
 
     useEffect(() => {
         if (!mapModel.map) return;
-    
+
         const map = mapModel.map.olMap;
         const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-    
+
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
                 (layer) => layer.olLayer?.getVisible?.() === true
             );
             setVisibleAvailableLayers(visibleLayers);
         };
-    
+
         updateVisibleLayers();
-    
+
         const eventKeys: EventsKey[] = allLayers
             .map((layer) => {
                 const olLayer = layer.olLayer;
@@ -97,16 +97,16 @@ export function MapApp() {
                 });
             })
             .filter((k): k is EventsKey => !!k);
-    
+
         let swipe: Swipe | null = null;
-    
+
         const removeSwipe = () => {
             if (swipe) {
                 map.removeControl(swipe);
                 swipe = null;
             }
         };
-    
+
         const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
             removeSwipe();
             swipe = new Swipe({
@@ -114,36 +114,36 @@ export function MapApp() {
                 rightLayers: [rightLayer],
                 position: 0.5,
                 orientation: "vertical",
-                className: "ol-swipe",
+                className: "ol-swipe"
             });
             map.addControl(swipe);
         };
-    
+
         const handleSwipeUpdate = () => {
             if (!selectedLeftLayer || !selectedRightLayer) {
                 removeSwipe();
                 return;
             }
-    
+
             const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
                 ?.olLayer as Layer;
             const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
                 ?.olLayer as Layer;
-    
+
             if (!leftLayer || !rightLayer) {
                 removeSwipe();
                 return;
             }
-    
+
             if (leftLayer.getVisible() && rightLayer.getVisible()) {
                 addSwipe(leftLayer, rightLayer);
             } else {
                 removeSwipe();
             }
         };
-    
+
         handleSwipeUpdate();
-    
+
         return () => {
             eventKeys.forEach(unByKey);
             removeSwipe();
@@ -164,7 +164,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            {intl.formatMessage({ id: "appTitle" })}
+                            {intl.formatMessage({ id: "heading" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -259,24 +259,27 @@ export function MapApp() {
                                 maxHeight={100}
                                 overflow="auto"
                             >
-                                <Text fontWeight={600}> Description </Text>
+                                <Text fontWeight={600}>
+                                    {" "}
+                                    {intl.formatMessage({ id: "description.title" })}{" "}
+                                </Text>
                                 <Text>
-                                    This platform serves as a way to learn about
+                                    {intl.formatMessage({ id: "description.text1" })}
                                     <Spacer />
                                     <Button
                                         variant="link"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Disaster Risk")}
                                     >
-                                        disaster risk
+                                        {intl.formatMessage({ id: "description.keyword1" })}
                                     </Button>{" "}
-                                    in the lens of{" "}
+                                    {intl.formatMessage({ id: "description.text2" })}{" "}
                                     <Button
                                         variant="link"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Climate Change")}
                                     >
-                                        climate change
+                                        {intl.formatMessage({ id: "description.keyword2" })}
                                     </Button>
                                     .
                                 </Text>
@@ -289,31 +292,31 @@ export function MapApp() {
                                     size="sm"
                                     onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
                                 >
-                                    Zoom to Egedal
+                                    {intl.formatMessage({ id: "zoom_buttons.egedal" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToFrederikssund(mapModel.map!)}
                                 >
-                                    Zoom to Frederikssund
+                                    {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToHalsnaes(mapModel.map!)}
                                 >
-                                    Zoom to Halsnaes
+                                    {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToLejre(mapModel.map!)}
                                 >
-                                    Zoom to Lejre
+                                    {intl.formatMessage({ id: "zoom_buttons.lejre" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToRoskilde(mapModel.map!)}
                                 >
-                                    Zoom to Roskilde
+                                    {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
                                 </Button>
                             </VStack>
 
@@ -362,12 +365,13 @@ export function MapApp() {
                                                 alignItems="center"
                                             ></Flex>
                                             <Text fontWeight="bold" mt={4}>
-                                                Select Layers for Comparison
+                                                {intl.formatMessage({ id: "layer_swipe.title" })}
                                             </Text>
                                             <Spacer />
                                             <Text fontSize={16}>
-                                                ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison.
+                                                {intl.formatMessage({
+                                                    id: "layer_swipe.description"
+                                                })}
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
@@ -445,7 +449,7 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* SaferPlaces flood model dialog */}
-                                <MCDM/>
+                                <MCDM />
                                 <SaferPlacesFloodMap />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
@@ -461,7 +465,6 @@ export function MapApp() {
                         </MapAnchor>
                     </MapContainer>
                     {/*END MAP_ID1*/}
-
                 </Flex>
                 <Flex
                     role="region"
