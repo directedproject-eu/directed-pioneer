@@ -48,7 +48,11 @@ const Legend: React.FC<legendmetaData> = ({ range, variable, isAuthenticated }) 
                     {isAuthenticated && (
                         <Box height="100%">
                             {to_display_circles.map((item, index) => (
-                                <Box key={index} display="flex" alignItems="center" mb={1}
+                                <Box
+                                    key={index}
+                                    display="flex"
+                                    alignItems="center"
+                                    mb={1}
                                     onClick={() => {
                                         console.log("test for item:", item.label);
                                     }}
@@ -136,7 +140,11 @@ const Legend: React.FC<legendmetaData> = ({ range, variable, isAuthenticated }) 
                 {isAuthenticated && (
                     <Box height="100%" mt={3}>
                         {to_display_circles.map((item, index) => (
-                            <Box key={index} display="flex" alignItems="center" mb={1}
+                            <Box
+                                key={index}
+                                display="flex"
+                                alignItems="center"
+                                mb={1}
                                 onMouseEnter={() => {
                                     highlightService.highlightLayer(item.layerId);
                                 }}

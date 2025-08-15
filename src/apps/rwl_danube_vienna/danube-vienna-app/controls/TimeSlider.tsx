@@ -14,7 +14,6 @@ import { SimpleLayer } from "@open-pioneer/map";
 import { useService } from "open-pioneer:react-hooks";
 import { GeosphereService } from "../services/GeosphereService";
 
-
 export const TimeSlider = () => {
     const [sliderValue, setSliderValue] = useState(0);
     const [totalPrecipLayerVisible, setTotalPrecipVisible] = useState(false);
@@ -68,7 +67,6 @@ export const TimeSlider = () => {
         return `https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/${year}${month}${day}T${hours}${minutes}${seconds}.tif`;
     };
 
-
     const onChange = (val: number) => {
         setSliderValue(val);
         const selectedUrl = valueToUrl(val);
@@ -99,12 +97,8 @@ export const TimeSlider = () => {
                                 marginBottom: "4px"
                             }}
                         >
-                            <span>
-                                Start Date: 2024-01-01
-                            </span>
-                            <span>
-                                End Date: 2024-12-31
-                            </span>
+                            <span>Start Date: 2024-01-01</span>
+                            <span>End Date: 2024-12-31</span>
                         </div>
                         <Slider
                             aria-label="date-slider"

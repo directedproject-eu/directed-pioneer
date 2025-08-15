@@ -26,7 +26,7 @@ messages:
   legend:
     title: "Legend"
     units: "Units"
-    
+
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"

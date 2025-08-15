@@ -29,7 +29,7 @@ export default defineBuildConfig({
             provides: ["http.Interceptor"],
             references: {
                 authService: "authentication.AuthService"
-            },
+            }
         },
         LayerHighlighterImpl: {
             provides: ["app.LayerHighlighter"],
