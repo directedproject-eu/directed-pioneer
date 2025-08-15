@@ -30,8 +30,8 @@
         "react-icons": "catalog:",
         "react-use": "catalog:",
         "navbar": "workspace:^",
-        "mcdm": "workspace:^",
         "taxonomy": "workspace:^",
-        "saferplaces": "workspace:^"
+        "saferplaces": "workspace:^",
+        "mcdm": "workspace:^"
     }
 }
