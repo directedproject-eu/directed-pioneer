@@ -50,12 +50,6 @@ const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) =
     const grouped = {};
 
     useEffect(() => {
-        // const files = [
-        //     "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP126.csv",
-        //     "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP370.csv",
-        //     "/crop_yield_scenarios_rwl3+4/cysz_zala_CMIP6:SSP585.csv"
-        // ];
-
         Promise.all(
             files.map((file) =>
                 fetch(file)

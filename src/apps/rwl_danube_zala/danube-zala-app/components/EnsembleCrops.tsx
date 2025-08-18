@@ -93,8 +93,21 @@ const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) =
         });
     }, []);
 
-    const series = [];
+    const groupedArray = uniqueCrops.map((crop) => {
+        const numbers = [...Array(10).keys()];
 
+        // For each crop, create and return a new array of its data
+        const cropData = numbers.map((number) => {
+            return data[
+                `${crop} | Real ${number + scenarioRealization[selectedScenario]} | CMIP6:${selectedScenario.toUpperCase()} | ${regionCode}`
+            ];
+        });
+
+        return cropData;
+    });
+    console.log(groupedArray);
+
+    const series = [];
     uniqueCrops.forEach((crop) => {
         series.push({
             name: crop,
