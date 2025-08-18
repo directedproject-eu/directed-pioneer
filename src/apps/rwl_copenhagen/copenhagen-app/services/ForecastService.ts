@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
+import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
@@ -28,6 +28,8 @@ export class ForecastServiceImpl implements ForecastService {
     private total_precip: WebGLTileLayer | undefined;
     private rate_precip: WebGLTileLayer | undefined;
 
+
+    //constructor with grouped DMI forecast layers
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
@@ -40,24 +42,7 @@ export class ForecastServiceImpl implements ForecastService {
                 },
                 properties: { title: "Sea Level Mean Deviation Forecasts" }
             });
-            model?.layers.addLayer(
-                new SimpleLayer({
-                    id: "sea_forecast_mean_deviation",
-                    title: "Sea Level Mean Deviation Forecasts",
-                    description:
-                        "Deviation of sea level in meters from the mean value, based on DMI's forecast model for storm surge, DKSS. Forecasts available for 5 days at hourly intervals.",
-                    olLayer: this.layer,
-                    attributes: {
-                        "legend": {
-                            Component: SeaLevelLegend
-                        }
-                    },
-                    isBaseLayer: false,
-                    visible: true
-                })
-            );
-
-            //HARMONIE total precip
+            //Harmonie total precip
             this.total_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
@@ -65,23 +50,6 @@ export class ForecastServiceImpl implements ForecastService {
                 },
                 properties: { title: "Total Precipitation Forecasts" }
             });
-            model?.layers.addLayer(
-                new SimpleLayer({
-                    id: "total_precipitation_forecast",
-                    title: "Total Precipitation Forecasts",
-                    description:
-                        "Total precipitation forecasts from the HARMONIE weather model via DMI. Forecasts available for 3 days at hourly intervals.",
-                    olLayer: this.total_precip,
-                    attributes: {
-                        "legend": {
-                            Component: PrecipitationLegend
-                        }
-                    },
-                    isBaseLayer: false,
-                    visible: false
-                })
-            );
-
             //Harmonie precipitation rate
             this.rate_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
@@ -91,113 +59,61 @@ export class ForecastServiceImpl implements ForecastService {
                 properties: { title: "Precipitation Rate Forecasts" }
             });
             model?.layers.addLayer(
-                new SimpleLayer({
-                    id: "precipitation_rate_forecast",
-                    title: "Precipitation Rate Forecasts",
-                    description:
-                        "Precipitation rate forecasts from the HARMONIE weather model via DMI. Forecasts available for 3 days at hourly intervals.",
-                    olLayer: this.rate_precip,
-                    attributes: {
-                        "legend": {
-                            Component: PrecipitationRateLegend
-                        }
-                    },
-                    isBaseLayer: false,
-                    visible: false
+                new GroupLayer({
+                    id: "dmi_forecasts",
+                    title: "DMI Forecasts",
+                    visible: false,
+                    layers: [
+                        new SimpleLayer({
+                            id: "sea_forecast_mean_deviation",
+                            title: "Sea Level Mean Deviation Forecasts",
+                            description:
+                                "Deviation of sea level in meters from the mean value, based on DMI's forecast model for storm surge, DKSS. Forecasts available for 5 days at hourly intervals.",
+                            olLayer: this.layer,
+                            attributes: {
+                                "legend": {
+                                    Component: SeaLevelLegend
+                                }
+                            },
+                            isBaseLayer: false,
+                            visible: false
+                        }),
+                        new SimpleLayer({
+                            id: "total_precipitation_forecast",
+                            title: "Total Precipitation Forecasts",
+                            description:
+                                "Total precipitation forecasts from the HARMONIE weather model via DMI. Forecasts available for 3 days at hourly intervals.",
+                            olLayer: this.total_precip,
+                            attributes: {
+                                "legend": {
+                                    Component: PrecipitationLegend
+                                }
+                            },
+                            isBaseLayer: false,
+                            visible: false
+                        }),
+                        new SimpleLayer({
+                            id: "precipitation_rate_forecast",
+                            title: "Precipitation Rate Forecasts",
+                            description:
+                                "Precipitation rate forecasts from the HARMONIE weather model via DMI. Forecasts available for 3 days at hourly intervals.",
+                            olLayer: this.rate_precip,
+                            attributes: {
+                                "legend": {
+                                    Component: PrecipitationRateLegend
+                                }
+                            },
+                            isBaseLayer: false,
+                            visible: false
+                        })
+                    ]
                 })
             );
-
             this.layer.setZIndex(0);
             this.total_precip.setZIndex(0);
             this.rate_precip.setZIndex(0);
         });
     }
-
-    ////constructor with grouped DMI forecast layers, however cannot render individual legends this way :(
-    // constructor(options: ServiceOptions<References>) {
-    //     const { mapRegistry } = options.references;
-    //     this.mapRegistry = mapRegistry;
-    //     this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-    //         //DKSS sea level mean deviation
-    //         this.layer = new WebGLTileLayer({
-    //             source: this.updateSource(""),
-    //             style: {
-    //                 color: this.createColorGradient([0, 100], "layer")
-    //             },
-    //             properties: { title: "Sea Level Mean Deviation Forecasts" }
-    //         });
-    //         //Harmonie total precip
-    //         this.total_precip = new WebGLTileLayer({
-    //             source: this.updateSource(""),
-    //             style: {
-    //                 color: this.createColorGradient([0, 100], "total_precip")
-    //             },
-    //             properties: { title: "Total Precipitation Forecasts" }
-    //         });
-    //         //Harmonie precipitation rate
-    //         this.rate_precip = new WebGLTileLayer({
-    //             source: this.updateSource(""),
-    //             style: {
-    //                 color: this.createColorGradient([0, 100], "rate_precip")
-    //             },
-    //             properties: { title: "Precipitation Rate Forecasts" }
-    //         });
-    //         model?.layers.addLayer(
-    //             new GroupLayer({
-    //                 id: "dmi_forecasts",
-    //                 title: "DMI Forecasts",
-    //                 visible: true,
-    //                 layers: [
-    //                     new SimpleLayer({
-    //                         id: "sea_forecast_mean_deviation",
-    //                         title: "Sea Level Mean Deviation Forecasts",
-    //                         description:
-    //                             "Deviation of sea level in meters from the mean value, based on DMI's forecast model for storm surge, DKSS. Forecasts available for 5 days at hourly intervals.",
-    //                         olLayer: this.layer,
-    //                         attributes: {
-    //                             "legend": {
-    //                                 Component: SeaLevelLegend
-    //                             }
-    //                         },
-    //                         isBaseLayer: false,
-    //                         visible: true
-    //                     }),
-    //                     new SimpleLayer({
-    //                         id: "total_precipitation_forecast",
-    //                         title: "Total Precipitation Forecasts",
-    //                         description:
-    //                             "Total precipitation forecasts from the HARMONIE weather model via DMI. Forecasts available for 3 days at hourly intervals.",
-    //                         olLayer: this.total_precip,
-    //                         attributes: {
-    //                             "legend": {
-    //                                 Component: PrecipitationLegend
-    //                             }
-    //                         },
-    //                         isBaseLayer: false,
-    //                         visible: false
-    //                     }),
-    //                     new SimpleLayer({
-    //                         id: "precipitation_rate_forecast",
-    //                         title: "Precipitation Rate Forecasts",
-    //                         description:
-    //                             "Precipitation rate forecasts from the HARMONIE weather model via DMI. Forecasts available for 3 days at hourly intervals.",
-    //                         olLayer: this.rate_precip,
-    //                         attributes: {
-    //                             "legend": {
-    //                                 Component: PrecipitationRateLegend
-    //                             }
-    //                         },
-    //                         isBaseLayer: false,
-    //                         visible: false
-    //                     })
-    //                 ]
-    //             })
-    //         );
-    //         this.layer.setZIndex(0);
-    //         this.total_precip.setZIndex(0);
-    //         this.rate_precip.setZIndex(0);
-    //     });
-    // }
 
     async getMapModel() {
         return await this.mapRegistry.getMapModel(this.MAP_ID);

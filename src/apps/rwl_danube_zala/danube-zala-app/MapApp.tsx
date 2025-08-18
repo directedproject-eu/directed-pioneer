@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
+
 import {
     Box,
     Button,
     Container,
-    Divider,
     Flex,
     FormControl,
     FormLabel,
@@ -29,7 +29,6 @@ import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
-import { OverviewMap } from "@open-pioneer/overview-map";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services/MapProvider";
 import { useEffect, useId, useMemo, useState } from "react";
@@ -49,7 +48,6 @@ import { IsimipSelector } from "./controls/IsimipSelector";
 import ChartComponentZala from "./components/ChartComponentZala";
 import ResizeBox from "./components/ResizeBox";
 import ChartComponentRhineErft from "./components/ChartComopnentRhineErft";
-
 import { useMapModel } from "@open-pioneer/map";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { Vector as VectorLayer } from "ol/layer.js";

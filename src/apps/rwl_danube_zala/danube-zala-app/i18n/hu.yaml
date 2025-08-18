@@ -1,3 +1,63 @@
+overrides:
+  "@open-pioneer/authentication":
+    auth-error: "hun:An error occurred during authentication."
+  "@open-pioneer/authentication-keycloak":
+    loginFailed:
+      title: "hun:Login failed"
+      message: "hun:An error occured during authentication."
+  "@open-pioneer/basemap-switcher":
+    emptyBasemapLabel: "hun:Without basemap"
+    layerNotAvailable: "hun:Layer not available"
+    selected: "hun:Selected"
+  "@open-pioneer/geolocation":
+    locateNotSupported: hun:Geolocation is not supported.
+    locateMeStart: hun:Start geolocation
+    locateMeEnd: hun:Stop geolocation
+    error: hun:Error
+    permissionDenied: hun:Geolocation was canceled.
+    positionUnavailable: hun:Geolocation position cannot be determined.
+    timeout: hun:Geolocation was canceled due to timeout.
+    unknownError: hun:An unexpected error occurred during geolocation.
+  "@open-pioneer/map-navigation":
+    initial-extent:
+      title: "hun: Zoom to initial extent"
+    zoom-in:
+      title: "hun: Zoom in map"
+    zoom-out:
+      title: "hun: Zoom out map"
+    view-backward:
+      title: "hun: One map view backward"
+    view-forward:
+      title: "hun: One map view forward"
+  "@open-pioneer/legend":
+    altLabel: hun:legend image for layer {layerName}
+    fallbackLabel: hun:legend not available
+    basemapLabel: hun:Basemap
+  "@open-pioneer/measurement":
+    measurementLabel: "hun:Mode"
+    distance: "hun:Distance"
+    area: "hun:Area"
+    deleteMeasurementLabel: "hun:Delete measurements"
+    measurementInfoText: "hun:Click in the map to start a measurement."
+    tooltips:
+      help: "hun:Click to start measuring."
+      continue: "hun:Double click to end the measurement."
+  "@open-pioneer/toc":
+    basemapsLabel: "hun:Basemaps"
+    descriptionLabel: "hun:Layer description"
+    operationalLayerLabel: "hun:Operational layers"
+    childgroupLabel: "hun:Layer group {title}"
+    missingLayers: "hun:There are no layers to display."
+    group:
+      expand: "hun:Expand group {title}"
+      collapse: "hun:Collapse group {title}"
+    error: "hun:Error while creating map content."
+    layerNotAvailable: "hun:Layer not available"
+    toolsLabel: "hun:Map tools"
+    tools:
+      hideAllLayers: "hun:Hide all layers"
+      collapseAllGroups: "hun:Collapse all groups"
+      
 messages:
   basemapLabel: "hun:Select basemap:"
   auth-error: "hun:An error occured during authentication."

@@ -1,4 +1,32 @@
 messages:
+  heading: "RWL The Capital Region of Denmark"
+  basemapLabel: "Select basemap:"
+  description:
+    title: "Description"
+    text1: "This platform serves as a way to learn about"
+    text2: "in the lens of"
+    keyword1: "disaster risk"
+    keyword2: "climate change"
+  zoom_buttons:
+    egedal: "Zoom to Egedal"
+    frederikssund: "Zoom to Frederikssund"
+    halsnaes: "Zoom to Halsnaes"
+    lejre: "Zoom to Lejre"
+    roskilde: "Zoom to Roskilde"
+  layer_swipe:
+    title: "Select Layers for Comparison"
+    description: "➡️ Only layers which have been selected in the Operational Layers are viewable for comparison."
+  forecast:
+    sea_level: "👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation Forecasts"
+    total_precip: "👆Drag the Slider to Select a Date and Time for Total Precipitation Forecasts"
+    precip_rate: "👆Drag the Slider to Select a Date and Time for Precipitation Rate Forecasts"
+    start_date: "Forecast Start Date:"
+    end_date: "Forecast End Date:"
+    selected_date: "Selected Date:"
+  legend:
+    title: "Legend"
+    units: "Units"
+    
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"
@@ -6,6 +34,4 @@ messages:
     topLeft: "Measurement"
     topRight: "Overview map and basemap switcher"
     bottomRight: "Maptools"
-  basemapLabel: "Basemap"
   measurementTitle: "Measurement"
-  appTitle: " RWL The Capital Region of Denmark"

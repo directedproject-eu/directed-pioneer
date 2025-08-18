@@ -1,5 +1,5 @@
 {
-    "name": "layerswipe",
+    "name": "mcdm",
     "private": true,
     "dependencies": {
         "@open-pioneer/runtime": "catalog:"

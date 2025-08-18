@@ -186,7 +186,6 @@ export class LayerHandlerImpl implements LayerHandler {
                 });
             })
             .catch((error) => console.error("Error fetching max value:", error));
-
     }
     private createColorGradiant(range: number[]) {
         const tempColors = {

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useEffect, useState } from "react";
+import { useIntl } from "open-pioneer:react-hooks";
 import {
     Box,
     Slider,
@@ -23,6 +24,8 @@ interface References {
 }
 
 export const Forecasts = () => {
+    const intl = useIntl();
+
     const [sliderValue, setSliderValue] = useState(0);
     const [sliderValue2, setSliderValue2] = useState(0);
     const [sliderValue3, setSliderValue3] = useState(0);
@@ -204,8 +207,7 @@ export const Forecasts = () => {
                 >
                     <Box padding={4} mb={8}>
                         <Text fontWeight="semibold">
-                            👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation
-                            Forecasts
+                            {intl.formatMessage({ id: "forecast.sea_level" })}
                         </Text>
                         <div
                             style={{
@@ -214,9 +216,12 @@ export const Forecasts = () => {
                                 marginBottom: "4px"
                             }}
                         >
-                            <span>Forecast Start Date: {formatTimestamp(timestamps[0] ?? "")}</span>
                             <span>
-                                Forecast End Date:{" "}
+                                {intl.formatMessage({ id: "forecast.start_date" })}{" "}
+                                {formatTimestamp(timestamps[0] ?? "")}
+                            </span>
+                            <span>
+                                {intl.formatMessage({ id: "forecast.end_date" })}{" "}
                                 {formatTimestamp(timestamps[timestamps.length - 1] ?? "")}
                             </span>
                         </div>
@@ -236,7 +241,7 @@ export const Forecasts = () => {
                         </Slider>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
-                            Selected Date:{" "}
+                            {intl.formatMessage({ id: "forecast.selected_date" })}{" "}
                             <Text as="span" fontWeight="normal" color="black">
                                 {formatTimestamp(timestamps[sliderValue] ?? "")}
                             </Text>
@@ -258,8 +263,7 @@ export const Forecasts = () => {
                 >
                     <Box padding={4} mb={8}>
                         <Text fontWeight="semibold">
-                            👆Drag the Slider to Select a Date and Time for Total Precipitation
-                            Forecasts
+                            {intl.formatMessage({ id: "forecast.total_precip" })}
                         </Text>
                         <div
                             style={{
@@ -269,10 +273,11 @@ export const Forecasts = () => {
                             }}
                         >
                             <span>
-                                Forecast Start Date: {formatTimestamp(timestamps2[0] ?? "")}
+                                {intl.formatMessage({ id: "forecast.start_date" })}{" "}
+                                {formatTimestamp(timestamps2[0] ?? "")}
                             </span>
                             <span>
-                                Forecast End Date:{" "}
+                                {intl.formatMessage({ id: "forecast.end_date" })}{" "}
                                 {formatTimestamp(timestamps2[timestamps2.length - 1] ?? "")}
                             </span>
                         </div>
@@ -292,7 +297,7 @@ export const Forecasts = () => {
                         </Slider>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
-                            Selected Date:{" "}
+                            {intl.formatMessage({ id: "forecast.selected_date" })}{" "}
                             <Text as="span" fontWeight="normal" color="black">
                                 {formatTimestamp(timestamps2[sliderValue2] ?? "")}
                             </Text>
@@ -313,8 +318,7 @@ export const Forecasts = () => {
                 >
                     <Box padding={4} mb={8}>
                         <Text fontWeight="semibold">
-                            👆Drag the Slider to Select a Date and Time for Precipitation Rate
-                            Forecasts
+                            {intl.formatMessage({ id: "forecast.precip_rate" })}
                         </Text>
                         <div
                             style={{
@@ -324,10 +328,11 @@ export const Forecasts = () => {
                             }}
                         >
                             <span>
-                                Forecast Start Date: {formatTimestamp(timestamps3[0] ?? "")}
+                                {intl.formatMessage({ id: "forecast.start_date" })}{" "}
+                                {formatTimestamp(timestamps3[0] ?? "")}
                             </span>
                             <span>
-                                Forecast End Date:{" "}
+                                {intl.formatMessage({ id: "forecast.end_date" })}{" "}
                                 {formatTimestamp(timestamps3[timestamps3.length - 1] ?? "")}
                             </span>
                         </div>
@@ -347,7 +352,7 @@ export const Forecasts = () => {
                         </Slider>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
-                            Selected Date:{" "}
+                            {intl.formatMessage({ id: "forecast.selected_date" })}{" "}
                             <Text as="span" fontWeight="normal" color="black">
                                 {formatTimestamp(timestamps3[sliderValue3] ?? "")}
                             </Text>

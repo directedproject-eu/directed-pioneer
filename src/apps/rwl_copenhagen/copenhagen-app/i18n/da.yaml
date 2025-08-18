@@ -1,0 +1,93 @@
+overrides:
+  "@open-pioneer/basemap-switcher":
+    emptyBasemapLabel: "da:Without basemap"
+    layerNotAvailable: "da:Layer not available"
+    selected: "da:Selected"
+  "@open-pioneer/geolocation":
+    locateNotSupported: da:Geolocation is not supported.
+    locateMeStart: da:Start geolocation
+    locateMeEnd: da:Stop geolocation
+    error: da:Error
+    permissionDenied: da:Geolocation was canceled.
+    positionUnavailable: da:Geolocation position cannot be determined.
+    timeout: da:Geolocation was canceled due to timeout.
+    unknownError: da:An unexpected error occurred during geolocation.
+  "@open-pioneer/map-navigation":
+    initial-extent:
+      title: "da: Zoom to initial extent"
+    zoom-in:
+      title: "da: Zoom in map"
+    zoom-out:
+      title: "da: Zoom out map"
+    view-backward:
+      title: "da: One map view backward"
+    view-forward:
+      title: "da: One map view forward"
+  "@open-pioneer/measurement":
+    measurementLabel: "da:Mode"
+    distance: "da:Distance"
+    area: "da:Area"
+    deleteMeasurementLabel: "da:Delete measurements"
+    measurementInfoText: "da:Click in the map to start a measurement."
+    tooltips:
+      help: "da:Click to start measuring."
+      continue: "da:Double click to end the measurement."
+  "@open-pioneer/legend":
+    altLabel: da:legend image for layer {layerName}
+    fallbackLabel: da:legend not available
+    basemapLabel: da:Basemap
+  "@open-pioneer/toc":
+    basemapsLabel: "da:Basemaps"
+    descriptionLabel: "da:Layer description"
+    operationalLayerLabel: "da:Operational layers"
+    childgroupLabel: "da:Layer group {title}"
+    missingLayers: "da:There are no layers to display."
+    group:
+      expand: "da:Expand group {title}"
+      collapse: "da:Collapse group {title}"
+    error: "da:Error while creating map content."
+    layerNotAvailable: "da:Layer not available"
+    toolsLabel: "da:Map tools"
+    tools:
+      hideAllLayers: "da:Hide all layers"
+      collapseAllGroups: "da:Collapse all groups"
+
+messages:
+  heading: "da:RWL The Capital Region of Denmark"
+  basemapLabel: "da:Select basemap:"
+  description:
+    title: "da:Description"
+    text1: "da:This platform serves as a way to learn about"
+    text2: "da:in the lens of"
+    keyword1: "da:disaster risk"
+    keyword2: "da:climate change"
+  zoom_buttons:
+    egedal: "da:Zoom to Egedal"
+    frederikssund: "da:Zoom to Frederikssund"
+    halsnaes: "da:Zoom to Halsnaes"
+    lejre: "da:Zoom to Lejre"
+    roskilde: "da:Zoom to Roskilde"
+  layer_swipe:
+    title: "da:Select Layers for Comparison"
+    description: "da:➡️ Only layers which have been selected in the Operational Layers are viewable for comparison."
+  forecast:
+    sea_level: "da:👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation Forecasts"
+    total_precip: "da:👆Drag the Slider to Select a Date and Time for Total Precipitation Forecasts"
+    precip_rate: "da:👆Drag the Slider to Select a Date and Time for Precipitation Rate Forecasts"
+    start_date: "da:Forecast Start Date:"
+    end_date: "da:Forecast End Date:"
+    selected_date: "da:Selected Date:"
+  legend:
+    title: "da:Legend"
+    units: "da:Units"
+  ariaLabel:
+    header: "da:Header bar"
+    footer: "da:Base bar with scale information, spatial reference system and coordinate display"
+    map: "da:Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."
+    topLeft: "da:Measurement"
+    topRight: "da:Overview map and basemap switcher"
+    bottomRight: "da:Maptools"
+  measurementTitle: "da:Measurement"
+
+    
+

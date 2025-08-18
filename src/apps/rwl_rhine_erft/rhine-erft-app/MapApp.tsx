@@ -38,19 +38,15 @@ import { PiChartLineUpLight, PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { FeatureInfo } from "featureinfo";
-import { LayerSwipe } from "layerswipe";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
 import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
+import Swipe from "ol-ext/control/Swipe";
 import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 
 export function MapApp() {
-    const { 
-        isOpen: isOpenChart, 
-        onClose: onCloseChart,
-        onOpen: onOpenChart
-    } = useDisclosure();
+    const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -65,56 +61,85 @@ export function MapApp() {
     //////////////////
     /// LayerSwipe ///
     /////////////////
-    const [availableLayers, setAvailableLayers] = useState<SimpleLayer[]>([]);
     const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
     const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [leftLayers, setLeftLayers] = useState<Layer[]>();
-    const [rightLayers, setRightLayers] = useState<Layer[]>();
-    const [sliderValue, setSliderValue] = useState<number>(50);
     const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
-
-    //////////////////
-    /// LayerSwipe ///
-    /////////////////
 
     useEffect(() => {
         if (!mapModel.map) return;
 
-        //get all layers from the mapmodel
-        const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-        setAvailableLayers(layers);
+        const map = mapModel.map.olMap;
+        const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
 
-        //set selected layers
-        if (selectedLeftLayer && selectedRightLayer) {
-            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-
-            if (leftLayer && rightLayer) {
-                setLeftLayers([leftLayer]);
-                setRightLayers([rightLayer]);
-            }
-        }
-
-        //set only visible layers in the dropdowns for left and right layer
         const updateVisibleLayers = () => {
-            const visibleLayers = layers.filter((layer) => layer.olLayer?.getVisible?.() === true);
+            const visibleLayers = allLayers.filter(
+                (layer) => layer.olLayer?.getVisible?.() === true
+            );
             setVisibleAvailableLayers(visibleLayers);
         };
 
-        updateVisibleLayers(); //filter
+        updateVisibleLayers();
 
-        const eventKeys = layers
+        const eventKeys: EventsKey[] = allLayers
             .map((layer) => {
                 const olLayer = layer.olLayer;
                 if (!olLayer || typeof olLayer.on !== "function") return null;
-                return olLayer.on("change:visible", updateVisibleLayers);
+                return olLayer.on("change:visible", () => {
+                    updateVisibleLayers();
+                    handleSwipeUpdate();
+                });
             })
             .filter((k): k is EventsKey => !!k);
 
+        let swipe: Swipe | null = null;
+
+        const removeSwipe = () => {
+            if (swipe) {
+                map.removeControl(swipe);
+                swipe = null;
+            }
+        };
+
+        const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
+            removeSwipe();
+            swipe = new Swipe({
+                layers: [leftLayer],
+                rightLayers: [rightLayer],
+                position: 0.5,
+                orientation: "vertical",
+                className: "ol-swipe"
+            });
+            map.addControl(swipe);
+        };
+
+        const handleSwipeUpdate = () => {
+            if (!selectedLeftLayer || !selectedRightLayer) {
+                removeSwipe();
+                return;
+            }
+
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+
+            if (!leftLayer || !rightLayer) {
+                removeSwipe();
+                return;
+            }
+
+            if (leftLayer.getVisible() && rightLayer.getVisible()) {
+                addSwipe(leftLayer, rightLayer);
+            } else {
+                removeSwipe();
+            }
+        };
+
+        handleSwipeUpdate();
+
         return () => {
             eventKeys.forEach(unByKey);
+            removeSwipe();
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
 
@@ -312,33 +337,6 @@ export function MapApp() {
                             </Flex>
                         </MapAnchor>
                     </MapContainer>
-                    {/* add layerswipe slider below map container  */}
-                    <Box
-                        position="absolute"
-                        bottom={0}
-                        left={0}
-                        right={0}
-                        padding={4}
-                        backgroundColor="white"
-                        borderTop={1}
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        {leftLayers && rightLayers && mapModel.map && (
-                            <LayerSwipe
-                                map={mapModel.map}
-                                sliderValue={sliderValue}
-                                onSliderValueChanged={(newValue) => {
-                                    setSliderValue(newValue);
-                                }}
-                                leftLayers={leftLayers}
-                                rightLayers={rightLayers}
-                                style={{ width: "100%", height: "100%" }}
-                            />
-                        )}
-                    </Box>
                 </Flex>
                 <Flex
                     role="region"
@@ -352,7 +350,7 @@ export function MapApp() {
                     <ScaleViewer mapId={MAP_ID} />
                 </Flex>
             </TitledSection>
-            
+
             {/* <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>

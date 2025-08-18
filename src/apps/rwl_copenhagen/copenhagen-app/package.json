@@ -22,15 +22,16 @@
         "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
         "@open-pioneer/legend": "catalog:",
+        "chroma-js": "catalog:",
         "ol": "catalog:",
+        "ol-ext": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
         "navbar": "workspace:^",
-        "layerswipe": "workspace:^",
-        "chroma-js": "^3.1.2",
         "taxonomy": "workspace:^",
-        "saferplaces": "workspace:^"
+        "saferplaces": "workspace:^",
+        "mcdm": "workspace:^"
     }
 }

@@ -31,7 +31,6 @@ import { PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Legend } from "@open-pioneer/legend";
 import { Navbar } from "navbar";
-import { LayerSwipe } from "layerswipe";
 import { LayerZoom } from "./services/LayerZoom";
 import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
@@ -42,6 +41,8 @@ import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
 import { SaferPlacesFloodMap } from "saferplaces";
 // import { ModelClient } from "modelclient";
+import Swipe from "ol-ext/control/Swipe";
+import { ModelClient } from "mcdm";
 
 export function MapApp() {
     const intl = useIntl();
@@ -51,23 +52,6 @@ export function MapApp() {
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
 
-    //////////////////
-    /// LayerSwipe ///
-    /////////////////
-    const [availableLayers, setAvailableLayers] = useState<SimpleLayer[]>([]);
-    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
-    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [leftLayers, setLeftLayers] = useState<Layer[]>();
-    const [rightLayers, setRightLayers] = useState<Layer[]>();
-    const [sliderValue, setSliderValue] = useState<number>(50);
-    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
-    const [isLayerSwipeActive, setIsLayerSwipeActive] = useState<boolean>(false); //new render layerswipe
-
-    const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
-    function toggleMeasurement() {
-        setMeasurementIsActive(!measurementIsActive);
-    }
-
     const overviewMapLayer = useMemo(
         () =>
             new TileLayer({
@@ -76,59 +60,93 @@ export function MapApp() {
         []
     );
 
+    const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
+    function toggleMeasurement() {
+        setMeasurementIsActive(!measurementIsActive);
+    }
+
     //////////////////
     /// LayerSwipe ///
     /////////////////
+    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
+    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
+    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
 
     useEffect(() => {
         if (!mapModel.map) return;
 
-        //get all layers from the mapmodel
-        const layers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-        setAvailableLayers(layers);
+        const map = mapModel.map.olMap;
+        const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
 
-        //set only visible layers in the dropdowns for left and right layer
         const updateVisibleLayers = () => {
-            const visibleLayers = layers.filter((layer) => layer.olLayer?.getVisible?.() === true);
+            const visibleLayers = allLayers.filter(
+                (layer) => layer.olLayer?.getVisible?.() === true
+            );
             setVisibleAvailableLayers(visibleLayers);
         };
 
-        updateVisibleLayers(); //filter
+        updateVisibleLayers();
 
-        const eventKeys = layers
+        const eventKeys: EventsKey[] = allLayers
             .map((layer) => {
                 const olLayer = layer.olLayer;
                 if (!olLayer || typeof olLayer.on !== "function") return null;
-                return olLayer.on("change:visible", updateVisibleLayers);
+                return olLayer.on("change:visible", () => {
+                    updateVisibleLayers();
+                    handleSwipeUpdate();
+                });
             })
             .filter((k): k is EventsKey => !!k);
 
-        //set selected layers & set back to initial state if "select left layer" & "select right layer" in dropdowns
-        if (selectedLeftLayer && selectedRightLayer) {
-            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
-            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-                ?.olLayer as TileLayer;
+        let swipe: Swipe | null = null;
 
-            if (leftLayer && rightLayer) {
-                setLeftLayers([leftLayer]);
-                setRightLayers([rightLayer]);
-                setIsLayerSwipeActive(true); //activate layerswipe
-                leftLayer.setVisible(true);
-                rightLayer.setVisible(true);
-            } else {
-                setLeftLayers([]);
-                setRightLayers([]);
-                setIsLayerSwipeActive(false); //deactivate if layers not selected
+        const removeSwipe = () => {
+            if (swipe) {
+                map.removeControl(swipe);
+                swipe = null;
             }
-        } else {
-            setLeftLayers([]);
-            setRightLayers([]);
-            setIsLayerSwipeActive(false);
-        }
+        };
+
+        const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
+            removeSwipe();
+            swipe = new Swipe({
+                layers: [leftLayer],
+                rightLayers: [rightLayer],
+                position: 0.5,
+                orientation: "vertical",
+                className: "ol-swipe"
+            });
+            map.addControl(swipe);
+        };
+
+        const handleSwipeUpdate = () => {
+            if (!selectedLeftLayer || !selectedRightLayer) {
+                removeSwipe();
+                return;
+            }
+
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+
+            if (!leftLayer || !rightLayer) {
+                removeSwipe();
+                return;
+            }
+
+            if (leftLayer.getVisible() && rightLayer.getVisible()) {
+                addSwipe(leftLayer, rightLayer);
+            } else {
+                removeSwipe();
+            }
+        };
+
+        handleSwipeUpdate();
 
         return () => {
             eventKeys.forEach(unByKey);
+            removeSwipe();
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
 
@@ -146,7 +164,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            {intl.formatMessage({ id: "appTitle" })}
+                            {intl.formatMessage({ id: "heading" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -241,24 +259,27 @@ export function MapApp() {
                                 maxHeight={100}
                                 overflow="auto"
                             >
-                                <Text fontWeight={600}> Description </Text>
+                                <Text fontWeight={600}>
+                                    {" "}
+                                    {intl.formatMessage({ id: "description.title" })}{" "}
+                                </Text>
                                 <Text>
-                                    This platform serves as a way to learn about
+                                    {intl.formatMessage({ id: "description.text1" })}
                                     <Spacer />
                                     <Button
                                         variant="link"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Disaster Risk")}
                                     >
-                                        disaster risk
+                                        {intl.formatMessage({ id: "description.keyword1" })}
                                     </Button>{" "}
-                                    in the lens of{" "}
+                                    {intl.formatMessage({ id: "description.text2" })}{" "}
                                     <Button
                                         variant="link"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Climate Change")}
                                     >
-                                        climate change
+                                        {intl.formatMessage({ id: "description.keyword2" })}
                                     </Button>
                                     .
                                 </Text>
@@ -271,31 +292,31 @@ export function MapApp() {
                                     size="sm"
                                     onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
                                 >
-                                    Zoom to Egedal
+                                    {intl.formatMessage({ id: "zoom_buttons.egedal" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToFrederikssund(mapModel.map!)}
                                 >
-                                    Zoom to Frederikssund
+                                    {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToHalsnaes(mapModel.map!)}
                                 >
-                                    Zoom to Halsnaes
+                                    {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToLejre(mapModel.map!)}
                                 >
-                                    Zoom to Lejre
+                                    {intl.formatMessage({ id: "zoom_buttons.lejre" })}
                                 </Button>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToRoskilde(mapModel.map!)}
                                 >
-                                    Zoom to Roskilde
+                                    {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
                                 </Button>
                             </VStack>
 
@@ -344,12 +365,13 @@ export function MapApp() {
                                                 alignItems="center"
                                             ></Flex>
                                             <Text fontWeight="bold" mt={4}>
-                                                Select Layers for Comparison
+                                                {intl.formatMessage({ id: "layer_swipe.title" })}
                                             </Text>
                                             <Spacer />
                                             <Text fontSize={16}>
-                                                ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison.
+                                                {intl.formatMessage({
+                                                    id: "layer_swipe.description"
+                                                })}
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
@@ -427,6 +449,7 @@ export function MapApp() {
                                 padding={1}
                             >
                                 {/* SaferPlaces flood model dialog */}
+                                <ModelClient />
                                 <SaferPlacesFloodMap />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
@@ -442,37 +465,6 @@ export function MapApp() {
                         </MapAnchor>
                     </MapContainer>
                     {/*END MAP_ID1*/}
-
-                    {/* add layerswipe slider below map container  */}
-                    {isLayerSwipeActive && mapModel.map && leftLayers && rightLayers && (
-                        <Box
-                            position="absolute"
-                            bottom={0}
-                            left={0}
-                            right={0}
-                            padding={4}
-                            backgroundColor="white"
-                            borderTop={1}
-                            display="flex"
-                            flexDirection="row"
-                            justifyContent="center"
-                            alignItems="center"
-                        >
-                            {leftLayers && rightLayers && mapModel.map && (
-                                <LayerSwipe
-                                    map={mapModel.map}
-                                    sliderValue={sliderValue}
-                                    onSliderValueChanged={(newValue) => {
-                                        setSliderValue(newValue);
-                                    }}
-                                    // onSliderValueChanged={onSliderValueChanged}
-                                    leftLayers={leftLayers}
-                                    rightLayers={rightLayers}
-                                    style={{ width: "100%", height: "100%" }}
-                                />
-                            )}
-                        </Box>
-                    )}
                 </Flex>
                 <Flex
                     role="region"

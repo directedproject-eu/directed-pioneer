@@ -22,14 +22,13 @@
         "@open-pioneer/scale-viewer": "catalog:",
         "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
-        "chroma-js": "^3.1.2",
-        "layerswipe": "workspace:^",
-        "navbar": "workspace:^",
+        "chroma-js": "catalog:",
         "ol": "catalog:",
-        "ol-ext": "^4.0.33",
+        "ol-ext": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
-        "react-use": "catalog:"
+        "react-use": "catalog:",
+        "navbar": "workspace:^"
     }
 }
