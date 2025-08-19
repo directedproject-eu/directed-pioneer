@@ -387,6 +387,11 @@ interface Config {
     pygeoapiBaseUrl: string;
 }
 
+interface LayerGroupDefinition {
+    [key: string]: string[] | LayerGroupDefinition;
+}
+
+
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID1;
     pygeoapiBaseUrl: string;
@@ -453,6 +458,388 @@ export class MainMapProvider implements MapConfigProvider {
     }
 
     async getMapConfig(): Promise<MapConfig> {
+        // Consolidated list of all WMS layers to be categorized
+        const allWmsLayers = [
+            ...wmsLayersFrederikssundScalgoPluvial,
+            ...wmsLayersFrederikssundScalgoStorm,
+            ...wmsLayersFrederikssundSaferPlacesPluvial,
+            ...wmsLayersFrederikssundSaferPlacesStorm,
+            ...wmsLayersFrederiksvaerkScalgoPluvial,
+            ...wmsLayersFrederiksvaerkScalgoStorm,
+            ...wmsLayersFrederiksvaerkSaferPlacesPluvial,
+            ...wmsLayersFrederiksvaerkSaferPlacesStorm,
+            ...wmsLayersJyllingeScalgoStorm,
+            ...wmsLayersJyllingeSaferPlacesPluvial,
+            ...wmsLayersJyllingeSaferPlacesStorm,
+            ...wmsLayersFrederikssundDamagecostStorm
+        ];
+
+        // A function to create a new GroupLayer with default properties
+        const createGroup = (title: string, id: string, layers: (SimpleLayer | GroupLayer)[] = []) => {
+            return new GroupLayer({
+                title: title,
+                id: id,
+                visible: false,
+                layers: layers.filter(layer => layer != null), // Filter out null layers
+                attributes: {
+                    "legend": {
+                        Component: WaterLevelLegend
+                    }
+                }
+            });
+        };
+
+        // Helper function to find a layer by its name
+        const getLayer = (name: string) => {
+            const layer = allWmsLayers.find(l => l.name === name);
+            return layer ? this.createWmsLayer(layer.name, layer.name, layer.name) : null;
+        };
+
+        const createNestedGroups = (groupStructure: LayerGroupDefinition, parentId = ""): GroupLayer[] => {
+            const groups: GroupLayer[] = [];
+            for (const [title, content] of Object.entries(groupStructure)) {
+                const id = parentId ? `${parentId}-${title.toLowerCase().replace(/ /g, "_")}` : title.toLowerCase().replace(/ /g, "_");
+                if (Array.isArray(content)) {
+                    const layers = content.map(layerName => getLayer(layerName)).filter(Boolean) as SimpleLayer[];
+                    if (layers.length > 0) {
+                        groups.push(createGroup(title, id, layers));
+                    }
+                } else if (typeof content === "object") {
+                    const subgroup = createNestedGroups(content, id);
+                    if (subgroup.length > 0) {
+                        groups.push(createGroup(title, id, subgroup));
+                    }
+                }
+            }
+            return groups;
+        };
+        
+
+        // Define the layer organization as an object 
+        const layerDefinition = {
+            "Coastal Flooding": {
+                "Reference Period": {
+                    "RP20": [
+                        "jyllinge_WD_Storm_Ref_RP20",
+                        "frederiksvaerk_WD_Storm_Ref_RP20",
+                        "frederikssund_WD_Storm_Reference_RP20",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Agricultural_areas",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Biodiversity",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Buildings",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Human",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Industry_staff",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Public_service",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Recreative_areas",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Road_traffic",
+                        "SP_Frederikssund_Storm_Ref_RP20_RP50__Tourism"
+                    ],
+                    "RP50": [
+                        "jyllinge_WD_Storm_Ref_SP50",
+                        "frederiksvaerk_WD_Storm_Ref_RP50",
+                        "frederikssund_WD_Storm_Reference_RP50"
+                    ],
+                    "RP100": [
+                        "jyllinge_WD_Storm_Ref_RP100",
+                        "frederiksvaerk_WD_Storm_Ref_RP100",
+                        "frederikssund_WD_Storm_Reference_RP100",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Agricultural_areas",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Biodiversity",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Buildings",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Human",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Industry_staff",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Public_service",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Recreative_areas",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Road_traffic",
+                        "SP_Frederikssund_Storm_Ref_RP100_RP100__Tourism"
+                    ]
+                },
+                "Low Emissions (SSP1)": {
+                    "Mid Century (2041-2070)": {
+                        "RP20": [],
+                        "RP50": [
+                            "jyllinge_WD_Storm_SSP1_RP50_2041_2070",
+                            "frederikssund_WD_Storm_SSP1_RP50_2041_2070",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Agricultural_areas",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Biodiversity",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Buildings",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Human",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Industry_staff",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Public_service",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Recreative_areas",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Road_traffic",
+                            "SP_Frederikssund_Storm_SSP1_RP50_RP50_2041_2070__Tourism"
+                        ],
+                        "RP100": []
+                    },
+                    "Long Term (2071-2100)": {
+                        "RP20": [
+                            "jyllinge_WD_Storm_SSP1_RP20_2071_2100",
+                            "frederiksvaerk_WD_Storm_SSP1_RP20_2071_2100",
+                            "frederikssund_WD_Storm_SSP1_RP20_2071_2100",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Agricultural_areas",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Biodiversity",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Buildings",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Human",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Industry_staff",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Public_service",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Recreative_areas",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Road_traffic",
+                            "SP_Frederikssund_Storm_SSP1_RP20_RP50_2071_2100__Tourism"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Storm_SSP1_RP50_2071_2100",
+                            "frederiksvaerk_WD_Storm_SSP1_RP50_2071_2100",
+                            "frederikssund_WD_Storm_SSP1_RP50_2071_2100"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Storm_SSP1_RP100_2071_2100",
+                            "frederiksvaerk_WD_Storm_SSP1_RP100_2071_2100",
+                            "frederikssund_WD_Storm_SSP1_RP100_2071_2100",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Agricultural_areas",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Biodiversity",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Buildings",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Human",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Industry_staff",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Public_service",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Recreative_areas",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Road_traffic",
+                            "SP_Frederikssund_Storm_SSP1_RP100_RP100_2071_2100__Tourism"
+                        ]
+                    }
+                },
+                "Moderate Emissions (SSP2)": {
+                    "Mid Century (2041-2070)": {
+                        "RP20": [
+                            "jyllinge_WD_Storm_SSP2_RP20_2041_2070",
+                            "frederiksvaerk_WD_Storm_SSP2_RP20_2041_2070",
+                            "frederikssund_WD_Storm_SSP2_RP20_2041_2070",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Agricultural_areas",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Biodiversity",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Buildings",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Human",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Industry_staff",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Public_service",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Recreative_areas",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Road_traffic",
+                            "SP_Frederikssund_Storm_SSP2_RP20_RP50_2041_2070__Tourism"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Storm_SSP2_RP50_2041_2070",
+                            "frederiksvaerk_WD_Storm_SSP2_RP50_2041_2070",
+                            "frederikssund_WD_Storm_SSP2_RP50_2041_2070"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Storm_SSP2_RP100_2041_2070",
+                            "frederiksvaerk_WD_Storm_SSP2_RP100_2041_2070",
+                            "frederikssund_WD_Storm_SSP2_RP100_2041_2070",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Agricultural_areas",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Biodiversity",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Buildings",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Human",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Industry_staff",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Public_service",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Recreative_areas",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Road_traffic",
+                            "SP_Frederikssund_Storm_SSP2_RP100_RP100_2041_2070__Tourism"
+                        ]
+                    },
+                    "Long Term (2071-2100)": {
+                        "RP20": [
+                            "jyllinge_WD_Storm_SSP2_RP20_2071_2100",
+                            "frederiksvaerk_WD_Storm_SSP2_RP20_2071_2100",
+                            "frederikssund_WD_Storm_SSP2_RP20_2071_2100"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Storm_SSP2_RP50_2071_2100",
+                            "frederiksvaerk_WD_Storm_SSP2_RP50_2071_2100",
+                            "frederikssund_WD_Storm_SSP2_RP50_2071_2100"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Storm_SSP2_RP100_2071_2100",
+                            "frederiksvaerk_WD_Storm_SSP2_RP100_2071_2100",
+                            "frederikssund_WD_Storm_SSP2_RP100_2071_2100"
+                        ]
+                    }
+                },
+                "High Emissions (SSP3)": {
+                    "Mid Century (2041-2070)": {
+                        "RP20": [],
+                        "RP50": [],
+                        "RP100": []
+                    },
+                    "Long Term (2071-2100)": {
+                        "RP20": [],
+                        "RP50": [],
+                        "RP100": [
+                            "jyllinge_WD_Storm_SSP3_RP100_2071_2100",
+                            "frederiksvaerk_WD_Storm_SSP3_RP100_2071_2100",
+                            "frederikssund_WD_Storm_SSP3_RP100_2071_2100"
+                        ]
+                    }
+                }
+            },
+            "Pluvial Flooding": {
+                "Reference Period": {
+                    "RP20": [
+                        "jyllinge_WD_Pluvial_Ref_RP20",
+                        "frederiksvaerk_WD_Pluvial_Ref_RP20",
+                        "frederikssund_WD_Pluvial_Ref_RP20"
+                    ],
+                    "RP50": [
+                        "jyllinge_WD_Pluvial_Ref_RP50",
+                        "frederiksvaerk_WD_Pluvial_Ref_RP50",
+                        "frederikssund_WD_Pluvial_Ref_RP50"
+                    ],
+                    "RP100": [
+                        "jyllinge_WD_Pluvial_Ref_RP100",
+                        "frederiksvaerk_WD_Pluvial_Ref_RP100",
+                        "frederikssund_WD_Pluvial_Ref_RP100"
+                    ]
+                },
+                "Low Emissions (SSP1)": {
+                    "Mid Century (2041-2070)": {
+                        "RP20": [
+                            "jyllinge_WD_Pluvial_SSP1_RP20_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP1_RP20_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP1_RP20_2041_2070"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Pluvial_SSP1_RP50_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP1_RP50_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP1_RP50_2041_2070"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Pluvial_SSP1_RP100_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP1_RP100_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP1_RP100_2041_2070"
+                        ]
+                    },
+                    "Long Term (2071-2100)": {
+                        "RP20": ["jyllinge_WD_Pluvial_SSP1_RP20_2071_2100"],
+                        "RP50": ["jyllinge_WD_Pluvial_SSP1_RP50_2071_2100"],
+                        "RP100": ["jyllinge_WD_Pluvial_SSP1_RP100_2071_2100"]
+                    }
+                },
+                "Moderate Emissions (SSP2)": {
+                    "Mid Century (2041-2070)": {
+                        "RP20": [
+                            "jyllinge_WD_Pluvial_SSP2_RP20_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP2_RP20_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP2_RP20_2041_2070"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Pluvial_SSP2_RP50_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP2_RP50_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP2_RP50_2041_2070"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Pluvial_SSP2_RP100_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP2_RP100_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP2_RP100_2041_2070"
+                        ]
+                    },
+                    "Long Term (2071-2100)": {
+                        "RP20": [
+                            "jyllinge_WD_Pluvial_SSP2_RP20_2071_2100",
+                            "frederiksvaerk_WD_Pluvial_SSP2_RP20_2071_2100",
+                            "frederikssund_WD_Pluvial_SSP2_RP20_2071_2100"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Pluvial_SSP2_RP50_2071_2100",
+                            "frederiksvaerk_WD_Pluvial_SSP2_RP50_2071_2100",
+                            "frederikssund_WD_Pluvial_SSP2_RP50_2071_2100"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Pluvial_SSP2_RP100_2071_2100",
+                            "frederiksvaerk_WD_Pluvial_SSP2_RP100_2071_2100",
+                            "frederikssund_WD_Pluvial_SSP2_RP100_2071_2100"
+                        ]
+                    }
+                },
+                "High Emissions (SSP3)": {
+                    "Mid Century (2041-2070)": {
+                        "RP20": [
+                            "jyllinge_WD_Pluvial_SSP3_RP20_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP3_RP20_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP3_RP20_2041_2070"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Pluvial_SSP3_RP50_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP3_RP50_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP3_RP50_2041_2070"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Pluvial_SSP3_RP100_2041_2070",
+                            "frederiksvaerk_WD_Pluvial_SSP3_RP100_2041_2070",
+                            "frederikssund_WD_Pluvial_SSP3_RP100_2041_2070"
+                        ]
+                    },
+                    "Long Term (2071-2100)": {
+                        "RP20": [
+                            "jyllinge_WD_Pluvial_SSP3_RP20_2071_2100",
+                            "frederiksvaerk_WD_Pluvial_SSP3_RP20_2071_2100",
+                            "frederikssund_WD_Pluvial_SSP3_RP20_2071_2100"
+                        ],
+                        "RP50": [
+                            "jyllinge_WD_Pluvial_SSP3_RP50_2071_2100",
+                            "frederiksvaerk_WD_Pluvial_SSP3_RP50_2071_2100",
+                            "frederikssund_WD_Pluvial_SSP3_RP50_2071_2100"
+                        ],
+                        "RP100": [
+                            "jyllinge_WD_Pluvial_SSP3_RP100_2071_2100",
+                            "frederiksvaerk_WD_Pluvial_SSP3_RP100_2071_2100",
+                            "frederikssund_WD_Pluvial_SSP3_RP100_2071_2100"
+                        ]
+                    }
+                }
+            }
+        };
+
+        const coastalFloodingGroup = new GroupLayer({
+            title: "Coastal Flooding",
+            id: "coastal_flooding",
+            visible: false,
+            attributes: {
+                "legend": {
+                    Component: WaterLevelLegend
+                }
+            },
+            layers: createNestedGroups(layerDefinition["Coastal Flooding"], "coastal_flooding")
+        });
+        
+        const pluvialFloodingGroup = new GroupLayer({
+            title: "Pluvial Flooding",
+            id: "pluvial_flooding",
+            visible: false,
+            attributes: {
+                "legend": {
+                    Component: WaterLevelLegend
+                }
+            },
+            layers: createNestedGroups(layerDefinition["Pluvial Flooding"], "pluvial_flooding")
+        });
+
+        // Combine all Scalgo layers into a single group, no known groupings yet 
+        const scalgoLayers = [
+            ...wmsLayersFrederikssundScalgoPluvial,
+            ...wmsLayersFrederikssundScalgoStorm,
+            ...wmsLayersFrederiksvaerkScalgoPluvial,
+            ...wmsLayersFrederiksvaerkScalgoStorm,
+            ...wmsLayersJyllingeScalgoStorm
+        ];
+
+        const scalgoGroup = new GroupLayer({
+            title: "SCALGO model",
+            id: "scalgo_model",
+            visible: false,
+            attributes: {
+                "legend": {
+                    Component: WaterLevelLegend
+                }
+            },
+            layers: scalgoLayers.map(({ name }) => this.createWmsLayer(name, name, name))
+        });
+
         return {
             initialView: {
                 kind: "position",
@@ -473,253 +860,285 @@ export class MainMapProvider implements MapConfigProvider {
                         this.createMunicipalityLayer("roskilde")
                     ]
                 }),
-                // ...wmsLayersRim2dCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
-                // ...wmsLayersRim2dPluvial.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
-                // ...wmsLayersSaferPlacesCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
-                // ...wmsLayersFrederikssundScalgoPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersFrederikssundScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersFrederikssundSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersFrederikssundSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersFrederiksvaerkScalgoPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersFrederiksvaerkScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersFrederiksvaerkSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersFrederiksvaerkSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersJyllingeScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersJyllingeSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
-                // ...wmsLayersJyllingeSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
-
-                //PARENT GROUP HISTORICAL LAYERS
-                new GroupLayer({
-                    title: "Historical Layers",
-                    visible: false,
-                    id: "historical",
-                    attributes: {
-                        "legend": {
-                            Component: WaterLevelLegend
-                        }
-                    },
-                    layers: [
-                        new GroupLayer({
-                            title: "SaferPlaces model",
-                            visible: false,
-                            id: "coastal_flooding_saferplaces",
-                            layers: [
-                                ...wmsLayersSaferPlacesCoastal.map(({ name, title, description }) =>
-                                    this.createWmsLayer(name, title, description)
-                                )
-                            ]
-                        }),
-                        new GroupLayer({
-                            title: "RIM2D model",
-                            visible: false,
-                            id: "historical_RIM2D",
-                            layers: [
-                                ...wmsLayersRim2dCoastal.map(({ name, title, description }) =>
-                                    this.createWmsLayer(name, title, description)
-                                ),
-                                ...wmsLayersRim2dPluvial.map(({ name, title, description }) =>
-                                    this.createWmsLayer(name, title, description)
-                                )
-                            ]
-                        })
-                    ]
-                }),
-
-                //PARENT GROUP PLUVIAL FLOODING
-                new GroupLayer({
-                    title: "Pluvial Flooding",
-                    visible: false,
-                    id: "pluvial_flooding",
-                    attributes: {
-                        "legend": {
-                            Component: WaterLevelLegend
-                        }
-                    },
-                    layers: [
-                        new GroupLayer({
-                            title: "Frederikssund",
-                            visible: false,
-                            id: "pluvial_flooding_frederikssund",
-                            layers: [
-                                new GroupLayer({
-                                    title: "Scalgo model",
-                                    visible: false,
-                                    id: "pluvial_flooding_frederikssund_scalgo",
-                                    layers: [
-                                        ...wmsLayersFrederikssundScalgoPluvial.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                }),
-                                new GroupLayer({
-                                    title: "SaferPlaces model",
-                                    visible: false,
-                                    id: "pluvial_flooding_frederikssund_saferplaces",
-                                    layers: [
-                                        ...wmsLayersFrederikssundSaferPlacesPluvial.map(
-                                            ({ name }) => this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                })
-                            ]
-                        }),
-                        new GroupLayer({
-                            title: "Frederiksvaerk",
-                            visible: false,
-                            id: "pluvial_flooding_frederiksvaerk",
-                            layers: [
-                                new GroupLayer({
-                                    title: "Scalgo model",
-                                    visible: false,
-                                    id: "pluvial_flooding_frederiksvaerk_scalgo",
-                                    layers: [
-                                        ...wmsLayersFrederiksvaerkScalgoPluvial.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                }),
-                                new GroupLayer({
-                                    title: "SaferPlaces model",
-                                    visible: false,
-                                    id: "pluvial_flooding_frederiksvaerk_saferplaces",
-                                    layers: [
-                                        ...wmsLayersFrederiksvaerkSaferPlacesPluvial.map(
-                                            ({ name }) => this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                })
-                            ],
-                            attributes: {
-                                "legend": {
-                                    Component: WaterLevelLegend
-                                }
-                            }
-                        }),
-                        new GroupLayer({
-                            title: "Jyllinge",
-                            visible: false,
-                            id: "pluvial_flooding_jyllinge",
-                            layers: [
-                                new GroupLayer({
-                                    title: "SaferPlaces model",
-                                    visible: false,
-                                    id: "pluvial_flooding_jyllinge_saferplaces",
-                                    layers: [
-                                        ...wmsLayersJyllingeSaferPlacesPluvial.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                })
-                            ]
-                        })
-                    ]
-                }),
-
-                //PARENT GROUP COASTAL FLOODING
-                new GroupLayer({
-                    title: "Coastal Flooding",
-                    visible: false,
-                    id: "coastal_flooding",
-                    attributes: {
-                        "legend": {
-                            Component: WaterLevelLegend
-                        }
-                    },
-                    layers: [
-                        new GroupLayer({
-                            title: "Frederikssund",
-                            visible: false,
-                            id: "storm_frederikssund",
-                            layers: [
-                                new GroupLayer({
-                                    title: "Scalgo model",
-                                    visible: false,
-                                    id: "storm_frederikssund_scalgo",
-                                    layers: [
-                                        ...wmsLayersFrederikssundScalgoStorm.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                }),
-                                new GroupLayer({
-                                    title: "SaferPlaces model",
-                                    visible: false,
-                                    id: "storm_frederikssund_saferplaces",
-                                    layers: [
-                                        ...wmsLayersFrederikssundSaferPlacesStorm.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                }),
-                                new GroupLayer({
-                                    title: "Damage cost model",
-                                    visible: false,
-                                    id: "storm_frederikssund_damagecost",
-                                    layers: [
-                                        ...wmsLayersFrederikssundDamagecostStorm.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                })
-                            ]
-                        }),
-                        new GroupLayer({
-                            title: "Frederiksvaerk",
-                            visible: false,
-                            id: "storm_frederiksvaerk",
-                            layers: [
-                                new GroupLayer({
-                                    title: "Scalgo model",
-                                    visible: false,
-                                    id: "storm_frederiksvaerk_scalgo",
-                                    layers: [
-                                        ...wmsLayersFrederiksvaerkScalgoStorm.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                }),
-                                new GroupLayer({
-                                    title: "SaferPlaces model",
-                                    visible: false,
-                                    id: "storm_frederiksvaerk_saferplaces",
-                                    layers: [
-                                        ...wmsLayersFrederiksvaerkSaferPlacesStorm.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                })
-                            ]
-                        }),
-                        new GroupLayer({
-                            title: "Jyllinge",
-                            visible: false,
-                            id: "storm_jyllinge",
-                            layers: [
-                                new GroupLayer({
-                                    title: "Scalgo model",
-                                    visible: false,
-                                    id: "storm_jyllinge_scalgo",
-                                    layers: [
-                                        ...wmsLayersJyllingeScalgoStorm.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                }),
-                                new GroupLayer({
-                                    title: "SaferPlaces model",
-                                    visible: false,
-                                    id: "storm_jyllinge_saferplaces",
-                                    layers: [
-                                        ...wmsLayersJyllingeSaferPlacesStorm.map(({ name }) =>
-                                            this.createWmsLayer(name, name, name)
-                                        )
-                                    ]
-                                })
-                            ]
-                        })
-                    ]
-                })
+                coastalFloodingGroup,
+                pluvialFloodingGroup,
+                scalgoGroup
             ]
         };
     }
 }
+
+/// OLD LAYER ORG /// 
+//     async getMapConfig(): Promise<MapConfig> {
+//         return {
+//             initialView: {
+//                 kind: "position",
+//                 center: { x: 1373573, y: 7503364 },
+//                 zoom: 11
+//             },
+//             projection: "EPSG:3857",
+//             layers: [
+//                 Basemap,
+//                 new GroupLayer({
+//                     title: "Municipalities",
+//                     id: "municipal_layers",
+//                     layers: [
+//                         this.createMunicipalityLayer("frederikssund"),
+//                         this.createMunicipalityLayer("egedal"),
+//                         this.createMunicipalityLayer("halsnaes"),
+//                         this.createMunicipalityLayer("lejre"),
+//                         this.createMunicipalityLayer("roskilde")
+//                     ]
+//                 }),
+//                 // ...wmsLayersRim2dCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
+//                 // ...wmsLayersRim2dPluvial.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
+//                 // ...wmsLayersSaferPlacesCoastal.map(({name, title, description}) => this.createWmsLayer(name, title, description)),
+//                 // ...wmsLayersFrederikssundScalgoPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersFrederikssundScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersFrederikssundSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersFrederikssundSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersFrederiksvaerkScalgoPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersFrederiksvaerkScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersFrederiksvaerkSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersFrederiksvaerkSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersJyllingeScalgoStorm.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersJyllingeSaferPlacesPluvial.map(({name}) => this.createWmsLayer(name, name, name)),
+//                 // ...wmsLayersJyllingeSaferPlacesStorm.map(({name}) => this.createWmsLayer(name, name, name)),
+
+//                 //PARENT GROUP HISTORICAL LAYERS
+//                 new GroupLayer({
+//                     title: "Historical Layers",
+//                     visible: false,
+//                     id: "historical",
+//                     attributes: {
+//                         "legend": {
+//                             Component: WaterLevelLegend
+//                         }
+//                     },
+//                     layers: [
+//                         new GroupLayer({
+//                             title: "SaferPlaces model",
+//                             visible: false,
+//                             id: "coastal_flooding_saferplaces",
+//                             layers: [
+//                                 ...wmsLayersSaferPlacesCoastal.map(({ name, title, description }) =>
+//                                     this.createWmsLayer(name, title, description)
+//                                 )
+//                             ]
+//                         }),
+//                         new GroupLayer({
+//                             title: "RIM2D model",
+//                             visible: false,
+//                             id: "historical_RIM2D",
+//                             layers: [
+//                                 ...wmsLayersRim2dCoastal.map(({ name, title, description }) =>
+//                                     this.createWmsLayer(name, title, description)
+//                                 ),
+//                                 ...wmsLayersRim2dPluvial.map(({ name, title, description }) =>
+//                                     this.createWmsLayer(name, title, description)
+//                                 )
+//                             ]
+//                         })
+//                     ]
+//                 }),
+
+//                 //PARENT GROUP PLUVIAL FLOODING
+//                 new GroupLayer({
+//                     title: "Pluvial Flooding",
+//                     visible: false,
+//                     id: "pluvial_flooding",
+//                     attributes: {
+//                         "legend": {
+//                             Component: WaterLevelLegend
+//                         }
+//                     },
+//                     layers: [
+//                         new GroupLayer({
+//                             title: "Frederikssund",
+//                             visible: false,
+//                             id: "pluvial_flooding_frederikssund",
+//                             layers: [
+//                                 new GroupLayer({
+//                                     title: "Scalgo model",
+//                                     visible: false,
+//                                     id: "pluvial_flooding_frederikssund_scalgo",
+//                                     layers: [
+//                                         ...wmsLayersFrederikssundScalgoPluvial.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 }),
+//                                 new GroupLayer({
+//                                     title: "SaferPlaces model",
+//                                     visible: false,
+//                                     id: "pluvial_flooding_frederikssund_saferplaces",
+//                                     layers: [
+//                                         ...wmsLayersFrederikssundSaferPlacesPluvial.map(
+//                                             ({ name }) => this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 })
+//                             ]
+//                         }),
+//                         new GroupLayer({
+//                             title: "Frederiksvaerk",
+//                             visible: false,
+//                             id: "pluvial_flooding_frederiksvaerk",
+//                             layers: [
+//                                 new GroupLayer({
+//                                     title: "Scalgo model",
+//                                     visible: false,
+//                                     id: "pluvial_flooding_frederiksvaerk_scalgo",
+//                                     layers: [
+//                                         ...wmsLayersFrederiksvaerkScalgoPluvial.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 }),
+//                                 new GroupLayer({
+//                                     title: "SaferPlaces model",
+//                                     visible: false,
+//                                     id: "pluvial_flooding_frederiksvaerk_saferplaces",
+//                                     layers: [
+//                                         ...wmsLayersFrederiksvaerkSaferPlacesPluvial.map(
+//                                             ({ name }) => this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 })
+//                             ],
+//                             attributes: {
+//                                 "legend": {
+//                                     Component: WaterLevelLegend
+//                                 }
+//                             }
+//                         }),
+//                         new GroupLayer({
+//                             title: "Jyllinge",
+//                             visible: false,
+//                             id: "pluvial_flooding_jyllinge",
+//                             layers: [
+//                                 new GroupLayer({
+//                                     title: "SaferPlaces model",
+//                                     visible: false,
+//                                     id: "pluvial_flooding_jyllinge_saferplaces",
+//                                     layers: [
+//                                         ...wmsLayersJyllingeSaferPlacesPluvial.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 })
+//                             ]
+//                         })
+//                     ]
+//                 }),
+
+//                 //PARENT GROUP COASTAL FLOODING
+//                 new GroupLayer({
+//                     title: "Coastal Flooding",
+//                     visible: false,
+//                     id: "coastal_flooding",
+//                     attributes: {
+//                         "legend": {
+//                             Component: WaterLevelLegend
+//                         }
+//                     },
+//                     layers: [
+//                         new GroupLayer({
+//                             title: "Frederikssund",
+//                             visible: false,
+//                             id: "storm_frederikssund",
+//                             layers: [
+//                                 new GroupLayer({
+//                                     title: "Scalgo model",
+//                                     visible: false,
+//                                     id: "storm_frederikssund_scalgo",
+//                                     layers: [
+//                                         ...wmsLayersFrederikssundScalgoStorm.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 }),
+//                                 new GroupLayer({
+//                                     title: "SaferPlaces model",
+//                                     visible: false,
+//                                     id: "storm_frederikssund_saferplaces",
+//                                     layers: [
+//                                         ...wmsLayersFrederikssundSaferPlacesStorm.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 }),
+//                                 new GroupLayer({
+//                                     title: "Damage cost model",
+//                                     visible: false,
+//                                     id: "storm_frederikssund_damagecost",
+//                                     layers: [
+//                                         ...wmsLayersFrederikssundDamagecostStorm.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 })
+//                             ]
+//                         }),
+//                         new GroupLayer({
+//                             title: "Frederiksvaerk",
+//                             visible: false,
+//                             id: "storm_frederiksvaerk",
+//                             layers: [
+//                                 new GroupLayer({
+//                                     title: "Scalgo model",
+//                                     visible: false,
+//                                     id: "storm_frederiksvaerk_scalgo",
+//                                     layers: [
+//                                         ...wmsLayersFrederiksvaerkScalgoStorm.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 }),
+//                                 new GroupLayer({
+//                                     title: "SaferPlaces model",
+//                                     visible: false,
+//                                     id: "storm_frederiksvaerk_saferplaces",
+//                                     layers: [
+//                                         ...wmsLayersFrederiksvaerkSaferPlacesStorm.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 })
+//                             ]
+//                         }),
+//                         new GroupLayer({
+//                             title: "Jyllinge",
+//                             visible: false,
+//                             id: "storm_jyllinge",
+//                             layers: [
+//                                 new GroupLayer({
+//                                     title: "Scalgo model",
+//                                     visible: false,
+//                                     id: "storm_jyllinge_scalgo",
+//                                     layers: [
+//                                         ...wmsLayersJyllingeScalgoStorm.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 }),
+//                                 new GroupLayer({
+//                                     title: "SaferPlaces model",
+//                                     visible: false,
+//                                     id: "storm_jyllinge_saferplaces",
+//                                     layers: [
+//                                         ...wmsLayersJyllingeSaferPlacesStorm.map(({ name }) =>
+//                                             this.createWmsLayer(name, name, name)
+//                                         )
+//                                     ]
+//                                 })
+//                             ]
+//                         })
+//                     ]
+//                 })
+//             ]
+//         };
+//     }
+// }
+
+/// END OLD LAYER ORG ///
