@@ -516,6 +516,7 @@ export class MainMapProvider implements MapConfigProvider {
         
 
         // Define the layer organization as an object 
+        // Change here for any additional layers/subgroups
         const layerDefinition = {
             "Coastal Flooding": {
                 "Reference Period": {
