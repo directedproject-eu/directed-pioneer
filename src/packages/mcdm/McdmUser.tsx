@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, ChangeEvent } from "react";
 import {
     Box,
     Button,
@@ -19,7 +19,8 @@ import {
     SliderFilledTrack,
     SliderThumb,
     Tooltip,
-    Flex
+    Flex,
+    Input
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
@@ -29,7 +30,6 @@ import HighchartsReact from "highcharts-react-official";
 import { useService } from "open-pioneer:react-hooks";
 import { McdmService } from "./McdmService";
 import type { ProcessExecution } from "./McdmService";
-
 
 interface Weights {
     "measure net cost": number;
@@ -143,6 +143,8 @@ const processSensitivityData = (rawData: Record<string, Record<string, number>>)
 export function ModelClient() {
     // Use the `useService` hook to get the MCDM service instance
     const clientService = useService<McdmService>("app.McdmService");
+    const [tokenInput, setTokenInput] = useState<string>("");
+    const [tokenSubmitted, setTokenSubmitted] = useState(false);
     const [ranksData, setRanksData] = useState<Record<string, number> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -167,18 +169,22 @@ export function ModelClient() {
         }));
     };
 
+    const handleTokenInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setTokenInput(event.target.value);
+    };
+
     // Submits the job to the backend API via the McdmService
     const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
         setLoading(true);
         setError(null);
         setRanksData(null); // Clear previous results
 
-        const TOKEN = "nZoHRZzSxkkHEOSJ5PBpYk3MejL3xJgm";
         const processId = "climada-mca-roskilde";
 
         // Create the inputs map for the service
         const inputs = new Map<string, unknown>();
-        inputs.set("token", TOKEN);
+        inputs.set("token", tokenInput);
         inputs.set("weights", weights);
 
         // Construct the process execution payload
@@ -291,7 +297,7 @@ export function ModelClient() {
                     type: "column",
                     data: seriesData
                 }
-            ], 
+            ]
             // exporting: {
             //     enabled: true
             // }
@@ -365,7 +371,7 @@ export function ModelClient() {
                     borderColor: "#CCC"
                 }
             },
-            series: processedData.series, 
+            series: processedData.series
             // exporting: {
             //     enabled: true
             // }
@@ -393,123 +399,180 @@ export function ModelClient() {
                     <ModalHeader>CLIMADA Multi-Criteria Decision Making (MCDM)</ModalHeader>
                     <ModalCloseButton isDisabled={loading} />
                     <ModalBody>
-                        {loading ? (
-                            <Center flexDirection="column" py={10}>
-                                <Spinner size="md" />
-                                <Text mt={4}>Calculating MCDM analysis...</Text>
-                            </Center>
+                        {!tokenSubmitted ? (
+                            <FormControl>
+                                <FormLabel padding={2} htmlFor="token">
+                                    Please enter a token to access the MCDM Dialog {" "}
+                                </FormLabel>
+                                <Input
+                                    type="text"
+                                    id="token"
+                                    value={tokenInput}
+                                    onChange={handleTokenInputChange}
+                                    placeholder="Enter your token here and press 'continue'"
+                                    variant="outline"
+                                />
+                                <Button
+                                    mt={4}
+                                    onClick={() => {
+                                        if (tokenInput.trim()) {
+                                            setTokenSubmitted(true); // Move on to criteria weightings
+                                        }
+                                    }}
+                                    isDisabled={!tokenInput.trim()}
+                                >
+                                    Continue
+                                </Button>
+                            </FormControl>
                         ) : (
                             <>
-                                <Text fontWeight="semibold" py={3}>
-                                    ⚖️ Please weight each criteria and press submit to view results.
-                                </Text>
-                                {/* optionally uncomment this and the mode state to have input for modes */}
-                                {/* <Text fontWeight="semibold" padding={1}>
-                                    Please select an Analysis Mode and rate each criteria.
-                                </Text>
-                                <FormControl mb={4}>
-                                    <FormLabel>Analysis Mode</FormLabel>
-                                    <Select
-                                        value={mode}
-                                        onChange={(e) =>
-                                            setMode(e.target.value as "ranks" | "sensitivity")
-                                        }
-                                    >
-                                        <option value="ranks">Ranks</option>
-                                        <option value="sensitivity">Sensitivity Analysis</option>
-                                    </Select>
-                                </FormControl> */}
+                                {loading ? (
+                                    <Center flexDirection="column" py={10}>
+                                        <Spinner size="md" />
+                                        <Text mt={4}>Calculating MCDM analysis...</Text>
+                                    </Center>
+                                ) : (
+                                    <>
+                                        <Flex justify="space-between" align="center" mb={4}>
+                                            <Text fontWeight="semibold">
+                                                ⚖️ Please weight each criteria and press submit to
+                                                view results.
+                                            </Text>
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={() => {
+                                                    setTokenSubmitted(false); // Go back to token input
+                                                    // setTokenInput(""); // Optional to clear token on going back
+                                                }}
+                                            >
+                                                ← Back
+                                            </Button>
+                                        </Flex>
+                                        {/* optionally uncomment this and the mode state to have input for modes */}
+                                        {/* <Text fontWeight="semibold" padding={1}>
+                                            Please select an Analysis Mode and rate each criteria.
+                                        </Text>
+                                        <FormControl mb={4}>
+                                            <FormLabel>Analysis Mode</FormLabel>
+                                            <Select
+                                                value={mode}
+                                                onChange={(e) =>
+                                                    setMode(e.target.value as "ranks" | "sensitivity")
+                                                }
+                                            >
+                                                <option value="ranks">Ranks</option>
+                                                <option value="sensitivity">Sensitivity Analysis</option>
+                                            </Select>
+                                        </FormControl> */}
 
-                                {Object.keys(weights).map((criteria) => {
-                                    const typedCriteria = criteria as keyof Weights;
-                                    const criterionDisplayNames: Record<keyof Weights, string> = {
-                                        "measure net cost":
-                                            "Cost: How important is the cost of implementing the measure?",
-                                        "averted risk_aai":
-                                            "Averted Risk: How important is it that the measure helps to avert risk to people?",
-                                        "approval":
-                                            "Approval: How important is it that the public approves of the measure?",
-                                        "feasability":
-                                            "Feasibility: How important is it that the measure be feasible to implement?",
-                                        "durability":
-                                            "Durability: How important is it that the measure is durable?",
-                                        "externalities":
-                                            "Externalities: How important is it that the measure is future-proof?",
-                                        "implementation time":
-                                            "Implementation Time: How important is the time it takes to implement the measure?"
-                                    };
-                                    return (
-                                        <FormControl key={typedCriteria} mb={4}>
-                                            <FormLabel>
-                                                {criterionDisplayNames[typedCriteria]}
-                                            </FormLabel>
-                                            <Box padding={2}>
-                                                <Flex justify="space-between" mb={1}>
-                                                    <Text fontSize="sm">Not important</Text>
-                                                    <Text fontSize="sm">Somewhat important</Text>
-                                                    <Text fontSize="sm">Highly important</Text>
-                                                </Flex>
-                                                <Slider
-                                                    value={weights[typedCriteria]}
-                                                    min={0}
-                                                    max={1}
-                                                    step={0.01}
-                                                    onChange={(newValue) =>
-                                                        handleWeightChange(typedCriteria, newValue)
-                                                    }
-                                                    defaultValue={0}
-                                                >
-                                                    <SliderTrack>
-                                                        <SliderFilledTrack />
-                                                    </SliderTrack>
-                                                    <Tooltip
-                                                        hasArrow
-                                                        color="white"
-                                                        placement="top"
-                                                        isOpen
-                                                        label={weights[typedCriteria]}
-                                                    >
-                                                        <SliderThumb />
-                                                    </Tooltip>
-                                                </Slider>
-                                            </Box>
-                                        </FormControl>
-                                    );
-                                })}
+                                        {Object.keys(weights).map((criteria) => {
+                                            const typedCriteria = criteria as keyof Weights;
+                                            const criterionDisplayNames: Record<
+                                                keyof Weights,
+                                                string
+                                            > = {
+                                                "measure net cost":
+                                                    "Cost: How important is the cost of implementing the measure?",
+                                                "averted risk_aai":
+                                                    "Averted Risk: How important is it that the measure helps to avert risk to people?",
+                                                "approval":
+                                                    "Approval: How important is it that the public approves of the measure?",
+                                                "feasability":
+                                                    "Feasibility: How important is it that the measure be feasible to implement?",
+                                                "durability":
+                                                    "Durability: How important is it that the measure is durable?",
+                                                "externalities":
+                                                    "Externalities: How important is it that the measure is future-proof?",
+                                                "implementation time":
+                                                    "Implementation Time: How important is the time it takes to implement the measure?"
+                                            };
+                                            return (
+                                                <FormControl key={typedCriteria} mb={4}>
+                                                    <FormLabel>
+                                                        {criterionDisplayNames[typedCriteria]}
+                                                    </FormLabel>
+                                                    <Box padding={2}>
+                                                        <Flex justify="space-between" mb={1}>
+                                                            <Text fontSize="sm">Not important</Text>
+                                                            <Text fontSize="sm">
+                                                                Somewhat important
+                                                            </Text>
+                                                            <Text fontSize="sm">
+                                                                Highly important
+                                                            </Text>
+                                                        </Flex>
+                                                        <Slider
+                                                            value={weights[typedCriteria]}
+                                                            min={0}
+                                                            max={1}
+                                                            step={0.01}
+                                                            onChange={(newValue) =>
+                                                                handleWeightChange(
+                                                                    typedCriteria,
+                                                                    newValue
+                                                                )
+                                                            }
+                                                            defaultValue={0}
+                                                        >
+                                                            <SliderTrack>
+                                                                <SliderFilledTrack />
+                                                            </SliderTrack>
+                                                            <Tooltip
+                                                                hasArrow
+                                                                color="white"
+                                                                placement="top"
+                                                                isOpen
+                                                                label={weights[typedCriteria]}
+                                                            >
+                                                                <SliderThumb />
+                                                            </Tooltip>
+                                                        </Slider>
+                                                    </Box>
+                                                </FormControl>
+                                            );
+                                        })}
 
-                                <Button
-                                    type="button"
-                                    size="md"
-                                    onClick={handleSubmit}
-                                    isDisabled={loading}
-                                >
-                                    Submit Criteria Weights
-                                </Button>
-
-                                <Flex paddingY={4} />
-                                <Flex justifyContent="space-between" alignItems="center">
-                                    <Tooltip
-                                        label="This chart shows the ranking of measures in all possible combinations of criteria weightings; it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 50% of the time."
-                                        aria-label="A tooltip"
-                                    >
-                                        <FaInfoCircle color="gray" cursor="pointer" />
-                                    </Tooltip>
-                                </Flex>
-                                <SensitivityChart chartOptions={sensitivityChartOptions} />
-                                {/* <hr style={{ margin: "20px 0" }} /> */}
-                                <Flex paddingY={4} />
-                                {UserWeightChartOptions && (
-                                    <Flex justifyContent="space-between" alignItems="center">
-                                        <Tooltip
-                                            label="This chart shows the ranking of measures based on the criteria weightings which were submitted. For example, if cost was weighted as highly important to you, this chart shows which measures align with this, with 1 being the best possible rank."
-                                            aria-label="A tooltip"
+                                        <Button
+                                            type="button"
+                                            size="md"
+                                            onClick={handleSubmit}
+                                            isDisabled={loading}
                                         >
-                                            <FaInfoCircle color="gray" cursor="pointer" />
-                                        </Tooltip>
-                                    </Flex>
-                                )}
-                                {UserWeightChartOptions && (
-                                    <UserWeightChart chartOptions={UserWeightChartOptions} />
+                                            Submit Criteria Weights
+                                        </Button>
+
+                                        <Flex paddingY={4} />
+                                        <Flex justifyContent="space-between" alignItems="center">
+                                            <Tooltip
+                                                label="This chart shows the ranking of measures in all possible combinations of criteria weightings; it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 50% of the time."
+                                                aria-label="A tooltip"
+                                            >
+                                                <FaInfoCircle color="gray" cursor="pointer" />
+                                            </Tooltip>
+                                        </Flex>
+                                        <SensitivityChart chartOptions={sensitivityChartOptions} />
+                                        {/* <hr style={{ margin: "20px 0" }} /> */}
+                                        <Flex paddingY={4} />
+                                        {UserWeightChartOptions && (
+                                            <Flex
+                                                justifyContent="space-between"
+                                                alignItems="center"
+                                            >
+                                                <Tooltip
+                                                    label="This chart shows the ranking of measures based on the criteria weightings which were submitted. For example, if cost was weighted as highly important to you, this chart shows which measures align best with this, with 1 being the best possible rank."
+                                                    aria-label="A tooltip"
+                                                >
+                                                    <FaInfoCircle color="gray" cursor="pointer" />
+                                                </Tooltip>
+                                            </Flex>
+                                        )}
+                                        {UserWeightChartOptions && (
+                                            <UserWeightChart
+                                                chartOptions={UserWeightChartOptions}
+                                            />
+                                        )}
+                                    </>
                                 )}
                             </>
                         )}
