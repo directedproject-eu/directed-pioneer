@@ -402,7 +402,7 @@ export function ModelClient() {
                         {!tokenSubmitted ? (
                             <FormControl>
                                 <FormLabel padding={2} htmlFor="token">
-                                    Please enter a token to access the MCDM Dialog {" "}
+                                    Please enter a token to access the MCDM Dialog{" "}
                                 </FormLabel>
                                 <Input
                                     type="text"
