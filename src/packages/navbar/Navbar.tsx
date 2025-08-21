@@ -24,6 +24,8 @@ export const BASE_URL = import.meta.env.DEV
 
 import { AuthService } from "@open-pioneer/authentication";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
+import Disclaimer from "./components/Disclaimer";
+import DisclaimerContent from "./components/DisclaimerContent";
 
 console.info("base url: " + BASE_URL);
 console.info("mode: " + import.meta.env.MODE);
@@ -95,6 +97,12 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                         </Button>
                     </Flex>
                 ) : null}
+                <div style={{width:"350px", display:"flex", padding: "0px 20px"}}>
+                    <Text>Users are advised to verify the information independently and use the service at their own risk.</Text>
+                    <Disclaimer>
+                        <DisclaimerContent></DisclaimerContent>
+                    </Disclaimer>
+                </div>
             </Flex>
 
             <Collapse in={isOpen} animateOpacity>
