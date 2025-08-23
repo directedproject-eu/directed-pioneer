@@ -100,11 +100,13 @@ export class MainMapProvider implements MapConfigProvider {
                     visible: false,
                     id: "fluvial_flooding",
                     layers: [
-                        new SimpleLayer({...this.createWmsLayer(
-                            "euh_danube_bigrivers_10",
-                            "10-Year Flood Depth",
-                            "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
-                        )})
+                        new SimpleLayer({
+                            ...this.createWmsLayer(
+                                "euh_danube_bigrivers_10",
+                                "10-Year Flood Depth",
+                                "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
+                            )
+                        })
                     ],
                     attributes: {
                         "legend": {

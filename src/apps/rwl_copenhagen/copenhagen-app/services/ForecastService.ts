@@ -28,7 +28,6 @@ export class ForecastServiceImpl implements ForecastService {
     private total_precip: WebGLTileLayer | undefined;
     private rate_precip: WebGLTileLayer | undefined;
 
-
     //constructor with grouped DMI forecast layers
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;

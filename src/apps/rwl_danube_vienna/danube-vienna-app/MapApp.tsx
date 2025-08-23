@@ -53,19 +53,19 @@ export function MapApp() {
 
     useEffect(() => {
         if (!mapModel.map) return;
-    
+
         const map = mapModel.map.olMap;
         const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-    
+
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
                 (layer) => layer.olLayer?.getVisible?.() === true
             );
             setVisibleAvailableLayers(visibleLayers);
         };
-    
+
         updateVisibleLayers();
-    
+
         const eventKeys: EventsKey[] = allLayers
             .map((layer) => {
                 const olLayer = layer.olLayer;
@@ -76,16 +76,16 @@ export function MapApp() {
                 });
             })
             .filter((k): k is EventsKey => !!k);
-    
+
         let swipe: Swipe | null = null;
-    
+
         const removeSwipe = () => {
             if (swipe) {
                 map.removeControl(swipe);
                 swipe = null;
             }
         };
-    
+
         const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
             removeSwipe();
             swipe = new Swipe({
@@ -93,42 +93,41 @@ export function MapApp() {
                 rightLayers: [rightLayer],
                 position: 0.5,
                 orientation: "vertical",
-                className: "ol-swipe",
+                className: "ol-swipe"
             });
             map.addControl(swipe);
         };
-    
+
         const handleSwipeUpdate = () => {
             if (!selectedLeftLayer || !selectedRightLayer) {
                 removeSwipe();
                 return;
             }
-    
+
             const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
                 ?.olLayer as Layer;
             const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
                 ?.olLayer as Layer;
-    
+
             if (!leftLayer || !rightLayer) {
                 removeSwipe();
                 return;
             }
-    
+
             if (leftLayer.getVisible() && rightLayer.getVisible()) {
                 addSwipe(leftLayer, rightLayer);
             } else {
                 removeSwipe();
             }
         };
-    
+
         handleSwipeUpdate();
-    
+
         return () => {
             eventKeys.forEach(unByKey);
             removeSwipe();
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
-    
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">

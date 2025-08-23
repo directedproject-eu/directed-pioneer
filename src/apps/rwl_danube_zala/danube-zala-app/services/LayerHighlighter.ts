@@ -28,7 +28,6 @@ export class LayerHighlighterImpl implements LayerHighlighter {
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.#layers.value = model?.layers.getAllLayers();
             console.log(this.#layers.value);
-
         });
     }
 
@@ -49,7 +48,6 @@ export class LayerHighlighterImpl implements LayerHighlighter {
             });
             layer.olLayer.setZIndex(20);
         });
-
     }
     unHighlightLayer(layerId: string): void {
         const color = {
@@ -69,13 +67,11 @@ export class LayerHighlighterImpl implements LayerHighlighter {
             });
             layer.olLayer.setZIndex(15);
         });
-
     }
     zoomTo = (layerId: string) => {
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             const layer = model?.layers.getLayerById(layerId);
             model?.olView.fit(layer?.olLayer.getSource().getExtent());
-
         });
     };
 }

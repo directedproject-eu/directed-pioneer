@@ -27,7 +27,9 @@ export class GeosphereServiceImpl implements GeosphereService {
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                source: this.updateSource("https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/20240101T000000.tif"),
+                source: this.updateSource(
+                    "https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/20240101T000000.tif"
+                ),
                 style: {
                     color: this.createColorGradient()
                 },
@@ -37,7 +39,8 @@ export class GeosphereServiceImpl implements GeosphereService {
                 new SimpleLayer({
                     id: "daily_precipitation_sum",
                     title: "Precipitation",
-                    description: "Daily precipitation sums for 2024 in Austria provided by GeoSphere.",
+                    description:
+                        "Daily precipitation sums for 2024 in Austria provided by GeoSphere.",
                     olLayer: this.layer,
                     attributes: {
                         "legend": {
@@ -84,7 +87,6 @@ export class GeosphereServiceImpl implements GeosphereService {
         { value: 200, color: "#674571", label: "200" },
         { value: 300, color: "#503752", label: "300" }
     ];
-
 
     private createColorGradient() {
         const boundaries = this.precipTotalColorMap.map((item) => item.value);

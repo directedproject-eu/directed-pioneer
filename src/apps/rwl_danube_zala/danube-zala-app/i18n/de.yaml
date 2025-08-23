@@ -61,9 +61,10 @@ messages:
     title_chart1: "Anbauflächen in der Region Zala für "
   welcome_window:
     header: "Willkommen in der Zala App des DIRECTED Data Fabric!"
-    body: "Die Zala App ist Teil des Data Fabric, welches im Rahmen des EU-geförderten DIRECTED Projekts entwickelt wird. 
-           Ziel ist die Unterstützung Interessenvertreters bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel.
-           Bitte beachten Sie, dass die App noch in der Entwicklung ist."
+    body:
+      "Die Zala App ist Teil des Data Fabric, welches im Rahmen des EU-geförderten DIRECTED Projekts entwickelt wird.
+      Ziel ist die Unterstützung Interessenvertreters bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel.
+      Bitte beachten Sie, dass die App noch in der Entwicklung ist."
   ariaLabel:
     header: "Kopfzeile"
     footer: "Fußzeile mit Maßstabsinformationen, Koordinatensystem und Koordinatenanzeige"

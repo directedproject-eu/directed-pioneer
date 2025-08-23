@@ -10,7 +10,6 @@ import { LidarLegend } from "./Components/Legends/LidarLegend ";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
 export { GeosphereServiceImpl } from "./services/GeosphereService";
 
-
 const wmsLayersHistoricalFlooding = [
     {
         "name": "WD_RAIN172645",
@@ -33,12 +32,14 @@ const wmsLayersHistoricalDamage = [
     {
         "name": "DMG_RIVER111745",
         "title": "Damage By Fluvial Flooding (DMG_RIVER111745)",
-        "description": "Damage caused by fluvial flooding. This layer is only meant for demonstration purposes!"
+        "description":
+            "Damage caused by fluvial flooding. This layer is only meant for demonstration purposes!"
     },
     {
         "name": "DMG_RAIN110828",
         "title": "Damage By Pluvial Flooding (DMG_RAIN110828)",
-        "description": "Damage caused by pluvial flooding. This layer is only meant for demonstration purposes!"
+        "description":
+            "Damage caused by pluvial flooding. This layer is only meant for demonstration purposes!"
     }
 ];
 
@@ -46,17 +47,20 @@ const wmsPluvialFloodingLayersRef = [
     {
         "name": "Vienna_WD_RAIN152452_Ref_RP25",
         "title": "Reference (1989-2018) - RP25 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - Reference period (1989-2018) - 25 years return period  - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - Reference period (1989-2018) - 25 years return period  - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164659_Ref_RP50",
         "title": "Reference (1989-2018) - RP50 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - Reference period (1989-2018) - 50 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - Reference period (1989-2018) - 50 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164612_Ref_RP100",
         "title": "Reference (1989-2018) - RP100 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - Reference period (1989-2018) - 100 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - Reference period (1989-2018) - 100 years return period - Vienna - Simulated with SaferPlaces"
     }
 ];
 
@@ -64,17 +68,20 @@ const wmsPluvialFloodingLayersSSP2452050 = [
     {
         "name": "Vienna_WD_RAIN164413_SSP245_RP25_2050",
         "title": "SSP245 - 2050 - RP25 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP245 - 2050 - 25 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2050 - 25 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164745_SSP245_RP50_2050",
         "title": "SSP245 - 2050 - RP50 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP245 - 2050 - 50 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2050 - 50 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164825_SSP245_RP100_2050",
         "title": "SSP245 - 2050 - RP100 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP245 - 2050 - 100 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2050 - 100 years return period - Vienna - Simulated with SaferPlaces"
     }
 ];
 
@@ -82,17 +89,20 @@ const wmsPluvialFloodingLayersSSP5852050 = [
     {
         "name": "Vienna_WD_RAIN164413_SSP585_RP25_2050",
         "title": "SSP585 - 2050 - RP25 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP585 - 2050 - 25 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2050 - 25 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164323_SSP585_RP50_2050",
         "title": "SSP585 - 2050 - RP50 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP585 - 2050 - 50 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2050 - 50 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164223_SSP585_RP100_2050",
         "title": "SSP585 - 2050 - RP100 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP585 - 2050 - 100 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2050 - 100 years return period - Vienna - Simulated with SaferPlaces"
     }
 ];
 
@@ -100,17 +110,20 @@ const wmsPluvialFloodingLayersSSP2452080 = [
     {
         "name": "Vienna_WD_RAIN164413_SSP245_RP25_2080",
         "title": "SSP245 - 2080 - RP25 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP245 - 2080 - 25 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2080 - 25 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164323_SSP245_RP50_2080",
         "title": "SSP245 - 2080 - RP50 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP245 - 2080 - 50 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2080 - 50 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164223_SSP245_RP100_2080",
         "title": "SSP245 - 2080 - RP100 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP245 - 2080 - 100 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2080 - 100 years return period - Vienna - Simulated with SaferPlaces"
     }
 ];
 
@@ -118,20 +131,22 @@ const wmsPluvialFloodingLayersSSP5852080 = [
     {
         "name": "Vienna_WD_RAIN164323_SSP585_RP25_2080",
         "title": "SSP585 - 2080 - RP25 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP585 - 2080 - 25 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2080 - 25 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN164223_SSP585_RP50_2080",
         "title": "SSP585 - 2080 - RP50 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP585 - 2080 - 50 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2080 - 50 years return period - Vienna - Simulated with SaferPlaces"
     },
     {
         "name": "Vienna_WD_RAIN115927_SSP585_RP100_2080",
         "title": "SSP585 - 2080 - RP100 - Vienna - SaferPlaces",
-        "description": "Water depth caused by pluvial flooding - SSP585 - 2080 - 100 years return period - Vienna - Simulated with SaferPlaces"
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2080 - 100 years return period - Vienna - Simulated with SaferPlaces"
     }
 ];
-
 
 export const MAP_ID = "main";
 export class MainMapProvider implements MapConfigProvider {
@@ -181,8 +196,11 @@ export class MainMapProvider implements MapConfigProvider {
                             visible: false,
                             id: "pluvial_flooding_historical",
                             layers: [
-                                ...wmsPluvialFloodingLayersRef.map(({ name, title, description }) =>
-                                    new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                ...wmsPluvialFloodingLayersRef.map(
+                                    ({ name, title, description }) =>
+                                        new SimpleLayer({
+                                            ...this.createWmsLayer(name, title, description)
+                                        })
                                 )
                             ],
                             attributes: {
@@ -203,8 +221,11 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "2050_ssp245",
                                     layers: [
-                                        ...wmsPluvialFloodingLayersSSP2452050.map(({ name, title, description }) =>
-                                            new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                        ...wmsPluvialFloodingLayersSSP2452050.map(
+                                            ({ name, title, description }) =>
+                                                new SimpleLayer({
+                                                    ...this.createWmsLayer(name, title, description)
+                                                })
                                         )
                                     ]
                                 }),
@@ -214,8 +235,11 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "2050_ssp585",
                                     layers: [
-                                        ...wmsPluvialFloodingLayersSSP5852050.map(({ name, title, description }) =>
-                                            new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                        ...wmsPluvialFloodingLayersSSP5852050.map(
+                                            ({ name, title, description }) =>
+                                                new SimpleLayer({
+                                                    ...this.createWmsLayer(name, title, description)
+                                                })
                                         )
                                     ]
                                 })
@@ -238,8 +262,11 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "2080_ssp245",
                                     layers: [
-                                        ...wmsPluvialFloodingLayersSSP2452080.map(({ name, title, description }) =>
-                                            new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                        ...wmsPluvialFloodingLayersSSP2452080.map(
+                                            ({ name, title, description }) =>
+                                                new SimpleLayer({
+                                                    ...this.createWmsLayer(name, title, description)
+                                                })
                                         )
                                     ]
                                 }),
@@ -249,8 +276,11 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "2080_ssp585",
                                     layers: [
-                                        ...wmsPluvialFloodingLayersSSP5852080.map(({ name, title, description }) =>
-                                            new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                        ...wmsPluvialFloodingLayersSSP5852080.map(
+                                            ({ name, title, description }) =>
+                                                new SimpleLayer({
+                                                    ...this.createWmsLayer(name, title, description)
+                                                })
                                         )
                                     ]
                                 })
@@ -267,19 +297,39 @@ export class MainMapProvider implements MapConfigProvider {
                             visible: false,
                             id: "pluvial_flooding_base_data",
                             layers: [
-                                new SimpleLayer(
-                                    {
-                                        ...this.createWmsLayer("Vienna_lidar_2m_ViennaCenter_32633", "Lidar", "Lidar elevation map with 2 m resolution"),
-                                        attributes: {
-                                            "legend": {
-                                                Component: LidarLegend
-                                            }
-                                        },
+                                new SimpleLayer({
+                                    ...this.createWmsLayer(
+                                        "Vienna_lidar_2m_ViennaCenter_32633",
+                                        "Lidar",
+                                        "Lidar elevation map with 2 m resolution"
+                                    ),
+                                    attributes: {
+                                        "legend": {
+                                            Component: LidarLegend
+                                        }
                                     }
-                                ),
-                                new SimpleLayer({...this.createWmsLayer("Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021", "Soil Clay Content", "Soil clay content")}),
-                                new SimpleLayer({...this.createWmsLayer("Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021", "Soil Sand Content", "Soil sand content")}),
-                                new SimpleLayer({...this.createWmsLayer("osm_buildings_162014", "OSM Buildings", "OSM Buildings")})
+                                }),
+                                new SimpleLayer({
+                                    ...this.createWmsLayer(
+                                        "Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021",
+                                        "Soil Clay Content",
+                                        "Soil clay content"
+                                    )
+                                }),
+                                new SimpleLayer({
+                                    ...this.createWmsLayer(
+                                        "Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021",
+                                        "Soil Sand Content",
+                                        "Soil sand content"
+                                    )
+                                }),
+                                new SimpleLayer({
+                                    ...this.createWmsLayer(
+                                        "osm_buildings_162014",
+                                        "OSM Buildings",
+                                        "OSM Buildings"
+                                    )
+                                })
                             ]
                         })
                     ]
@@ -290,11 +340,13 @@ export class MainMapProvider implements MapConfigProvider {
                     visible: false,
                     id: "fluvial_flooding",
                     layers: [
-                        new SimpleLayer({...this.createWmsLayer(
-                            "euh_danube_bigrivers_10",
-                            "10-Year Flood Depth",
-                            "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
-                        )})
+                        new SimpleLayer({
+                            ...this.createWmsLayer(
+                                "euh_danube_bigrivers_10",
+                                "10-Year Flood Depth",
+                                "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
+                            )
+                        })
                     ],
                     attributes: {
                         "legend": {
@@ -313,8 +365,11 @@ export class MainMapProvider implements MapConfigProvider {
                             visible: false,
                             id: "historical_flooding",
                             layers: [
-                                ...wmsLayersHistoricalFlooding.map(({ name, title, description }) =>
-                                    new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                ...wmsLayersHistoricalFlooding.map(
+                                    ({ name, title, description }) =>
+                                        new SimpleLayer({
+                                            ...this.createWmsLayer(name, title, description)
+                                        })
                                 )
                             ],
                             attributes: {
@@ -328,8 +383,11 @@ export class MainMapProvider implements MapConfigProvider {
                             visible: false,
                             id: "historical_damage",
                             layers: [
-                                ...wmsLayersHistoricalDamage.map(({ name, title, description }) =>
-                                    new SimpleLayer({...this.createWmsLayer(name, title, description)})
+                                ...wmsLayersHistoricalDamage.map(
+                                    ({ name, title, description }) =>
+                                        new SimpleLayer({
+                                            ...this.createWmsLayer(name, title, description)
+                                        })
                                 )
                             ],
                             attributes: {
@@ -340,7 +398,13 @@ export class MainMapProvider implements MapConfigProvider {
                         })
                     ]
                 }),
-                new SimpleLayer({...this.createWmsLayer("euh_danube_wsurf_gt1km2_c", "Reservoirs And Lakes", "Large reservoirs and lakes in the Danube region")}),
+                new SimpleLayer({
+                    ...this.createWmsLayer(
+                        "euh_danube_wsurf_gt1km2_c",
+                        "Reservoirs And Lakes",
+                        "Large reservoirs and lakes in the Danube region"
+                    )
+                }),
                 // OSM basemap
                 new SimpleLayer({
                     title: "OpenStreetMap",
