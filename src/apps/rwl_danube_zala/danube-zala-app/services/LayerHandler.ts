@@ -11,15 +11,39 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 
 import chroma from "chroma-js";
 
-const legend_text = {
-    hurs: "Near-Surface Relative Humidity in %",
-    pr: "Precipitation in kg·m⁻²·s⁻¹",
-    rsds: "Surface Downwelling Shortwave Radiation in W/m²",
-    sfcwind: "Near-Surface Wind Speed in m/s",
-    spei12: "SPEI drought index",
-    tas: "Near-Surface Air Temperature in K",
-    tasmax: "Daily Maximum Near-Surface Air Temperature in K",
-    tasmin: "Daily Minimum Near-Surface Air Temperature in K"
+const layer_info = {
+    "hurs": {
+        "title": "Near-Surface Relative Humidity",
+        "description": "Near-Surface Relative Humidity in %"
+    },
+    "pr": {
+        "title": "Precipitation",
+        "description": "Precipitation in kg·m⁻²·s⁻¹"
+    },
+    "rsds": {
+        "title": "Surface Downwelling Shortwave Radiation",
+        "description": "Surface Downwelling Shortwave Radiation in W/m²"
+    },
+    "sfcwind": {
+        "title": "Near-Surface Wind Speed",
+        "description": "Near-Surface Wind Speed in m/s"
+    },
+    "spei12": {
+        "title": "SPEI drought index",
+        "description": "SPEI drought index"
+    },
+    "tas": {
+        "title": "Near-Surface Air Temperature",
+        "description": "Near-Surface Air Temperature in K"
+    },
+    "tasmax": {
+        "title": "Daily Maximum Near-Surface Air Temperature",
+        "description": "Daily Maximum Near-Surface Air Temperature in K"
+    },
+    "tasmin": {
+        "title": "Daily Minimum Near-Surface Air Temperature",
+        "description": "Daily Minimum Near-Surface Air Temperature in K"
+    }
 };
 
 async function getRangeFromGeoTiff(url: string): Promise<number[]> {
@@ -87,8 +111,8 @@ export class LayerHandlerImpl implements LayerHandler {
             model?.layers.addLayer(
                 new SimpleLayer({
                     id: "isimip",
-                    description: legend_text["hurs"],
-                    title: this.#selectedVariable.value,
+                    description: layer_info["hurs"]["title"],
+                    title: layer_info["hurs"]["description"],
                     isBaseLayer: false,
                     olLayer: this.layer,
                     visible: false
@@ -120,7 +144,7 @@ export class LayerHandlerImpl implements LayerHandler {
         this.#selectedVariable.value = newVariable;
         this.updateSource();
         this.updateStyle();
-        this.changeTitleOfLayer(this.#selectedVariable.value);
+        this.changeLayerInfo();
     }
     setModel(newModel: string): void {
         this.#selectedModel.value = newModel;
@@ -157,7 +181,7 @@ export class LayerHandlerImpl implements LayerHandler {
                 model?.layers.getLayerById("isimip")?.setTitle("No map data available");
             });
         } else {
-            this.changeTitleOfLayer(this.#selectedVariable.value);
+            this.changeLayerInfo();
             const newSource = new GeoTIFF({
                 projection: "EPSG:4326",
                 normalize: false,
@@ -237,12 +261,12 @@ export class LayerHandlerImpl implements LayerHandler {
         ];
         return tempColorGradient;
     }
-    private changeTitleOfLayer(newTitle: string) {
+    private changeLayerInfo() {
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            model?.layers.getLayerById("isimip")?.setTitle(newTitle);
+            model?.layers.getLayerById("isimip")?.setTitle(layer_info[this.#selectedVariable.value]["title"]);
             model?.layers
                 .getLayerById("isimip")
-                ?.setDescription(legend_text[this.#selectedVariable.value]);
+                ?.setDescription(layer_info[this.#selectedVariable.value]["description"]);
         });
     }
 }
