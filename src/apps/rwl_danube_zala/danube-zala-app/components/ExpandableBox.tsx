@@ -27,7 +27,6 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({
             borderRadius="lg"
             overflow="hidden"
             p={4}
-            w="300px"
             boxShadow="md"
             marginBottom={marginBottom}
         >

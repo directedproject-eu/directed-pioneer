@@ -45,17 +45,21 @@ export function IsimipSelector() {
                 setSelected={setModel}
                 marginBottom="5px"
                 title={intl.formatMessage({ id: "map.layer_select.model" })}
+                alternativeText={false}
             ></Selector>
             <Selector
                 options={["ssp585", "ssp370", "ssp126"]}
                 setSelected={setScenario}
                 marginBottom="5px"
                 title={intl.formatMessage({ id: "map.layer_select.scenario" })}
+                alternativeText={false}
             ></Selector>
             <Selector
                 options={["hurs", "pr", "rsds", "sfcwind", "spei12", "tasmax", "tasmin", "tas"]}
                 setSelected={setVariable}
+                marginBottom="5px"
                 title={intl.formatMessage({ id: "map.layer_select.variable" })}
+                alternativeText={true}
             ></Selector>
         </ExpandableBox>
     );
