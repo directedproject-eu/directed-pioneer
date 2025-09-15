@@ -180,7 +180,7 @@ export class MainMapProvider implements MapConfigProvider {
             visible: true,
             olLayer: new VectorLayer({
                 source: new VectorSource({
-                    url: `${this.pygeoapiBaseUrl}/collections/zala_region/items/${regionID}?f=json`,
+                    url: `${this.pygeoapiBaseUrl}/collections/danube_administrative_boundaries/items/${regionID}?f=json`,
                     format: new GeoJSON()
                 }),
                 style: new Style({
@@ -196,12 +196,12 @@ export class MainMapProvider implements MapConfigProvider {
         return regionLayer;
     }
 
-    createWmsLayer(layerName: string, layerTitle: string, layerDescription: string) {
+    createWmsLayer(layerName: string, layerTitle: string, layerDescription: string, visible: boolean = false) {
         const wmsLayerContent = {
             id: layerName,
             title: layerTitle,
             description: layerDescription,
-            visible: false,
+            visible: visible,
             olLayer: new TileLayer({
                 source: new TileWMS({
                     url: "https://directed.dev.52north.org/geoserver/directed/wms",
@@ -224,7 +224,7 @@ export class MainMapProvider implements MapConfigProvider {
             initialView: {
                 kind: "position",
                 center: { x: 2100000, y: 5890000 },
-                zoom: 10
+                zoom: 7
             },
             projection: "EPSG:3857",
             layers: [
@@ -236,7 +236,16 @@ export class MainMapProvider implements MapConfigProvider {
                     }),
                     isBaseLayer: true
                 }),
-                this.createRegionLayer("zala"),
+                // Administrative boundaries
+                new GroupLayer({
+                    title: "Administrative boundaries",
+                    visible: true,
+                    id: "administrative_boundaries",
+                    layers: [
+                        this.createRegionLayer("vienna"),
+                        this.createRegionLayer("zala"),
+                    ]
+                }),
                 // Vienna model results
                 new GroupLayer({
                     title: "Vienna",
@@ -442,14 +451,15 @@ export class MainMapProvider implements MapConfigProvider {
                 // Fluvial flood layers
                 new GroupLayer({
                     title: "Fluvial Flooding",
-                    visible: false,
+                    visible: true,
                     id: "fluvial_flooding",
                     layers: [
                         new SimpleLayer({
                             ...this.createWmsLayer(
                                 "euh_danube_bigrivers_10",
                                 "10-Year Flood Depth",
-                                "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull)."
+                                "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull).",
+                                true
                             )
                         })
                     ],

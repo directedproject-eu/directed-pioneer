@@ -65,6 +65,9 @@ messages:
       "Die Danube App ist Teil des Data Fabric, welches im Rahmen des EU-geförderten DIRECTED Projekts entwickelt wird.
       Ziel ist die Unterstützung Interessenvertreters bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel.
       Bitte beachten Sie, dass die App noch in der Entwicklung ist."
+  zoom_buttons:
+    vienna: "Zoom auf Wien"
+    zala: "Zoom auf Zala"
   ariaLabel:
     header: "Kopfzeile"
     footer: "Fußzeile mit Maßstabsinformationen, Koordinatensystem und Koordinatenanzeige"

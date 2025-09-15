@@ -27,7 +27,8 @@ import {
     Select,
     Spacer,
     Text,
-    useDisclosure
+    useDisclosure,
+    VStack
 } from "@open-pioneer/chakra-integration";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
@@ -57,10 +58,12 @@ import ChartComponentZala from "./components/ChartComponentZala";
 import Legend from "./components/legends/Legend";
 import { LayerHandler } from "./services/LayerHandler";
 import { StationSelector } from "./services/StationSelector";
+import { LayerZoom } from "./services/LayerZoom";
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
     const mapModel = useMapModel(MAP_ID);
+    const zoomService = useService<LayerZoom>("app.LayerZoom"); // administrative boundary layer zoom service
     const vectorSourceFactory = useService<OgcFeaturesVectorSourceFactory>(
         "ogc-features.VectorSourceFactory"
     );
@@ -399,8 +402,23 @@ export function MapApp() {
                                     </Box>
                                 </MapAnchor>
 
-                                {/* feature info */}
+                                {/* zoom to region and feature info */}
                                 <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
+                                    <VStack align="stretch" spacing={2}>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => zoomService.zoomToVienna(mapModel.map!)}
+                                        >
+                                            {intl.formatMessage({ id: "zoom_buttons.vienna" })}
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => zoomService.zoomToZala(mapModel.map!)}
+                                        >
+                                            {intl.formatMessage({ id: "zoom_buttons.zala" })}
+                                        </Button>
+                                    </VStack>
+
                                     {mapModel && (
                                         <FeatureInfo
                                             mapModel={mapModel.map!}

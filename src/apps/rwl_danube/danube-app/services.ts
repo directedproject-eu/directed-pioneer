@@ -7,4 +7,5 @@ export { MainMapProvider } from "./services/MapProvider";
 export { GeosphereServiceImpl } from "./services/GeosphereService";
 export { LayerHandlerImpl } from "./services/LayerHandler";
 export { LayerHighlighterImpl } from "./services/LayerHighlighter";
+export { LayerZoomImpl } from "./services/LayerZoom";
 export { StationSelectorImpl } from "./services/StationSelector";

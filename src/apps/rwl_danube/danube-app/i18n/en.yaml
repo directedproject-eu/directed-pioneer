@@ -67,6 +67,9 @@ messages:
       The app contains public data which is made available to everyone. Additional access-restricted data will 
       appear after login (use the login button in the right top corner).
       Please note that the app is still work in progress."
+  zoom_buttons:
+    vienna: "Zoom to Vienna"
+    zala: "Zoom to Zala"
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"

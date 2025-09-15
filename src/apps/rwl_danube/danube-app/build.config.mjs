@@ -37,6 +37,9 @@ export default defineBuildConfig({
                 mapRegistry: "map.MapRegistry"
             }
         },
+        LayerZoomImpl: {
+            provides: ["app.LayerZoom"]
+        },
         GeosphereServiceImpl: {
             provides: ["app.GeosphereService"],
             references: {
@@ -51,6 +54,7 @@ export default defineBuildConfig({
             "app.GeosphereService",
             "app.LayerHandler",
             "app.LayerHighlighter",
+            "app.LayerZoom",
             "app.StationSelector",
             "ogc-features.VectorSourceFactory",
             "ogc-features.SearchSourceFactory"
