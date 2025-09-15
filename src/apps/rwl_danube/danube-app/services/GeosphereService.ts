@@ -6,7 +6,7 @@ import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
-import { PrecipitationLegend } from "../Components/Legends/PrecipitationLegend";
+import { PrecipitationLegend } from "../components/legends/PrecipitationLegend";
 
 interface References {
     mapRegistry: MapRegistry;

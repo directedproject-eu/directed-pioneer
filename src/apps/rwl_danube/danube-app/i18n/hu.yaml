@@ -120,9 +120,9 @@ messages:
     button_title: "hun:Crop chart"
     title_chart1: "hun:Crops in Zala region for "
   welcome_window:
-    header: "hun:Welcome to the Zala app of the DIRECTED Data Fabric!"
+    header: "hun:Welcome to the Danube app of the DIRECTED Data Fabric!"
     body:
-      "hun:The Zala app is part of the Data Fabric which is developed within the EU-funded DIRECTED project.
+      "hun:The Danube app is part of the Data Fabric which is developed within the EU-funded DIRECTED project.
       Goal of the app is to support stakeholders in disaster risk reduction and climate change adaptation.
       The app contains public data which is made available to everyone. Additional access-restricted data will 
       appear after login (use the login button in the right top corner).

@@ -1,6 +1,15 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
+import { useEffect, useId, useState } from "react";
+import { PiRulerLight, PiChartLineDownLight } from "react-icons/pi";
+import { EventsKey } from "ol/events";
+import { Vector as VectorLayer } from "ol/layer.js";
+import Layer from "ol/layer/Layer";
+import { unByKey } from "ol/Observable";
+import Swipe from "ol-ext/control/Swipe";
+import { AuthService, useAuthState } from "@open-pioneer/authentication";
+import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import {
     Box,
     Button,
@@ -15,45 +24,39 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
+    Select,
+    Spacer,
     Text,
     useDisclosure
 } from "@open-pioneer/chakra-integration";
-import { AuthService, useAuthState } from "@open-pioneer/authentication";
-import { MapAnchor, MapContainer } from "@open-pioneer/map";
-import { ScaleBar } from "@open-pioneer/scale-bar";
-import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
-import { useIntl } from "open-pioneer:react-hooks";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
-import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
-import { ToolButton } from "@open-pioneer/map-ui-components";
-import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
+//import { Legend } from "@open-pioneer/legend";
+import { MapAnchor, MapContainer, SimpleLayer, useMapModel } from "@open-pioneer/map";
+import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
+import { ToolButton } from "@open-pioneer/map-ui-components";
 import { Notifier } from "@open-pioneer/notifier";
-import { Toc } from "@open-pioneer/toc";
-import { MAP_ID } from "./services/MapProvider";
-import { useEffect, useId, useMemo, useState } from "react";
-import { Measurement } from "@open-pioneer/measurement";
-import OSM from "ol/source/OSM";
-import { PiRulerLight, PiChartLineDownLight } from "react-icons/pi";
-import { useService } from "open-pioneer:react-hooks";
-import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
-import { Navbar } from "navbar";
-import { LayerSelector } from "./controls/LayerSelector";
-import Legend from "./components/legends/Legend";
+import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
+import { useIntl } from "open-pioneer:react-hooks";
+import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
+import { ScaleBar } from "@open-pioneer/scale-bar";
+import { ScaleViewer } from "@open-pioneer/scale-viewer";
+import { Toc } from "@open-pioneer/toc";
+import { Measurement } from "@open-pioneer/measurement";
+import { useService } from "open-pioneer:react-hooks";
+import { MAP_ID } from "./services/MapProvider";
+import { FeatureInfo } from "featureinfo";
+import { Navbar } from "navbar";
+import { IsimipSelector } from "./controls/IsimipSelector";
+import { LayerSelector } from "./controls/LayerSelector";
+import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
-import { StationSelector } from "./services/StationSelector";
-import { IsimipSelector } from "./controls/IsimipSelector";
 import ChartComponentZala from "./components/ChartComponentZala";
-import ResizeBox from "./components/ResizeBox";
-import ChartComponentRhineErft from "./components/ChartComopnentRhineErft";
-import { useMapModel } from "@open-pioneer/map";
-import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
-import { Vector as VectorLayer } from "ol/layer.js";
-import { SimpleLayer } from "@open-pioneer/map";
-import TileLayer from "ol/layer/Tile";
+import Legend from "./components/legends/Legend";
 import { LayerHandler } from "./services/LayerHandler";
+import { StationSelector } from "./services/StationSelector";
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,8 +67,6 @@ export function MapApp() {
 
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
-    const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
-    const userName = sessionInfo?.attributes?.userName as string;
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -75,13 +76,6 @@ export function MapApp() {
         setMeasurementIsActive(!measurementIsActive);
     }
 
-    const overviewMapLayer = useMemo(
-        () =>
-            new TileLayer({
-                source: new OSM()
-            }),
-        []
-    );
     const prepSrvc = useService<LayerHandler>("app.LayerHandler");
 
     const { legendMetadata } = useReactiveSnapshot(
@@ -177,6 +171,91 @@ export function MapApp() {
         );
     }, [authState.kind]);
 
+    //////////////////
+    /// LayerSwipe ///
+    /////////////////
+    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
+    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
+    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
+
+    useEffect(() => {
+        if (!mapModel.map) return;
+
+        const map = mapModel.map.olMap;
+        const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
+
+        const updateVisibleLayers = () => {
+            const visibleLayers = allLayers.filter(
+                (layer) => layer.olLayer?.getVisible?.() === true
+            );
+            setVisibleAvailableLayers(visibleLayers);
+        };
+
+        updateVisibleLayers();
+
+        const eventKeys: EventsKey[] = allLayers
+            .map((layer) => {
+                const olLayer = layer.olLayer;
+                if (!olLayer || typeof olLayer.on !== "function") return null;
+                return olLayer.on("change:visible", () => {
+                    updateVisibleLayers();
+                    handleSwipeUpdate();
+                });
+            })
+            .filter((k): k is EventsKey => !!k);
+
+        let swipe: Swipe | null = null;
+
+        const removeSwipe = () => {
+            if (swipe) {
+                map.removeControl(swipe);
+                swipe = null;
+            }
+        };
+
+        const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
+            removeSwipe();
+            swipe = new Swipe({
+                layers: [leftLayer],
+                rightLayers: [rightLayer],
+                position: 0.5,
+                orientation: "vertical",
+                className: "ol-swipe"
+            });
+            map.addControl(swipe);
+        };
+
+        const handleSwipeUpdate = () => {
+            if (!selectedLeftLayer || !selectedRightLayer) {
+                removeSwipe();
+                return;
+            }
+
+            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+                ?.olLayer as Layer;
+
+            if (!leftLayer || !rightLayer) {
+                removeSwipe();
+                return;
+            }
+
+            if (leftLayer.getVisible() && rightLayer.getVisible()) {
+                addSwipe(leftLayer, rightLayer);
+            } else {
+                removeSwipe();
+            }
+        };
+
+        handleSwipeUpdate();
+
+        return () => {
+            eventKeys.forEach(unByKey);
+            removeSwipe();
+        };
+    }, [mapModel, selectedLeftLayer, selectedRightLayer]);
+
     return (
         <>
             <Flex height="100%" direction="column" overflow="hidden">
@@ -241,6 +320,11 @@ export function MapApp() {
                                         <LayerSelector />
                                     </div>
                                 </MapAnchor>
+
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                    <TimeSlider />
+                                </MapAnchor>
+
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                     <IsimipSelector />
 
@@ -314,13 +398,90 @@ export function MapApp() {
                                         </FormControl>
                                     </Box>
                                 </MapAnchor>
-                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                                    <Legend
-                                        range={legendMetadata.range}
-                                        variable={legendMetadata.variable}
-                                        isAuthenticated={authState.kind === "authenticated"}
-                                    ></Legend>
+
+                                {/* feature info */}
+                                <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
+                                    {mapModel && (
+                                        <FeatureInfo
+                                            mapModel={mapModel.map!}
+                                            projection="EPSG:3857"
+                                            layerId={""}
+                                        />
+                                    )}
                                 </MapAnchor>
+
+                                {/* layerswipe and legend */}
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
+                                    <Flex direction="column" gap={4}>
+                                        <Box
+                                            backgroundColor="white"
+                                            borderWidth="1px"
+                                            borderRadius="lg"
+                                            padding={2}
+                                            boxShadow="lg"
+                                            role="top-right"
+                                            aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
+                                            maxHeight={615}
+                                            maxWidth={430}
+                                            overflow="hidden"
+                                            marginBottom={5}
+                                        >
+                                            <Box>
+                                                <Box maxHeight={300} overflow="auto">
+                                                    <Flex
+                                                        direction="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                    ></Flex>
+                                                    <Text fontWeight="bold" mt={4}>
+                                                        Select Layers for Comparison
+                                                    </Text>
+                                                    <Spacer />
+                                                    <Text fontSize={16}>
+                                                        ➡️ Only layers which have been selected in the
+                                                        Operational Layers are viewable for comparison.
+                                                    </Text>
+                                                    <Flex direction="row" gap={4} p={4}>
+                                                        <Select
+                                                            placeholder="Select Left Layer"
+                                                            value={selectedLeftLayer ?? ""}
+                                                            onChange={(e) =>
+                                                                setSelectedLeftLayer(e.target.value)
+                                                            }
+                                                        >
+                                                            {visibleAvailableLayers.map((layer) => (
+                                                                <option key={layer.id} value={layer.id}>
+                                                                    {layer.title || layer.id}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+
+                                                        <Select
+                                                            placeholder="Select Right Layer"
+                                                            value={selectedRightLayer ?? ""}
+                                                            onChange={(e) =>
+                                                                setSelectedRightLayer(e.target.value)
+                                                            }
+                                                        >
+                                                            {visibleAvailableLayers.map((layer) => (
+                                                                <option key={layer.id} value={layer.id}>
+                                                                    {layer.title || layer.id}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    </Flex>
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                        <Legend
+                                            range={legendMetadata.range}
+                                            variable={legendMetadata.variable}
+                                            isAuthenticated={authState.kind === "authenticated"}
+                                        ></Legend>
+                                    </Flex>
+                                </MapAnchor>
+
+                                {/* tool buttons */}
                                 <MapAnchor
                                     position="bottom-right"
                                     horizontalGap={10}
@@ -370,10 +531,6 @@ export function MapApp() {
                     </Flex>
                 </TitledSection>
             </Flex>
-
-            <ResizeBox title={"Zala Chart"}>
-                <ChartComponentZala></ChartComponentZala>
-            </ResizeBox>
 
             <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />

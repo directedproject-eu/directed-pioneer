@@ -16,7 +16,7 @@ const element = createCustomElement({
             const config = await (await fetch(targetUrl)).json();
             return {
                 properties: {
-                    "danube-zala-app": {
+                    "danube-app": {
                         "userConfig": config
                     },
                     "@open-pioneer/authentication-keycloak": {
@@ -46,7 +46,7 @@ const element = createCustomElement({
         } catch {
             return {
                 properties: {
-                    "danube-zala-app": {
+                    "danube-app": {
                         userConfig: {
                             pygeoapiBaseUrl: "https://directed.dev.52north.org/api"
                         }

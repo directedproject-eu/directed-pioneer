@@ -235,12 +235,8 @@ const NAV_ITEMS: Array<NavItem> = [
                 href: "https://directed-rwl2.saferplaces.co/"
             },
             {
-                label: "Danube Region - Vienna",
-                href: `${BASE_URL}apps/rwl_danube_vienna/index.html`
-            },
-            {
-                label: "Danube Region - Zala",
-                href: `${BASE_URL}apps/rwl_danube_zala/index.html`
+                label: "Danube Region",
+                href: `${BASE_URL}apps/rwl_danube/index.html`
             },
             {
                 label: "Rhine Erft Region",

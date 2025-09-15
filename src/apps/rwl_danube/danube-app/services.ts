@@ -4,6 +4,7 @@
 export { TocServiceImpl } from "./services/TocService";
 export { TokenInterceptor } from "./TokenInterceptor";
 export { MainMapProvider } from "./services/MapProvider";
+export { GeosphereServiceImpl } from "./services/GeosphereService";
 export { LayerHandlerImpl } from "./services/LayerHandler";
-export { StationSelectorImpl } from "./services/StationSelector";
 export { LayerHighlighterImpl } from "./services/LayerHighlighter";
+export { StationSelectorImpl } from "./services/StationSelector";

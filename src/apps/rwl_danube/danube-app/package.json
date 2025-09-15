@@ -1,5 +1,5 @@
 {
-    "name": "danube-zala-app",
+    "name": "danube-app",
     "private": true,
     "dependencies": {
         "@chakra-ui/icons": "catalog:",
@@ -24,14 +24,16 @@
         "@open-pioneer/scale-viewer": "catalog:",
         "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
+        "chroma-js": "catalog:",
         "highcharts": "^12.1.2",
         "highcharts-react-official": "^3.2.1",
-        "navbar": "workspace:^",
         "ol": "catalog:",
+        "ol-ext": "catalog:",
         "papaparse": "^5.5.2",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-icons": "catalog:",
-        "react-use": "catalog:"
+        "react-use": "catalog:",
+        "navbar": "workspace:^"
     }
 }

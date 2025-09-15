@@ -36,15 +36,22 @@ export default defineBuildConfig({
             references: {
                 mapRegistry: "map.MapRegistry"
             }
+        },
+        GeosphereServiceImpl: {
+            provides: ["app.GeosphereService"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
         }
     },
     ui: {
         references: [
             "authentication.AuthService",
             "http.HttpService",
+            "app.GeosphereService",
             "app.LayerHandler",
-            "app.StationSelector",
             "app.LayerHighlighter",
+            "app.StationSelector",
             "ogc-features.VectorSourceFactory",
             "ogc-features.SearchSourceFactory"
         ]
