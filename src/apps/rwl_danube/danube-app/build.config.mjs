@@ -13,8 +13,8 @@ export default defineBuildConfig({
                 authService: "authentication.AuthService"
             }
         },
-        LayerHandlerImpl: {
-            provides: ["app.LayerHandler"],
+        IsimipHandlerImpl: {
+            provides: ["app.IsimipHandler"],
             references: {
                 mapRegistry: "map.MapRegistry"
             }
@@ -52,7 +52,7 @@ export default defineBuildConfig({
             "authentication.AuthService",
             "http.HttpService",
             "app.GeosphereService",
-            "app.LayerHandler",
+            "app.IsimipHandler",
             "app.LayerHighlighter",
             "app.LayerZoom",
             "app.StationSelector",

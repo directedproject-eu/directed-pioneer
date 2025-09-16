@@ -56,7 +56,7 @@ import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
 import Legend from "./components/legends/Legend";
-import { LayerHandler } from "./services/LayerHandler";
+import { IsimipHandler } from "./services/IsimipHandler";
 import { StationSelector } from "./services/StationSelector";
 import { LayerZoom } from "./services/LayerZoom";
 
@@ -79,7 +79,7 @@ export function MapApp() {
         setMeasurementIsActive(!measurementIsActive);
     }
 
-    const prepSrvc = useService<LayerHandler>("app.LayerHandler");
+    const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const { legendMetadata } = useReactiveSnapshot(
         () => ({
@@ -97,6 +97,9 @@ export function MapApp() {
     const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
+    /////////////////////////
+    /// Past event layers ///
+    ////////////////////////
     function createPastEventLayer(
         collectionId: string,
         id: string,
@@ -176,7 +179,7 @@ export function MapApp() {
 
     //////////////////
     /// LayerSwipe ///
-    /////////////////
+    //////////////////
     const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
     const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
     const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers

@@ -90,7 +90,7 @@ messages:
   heading: "hun:RWL The Danube Region"
   map:
     layer_select:
-      heading: "hun:Select a Layer"
+      heading: "hun:Climate projections from ISIMIP"
       model: "hun:Model"
       scenario: "hun:Scenario"
       variable: "hun:Variable"

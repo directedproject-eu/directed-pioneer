@@ -9,13 +9,13 @@ import {
     VStack
 } from "@open-pioneer/chakra-integration";
 import { useState } from "react";
-import { LayerHandler } from "../services/LayerHandler";
+import { IsimipHandler } from "../services/IsimipHandler";
 import { useService } from "open-pioneer:react-hooks";
 import { useIntl } from "open-pioneer:react-hooks";
 
 export function MonthSlider() {
     const intl = useIntl();
-    const prepSrvc = useService<LayerHandler>("app.LayerHandler");
+    const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const [sliderValue, setSliderValue] = useState(0);
     const [displayDate, setDisplayDate] = useState(intl.formatMessage({ id: "global.months.jan" }));

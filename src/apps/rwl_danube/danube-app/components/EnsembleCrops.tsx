@@ -5,7 +5,7 @@ import HighchartsReact from "highcharts-react-official";
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
 import { useService } from "open-pioneer:react-hooks";
-import { LayerHandler } from "../services/LayerHandler";
+import { IsimipHandler } from "../services/IsimipHandler";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
 type EnsembleProps = {
@@ -34,7 +34,7 @@ const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) =
         "ssp126": 30
     };
 
-    const prepSrvc = useService<LayerHandler>("app.LayerHandler");
+    const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const { selectedModel, selectedScenario, selectedYear } = useReactiveSnapshot(
         () => ({

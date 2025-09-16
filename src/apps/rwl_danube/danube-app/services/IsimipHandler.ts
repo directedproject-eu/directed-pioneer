@@ -76,7 +76,7 @@ interface legendMetadata {
     variable: string;
 }
 
-export interface LayerHandler extends DeclaredService<"app.LayerHandler"> {
+export interface IsimipHandler extends DeclaredService<"app.IsimipHandler"> {
     setYear(newYear: number): void;
     setMonth(newMonth: number): void;
     setScenario(newScenario: string): void;
@@ -84,7 +84,7 @@ export interface LayerHandler extends DeclaredService<"app.LayerHandler"> {
     setModel(newModel: string): void;
 }
 
-export class LayerHandlerImpl implements LayerHandler {
+export class IsimipHandlerImpl implements IsimipHandler {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;

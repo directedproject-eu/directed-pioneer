@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useService } from "open-pioneer:react-hooks";
-import { LayerHandler } from "../services/LayerHandler";
+import { IsimipHandler } from "../services/IsimipHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
 
 export function IsimipSelector() {
     const intl = useIntl();
-    const prepSrvc = useService<LayerHandler>("app.LayerHandler");
+    const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const setModel = (option: string) => {
         prepSrvc.setModel(option);
