@@ -29,7 +29,7 @@ messages:
   heading: "RWL The Danube Region"
   map:
     layer_select:
-      heading: "Climate projections from ISIMIP"
+      heading: "Climate projections"
       model: "Model"
       scenario: "Scenario"
       variable: "Variable"

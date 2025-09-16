@@ -10,21 +10,8 @@ interface SelectorProps {
     setSelected: (value: string) => void;
     marginBottom?: string;
     title?: string;
-    alternativeText: boolean;
 }
-
-const option_text_mapping = {
-    "hurs": "Relative Humidity",
-    "pr": "Precipitation",
-    "rsds": "Shortwave Radiation",
-    "sfcwind": "Wind Speed",
-    "spei12": "SPEI drought index",
-    "tas": "Air Temperature",
-    "tasmax": "Daily Maximum Air Temperature",
-    "tasmin": "Daily Minimum Air Temperature"
-};
-
-const Selector: React.FC<SelectorProps> = ({ options, setSelected, marginBottom, title, alternativeText }) => {
+const Selector: React.FC<SelectorProps> = ({ options, setSelected, marginBottom, title }) => {
     const [currentSelected, setCurrentSelected] = useState(options[0]);
 
     return (
@@ -46,8 +33,7 @@ const Selector: React.FC<SelectorProps> = ({ options, setSelected, marginBottom,
                         setCurrentSelected(option);
                     }}
                 >
-                    {alternativeText && option_text_mapping[option]}
-                    {!alternativeText && option}
+                    {option}
                 </SelectorItem>
             ))}
         </Box>
