@@ -1,0 +1,25 @@
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-License-Identifier: Apache-2.0
+
+import { useService } from "open-pioneer:react-hooks";
+import { IsimipHandler } from "../services/IsimipHandler";
+import Selector from "./Selector";
+import ExpandableBox from "../components/ExpandableBox";
+
+export function ScenarioSelector() {
+    const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
+
+    const setSelected = (option: string) => {
+        prepSrvc.setScenario(option);
+    };
+
+    return (
+        <ExpandableBox title="Select a scenario" marginBottom="10px">
+            <Selector
+                options={["ssp585", "ssp370"]}
+                heading="Select a scenario"
+                setSelected={setSelected}
+            ></Selector>
+        </ExpandableBox>
+    );
+}
