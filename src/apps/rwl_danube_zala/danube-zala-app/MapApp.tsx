@@ -16,7 +16,8 @@ import {
     ModalBody,
     ModalCloseButton,
     Text,
-    useDisclosure
+    useDisclosure,
+    VStack
 } from "@open-pioneer/chakra-integration";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
 import { MapAnchor, MapContainer } from "@open-pioneer/map";
@@ -34,7 +35,7 @@ import { MAP_ID } from "./services/MapProvider";
 import { useEffect, useId, useMemo, useState } from "react";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiRulerLight, PiChartLineDownLight } from "react-icons/pi";
+import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
 import { useService } from "open-pioneer:react-hooks";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
@@ -54,6 +55,7 @@ import { Vector as VectorLayer } from "ol/layer.js";
 import { SimpleLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import { LayerHandler } from "./services/LayerHandler";
+import DownloadLayer from "./components/DownloadLayer";
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -71,8 +73,13 @@ export function MapApp() {
     const measurementTitleId = useId();
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
+    const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
+    }
+    function toggleDownload() {
+        setDownloadIsActive(!downloadIsActive);
     }
 
     const overviewMapLayer = useMemo(
@@ -235,110 +242,105 @@ export function MapApp() {
                                             marginRight: window.innerWidth * 0.2,
                                             borderRadius: "10px",
                                             backgroundColor: "rgba(255, 255, 255, 0.5)",
-                                            marginTop: "5px"
+                                            marginTop: "5px",
+                                            padding: "5px"
                                         }}
                                     >
                                         <LayerSelector />
                                     </div>
                                 </MapAnchor>
-                                <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                                    <IsimipSelector />
-
-                                    {authState.kind === "authenticated" && (
-                                        <ExpandableBox
-                                            title={intl.formatMessage({
-                                                id: "map.station_information.heading"
-                                            })}
-                                            marginBottom="10px"
-                                        >
-                                            <StationInformation data={stationData} />
-                                        </ExpandableBox>
-                                    )}
-                                    {measurementIsActive && (
+                            
+                                <MapAnchor position="top-left" horizontalGap={5} verticalGap={75}>
+                                    <VStack spacing={3} align="stretch">
+                                        <IsimipSelector />
+                            
+                                        {authState.kind === "authenticated" && (
+                                            <ExpandableBox
+                                                title={intl.formatMessage({ id: "map.station_information.heading" })}
+                                                marginBottom="10px"
+                                            >
+                                                <StationInformation data={stationData} />
+                                            </ExpandableBox>
+                                        )}
+                            
+                                        {measurementIsActive && (
+                                            <Box
+                                                backgroundColor="white"
+                                                borderWidth="1px"
+                                                borderRadius="lg"
+                                                padding={2}
+                                                boxShadow="lg"
+                                                role="top-left"
+                                                aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                            >
+                                                <Box role="dialog" aria-labelledby={measurementTitleId}>
+                                                    <TitledSection
+                                                        title={
+                                                            <SectionHeading id={measurementTitleId} size="md" mb={2}>
+                                                                {intl.formatMessage({ id: "measurementTitle" })}
+                                                            </SectionHeading>
+                                                        }
+                                                    >
+                                                        <Measurement mapId={MAP_ID} />
+                                                    </TitledSection>
+                                                </Box>
+                                            </Box>
+                                        )}
+                            
                                         <Box
                                             backgroundColor="white"
                                             borderWidth="1px"
                                             borderRadius="lg"
                                             padding={2}
                                             boxShadow="lg"
-                                            role="top-left"
-                                            aria-label={intl.formatMessage({
-                                                id: "ariaLabel.topLeft"
-                                            })}
+                                            role="dialog"
+                                            aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                         >
-                                            <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                                <TitledSection
-                                                    title={
-                                                        <SectionHeading
-                                                            id={measurementTitleId}
-                                                            size="md"
-                                                            mb={2}
-                                                        >
-                                                            {intl.formatMessage({
-                                                                id: "measurementTitle"
-                                                            })}
-                                                        </SectionHeading>
-                                                    }
-                                                >
-                                                    <Measurement mapId={MAP_ID} />
-                                                </TitledSection>
-                                            </Box>
-                                        </Box>
-                                    )}
-                                    <Box
-                                        backgroundColor="white"
-                                        borderWidth="1px"
-                                        borderRadius="lg"
-                                        padding={2}
-                                        boxShadow="lg"
-                                        role="dialog"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                    >
-                                        <Toc
-                                            mapId={MAP_ID}
-                                            showTools={true}
-                                            collapsibleGroups={true}
-                                            initiallyCollapsed={true}
-                                            showBasemapSwitcher={false}
-                                        />
-                                        <FormControl>
-                                            <FormLabel mt={2}>
-                                                <Text as="b">
-                                                    {intl.formatMessage({ id: "basemapLabel" })}
-                                                </Text>
-                                            </FormLabel>
-                                            <BasemapSwitcher
+                                            <Toc
                                                 mapId={MAP_ID}
-                                                allowSelectingEmptyBasemap={true}
+                                                showTools={true}
+                                                collapsibleGroups={true}
+                                                initiallyCollapsed={true}
+                                                showBasemapSwitcher={false}
                                             />
-                                        </FormControl>
-                                    </Box>
+                                            <FormControl>
+                                                <FormLabel mt={2}>
+                                                    <Text as="b">{intl.formatMessage({ id: "basemapLabel" })}</Text>
+                                                </FormLabel>
+                                                <BasemapSwitcher mapId={MAP_ID} allowSelectingEmptyBasemap={true} />
+                                            </FormControl>
+                                        </Box>
+                            
+                                        {downloadIsActive && (
+                                            <DownloadLayer mapID={MAP_ID} />
+                                        )}
+                                    </VStack>
                                 </MapAnchor>
+                            
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                     <Legend
                                         range={legendMetadata.range}
                                         variable={legendMetadata.variable}
                                         isAuthenticated={authState.kind === "authenticated"}
-                                    ></Legend>
+                                    />
                                 </MapAnchor>
-                                <MapAnchor
-                                    position="bottom-right"
-                                    horizontalGap={10}
-                                    verticalGap={30}
-                                >
+                            
+                                <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
                                     <Flex
                                         role="bottom-right"
-                                        aria-label={intl.formatMessage({
-                                            id: "ariaLabel.bottomRight"
-                                        })}
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
                                         direction="column"
                                         gap={1}
                                         padding={1}
                                     >
                                         <ToolButton
-                                            label={intl.formatMessage({
-                                                id: "charts.button_title"
-                                            })}
+                                            label={intl.formatMessage({ id: "map.button_title.download" })}
+                                            icon={<PiDownload />}
+                                            isActive={downloadIsActive}
+                                            onClick={toggleDownload}
+                                        />
+                                        <ToolButton
+                                            label={intl.formatMessage({ id: "charts.button_title" })}
                                             icon={<PiChartLineDownLight />}
                                             onClick={onOpenChart}
                                         />
@@ -355,6 +357,7 @@ export function MapApp() {
                                     </Flex>
                                 </MapAnchor>
                             </MapContainer>
+                        
                         )}
                     </Flex>
                     <Flex

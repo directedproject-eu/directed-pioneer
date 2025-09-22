@@ -104,7 +104,10 @@ export class LayerHandlerImpl implements LayerHandler {
                 style: {
                     color: this.createColorGradiant([0, 100])
                 },
-                properties: { title: "Layer Title" },
+                properties: {
+                    title: "Layer Title",
+                    type: "GeoTIFF"
+                },
                 extent: [-2782996, 4000985, 4254277, 11753013]
             });
             this.updateSource();

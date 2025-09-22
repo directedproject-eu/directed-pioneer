@@ -37,7 +37,7 @@ export class MainMapProvider implements MapConfigProvider {
             visible: true,
             olLayer: new VectorLayer({
                 source: new VectorSource({
-                    url: `${this.pygeoapiBaseUrl}/collections/zala_region/items/${regionID}?f=json`,
+                    url: `${this.pygeoapiBaseUrl}/collections/danube_administrative_boundaries/items/${regionID}?f=json`,
                     format: new GeoJSON()
                 }),
                 style: new Style({
@@ -46,7 +46,10 @@ export class MainMapProvider implements MapConfigProvider {
                         width: 3
                     })
                 }),
-                properties: { title: "GeoJSON Layer" }
+                properties: {
+                    title: "GeoJSON Layer",
+                    type: "GeoJSON"
+                }
             }),
             isBaseLayer: false
         });
@@ -68,7 +71,9 @@ export class MainMapProvider implements MapConfigProvider {
                 }),
                 properties: {
                     title: layerTitle,
-                    id: layerName
+                    id: layerName,
+                    type: "WMS"
+
                 }
             }),
             isBaseLayer: false
@@ -89,7 +94,7 @@ export class MainMapProvider implements MapConfigProvider {
                     title: "OpenStreetMap",
                     olLayer: new TileLayer({
                         source: new OSM(),
-                        properties: { title: "OSM" }
+                        properties: { title: "OSM", type: "OSM"}
                     }),
                     isBaseLayer: true
                 }),

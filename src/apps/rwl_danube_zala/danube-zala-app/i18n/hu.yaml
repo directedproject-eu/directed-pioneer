@@ -108,6 +108,10 @@ messages:
         county: "hun:County (abbr.)"
     measurement:
       heading: "hun:Measurement"
+    download:
+      heading: "hun:Download Layer"
+      no_layers: "hun:No layers available for download"
+      button: "hun:Donwload Layer"
     operational_layers: "hun:Operational Layers"
     select_basemap: "hun:Select basemap"
     legend:

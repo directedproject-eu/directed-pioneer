@@ -47,7 +47,10 @@ messages:
         county: "County (abbr.)"
     measurement:
       heading: "Measurement"
-
+    download:
+      heading: "Download Layer"
+      no_layers: "No layers available for download"
+      button: "Donwload Layer"
     operational_layers: "Operational Layers"
     select_basemap: "Select basemap"
     legend:
