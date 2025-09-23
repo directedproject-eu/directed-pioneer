@@ -1,11 +1,37 @@
 messages:
+  heading: "RWL Die Hauptstadtregion Dänemarks"
+  basemapLabel: "Basemap auswählen:"
+  description:
+    title: "Beschreibung"
+    text1: "Diese Plattform dient als Möglichkeit, mehr über"
+    text2: "zu erfahren, im Hinblick auf den"
+    keyword1: "Katastrophenrisiko"
+    keyword2: "Klimawandel"
+  zoom_buttons:
+    egedal: "Zoom auf Egedal"
+    frederikssund: "Zoom auf Frederikssund"
+    halsnaes: "Zoom auf Halsnæs"
+    lejre: "Zoom auf Lejre"
+    roskilde: "Zoom auf Roskilde"
+  layer_swipe:
+    title: "Layer zum Vergleichen auswählen"
+    description: "➡️ Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
+  forecast:
+    sea_level: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der mittleren Meeresspiegelschwankungen auszuwählen"
+    total_precip: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der Gesamtniederschläge auszuwählen"
+    precip_rate: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der Niederschlagsrate auszuwählen"
+    start_date: "Startdatum der Vorhersage:"
+    end_date: "Enddatum der Vorhersage:"
+    selected_date: "Ausgewähltes Datum:"
+  legend:
+    title: "Legende"
+    units: "Einheit"
+    
   ariaLabel:
-    header: "Kopfleiste"
-    footer: "Fussleiste mit Maßstabsangabe, Raumbezugssystem und Koordinatenanzeige"
-    map: "Karte. Mit den Pfeiltasten kannst du die Karte bewegen. Mit der Plus Taste hineinzoomen und mit der Minus Taste herauszoomen."
-    topLeft: "Messen"
-    topRight: "Übersichtskarte und Auswahl der Hintergrundkarte"
+    header: "Kopfzeile"
+    footer: "Fußleiste mit Maßstabsinformationen, räumlichem Bezugssystem und Koordinatenanzeige"
+    map: "Karte. Verwenden Sie die Pfeiltasten, um die Karte zu verschieben. Mit der Plus-Taste hereinzoomen und mit der Minus-Taste herauszoomen."
+    topLeft: "Messung"
+    topRight: "Übersichtskarte und Grundkartenauswahl"
     bottomRight: "Kartenwerkzeuge"
-  basemapLabel: "Hintergrundkarte"
-  measurementTitle: "Messen"
-  appTitle: 'RWL "Die Hauptstadt-Region Dänemarks"'
+  measurementTitle: "Messung"

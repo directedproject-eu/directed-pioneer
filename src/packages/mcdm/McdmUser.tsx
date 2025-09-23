@@ -393,7 +393,7 @@ export function ModelClient() {
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
             />
-            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="xl">
+            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="full">
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>CLIMADA Multi-Criteria Decision Making (MCDM)</ModalHeader>
