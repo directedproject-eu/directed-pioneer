@@ -20,7 +20,13 @@ import {
     SliderThumb,
     Tooltip,
     Flex,
-    Input
+    Input, 
+    Drawer, 
+    DrawerOverlay, 
+    DrawerContent, 
+    DrawerHeader,
+    DrawerBody,
+    DrawerCloseButton
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
@@ -32,6 +38,7 @@ import { McdmService } from "./McdmService";
 import type { ProcessExecution } from "./McdmService";
 
 interface Weights {
+    [key: string]: number;
     "measure net cost": number;
     "averted risk_aai": number;
     "approval": number;
@@ -148,7 +155,10 @@ export function ModelClient() {
     const [ranksData, setRanksData] = useState<Record<string, number> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    // const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
+    const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
+    const [customCriteria, setCustomCriteria] = useState<string>(""); // State for custom criteria name input
     // const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Default mode ranks
 
     const [weights, setWeights] = useState<Weights>({
@@ -161,12 +171,29 @@ export function ModelClient() {
         "implementation time": 0
     });
 
+    const [customCriteriaWeights, setCustomCriteriaWeights] = useState<Record<string, number>>({}); // State for custom criteria weight input
+    
+    const allWeights = { ...weights, ...customCriteriaWeights};
+
     // Handles changes to slider values for each criteria
-    const handleWeightChange = (criteria: keyof Weights, newValue: number) => {
-        setWeights((prevWeights) => ({
-            ...prevWeights,
-            [criteria]: newValue
-        }));
+    // const handleWeightChange = (criteria: keyof Weights, newValue: number) => {
+    //     setWeights((prevWeights) => ({
+    //         ...prevWeights,
+    //         [criteria]: newValue
+    //     }));
+    // };
+
+    const handleAddCustomCriteria = () => {
+        const trimmedName = customCriteria.trim();
+        // Check for a non-empty string and if the key already exists
+        if (trimmedName && !Object.hasOwn(allWeights, trimmedName)) {
+            setCustomCriteriaWeights((prevCustomWeights) => ({
+                ...prevCustomWeights,
+                [trimmedName]: 0
+            }));
+            setCustomCriteria("");
+            onModalClose();
+        }
     };
 
     const handleTokenInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -185,7 +212,8 @@ export function ModelClient() {
         // Create the inputs map for the service
         const inputs = new Map<string, unknown>();
         inputs.set("token", tokenInput);
-        inputs.set("weights", weights);
+        inputs.set("weights", allWeights); // Send all weights, including custom criteria, to API
+        // inputs.set("weights", weights);
 
         // Construct the process execution payload
         const jobDescription: ProcessExecution = {
@@ -391,14 +419,14 @@ export function ModelClient() {
             <ToolButton
                 label="Multi-Criteria Decision Making (MCDM)"
                 icon={<FaBalanceScale />}
-                onClick={onOpen}
+                onClick={onDrawerOpen}
             />
-            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="full">
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>CLIMADA Multi-Criteria Decision Making (MCDM)</ModalHeader>
-                    <ModalCloseButton isDisabled={loading} />
-                    <ModalBody>
+            <Drawer closeOnOverlayClick={false} isOpen={isDrawerOpen} onClose={onDrawerClose} size="xl">
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerHeader>CLIMADA Multi-Criteria Decision Making (MCDM)</DrawerHeader>
+                    <DrawerCloseButton isDisabled={loading} />
+                    <DrawerBody>
                         {!tokenSubmitted ? (
                             <FormControl>
                                 <FormLabel padding={2} htmlFor="token">
@@ -466,12 +494,9 @@ export function ModelClient() {
                                             </Select>
                                         </FormControl> */}
 
-                                        {Object.keys(weights).map((criteria) => {
-                                            const typedCriteria = criteria as keyof Weights;
-                                            const criterionDisplayNames: Record<
-                                                keyof Weights,
-                                                string
-                                            > = {
+                                        {Object.keys(allWeights).map((criteria) => {
+                                            // const typedCriteria = criteria as keyof Weights;
+                                            const criterionDisplayNames: Record<string, string> = {                                           
                                                 "measure net cost":
                                                     "Cost: How important is the cost of implementing the measure?",
                                                 "averted risk_aai":
@@ -487,10 +512,11 @@ export function ModelClient() {
                                                 "implementation time":
                                                     "Implementation Time: How important is the time it takes to implement the measure?"
                                             };
+                                            const criteriaLabel = criterionDisplayNames[criteria] || criteria;
                                             return (
-                                                <FormControl key={typedCriteria} mb={4}>
+                                                <FormControl key={criteria} mb={4}>
                                                     <FormLabel>
-                                                        {criterionDisplayNames[typedCriteria]}
+                                                        {criteriaLabel}
                                                     </FormLabel>
                                                     <Box padding={2}>
                                                         <Flex justify="space-between" mb={1}>
@@ -503,16 +529,18 @@ export function ModelClient() {
                                                             </Text>
                                                         </Flex>
                                                         <Slider
-                                                            value={weights[typedCriteria]}
+                                                            value={allWeights[criteria]}
                                                             min={0}
                                                             max={1}
                                                             step={0.01}
-                                                            onChange={(newValue) =>
-                                                                handleWeightChange(
-                                                                    typedCriteria,
-                                                                    newValue
-                                                                )
-                                                            }
+                                                            onChange={(newValue) => {
+                                                                // Check which state to update based on the criteria name
+                                                                if (Object.hasOwn(weights, criteria)) {
+                                                                    setWeights(prev => ({ ...prev, [criteria]: newValue as number }));
+                                                                } else {
+                                                                    setCustomCriteriaWeights(prev => ({ ...prev, [criteria]: newValue as number }));
+                                                                }
+                                                            }}
                                                             defaultValue={0}
                                                         >
                                                             <SliderTrack>
@@ -523,7 +551,7 @@ export function ModelClient() {
                                                                 color="white"
                                                                 placement="top"
                                                                 isOpen
-                                                                label={weights[typedCriteria]}
+                                                                label={allWeights[criteria]}
                                                             >
                                                                 <SliderThumb />
                                                             </Tooltip>
@@ -532,6 +560,10 @@ export function ModelClient() {
                                                 </FormControl>
                                             );
                                         })}
+
+                                        <Button mt={4} onClick={onModalOpen}>
+                                            Add Custom Criteria
+                                        </Button>
 
                                         <Button
                                             type="button"
@@ -576,6 +608,31 @@ export function ModelClient() {
                                 )}
                             </>
                         )}
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+            {/* Modal for adding new criteria */}
+            <Modal isOpen={isModalOpen} onClose={onModalClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Add Custom Criteria</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <FormControl>
+                            <FormLabel>Criteria Name</FormLabel>
+                            <Input
+                                placeholder="e.g., 'environmental impact'"
+                                value={customCriteria}
+                                onChange={(e) => setCustomCriteria(e.target.value)}
+                            />
+                        </FormControl>
+                        <Button
+                            mt={4}
+                            onClick={handleAddCustomCriteria}
+                            isDisabled={!customCriteria.trim()}
+                        >
+                            Add Criteria
+                        </Button>
                     </ModalBody>
                 </ModalContent>
             </Modal>
