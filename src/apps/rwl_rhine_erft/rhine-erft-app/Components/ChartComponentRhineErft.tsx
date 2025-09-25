@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { Button, Checkbox, Stack } from "@open-pioneer/chakra-integration";
+import { Button, Checkbox, Stack , Text} from "@open-pioneer/chakra-integration";
 import EnsembleCrops from "./EnsembleCrops";
 import { useState } from "react";
 
@@ -95,6 +95,10 @@ const ChartComponentRhineErft = () => {
                     </Checkbox>
                 ))}
             </Stack>
+            <Text mt={"2em"} size={"2em"}>
+                This graph displays the average value, as well as the 20th to 80th percentile, of
+                predicted crop yields across all models in the Danula region.
+            </Text>
         </>
     );
 };
