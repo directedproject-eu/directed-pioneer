@@ -26,10 +26,12 @@ import {
     DrawerContent, 
     DrawerHeader,
     DrawerBody,
-    DrawerCloseButton
+    DrawerCloseButton, 
+    Icon, 
+    IconButton
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
-import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
+import { FaBalanceScale, FaInfoCircle, FaTimes } from "react-icons/fa";
 import { Spinner, Center, Text } from "@open-pioneer/chakra-integration";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -171,6 +173,23 @@ export function ModelClient() {
         "implementation time": 0
     });
 
+    const [customCriteriaMeasures, setCustomCriteriaMeasures] = 
+    useState<Record<string, Record<string, number>>>({
+        // Initialize fixed and default custom criteria scores
+        "durability": { "Barrier": 6, "Building code": 8, "no_measure": 0, "Relocate": 10 },
+        "externalities": { "Barrier": 2, "Building code": 8, "no_measure": 0, "Relocate": 10 },
+        "implementation time": { "Barrier": 4, "Building code": 6, "no_measure": 10, "Relocate": 3 },
+    });
+
+
+    // Add all measures
+    const [newCriteriaScores, setNewCriteriaScores] = useState<Record<string, number>>({
+        "Barrier": 0, 
+        "Building code": 0, 
+        "Relocate": 0, 
+        "no_measure": 0
+    });
+
     const [customCriteriaWeights, setCustomCriteriaWeights] = useState<Record<string, number>>({}); // State for custom criteria weight input
     
     const allWeights = { ...weights, ...customCriteriaWeights};
@@ -187,12 +206,44 @@ export function ModelClient() {
         const trimmedName = customCriteria.trim();
         // Check for a non-empty string and if the key already exists
         if (trimmedName && !Object.hasOwn(allWeights, trimmedName)) {
+            // Add new criteria to the weights state (default 0)
             setCustomCriteriaWeights((prevCustomWeights) => ({
                 ...prevCustomWeights,
                 [trimmedName]: 0
             }));
+            // Add the measure scores to the customCriteriaMeasures state
+            setCustomCriteriaMeasures(prevMeasures => ({
+                ...prevMeasures,
+                [trimmedName]: newCriteriaScores
+            }));
+            // Reset modal states
             setCustomCriteria("");
+            setNewCriteriaScores({"Barrier": 0, "Building code": 0, "Relocate": 0, "no_measure": 0 });
             onModalClose();
+        }
+    };
+
+    // State to update the criteria scores
+    const handleNewCriteriaScoreChange = (measure: string, value: string) => {
+        const numValue = parseFloat(value);
+        setNewCriteriaScores(prevScores => ({
+            ...prevScores,
+            [measure]: isNaN(numValue) ? 0 : numValue
+        }));
+    };
+
+    const handleRemoveFixedCriteria = (criteria: keyof Weights) => {
+        // Create a copy of the weights object and delete the key 
+        const newWeights = {...weights}; 
+        delete newWeights[criteria];
+        setWeights(newWeights);
+    };
+
+    const handleRemoveCustomCriteria = (criteria: string) => {
+        if (Object.hasOwn(customCriteriaWeights, criteria)) {
+            const newCustomWeights = {...customCriteriaWeights};
+            delete newCustomWeights[criteria]; 
+            setCustomCriteriaWeights(newCustomWeights);
         }
     };
 
@@ -209,10 +260,25 @@ export function ModelClient() {
 
         const processId = "climada-mca-roskilde";
 
+        // Generate array of active criteria from weights
+        const criteriasToConsider = Object.keys(allWeights); 
+        // Filter custom criteria scores to only include acitve
+        const activeCustomCriterias: Record<string, Record<string, number >> = {}; 
+
+        // Iterate through all custom criteria (from new state)
+        Object.keys(customCriteriaMeasures).forEach(customCriteria => {
+            // Check if criteria is active (has a weight from allWeights)
+            if (Object.hasOwn(allWeights, customCriteria)) {
+                activeCustomCriterias[customCriteria] = customCriteriaMeasures[customCriteria] as Record<string, number>;;
+            }
+        });
+
         // Create the inputs map for the service
         const inputs = new Map<string, unknown>();
         inputs.set("token", tokenInput);
         inputs.set("weights", allWeights); // Send all weights, including custom criteria, to API
+        inputs.set("criterias_to_consider", criteriasToConsider);
+        inputs.set("custom_criterias", activeCustomCriterias);
         // inputs.set("weights", weights);
 
         // Construct the process execution payload
@@ -513,11 +579,43 @@ export function ModelClient() {
                                                     "Implementation Time: How important is the time it takes to implement the measure?"
                                             };
                                             const criteriaLabel = criterionDisplayNames[criteria] || criteria;
+                                            const isCustom = Object.hasOwn(customCriteriaWeights, criteria); // Check if custom criteria
+                                            const isFixed = Object.hasOwn(weights, criteria); // Check if fixed criteria
                                             return (
                                                 <FormControl key={criteria} mb={4}>
-                                                    <FormLabel>
-                                                        {criteriaLabel}
-                                                    </FormLabel>
+                                                    <Flex alignItems="center" justifyContent="space-between">
+                                                        <FormLabel>
+                                                            {criteriaLabel}
+                                                        </FormLabel>
+                                                        {isCustom && (
+                                                            <Tooltip
+                                                                label="Remove Criteria"
+                                                                placement="left"
+                                                            >
+                                                                <IconButton
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    icon={<Icon as={FaTimes} />}
+                                                                    aria-label={`Remove custom criteria: ${criteria}`}
+                                                                    onClick={() => handleRemoveCustomCriteria(criteria)}
+                                                                />
+                                                            </Tooltip>
+                                                        )}                                                    
+                                                        {isFixed && (
+                                                            <Tooltip
+                                                                label="Remove Criteria"
+                                                                placement="left"
+                                                            >
+                                                                <IconButton
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    icon={<Icon as={FaTimes} />}
+                                                                    aria-label={`Remove Criteria: ${criteria}`}
+                                                                    onClick={() => handleRemoveFixedCriteria(criteria as keyof Weights)}
+                                                                />
+                                                            </Tooltip>
+                                                        )}
+                                                    </Flex>
                                                     <Box padding={2}>
                                                         <Flex justify="space-between" mb={1}>
                                                             <Text fontSize="sm">Not important</Text>
@@ -549,7 +647,7 @@ export function ModelClient() {
                                                             <Tooltip
                                                                 hasArrow
                                                                 color="white"
-                                                                placement="top"
+                                                                placement="bottom"
                                                                 isOpen
                                                                 label={allWeights[criteria]}
                                                             >
@@ -560,19 +658,21 @@ export function ModelClient() {
                                                 </FormControl>
                                             );
                                         })}
-
-                                        <Button mt={4} onClick={onModalOpen}>
-                                            Add Custom Criteria
-                                        </Button>
-
-                                        <Button
-                                            type="button"
-                                            size="md"
-                                            onClick={handleSubmit}
-                                            isDisabled={loading}
-                                        >
-                                            Submit Criteria Weights
-                                        </Button>
+                                        <Flex mt={4} justifyContent="flex-start">
+                                            <Flex direction="column" gap={4}>
+                                                <Button onClick={onModalOpen}>
+                                                    Add Custom Criteria
+                                                </Button>
+                                                <Button
+                                                    type="button"
+                                                    size="md"
+                                                    onClick={handleSubmit}
+                                                    isDisabled={loading}
+                                                >
+                                                    Submit Criteria Weights
+                                                </Button>
+                                            </Flex>
+                                        </Flex>
 
                                         <Flex paddingY={4} />
                                         <Flex justifyContent="space-between" alignItems="center">
@@ -626,6 +726,18 @@ export function ModelClient() {
                                 onChange={(e) => setCustomCriteria(e.target.value)}
                             />
                         </FormControl>
+                        <Text fontWeight="semibold" mb={2}>Input a Score for Each Measure (e.g., 0 to 10)</Text>
+                        {Object.keys(newCriteriaScores).map(measure => (
+                            <FormControl key={measure} mb={3}>
+                                <FormLabel fontSize="sm" mb={1}>{measure}:</FormLabel>
+                                <Input
+                                    type="number"
+                                    value={(newCriteriaScores[measure] ?? 0).toString()} 
+                                    onChange={(e) => handleNewCriteriaScoreChange(measure, e.target.value)}
+                                    size="sm"
+                                />
+                            </FormControl>
+                        ))}
                         <Button
                             mt={4}
                             onClick={handleAddCustomCriteria}
