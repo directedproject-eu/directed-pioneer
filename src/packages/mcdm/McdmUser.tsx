@@ -218,8 +218,8 @@ export function ModelClient() {
                 err instanceof Error
                     ? err.message
                     : typeof err === "string"
-                      ? err
-                      : "Unknown error";
+                        ? err
+                        : "Unknown error";
             setError(`Failed to run MCDM analysis. Error: ${errorMessage}`);
         } finally {
             setLoading(false);
