@@ -356,7 +356,7 @@ export function MapApp() {
             <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Zala Chart</ModalHeader>
+                    <ModalHeader>Rhine-Erft Chart</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <ChartComponentRhineErft></ChartComponentRhineErft>

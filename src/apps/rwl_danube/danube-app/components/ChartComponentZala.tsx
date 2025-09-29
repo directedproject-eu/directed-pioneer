@@ -1,20 +1,20 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
+import { useState } from "react";
 import {
     Button,
     Center,
     Checkbox,
     Stack,
     Text,
-    Icon,
     Flex
 } from "@open-pioneer/chakra-integration";
-import { FiAlertTriangle } from "react-icons/fi";
+import { useIntl } from "open-pioneer:react-hooks";
 import EnsembleCrops from "./EnsembleCrops";
-import { useState } from "react";
 
 const ChartComponentZala = () => {
+    const intl = useIntl();
     const [selectedScenario, setSelectedScenario] = useState("ssp585");
     const [selectedCrops, setSelectedCrops] = useState<string[]>(["Potatoes"]);
     const crops = [
@@ -107,14 +107,11 @@ const ChartComponentZala = () => {
                 </Stack>
             </Center>
             <Text mt={"2em"} size={"2em"}>
-                This graph displays the average value, as well as the 20th to 80th percentile, of
-                predicted crop yields across all models in the Danula region.
+                {intl.formatMessage({id: "charts.explanation1"})}
             </Text>
             <Flex alignItems="center">
                 <Text>
-                    There was insufficient yield data for summer barley and lucerne in Western
-                    Danubia for local simulations. Therefore, data from a neighboring region in
-                    Austria was utilized.
+                    {intl.formatMessage({id: "charts.explanation2"})}
                 </Text>
             </Flex>
         </>
