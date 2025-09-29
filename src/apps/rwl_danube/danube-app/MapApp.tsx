@@ -61,8 +61,6 @@ import { StationSelector } from "./services/StationSelector";
 import { LayerZoom } from "./services/LayerZoom";
 
 export function MapApp() {
-    const highlightService = useService<LayerHighlighter>("app.LayerHighlighter");
-
     // const { isOpen, onOpen, onClose } = useDisclosure();
     const mapModel = useMapModel(MAP_ID);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); // administrative boundary layer zoom service
@@ -408,11 +406,7 @@ export function MapApp() {
                                 </MapAnchor>
 
                                 {/* zoom to region and feature info */}
-                                <MapAnchor
-                                    position="bottom-left"
-                                    horizontalGap={15}
-                                    verticalGap={60}
-                                >
+                                <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
                                     <VStack align="stretch" spacing={2}>
                                         <Button
                                             size="sm"
@@ -447,9 +441,7 @@ export function MapApp() {
                                             padding={2}
                                             boxShadow="lg"
                                             role="top-right"
-                                            aria-label={intl.formatMessage({
-                                                id: "ariaLabel.topRight"
-                                            })}
+                                            aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
                                             maxHeight={615}
                                             maxWidth={430}
                                             overflow="hidden"
@@ -467,9 +459,8 @@ export function MapApp() {
                                                     </Text>
                                                     <Spacer />
                                                     <Text fontSize={16}>
-                                                        ➡️ Only layers which have been selected in
-                                                        the Operational Layers are viewable for
-                                                        comparison.
+                                                        ➡️ Only layers which have been selected in the
+                                                        Operational Layers are viewable for comparison.
                                                     </Text>
                                                     <Flex direction="row" gap={4} p={4}>
                                                         <Select
@@ -480,10 +471,7 @@ export function MapApp() {
                                                             }
                                                         >
                                                             {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
+                                                                <option key={layer.id} value={layer.id}>
                                                                     {layer.title || layer.id}
                                                                 </option>
                                                             ))}
@@ -493,16 +481,11 @@ export function MapApp() {
                                                             placeholder="Select Right Layer"
                                                             value={selectedRightLayer ?? ""}
                                                             onChange={(e) =>
-                                                                setSelectedRightLayer(
-                                                                    e.target.value
-                                                                )
+                                                                setSelectedRightLayer(e.target.value)
                                                             }
                                                         >
                                                             {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
+                                                                <option key={layer.id} value={layer.id}>
                                                                     {layer.title || layer.id}
                                                                 </option>
                                                             ))}
@@ -552,14 +535,6 @@ export function MapApp() {
                                         <ZoomIn mapId={MAP_ID} />
                                         <ZoomOut mapId={MAP_ID} />
                                     </Flex>
-                                </MapAnchor>
-                                <MapAnchor position="bottom-left" horizontalGap={5} verticalGap={5}>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => highlightService.zoomTo("zala_region")}
-                                    >
-                                        Zoom Zala region
-                                    </Button>
                                 </MapAnchor>
                             </MapContainer>
                         )}

@@ -14,7 +14,7 @@ import { FiAlertTriangle } from "react-icons/fi";
 import EnsembleCrops from "./EnsembleCrops";
 import { useState } from "react";
 
-const ChartComponentRhineErft = () => {
+const ChartComponentZala = () => {
     const [selectedScenario, setSelectedScenario] = useState("ssp585");
     const [selectedCrops, setSelectedCrops] = useState<string[]>(["Potatoes"]);
     const crops = [
@@ -121,4 +121,4 @@ const ChartComponentRhineErft = () => {
     );
 };
 
-export default ChartComponentRhineErft;
+export default ChartComponentZala;

@@ -263,9 +263,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     }
     private changeLayerInfo() {
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            model?.layers
-                .getLayerById("isimip")
-                ?.setTitle(layer_info[this.#selectedVariable.value]["title"]);
+            model?.layers.getLayerById("isimip")?.setTitle(layer_info[this.#selectedVariable.value]["title"]);
             model?.layers
                 .getLayerById("isimip")
                 ?.setDescription(layer_info[this.#selectedVariable.value]["description"]);

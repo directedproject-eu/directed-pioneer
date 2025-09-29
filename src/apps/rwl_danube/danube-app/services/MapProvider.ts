@@ -14,6 +14,7 @@ import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
 import { LidarLegend } from "../components/legends/LidarLegend ";
 import { WaterLevelLegend } from "../components/legends/WaterLevelLegend";
 
+
 interface Config {
     pygeoapiBaseUrl: string;
 }
@@ -156,6 +157,7 @@ const wmsPluvialFloodingLayersSSP5852080 = [
     }
 ];
 
+
 export const MAP_ID = "main";
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
@@ -194,12 +196,7 @@ export class MainMapProvider implements MapConfigProvider {
         return regionLayer;
     }
 
-    createWmsLayer(
-        layerName: string,
-        layerTitle: string,
-        layerDescription: string,
-        visible: boolean = false
-    ) {
+    createWmsLayer(layerName: string, layerTitle: string, layerDescription: string, visible: boolean = false) {
         const wmsLayerContent = {
             id: layerName,
             title: layerTitle,
@@ -244,7 +241,10 @@ export class MainMapProvider implements MapConfigProvider {
                     title: "Administrative boundaries",
                     visible: true,
                     id: "administrative_boundaries",
-                    layers: [this.createRegionLayer("vienna"), this.createRegionLayer("zala")]
+                    layers: [
+                        this.createRegionLayer("vienna"),
+                        this.createRegionLayer("zala"),
+                    ]
                 }),
                 // Vienna model results
                 new GroupLayer({
@@ -292,11 +292,7 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP2452050.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description
-                                                            )
+                                                            ...this.createWmsLayer(name, title, description)
                                                         })
                                                 )
                                             ]
@@ -310,11 +306,7 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP5852050.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description
-                                                            )
+                                                            ...this.createWmsLayer(name, title, description)
                                                         })
                                                 )
                                             ]
@@ -341,11 +333,7 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP2452080.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description
-                                                            )
+                                                            ...this.createWmsLayer(name, title, description)
                                                         })
                                                 )
                                             ]
@@ -359,11 +347,7 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP5852080.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description
-                                                            )
+                                                            ...this.createWmsLayer(name, title, description)
                                                         })
                                                 )
                                             ]
