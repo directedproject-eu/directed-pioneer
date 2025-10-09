@@ -1,15 +1,11 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { useEffect, useId, useState } from "react";
-import { PiRulerLight, PiChartLineDownLight } from "react-icons/pi";
 import { EventsKey } from "ol/events";
-import { Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
 import { unByKey } from "ol/Observable";
 import Swipe from "ol-ext/control/Swipe";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
-import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import {
     Box,
     Button,
@@ -30,18 +26,12 @@ import {
     useDisclosure,
     VStack
 } from "@open-pioneer/chakra-integration";
-import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
-import { Geolocation } from "@open-pioneer/geolocation";
 //import { Legend } from "@open-pioneer/legend";
 import { MapAnchor, MapContainer, SimpleLayer, useMapModel } from "@open-pioneer/map";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
-import { ToolButton } from "@open-pioneer/map-ui-components";
-import { Notifier } from "@open-pioneer/notifier";
-import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { useIntl } from "open-pioneer:react-hooks";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
-import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
@@ -52,7 +42,7 @@ import { MAP_ID } from "./services/MapProvider";
 import { useEffect, useId, useMemo, useState } from "react";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiRulerLight, PiChartLineDownLight } from "react-icons/pi";
+import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
 import { useService } from "open-pioneer:react-hooks";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
@@ -66,12 +56,11 @@ import { IsimipSelector } from "./controls/IsimipSelector";
 import ChartComponentZala from "./components/ChartComponentZala";
 import ResizeBox from "./components/ResizeBox";
 import ChartComponentRhineErft from "./components/ChartComopnentRhineErft";
-import { useMapModel } from "@open-pioneer/map";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { Vector as VectorLayer } from "ol/layer.js";
-import { SimpleLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import { LayerHandler } from "./services/LayerHandler";
+import DownloadLayer from "./components/DownloadLayer";
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -425,6 +414,7 @@ export function MapApp() {
                                             />
                                         </FormControl>
                                     </Box>
+                                    {downloadIsActive && <DownloadLayer mapID={MAP_ID} />}
                                 </MapAnchor>
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                     <Legend
@@ -440,19 +430,25 @@ export function MapApp() {
                                 >
                                     <Flex
                                         role="bottom-right"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.bottomRight"
+                                        })}
                                         direction="column"
                                         gap={1}
                                         padding={1}
                                     >
                                         <ToolButton
-                                            label={intl.formatMessage({ id: "map.button_title.download" })}
+                                            label={intl.formatMessage({
+                                                id: "map.download.button"
+                                            })}
                                             icon={<PiDownload />}
                                             isActive={downloadIsActive}
                                             onClick={toggleDownload}
                                         />
                                         <ToolButton
-                                            label={intl.formatMessage({ id: "charts.button_title" })}
+                                            label={intl.formatMessage({
+                                                id: "charts.button_title"
+                                            })}
                                             icon={<PiChartLineDownLight />}
                                             onClick={onOpenChart}
                                         />

@@ -15,7 +15,6 @@ import { Vector as VectorSource } from "ol/source.js";
 import { TileWMS } from "ol/source.js";
 import { set } from "ol/transform";
 
-
 type DownloadLayerProps = {
     mapID: string;
 };
@@ -47,7 +46,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
                     properties: layer.olLayer?.getProperties()
                 }));
             setVisibleLayers(vis);
-            console.log("Visible layers updated:", vis);
+            // console.log("Visible layers updated:", vis);
         };
 
         updateVisibleLayers();
@@ -65,43 +64,147 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
         };
     }, [mapModel]);
 
+    async function getLayerInfo(id: string) {
+        const url =
+            "https://directed.dev.52north.org/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities";
+        const response = await fetch(url);
+        const xmlText = await response.text();
+
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+
+        const layers = Array.from(xmlDoc.getElementsByTagName("Layer"));
+
+        const targetLayer = layers.find((layer) => {
+            const nameNode = layer.getElementsByTagName("Name")[0];
+            return nameNode && nameNode.textContent === id;
+        });
+
+        if (!targetLayer) {
+            console.warn("Layer nicht gefunden:", id);
+            return;
+        }
+
+        const keywordNodes = targetLayer.getElementsByTagName("Keyword");
+        const keywords = Array.from(keywordNodes).map((node) => node.textContent?.trim() || "");
+
+        // console.log("Keywords:", keywords);
+
+        if (keywords.includes("features")) {
+            return "features";
+        } else if (keywords.includes("WCS")) {
+            return "WCS";
+        } else {
+            return null;
+        }
+    }
+
     const handleDownload = (layer: LayerEntry) => {
         const properties = layer.olLayer?.getProperties();
         console.log("Layer properties:", properties);
 
         if (properties?.["type"] === "GeoTIFF") {
             const source = layer.olLayer?.getSource() as GeoTIFF;
-            console.log("Layer source:", source);
+            // console.log("Layer source:", source);
             if (source && source["key_"]) {
                 const donwloadUrl = source["key_"];
                 console.log("Downloading GeoTIFF from URL:", donwloadUrl);
                 window.open(source["key_"], "_blank");
             }
-        }
-        else if (properties?.["type"] === "GeoJSON") {
+        } else if (properties?.["type"] === "GeoJSON") {
             const source = layer.olLayer?.getSource() as VectorSource;
             if (source && source["url_"]) {
                 const downloadUrl = source["url_"];
-                console.log("Downloading GeoJSON from URL:", downloadUrl);
+                // console.log("Downloading GeoJSON from URL:", downloadUrl);
                 const response = fetch(downloadUrl);
-                response.then((res) => res.blob().then((blob) => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `${layer.id || "data"}.geojson`;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                }));
+                response.then((res) =>
+                    res.blob().then((blob) => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = `${layer.id || "data"}.geojson`;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    })
+                );
             }
-        }
-        else if (properties?.["type"] === "OSM") {
-            alert("Direct download of OSM layers is not supported. Please visit https://www.openstreetmap.org to download data.");        
-        }
-        else if (properties?.["type"] === "WMS") {
-            alert("Direct download of WMS layers is not supported yet. Please contact the data provider for access.");
-        }
+        } else if (properties?.["type"] === "OSM") {
+            alert(
+                "Direct download of OSM layers is not supported. Please visit https://www.openstreetmap.org to download data."
+            );
+        } else if (properties?.["type"] === "WMS") {
+            const id = "directed:" + properties.id;
+            console.log("id:", id);
 
+            const type = getLayerInfo(id);
+            type?.then(async (t) => {
+                if (t === "features") {
+                    try {
+                        const baseUrl = "https://directed.dev.52north.org/geoserver/wfs";
+                        const params = new URLSearchParams({
+                            service: "WFS",
+                            version: "2.0.0",
+                            request: "GetFeature",
+                            typeNames: id,
+                            outputFormat: "shape-zip"
+                        });
+
+                        const url = `${baseUrl}?${params.toString()}`;
+                        // console.log("WFS Shapefile Request:", url);
+
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error("WFS request failed");
+                        }
+
+                        const blob = await response.blob();
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `${properties.id}.zip`;
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                    } catch (err) {
+                        console.error("Error downloading the shapefile:", err);
+                        alert("Download failed.");
+                    }
+                } else if (t === "WCS") {
+                    // WCS GeoTIFF Download
+                    try {
+                        const baseUrl = "https://directed.dev.52north.org/geoserver/wcs";
+                        const params = new URLSearchParams({
+                            service: "WCS",
+                            version: "2.0.1",
+                            request: "GetCoverage",
+                            coverageId: id,
+                            format: "image/tiff"
+                        });
+
+                        const url = `${baseUrl}?${params.toString()}`;
+                        // console.log("WCS GeoTIFF Request:", url);
+
+                        const response = await fetch(url);
+                        if (!response.ok) throw new Error("WCS request failed");
+
+                        const blob = await response.blob();
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `${properties.id}.tif`;
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                    } catch (err) {
+                        console.error("WCS download failed:", err);
+                        alert("Download failed.");
+                    }
+                } else {
+                    alert("Download not supported for this WMS layer.");
+                }
+            });
+        } else {
+            alert("Download not supported for this layer type.");
+        }
     };
 
     return (
@@ -116,25 +219,33 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
                         placeholder="Select a layer to download"
                         value={selectedLayer?.id || ""}
                         onChange={(e) => {
-                            const layer = visibleLayers.find((l) => l.id === e.target.value) || null;
+                            const layer =
+                                visibleLayers.find((l) => l.id === e.target.value) || null;
                             setSelectedLayer(layer);
                         }}
                     >
-                        {visibleLayers.map((layer) =>
-                            layer.olLayer?.getProperties()?.type !== "OSM" && (
-                                <option key={layer.id} value={layer.id}>
-                                    {layer.title || layer.id}
-                                </option>
-                            )
+                        {visibleLayers.map(
+                            (layer) =>
+                                layer.olLayer?.getProperties()?.type !== "OSM" && (
+                                    <option key={layer.id} value={layer.id}>
+                                        {layer.title || layer.id}
+                                    </option>
+                                )
                         )}
                     </Select>
 
                     <Button
                         colorScheme="blue"
-                        isDisabled={!selectedLayer || selectedLayer.olLayer?.getProperties()?.["type"] === "OSM"}
+                        isDisabled={
+                            !selectedLayer ||
+                            selectedLayer.olLayer?.getProperties()?.["type"] === "OSM"
+                        }
                         onClick={() => selectedLayer && handleDownload(selectedLayer)}
                     >
-                        {intl.formatMessage({ id: "map.download.button", defaultMessage: "Download Layer" })}
+                        {intl.formatMessage({
+                            id: "map.download.button",
+                            defaultMessage: "Download Layer"
+                        })}
                     </Button>
                 </VStack>
             )}
