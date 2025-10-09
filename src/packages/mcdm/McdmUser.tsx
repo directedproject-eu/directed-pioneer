@@ -218,8 +218,8 @@ export function ModelClient() {
                 err instanceof Error
                     ? err.message
                     : typeof err === "string"
-                        ? err
-                        : "Unknown error";
+                            ? err
+                            : "Unknown error";
             setError(`Failed to run MCDM analysis. Error: ${errorMessage}`);
         } finally {
             setLoading(false);
@@ -393,7 +393,7 @@ export function ModelClient() {
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
             />
-            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="xl">
+            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="full">
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>CLIMADA Multi-Criteria Decision Making (MCDM)</ModalHeader>

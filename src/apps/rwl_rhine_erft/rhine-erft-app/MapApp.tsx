@@ -34,7 +34,7 @@ import { useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiChartLineUpLight, PiRulerLight } from "react-icons/pi";
+import { PiChartLineDownLight, PiRulerLight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { FeatureInfo } from "featureinfo";
@@ -319,11 +319,13 @@ export function MapApp() {
                                 gap={1}
                                 padding={1}
                             >
-                                {/* <ToolButton
-                                    label={intl.formatMessage({ id: "charts.button_title" })}
-                                    icon={<PiChartLineUpLight/>}
+                                <ToolButton
+                                    label={intl.formatMessage({
+                                        id: "charts.button_title"
+                                    })}
+                                    icon={<PiChartLineDownLight />}
                                     onClick={onOpenChart}
-                                /> */}
+                                />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
@@ -351,10 +353,10 @@ export function MapApp() {
                 </Flex>
             </TitledSection>
 
-            {/* <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
+            <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Zala Chart</ModalHeader>
+                    <ModalHeader>Rhine-Erft Chart</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <ChartComponentRhineErft></ChartComponentRhineErft>
@@ -366,7 +368,7 @@ export function MapApp() {
                         </Button>
                     </ModalFooter>
                 </ModalContent>
-            </Modal> */}
+            </Modal>
         </Flex>
     );
 }

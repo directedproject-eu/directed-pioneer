@@ -1,0 +1,482 @@
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-License-Identifier: Apache-2.0
+import { Vector as VectorLayer } from "ol/layer.js";
+import { Vector as VectorSource } from "ol/source.js";
+import TileLayer from "ol/layer/Tile";
+import OSM from "ol/source/OSM";
+import GeoJSON from "ol/format/GeoJSON.js";
+import { Stroke, Style } from "ol/style";
+import TileWMS from "ol/source/TileWMS";
+import { ServiceOptions } from "@open-pioneer/runtime";
+import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
+import { BuildingDamageLegend } from "../components/legends/BuildingDamageLegend";
+import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
+import { LidarLegend } from "../components/legends/LidarLegend ";
+import { WaterLevelLegend } from "../components/legends/WaterLevelLegend";
+
+
+interface Config {
+    pygeoapiBaseUrl: string;
+}
+
+const wmsLayersHistoricalFlooding = [
+    {
+        "name": "WD_RAIN172645",
+        "title": "Pluvial Flooding (WD_RAIN172645)",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "WD_RAIN110828",
+        "title": "Pluvial Flooding (WD_RAIN110828)",
+        "description": "Water depth caused by pluvial flooding"
+    },
+    {
+        "name": "WD_RAIN095830",
+        "title": "Pluvial Flooding (WD_RAIN095830)",
+        "description": "Water depth caused by pluvial flooding"
+    }
+];
+
+const wmsLayersHistoricalDamage = [
+    {
+        "name": "DMG_RIVER111745",
+        "title": "Damage By Fluvial Flooding (DMG_RIVER111745)",
+        "description":
+            "Damage caused by fluvial flooding. This layer is only meant for demonstration purposes!"
+    },
+    {
+        "name": "DMG_RAIN110828",
+        "title": "Damage By Pluvial Flooding (DMG_RAIN110828)",
+        "description":
+            "Damage caused by pluvial flooding. This layer is only meant for demonstration purposes!"
+    }
+];
+
+const wmsPluvialFloodingLayersRef = [
+    {
+        "name": "Vienna_WD_RAIN152452_Ref_RP25",
+        "title": "Reference (1989-2018) - RP25 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - Reference period (1989-2018) - 25 years return period  - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164659_Ref_RP50",
+        "title": "Reference (1989-2018) - RP50 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - Reference period (1989-2018) - 50 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164612_Ref_RP100",
+        "title": "Reference (1989-2018) - RP100 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - Reference period (1989-2018) - 100 years return period - Vienna - Simulated with SaferPlaces"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP2452050 = [
+    {
+        "name": "Vienna_WD_RAIN164413_SSP245_RP25_2050",
+        "title": "SSP245 - 2050 - RP25 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2050 - 25 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164745_SSP245_RP50_2050",
+        "title": "SSP245 - 2050 - RP50 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2050 - 50 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164825_SSP245_RP100_2050",
+        "title": "SSP245 - 2050 - RP100 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2050 - 100 years return period - Vienna - Simulated with SaferPlaces"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP5852050 = [
+    {
+        "name": "Vienna_WD_RAIN164413_SSP585_RP25_2050",
+        "title": "SSP585 - 2050 - RP25 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2050 - 25 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164323_SSP585_RP50_2050",
+        "title": "SSP585 - 2050 - RP50 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2050 - 50 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164223_SSP585_RP100_2050",
+        "title": "SSP585 - 2050 - RP100 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2050 - 100 years return period - Vienna - Simulated with SaferPlaces"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP2452080 = [
+    {
+        "name": "Vienna_WD_RAIN164413_SSP245_RP25_2080",
+        "title": "SSP245 - 2080 - RP25 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2080 - 25 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164323_SSP245_RP50_2080",
+        "title": "SSP245 - 2080 - RP50 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2080 - 50 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164223_SSP245_RP100_2080",
+        "title": "SSP245 - 2080 - RP100 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP245 - 2080 - 100 years return period - Vienna - Simulated with SaferPlaces"
+    }
+];
+
+const wmsPluvialFloodingLayersSSP5852080 = [
+    {
+        "name": "Vienna_WD_RAIN164323_SSP585_RP25_2080",
+        "title": "SSP585 - 2080 - RP25 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2080 - 25 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN164223_SSP585_RP50_2080",
+        "title": "SSP585 - 2080 - RP50 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2080 - 50 years return period - Vienna - Simulated with SaferPlaces"
+    },
+    {
+        "name": "Vienna_WD_RAIN115927_SSP585_RP100_2080",
+        "title": "SSP585 - 2080 - RP100 - Vienna - SaferPlaces",
+        "description":
+            "Water depth caused by pluvial flooding - SSP585 - 2080 - 100 years return period - Vienna - Simulated with SaferPlaces"
+    }
+];
+
+
+export const MAP_ID = "main";
+export class MainMapProvider implements MapConfigProvider {
+    mapId = MAP_ID;
+    pygeoapiBaseUrl: string;
+
+    constructor(serviceOptions: ServiceOptions) {
+        const config = serviceOptions.properties.userConfig as Config;
+        this.pygeoapiBaseUrl = config.pygeoapiBaseUrl;
+    }
+
+    capitalizeFirstLetter(word: string) {
+        return String(word).charAt(0).toUpperCase() + String(word).slice(1);
+    }
+
+    createRegionLayer(regionID: string) {
+        const regionLayer = new SimpleLayer({
+            id: `${regionID}_region`,
+            title: `${this.capitalizeFirstLetter(regionID)} region`,
+            description: `This layer shows the boundaries of the ${this.capitalizeFirstLetter(regionID)} region`,
+            visible: true,
+            olLayer: new VectorLayer({
+                source: new VectorSource({
+                    url: `${this.pygeoapiBaseUrl}/collections/danube_administrative_boundaries/items/${regionID}?f=json`,
+                    format: new GeoJSON()
+                }),
+                style: new Style({
+                    stroke: new Stroke({
+                        color: "#2e9ecc",
+                        width: 3
+                    })
+                }),
+                properties: { title: "GeoJSON Layer" }
+            }),
+            isBaseLayer: false
+        });
+        return regionLayer;
+    }
+
+    createWmsLayer(layerName: string, layerTitle: string, layerDescription: string, visible: boolean = false) {
+        const wmsLayerContent = {
+            id: layerName,
+            title: layerTitle,
+            description: layerDescription,
+            visible: visible,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://directed.dev.52north.org/geoserver/directed/wms",
+                    params: {
+                        LAYERS: layerName
+                    }
+                }),
+                properties: {
+                    title: layerTitle,
+                    id: layerName
+                }
+            }),
+            isBaseLayer: false
+        };
+        return wmsLayerContent;
+    }
+
+    async getMapConfig(): Promise<MapConfig> {
+        return {
+            initialView: {
+                kind: "position",
+                center: { x: 2100000, y: 5890000 },
+                zoom: 7
+            },
+            projection: "EPSG:3857",
+            layers: [
+                new SimpleLayer({
+                    title: "OpenStreetMap",
+                    olLayer: new TileLayer({
+                        source: new OSM(),
+                        properties: { title: "OSM" }
+                    }),
+                    isBaseLayer: true
+                }),
+                // Administrative boundaries
+                new GroupLayer({
+                    title: "Administrative boundaries",
+                    visible: true,
+                    id: "administrative_boundaries",
+                    layers: [
+                        this.createRegionLayer("vienna"),
+                        this.createRegionLayer("zala"),
+                    ]
+                }),
+                // Vienna model results
+                new GroupLayer({
+                    title: "Vienna",
+                    visible: false,
+                    id: "vienna",
+                    layers: [
+                        // Pluvial flood layers
+                        new GroupLayer({
+                            title: "Pluvial Flooding",
+                            visible: false,
+                            id: "pluvial_flooding",
+                            layers: [
+                                // Reference
+                                new GroupLayer({
+                                    title: "Reference (1989-2018)",
+                                    visible: false,
+                                    id: "pluvial_flooding_historical",
+                                    layers: [
+                                        ...wmsPluvialFloodingLayersRef.map(
+                                            ({ name, title, description }) =>
+                                                new SimpleLayer({
+                                                    ...this.createWmsLayer(name, title, description)
+                                                })
+                                        )
+                                    ],
+                                    attributes: {
+                                        "legend": {
+                                            Component: WaterLevelLegend
+                                        }
+                                    }
+                                }),
+                                // 2050
+                                new GroupLayer({
+                                    title: "2050",
+                                    visible: false,
+                                    id: "2050",
+                                    layers: [
+                                        // SSP245
+                                        new GroupLayer({
+                                            title: "SSP245",
+                                            visible: false,
+                                            id: "2050_ssp245",
+                                            layers: [
+                                                ...wmsPluvialFloodingLayersSSP2452050.map(
+                                                    ({ name, title, description }) =>
+                                                        new SimpleLayer({
+                                                            ...this.createWmsLayer(name, title, description)
+                                                        })
+                                                )
+                                            ]
+                                        }),
+                                        // SSP585
+                                        new GroupLayer({
+                                            title: "SSP585",
+                                            visible: false,
+                                            id: "2050_ssp585",
+                                            layers: [
+                                                ...wmsPluvialFloodingLayersSSP5852050.map(
+                                                    ({ name, title, description }) =>
+                                                        new SimpleLayer({
+                                                            ...this.createWmsLayer(name, title, description)
+                                                        })
+                                                )
+                                            ]
+                                        })
+                                    ],
+                                    attributes: {
+                                        "legend": {
+                                            Component: WaterLevelLegend
+                                        }
+                                    }
+                                }),
+                                // 2080
+                                new GroupLayer({
+                                    title: "2080",
+                                    visible: false,
+                                    id: "2080",
+                                    layers: [
+                                        // SSP245
+                                        new GroupLayer({
+                                            title: "SSP245",
+                                            visible: false,
+                                            id: "2080_ssp245",
+                                            layers: [
+                                                ...wmsPluvialFloodingLayersSSP2452080.map(
+                                                    ({ name, title, description }) =>
+                                                        new SimpleLayer({
+                                                            ...this.createWmsLayer(name, title, description)
+                                                        })
+                                                )
+                                            ]
+                                        }),
+                                        // SSP585
+                                        new GroupLayer({
+                                            title: "SSP585",
+                                            visible: false,
+                                            id: "2080_ssp585",
+                                            layers: [
+                                                ...wmsPluvialFloodingLayersSSP5852080.map(
+                                                    ({ name, title, description }) =>
+                                                        new SimpleLayer({
+                                                            ...this.createWmsLayer(name, title, description)
+                                                        })
+                                                )
+                                            ]
+                                        })
+                                    ],
+                                    attributes: {
+                                        "legend": {
+                                            Component: WaterLevelLegend
+                                        }
+                                    }
+                                }),
+                                // Base data
+                                new GroupLayer({
+                                    title: "Base Data",
+                                    visible: false,
+                                    id: "pluvial_flooding_base_data",
+                                    layers: [
+                                        new SimpleLayer({
+                                            ...this.createWmsLayer(
+                                                "Vienna_lidar_2m_ViennaCenter_32633",
+                                                "Lidar",
+                                                "Lidar elevation map with 2 m resolution"
+                                            ),
+                                            attributes: {
+                                                "legend": {
+                                                    Component: LidarLegend
+                                                }
+                                            }
+                                        }),
+                                        new SimpleLayer({
+                                            ...this.createWmsLayer(
+                                                "Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021",
+                                                "Soil Clay Content",
+                                                "Soil clay content"
+                                            )
+                                        }),
+                                        new SimpleLayer({
+                                            ...this.createWmsLayer(
+                                                "Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021",
+                                                "Soil Sand Content",
+                                                "Soil sand content"
+                                            )
+                                        }),
+                                        new SimpleLayer({
+                                            ...this.createWmsLayer(
+                                                "osm_buildings_162014",
+                                                "OSM Buildings",
+                                                "OSM Buildings"
+                                            )
+                                        })
+                                    ]
+                                })
+                            ]
+                        }),
+                        // Historical layers
+                        new GroupLayer({
+                            title: "Historical Layers",
+                            visible: false,
+                            id: "historical",
+                            layers: [
+                                new GroupLayer({
+                                    title: "Flooding",
+                                    visible: false,
+                                    id: "historical_flooding",
+                                    layers: [
+                                        ...wmsLayersHistoricalFlooding.map(
+                                            ({ name, title, description }) =>
+                                                new SimpleLayer({
+                                                    ...this.createWmsLayer(name, title, description)
+                                                })
+                                        )
+                                    ],
+                                    attributes: {
+                                        "legend": {
+                                            Component: WaterLevelLegend
+                                        }
+                                    }
+                                }),
+                                new GroupLayer({
+                                    title: "Damage",
+                                    visible: false,
+                                    id: "historical_damage",
+                                    layers: [
+                                        ...wmsLayersHistoricalDamage.map(
+                                            ({ name, title, description }) =>
+                                                new SimpleLayer({
+                                                    ...this.createWmsLayer(name, title, description)
+                                                })
+                                        )
+                                    ],
+                                    attributes: {
+                                        "legend": {
+                                            Component: BuildingDamageLegend
+                                        }
+                                    }
+                                })
+                            ]
+                        })
+                    ]
+                }),
+                // Fluvial flood layers
+                new GroupLayer({
+                    title: "Fluvial Flooding",
+                    visible: true,
+                    id: "fluvial_flooding",
+                    layers: [
+                        new SimpleLayer({
+                            ...this.createWmsLayer(
+                                "euh_danube_bigrivers_10",
+                                "10-Year Flood Depth",
+                                "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull).",
+                                true
+                            )
+                        })
+                    ],
+                    attributes: {
+                        "legend": {
+                            Component: FluvialFloodLegend
+                        }
+                    }
+                }),
+                new SimpleLayer({
+                    ...this.createWmsLayer(
+                        "euh_danube_wsurf_gt1km2_c",
+                        "Reservoirs And Lakes",
+                        "Large reservoirs and lakes in the Danube region"
+                    )
+                })
+            ]
+        };
+    }
+}

@@ -97,8 +97,11 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                         </Button>
                     </Flex>
                 ) : null}
-                <div style={{width:"350px", display:"flex", padding: "0px 20px"}}>
-                    <Text>Users are advised to verify the information independently and use the service at their own risk.</Text>
+                <div style={{ width: "350px", display: "flex", padding: "0px 20px" }}>
+                    <Text>
+                        Users are advised to verify the information independently and use the
+                        service at their own risk.
+                    </Text>
                     <Disclaimer>
                         <DisclaimerContent></DisclaimerContent>
                     </Disclaimer>
@@ -235,12 +238,8 @@ const NAV_ITEMS: Array<NavItem> = [
                 href: "https://directed-rwl2.saferplaces.co/"
             },
             {
-                label: "Danube Region - Vienna",
-                href: `${BASE_URL}apps/rwl_danube_vienna/index.html`
-            },
-            {
-                label: "Danube Region - Zala",
-                href: `${BASE_URL}apps/rwl_danube_zala/index.html`
+                label: "Danube Region",
+                href: `${BASE_URL}apps/rwl_danube/index.html`
             },
             {
                 label: "Rhine Erft Region",

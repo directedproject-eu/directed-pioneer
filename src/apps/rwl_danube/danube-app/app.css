@@ -6,6 +6,21 @@
     transition: width 300ms ease-out 0s;
 }
 
+.choice-button {
+    margin-right: 1em !important;
+    border-radius: 5px !important;
+    /* width: 30%; */
+}
+.choice-button.inactive {
+    background-color: #9ba5ab !important;
+    color: white !important;
+}
+
+.choice-button.inactive:hover {
+    background-color: #708894 !important;
+    color: white !important;
+}
+
 .right-bottom {
     position: absolute;
     right: 0;
@@ -27,6 +42,53 @@
 
 .ol-control i {
     cursor: default;
+}
+
+.arrow {
+    transition: transform 0.2s;
+}
+
+.arrow.open {
+    transform: rotate(180deg);
+}
+
+.selector-container {
+    position: relative;
+    width: 200px;
+    font-family: Arial, sans-serif;
+}
+
+.selector-header {
+    padding: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.selector-options {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    list-style: none;
+    padding: 0;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.selector-option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.selector-option:hover {
+    background: #f0f0f0;
 }
 
 .ol-swipe {
@@ -89,19 +151,4 @@
 .ol-swipe button:before {
     -webkit-transform: translateX(-6px);
     transform: translateX(-6px);
-}
-
-.choice-button {
-    margin-right: 1em !important;
-    border-radius: 5px !important;
-    /* width: 30%; */
-}
-.choice-button.inactive {
-    background-color: #9ba5ab !important;
-    color: white !important;
-}
-
-.choice-button.inactive:hover {
-    background-color: #708894 !important;
-    color: white !important;
 }

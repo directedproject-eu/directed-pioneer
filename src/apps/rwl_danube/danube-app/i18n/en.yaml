@@ -1,0 +1,88 @@
+messages:
+  basemapLabel: "Select basemap:"
+  global:
+    year: "Year"
+    month: "Month"
+    day: "Day"
+    months:
+      jan: "January"
+      feb: "February"
+      mar: "March"
+      apr: "April"
+      may: "May"
+      jun: "June"
+      jul: "July"
+      aug: "August"
+      sep: "September"
+      oct: "October"
+      nov: "November"
+      dec: "December"
+  navbar:
+    home: "Home"
+    rwl: "Real World Labs"
+    directed_website: "Directed Project Website"
+    github: "GitHub Organization"
+    model: "Model Documentation"
+    login: "Login"
+    logout: "Logout"
+    sign_up: "Sign Up"
+  heading: "RWL The Danube Region"
+  map:
+    layer_select:
+      heading: "Climate projections from ISIMIP"
+      model: "Model"
+      scenario: "Scenario"
+      variable: "Variable"
+    station_information:
+      heading: "Event Information"
+      description: "Select an event on the map to see more information."
+      attributes:
+        address: "Address:"
+        settlement: "Settlement"
+        type_of_intervention: "Type of intervention"
+        event_type: "Type of event"
+        location_type: "Type of location"
+        date_reported: "Date reported"
+        damage_type: "Type of damage"
+        county: "County (abbr.)"
+    measurement:
+      heading: "Measurement"
+    download:
+      heading: "Download Layer"
+      no_layers: "No layers available for download"
+      button: "Donwload Layer"
+    operational_layers: "Operational Layers"
+    select_basemap: "Select basemap"
+    legend:
+      event_variables:
+        tree_clearing: "Tree Clearing"
+        forest_and_vegetation_fire: "Forest and vegetation fire"
+        water_damage: "Water Damage"
+        storm_damage: "Storm Damage"
+  charts:
+    button_title: "Crop chart"
+    title_chart1: "Crops in Zala region for "
+    explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of
+                predicted crop yields across all models in the Danube region."
+    explanation2: "There was insufficient yield data for summer barley and lucerne in Western
+                    Danubia for local simulations. Therefore, data from a neighboring region in
+                    Austria was utilized."
+  welcome_window:
+    header: "Welcome to the Danube app of the DIRECTED Data Fabric!"
+    body:
+      "The Danube app is part of the Data Fabric which is developed within the EU-funded DIRECTED project.
+      Goal of the app is to support stakeholders in disaster risk reduction and climate change adaptation.
+      The app contains public data which is made available to everyone. Additional access-restricted data will 
+      appear after login (use the login button in the right top corner).
+      Please note that the app is still work in progress."
+  zoom_buttons:
+    vienna: "Zoom to Vienna"
+    zala: "Zoom to Zala"
+  ariaLabel:
+    header: "Header bar"
+    footer: "Base bar with scale information, spatial reference system and coordinate display"
+    map: "Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."
+    topLeft: "Measurement"
+    topRight: "Overview map and basemap switcher"
+    bottomRight: "Maptools"
+  measurementTitle: "Measurement"

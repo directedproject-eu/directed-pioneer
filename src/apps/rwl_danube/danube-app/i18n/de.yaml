@@ -1,0 +1,87 @@
+messages:
+  basemapLabel: "Hintergrundkarte auswählen:"
+  global:
+    year: "Jahr"
+    month: "Monat"
+    day: "Tag"
+    months:
+      jan: "Januar"
+      feb: "Februar"
+      mar: "März"
+      apr: "April"
+      may: "Mai"
+      jun: "Juni"
+      jul: "Juli"
+      aug: "August"
+      sep: "September"
+      oct: "Oktober"
+      nov: "November"
+      dec: "Dezember"
+  navbar:
+    home: "Startseite"
+    rwl: "Real World Labs"
+    directed_website: "Projektwebseite"
+    github: "GitHub-Organisation"
+    model: "Modelldokumentation"
+    login: "Anmelden"
+    logout: "Abmelden"
+    sign_up: "Registrieren"
+  heading: "RWL Donau-Region"
+  map:
+    layer_select:
+      heading: "Layer auswählen"
+      model: "Modell"
+      scenario: "Szenario"
+      variable: "Variable"
+    station_information:
+      heading: "Ereignisinformationen"
+      description: "Wähle ein Ereignis auf der Karte aus, um weitere Informationen zu sehen."
+      attributes:
+        address: "Adresse:"
+        settlement: "Ort"
+        type_of_intervention: "Art der Maßnahme"
+        event_type: "Ereignistyp"
+        location_type: "Standorttyp"
+        date_reported: "Meldedatum"
+        damage_type: "Schadensart"
+        county: "Bezirk (Abk.)"
+    measurement:
+      heading: "Messung"
+    download:
+      heading: "Layer herunterladen"
+      no_layers: "Keine Layer zum Herunterladen verfügbar"
+      button: "Layer herunterladen"
+
+    operational_layers: "Operationale Layer"
+    select_basemap: "Grundkarte auswählen"
+    legend:
+      event_variables:
+        tree_clearing: "Baumfällung"
+        forest_and_vegetation_fire: "Wald- und Vegetationsbrand"
+        water_damage: "Wasserschaden"
+        storm_damage: "Sturmschaden"
+  charts:
+    button_title: "Erntediagramm"
+    title_chart1: "Anbauflächen in der Region Zala für "
+    explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of
+                predicted crop yields across all models in the Danube region."
+    explanation2: "There was insufficient yield data for summer barley and lucerne in Western
+                    Danubia for local simulations. Therefore, data from a neighboring region in
+                    Austria was utilized."
+  welcome_window:
+    header: "Willkommen in der Danube App des DIRECTED Data Fabric!"
+    body:
+      "Die Danube App ist Teil des Data Fabric, welches im Rahmen des EU-geförderten DIRECTED Projekts entwickelt wird.
+      Ziel ist die Unterstützung Interessenvertreters bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel.
+      Bitte beachten Sie, dass die App noch in der Entwicklung ist."
+  zoom_buttons:
+    vienna: "Zoom auf Wien"
+    zala: "Zoom auf Zala"
+  ariaLabel:
+    header: "Kopfzeile"
+    footer: "Fußzeile mit Maßstabsinformationen, Koordinatensystem und Koordinatenanzeige"
+    map: "Karte. Mit den Pfeiltasten kannst du die Karte verschieben. Mit der Plus-Taste hineinzoomen und mit der Minus-Taste herauszoomen."
+    topLeft: "Messung"
+    topRight: "Übersichtskarte und Grundkartenauswahl"
+    bottomRight: "Werkzeuge"
+  measurementTitle: "Messung"

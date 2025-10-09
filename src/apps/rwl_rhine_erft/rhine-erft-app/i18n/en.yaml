@@ -11,3 +11,5 @@ messages:
   charts:
     button_title: "Crop chart"
     title_chart1: "Crops in Rhine-Erft region for "
+    explanation: "This graph displays the average value, as well as the 20th to 80th percentile, of
+                predicted crop yields across all models in the Rhine-Erft region."
