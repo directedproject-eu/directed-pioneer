@@ -90,3 +90,18 @@
     -webkit-transform: translateX(-6px);
     transform: translateX(-6px);
 }
+
+.choice-button {
+    margin-right: 1em !important;
+    border-radius: 5px !important;
+    /* width: 30%; */
+}
+.choice-button.inactive {
+    background-color: #9ba5ab !important;
+    color: white !important;
+}
+
+.choice-button.inactive:hover {
+    background-color: #708894 !important;
+    color: white !important;
+}

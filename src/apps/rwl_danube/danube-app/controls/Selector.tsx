@@ -24,7 +24,13 @@ const option_text_mapping = {
     "tasmin": "Daily Minimum Air Temperature"
 };
 
-const Selector: React.FC<SelectorProps> = ({ options, setSelected, marginBottom, title, alternativeText }) => {
+const Selector: React.FC<SelectorProps> = ({
+    options,
+    setSelected,
+    marginBottom,
+    title,
+    alternativeText
+}) => {
     const [currentSelected, setCurrentSelected] = useState(options[0]);
 
     return (

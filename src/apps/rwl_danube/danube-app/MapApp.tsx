@@ -61,8 +61,6 @@ import { StationSelector } from "./services/StationSelector";
 import { LayerZoom } from "./services/LayerZoom";
 
 export function MapApp() {
-    const highlightService = useService<LayerHighlighter>("app.LayerHighlighter");
-
     // const { isOpen, onOpen, onClose } = useDisclosure();
     const mapModel = useMapModel(MAP_ID);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); // administrative boundary layer zoom service
@@ -537,14 +535,6 @@ export function MapApp() {
                                         <ZoomIn mapId={MAP_ID} />
                                         <ZoomOut mapId={MAP_ID} />
                                     </Flex>
-                                </MapAnchor>
-                                <MapAnchor position="bottom-left" horizontalGap={5} verticalGap={5}>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => highlightService.zoomTo("zala_region")}
-                                    >
-                                        Zoom Zala region
-                                    </Button>
                                 </MapAnchor>
                             </MapContainer>
                         )}

@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import "highcharts/highcharts-more"; // Note: no "highchartsMore from"
+
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
 import { useService } from "open-pioneer:react-hooks";
@@ -12,9 +14,17 @@ type EnsembleProps = {
     regionName: string;
     files: string[];
     regionCode: string;
+    selectedCrop: string[];
+    selectedScenario: string;
 };
 
-const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) => {
+const LineChart: React.FC<EnsembleProps> = ({
+    regionName,
+    files,
+    regionCode,
+    selectedCrops,
+    selectedScenario
+}) => {
     const modelRealizations = {
         "gfdl-esm4": 0,
         "ipsl-cm6a-lr": 1,
@@ -34,20 +44,22 @@ const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) =
         "ssp126": 30
     };
 
-    const prepSrvc = useService<LayerHandler>("app.LayerHandler");
-
-    const { selectedModel, selectedScenario, selectedYear } = useReactiveSnapshot(
-        () => ({
-            selectedModel: prepSrvc.selectedModel,
-            selectedScenario: prepSrvc.selectedScenario,
-            selectedYear: prepSrvc.selectedYear
-        }),
-        [prepSrvc]
-    );
-
     const [data, setData] = useState({});
     const [uniqueCrops, setUniqueCrops] = useState([]);
     const grouped = {};
+
+    const distinctColors = [
+        "#E6194B", // Red
+        "#3CB44B", // Green
+        "#FFE119", // Yellow
+        "#4363D8", // Blue
+        "#F58231", // Orange
+        "#911EB4", // Purple
+        "#42D4F4", // Cyan
+        "#F032E6", // Magenta
+        "#BFEF45", // Lime
+        "#469990" // Teal
+    ];
 
     useEffect(() => {
         Promise.all(
@@ -68,7 +80,6 @@ const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) =
         ).then((allCsvData) => {
             const dataGroups = {};
             const crops: string[] = [];
-
             allCsvData.flat().forEach((row) => {
                 const key = `${row.Crop} | Real ${row.Real} | ${row.Scenario} | ${row.Region}`;
 
@@ -87,38 +98,142 @@ const LineChart: React.FC<EnsembleProps> = ({ regionName, files, regionCode }) =
         });
     }, []);
 
-    const series = [];
-
-    uniqueCrops.forEach((crop) => {
-        series.push({
-            name: crop,
-            data: data[
-                `${crop} | Real ${modelRealizations[selectedModel] + scenarioRealization[selectedScenario]} | CMIP6:${selectedScenario.toUpperCase()} | ${regionCode}`
-            ],
-            type: "line"
-        });
+    if (Object.keys(data).length === 0) {
+        return "loading...";
+    }
+    const allCropsData = selectedCrops.map((crop) => {
+        if (selectedScenario == "RCP8dot5") {
+            const models = [
+                "Cc",
+                "Cd1",
+                "Ck",
+                "Cs",
+                "Ec",
+                "Ed1",
+                "Ed2",
+                "Ed3",
+                "Ek1",
+                "Ek2",
+                "Ek3",
+                "Es",
+                "Hc",
+                "Hd",
+                "Hk",
+                "Hs",
+                "Is",
+                "Mc",
+                "Ms",
+                "Nd",
+                "Ns"
+            ];
+            const cropData = models.map((model) => {
+                return data[`${crop} | Real ${model} | CMIP5:RCP8.5 | ${regionCode}`];
+            });
+            return cropData;
+        } else {
+            const numbers = [...Array(10).keys()];
+            const cropData = numbers.map((number) => {
+                return data[
+                    `${crop} | Real ${number + scenarioRealization[selectedScenario]} | CMIP6:${selectedScenario.toUpperCase()} | ${regionCode}`
+                ];
+            });
+            return cropData;
+        }
     });
+    const series = allCropsData.flatMap((cropData, index) => {
+        if (!cropData || !Array.isArray(cropData)) return [];
 
+        const yearlyGroups = {};
+        cropData.forEach((realization, realizationIndex) => {
+            if (Array.isArray(realization)) {
+                realization.forEach(([year, value]) => {
+                    if (!yearlyGroups[year]) {
+                        yearlyGroups[year] = [];
+                    }
+                    yearlyGroups[year][realizationIndex] = value;
+                });
+            }
+        });
+
+        const finalArray = Object.keys(yearlyGroups).map((year) => ({
+            year: parseInt(year),
+            values: yearlyGroups[year]
+        }));
+
+        const highchartsData = finalArray
+            .map((yearData) => {
+                const { year, values } = yearData;
+                if (!values || values.length === 0) {
+                    return null;
+                }
+                const sortedValues = [...values]
+                    .filter((v) => typeof v === "number" && !isNaN(v))
+                    .sort((a, b) => a - b);
+                if (sortedValues.length === 0) return null;
+
+                const medianIndex = Math.floor(sortedValues.length * 0.5);
+                const lowerIndex = Math.floor(sortedValues.length * 0.2);
+                const upperIndex = Math.floor(sortedValues.length * 0.8);
+                const timestamp = new Date(year, 0, 1).getTime();
+
+                return {
+                    "timestamp": timestamp,
+                    "median": Math.floor(sortedValues[medianIndex] * 100) / 100,
+                    "lower20": Math.floor(sortedValues[lowerIndex] * 100) / 100,
+                    "upper80": Math.floor(sortedValues[upperIndex] * 100) / 100
+                };
+            })
+            .filter(Boolean);
+
+        const rangeData = highchartsData.map((d) => [d.timestamp, d.lower20, d.upper80]);
+        const medianData = highchartsData.map((d) => [d.timestamp, d.median]);
+        const cropName = selectedCrops[index];
+        const color = distinctColors[index % distinctColors.length];
+
+        return [
+            {
+                "name": `${cropName} (20-80 Percentile Range)`,
+                "data": rangeData,
+                "type": "arearange",
+                "color": color,
+                "fillOpacity": 0.2,
+                "lineWidth": 0,
+                "marker": { "enabled": false },
+                "showInLegend": false,
+                "zIndex": 0
+            },
+            {
+                "name": `${cropName} (Median)`,
+                "data": medianData,
+                "type": "line",
+                "color": color,
+                "marker": { "enabled": false },
+                "zIndex": 1
+            }
+        ];
+    });
+    const title =
+        selectedScenario == "RCP8dot5"
+            ? `Crop Yields in ${regionName} for CMIP5:RCP8.5`
+            : `Crop Yields in ${regionName} for CMIP6:${selectedScenario.toUpperCase()}`;
     const options = {
         title: {
-            text: `Crops in the ${regionName} region for Real ${modelRealizations[selectedModel] + scenarioRealization[selectedScenario]} CMIP6:${selectedScenario.toUpperCase()} ${regionCode}`
+            text: title
         },
         xAxis: {
-            title: { text: "Year" },
-            type: "linear",
-            plotLines: [
-                {
-                    color: "grey",
-                    width: 2,
-                    value: selectedYear,
-                    zIndex: 5,
-                    dashStyle: "dash"
-                }
-            ]
+            type: "datetime",
+            title: { text: "Year" }
         },
         yAxis: {
-            title: { text: "Value" },
-            min: 0
+            title: { text: "Projected Yield in t/ha" }
+        },
+        tooltip: {
+            crosshairs: true,
+            shared: true,
+            valueSuffix: "t/ha"
+        },
+        legend: {
+            enabled: true
         },
         series: series
     };
