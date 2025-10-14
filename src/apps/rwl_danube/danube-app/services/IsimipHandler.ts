@@ -8,6 +8,8 @@ import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import { Style } from "ol/style.js";
 import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
+import  Legend  from "../components/legends/Legend"; 
+
 
 import chroma from "chroma-js";
 
@@ -109,13 +111,24 @@ export class IsimipHandlerImpl implements IsimipHandler {
             });
             this.updateSource();
             model?.layers.addLayer(
+                // new GroupLayer({
+                //     title: "Isimip Data",
+                //     visible: true,
+                //     id: "isimip",
+                //     layers: []
+                // }),
                 new SimpleLayer({
                     id: "isimip",
                     description: layer_info["hurs"]["title"],
                     title: layer_info["hurs"]["description"],
                     isBaseLayer: false,
                     olLayer: this.layer,
-                    visible: false
+                    visible: false,
+                    attributes: {
+                        "legend": {
+                            Component: Legend
+                        }
+                    }
                 })
             );
             this.layer.setZIndex(0);

@@ -4,13 +4,27 @@
 import { Box, Text } from "@open-pioneer/chakra-integration";
 import { useIntl, useService } from "open-pioneer:react-hooks";
 import { LayerHighlighter } from "../../services/LayerHighlighter";
+import { IsimipHandler } from "./services/IsimipHandler";
+import { useReactiveSnapshot } from "@open-pioneer/reactivity";
+
 
 interface legendmetaData {
     range: number[];
     variable: string;
     isAuthenticated?: boolean;
 }
-const Legend: React.FC<legendmetaData> = ({ range, variable, isAuthenticated }) => {
+const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }) => {
+    const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
+
+
+    const { legendMetadata } = useReactiveSnapshot(
+        () => ({
+            legendMetadata: prepSrvc.legendMetadata
+        }),
+        [prepSrvc]
+    );
+    const range = legendMetadata.range; 
+    const variable = legendMetadata.variable; 
     const highlightService = useService<LayerHighlighter>("app.LayerHighlighter");
     const intl = useIntl();
     const to_display_circles = [
@@ -128,11 +142,11 @@ const Legend: React.FC<legendmetaData> = ({ range, variable, isAuthenticated }) 
             <Text fontWeight="bold" mb={0}>
                 {legend_text[variable]}
             </Text>
-            <Box display="flex" justifyContent="center" alignItems="center">
+            <Box display="flex">
                 <div style={{ marginRight: "3em" }}>
                     {to_display.map((item, index) => (
-                        <Box key={index} display="flex" alignItems="center" mb={1}>
-                            <Box width="12px" height="12px" bg={item.color} mr={2} />
+                        <Box key={index} display="flex" mb={1}>
+                            <Box width="12px" height="12px" bg={item.color} mr={2}  border={"2px solid black"} />
                             <Box>{item.label}</Box>
                         </Box>
                     ))}

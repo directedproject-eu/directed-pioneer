@@ -427,8 +427,8 @@ export function MapApp() {
                                     </Flex>
                                 )}
                                 <Flex
-                                    maxHeight={400}
-                                    maxWidth={250}
+                                    maxHeight={800}
+                                    // maxWidth={250}
                                     overflow="auto"
                                     borderRadius="md"
                                     boxShadow="lg"

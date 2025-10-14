@@ -26,16 +26,17 @@ export function BuildingDamageLegend(props: LegendItemComponentProps) {
         <Box
             position="relative"
             top="10px"
-            right="10px"
+            right="0px"
             bg="white"
             p={4}
-            borderRadius="md"
+            borderRadius="5px"
             borderWidth={1}
+            width="300px"
         >
-            <Text fontWeight="bold" fontSize={20}>
+            {/* <Text fontWeight="bold" fontSize={20}>
                 {" "}
                 Legend{" "}
-            </Text>
+            </Text> */}
             <Text fontWeight="bold" mb={2}>
                 {" "}
                 {props.layer.title}{" "}

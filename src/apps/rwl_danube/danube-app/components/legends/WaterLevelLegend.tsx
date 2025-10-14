@@ -31,10 +31,10 @@ export function WaterLevelLegend(props: LegendItemComponentProps) {
             borderRadius="md"
             borderWidth={1}
         >
-            <Text fontWeight="bold" fontSize={20}>
+            {/* <Text fontWeight="bold" fontSize={20}>
                 {" "}
                 Legend{" "}
-            </Text>
+            </Text> */}
             <Text fontWeight="bold" mb={2}>
                 {" "}
                 {props.layer.title}{" "}

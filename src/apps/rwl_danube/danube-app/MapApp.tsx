@@ -55,7 +55,8 @@ import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
-import Legend from "./components/legends/Legend";
+import { Legend as PioneerLegend } from "@open-pioneer/legend";
+
 import { IsimipHandler } from "./services/IsimipHandler";
 import { StationSelector } from "./services/StationSelector";
 import { LayerZoom } from "./services/LayerZoom";
@@ -81,12 +82,6 @@ export function MapApp() {
 
     const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
-    const { legendMetadata } = useReactiveSnapshot(
-        () => ({
-            legendMetadata: prepSrvc.legendMetadata
-        }),
-        [prepSrvc]
-    );
     const stationService = useService<StationSelector>("app.StationSelector");
     const { stationData } = useReactiveSnapshot(
         () => ({
@@ -261,7 +256,6 @@ export function MapApp() {
             removeSwipe();
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
-
     return (
         <>
             <Flex height="100%" direction="column" overflow="hidden">
@@ -444,7 +438,6 @@ export function MapApp() {
                                             aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
                                             maxHeight={615}
                                             maxWidth={430}
-                                            overflow="hidden"
                                             marginBottom={5}
                                         >
                                             <Box>
@@ -494,11 +487,19 @@ export function MapApp() {
                                                 </Box>
                                             </Box>
                                         </Box>
-                                        <Legend
-                                            range={legendMetadata.range}
-                                            variable={legendMetadata.variable}
-                                            isAuthenticated={authState.kind === "authenticated"}
-                                        ></Legend>
+                                        {/* <PioneerLegend mapId={MAP_ID} /> */}
+                                        <Flex
+                                            maxHeight={800}
+                                            minWidth={250}
+                                            overflow="auto"
+                                            borderRadius="md"
+                                            boxShadow="lg"
+                                            // marginLeft="auto"
+                                            alignSelf="flex-end"
+                                        >
+                                            <PioneerLegend mapId={MAP_ID} />
+                                        </Flex>
+
                                     </Flex>
                                 </MapAnchor>
 
@@ -513,7 +514,7 @@ export function MapApp() {
                                         aria-label={intl.formatMessage({
                                             id: "ariaLabel.bottomRight"
                                         })}
-                                        direction="column"
+                                        direction="row"
                                         gap={1}
                                         padding={1}
                                     >
