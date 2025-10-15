@@ -394,6 +394,7 @@ export function MapApp() {
                                         boxShadow="lg"
                                         role="dialog"
                                         aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                        marginBottom="10px"
                                     >
                                         <Toc
                                             mapId={MAP_ID}

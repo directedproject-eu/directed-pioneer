@@ -112,6 +112,7 @@ messages:
       heading: "hun:Download Layer"
       no_layers: "hun:No layers available for download"
       button: "hun:Donwload Layer"
+      loading: "hun:Preparing download..."
     operational_layers: "hun:Operational Layers"
     select_basemap: "hun:Select basemap"
     legend:
