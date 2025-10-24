@@ -1,15 +1,11 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { useEffect, useId, useState } from "react";
-import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
 import { EventsKey } from "ol/events";
-import { Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
 import { unByKey } from "ol/Observable";
 import Swipe from "ol-ext/control/Swipe";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
-import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import {
     Box,
     Button,
@@ -30,48 +26,60 @@ import {
     useDisclosure,
     VStack
 } from "@open-pioneer/chakra-integration";
-import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
-import { Geolocation } from "@open-pioneer/geolocation";
 //import { Legend } from "@open-pioneer/legend";
 import { MapAnchor, MapContainer, SimpleLayer, useMapModel } from "@open-pioneer/map";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
-import { ToolButton } from "@open-pioneer/map-ui-components";
-import { Notifier } from "@open-pioneer/notifier";
-import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { useIntl } from "open-pioneer:react-hooks";
+import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
-import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import { ScaleBar } from "@open-pioneer/scale-bar";
+import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
+import { Geolocation } from "@open-pioneer/geolocation";
+import { Notifier } from "@open-pioneer/notifier";
 import { Toc } from "@open-pioneer/toc";
-import { Measurement } from "@open-pioneer/measurement";
-import { useService } from "open-pioneer:react-hooks";
 import { MAP_ID } from "./services/MapProvider";
-import { FeatureInfo } from "featureinfo";
+import { useEffect, useId, useMemo, useState } from "react";
+import { Measurement } from "@open-pioneer/measurement";
+import OSM from "ol/source/OSM";
+import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
+import { useService } from "open-pioneer:react-hooks";
+import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
-import { IsimipSelector } from "./controls/IsimipSelector";
 import { LayerSelector } from "./controls/LayerSelector";
-import { TimeSlider } from "./controls/TimeSlider";
+import Legend from "./components/legends/Legend";
+import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
+<<<<<<< HEAD
 import ChartComponentZala from "./components/ChartComponentZala";
 import { Legend as PioneerLegend } from "@open-pioneer/legend";
 
 import { IsimipHandler } from "./services/IsimipHandler";
+=======
+>>>>>>> download-component-for-zala
 import { StationSelector } from "./services/StationSelector";
-import { LayerZoom } from "./services/LayerZoom";
+import { IsimipSelector } from "./controls/IsimipSelector";
+import ChartComponentZala from "./components/ChartComponentZala";
+import ResizeBox from "./components/ResizeBox";
+import ChartComponentRhineErft from "./components/ChartComopnentRhineErft";
+import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
+import { Vector as VectorLayer } from "ol/layer.js";
+import TileLayer from "ol/layer/Tile";
+import { LayerHandler } from "./services/LayerHandler";
 import DownloadLayer from "./components/DownloadLayer";
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
     const mapModel = useMapModel(MAP_ID);
-    const zoomService = useService<LayerZoom>("app.LayerZoom"); // administrative boundary layer zoom service
     const vectorSourceFactory = useService<OgcFeaturesVectorSourceFactory>(
         "ogc-features.VectorSourceFactory"
     );
 
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
+    const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
+    const userName = sessionInfo?.attributes?.userName as string;
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -86,6 +94,13 @@ export function MapApp() {
         setDownloadIsActive(!downloadIsActive);
     }
 
+    const overviewMapLayer = useMemo(
+        () =>
+            new TileLayer({
+                source: new OSM()
+            }),
+        []
+    );
     const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const stationService = useService<StationSelector>("app.StationSelector");
@@ -262,7 +277,6 @@ export function MapApp() {
             removeSwipe();
         };
     }, [mapModel, selectedLeftLayer, selectedRightLayer]);
-
     return (
         <>
             <Flex height="100%" direction="column" overflow="hidden">
@@ -321,17 +335,13 @@ export function MapApp() {
                                             marginRight: window.innerWidth * 0.2,
                                             borderRadius: "10px",
                                             backgroundColor: "rgba(255, 255, 255, 0.5)",
-                                            marginTop: "5px"
+                                            marginTop: "5px",
+                                            padding: "5px"
                                         }}
                                     >
                                         <LayerSelector />
                                     </div>
                                 </MapAnchor>
-
-                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                                    <TimeSlider />
-                                </MapAnchor>
-
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                     <IsimipSelector />
 
@@ -407,36 +417,14 @@ export function MapApp() {
                                     </Box>
                                     {downloadIsActive && <DownloadLayer mapID={MAP_ID} />}
                                 </MapAnchor>
-
-                                {/* zoom to region and feature info */}
-                                <MapAnchor
-                                    position="bottom-left"
-                                    horizontalGap={15}
-                                    verticalGap={60}
-                                >
-                                    <VStack align="stretch" spacing={2}>
-                                        <Button
-                                            size="sm"
-                                            onClick={() => zoomService.zoomToVienna(mapModel.map!)}
-                                        >
-                                            {intl.formatMessage({ id: "zoom_buttons.vienna" })}
-                                        </Button>
-                                        <Button
-                                            size="sm"
-                                            onClick={() => zoomService.zoomToZala(mapModel.map!)}
-                                        >
-                                            {intl.formatMessage({ id: "zoom_buttons.zala" })}
-                                        </Button>
-                                    </VStack>
-
-                                    {mapModel && (
-                                        <FeatureInfo
-                                            mapModel={mapModel.map!}
-                                            projection="EPSG:3857"
-                                            layerId={""}
-                                        />
-                                    )}
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                    <Legend
+                                        range={legendMetadata.range}
+                                        variable={legendMetadata.variable}
+                                        isAuthenticated={authState.kind === "authenticated"}
+                                    ></Legend>
                                 </MapAnchor>
+<<<<<<< HEAD
 
                                 {/* layerswipe and legend */}
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
@@ -448,9 +436,7 @@ export function MapApp() {
                                             padding={2}
                                             boxShadow="lg"
                                             role="top-right"
-                                            aria-label={intl.formatMessage({
-                                                id: "ariaLabel.topRight"
-                                            })}
+                                            aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
                                             maxHeight={615}
                                             maxWidth={430}
                                             marginBottom={5}
@@ -467,9 +453,8 @@ export function MapApp() {
                                                     </Text>
                                                     <Spacer />
                                                     <Text fontSize={16}>
-                                                        ➡️ Only layers which have been selected in
-                                                        the Operational Layers are viewable for
-                                                        comparison.
+                                                        ➡️ Only layers which have been selected in the
+                                                        Operational Layers are viewable for comparison.
                                                     </Text>
                                                     <Flex direction="row" gap={4} p={4}>
                                                         <Select
@@ -480,10 +465,7 @@ export function MapApp() {
                                                             }
                                                         >
                                                             {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
+                                                                <option key={layer.id} value={layer.id}>
                                                                     {layer.title || layer.id}
                                                                 </option>
                                                             ))}
@@ -493,16 +475,11 @@ export function MapApp() {
                                                             placeholder="Select Right Layer"
                                                             value={selectedRightLayer ?? ""}
                                                             onChange={(e) =>
-                                                                setSelectedRightLayer(
-                                                                    e.target.value
-                                                                )
+                                                                setSelectedRightLayer(e.target.value)
                                                             }
                                                         >
                                                             {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
+                                                                <option key={layer.id} value={layer.id}>
                                                                     {layer.title || layer.id}
                                                                 </option>
                                                             ))}
@@ -523,10 +500,13 @@ export function MapApp() {
                                         >
                                             <PioneerLegend mapId={MAP_ID} />
                                         </Flex>
+
                                     </Flex>
                                 </MapAnchor>
 
                                 {/* tool buttons */}
+=======
+>>>>>>> download-component-for-zala
                                 <MapAnchor
                                     position="bottom-right"
                                     horizontalGap={10}
@@ -584,6 +564,10 @@ export function MapApp() {
                     </Flex>
                 </TitledSection>
             </Flex>
+
+            <ResizeBox title={"Zala Chart"}>
+                <ChartComponentZala></ChartComponentZala>
+            </ResizeBox>
 
             <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />

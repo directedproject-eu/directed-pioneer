@@ -6,10 +6,8 @@ import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
-import { Style } from "ol/style.js";
 import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
-import  Legend  from "../components/legends/Legend"; 
-
+import Legend from "../components/legends/Legend";
 
 import chroma from "chroma-js";
 
@@ -106,7 +104,10 @@ export class IsimipHandlerImpl implements IsimipHandler {
                 style: {
                     color: this.createColorGradiant([0, 100])
                 },
-                properties: { title: "Layer Title" },
+                properties: {
+                    title: "Layer Title",
+                    type: "GeoTIFF"
+                },
                 extent: [-2782996, 4000985, 4254277, 11753013]
             });
             this.updateSource();
@@ -276,7 +277,9 @@ export class IsimipHandlerImpl implements IsimipHandler {
     }
     private changeLayerInfo() {
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            model?.layers.getLayerById("isimip")?.setTitle(layer_info[this.#selectedVariable.value]["title"]);
+            model?.layers
+                .getLayerById("isimip")
+                ?.setTitle(layer_info[this.#selectedVariable.value]["title"]);
             model?.layers
                 .getLayerById("isimip")
                 ?.setDescription(layer_info[this.#selectedVariable.value]["description"]);

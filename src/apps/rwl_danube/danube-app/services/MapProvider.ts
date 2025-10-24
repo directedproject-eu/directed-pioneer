@@ -14,7 +14,6 @@ import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
 import { LidarLegend } from "../components/legends/LidarLegend ";
 import { WaterLevelLegend } from "../components/legends/WaterLevelLegend";
 
-
 interface Config {
     pygeoapiBaseUrl: string;
 }
@@ -157,7 +156,6 @@ const wmsPluvialFloodingLayersSSP5852080 = [
     }
 ];
 
-
 export const MAP_ID = "main";
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
@@ -189,14 +187,19 @@ export class MainMapProvider implements MapConfigProvider {
                         width: 3
                     })
                 }),
-                properties: { title: "GeoJSON Layer" }
+                properties: { title: "GeoJSON Layer", type: "GeoJSON" }
             }),
             isBaseLayer: false
         });
         return regionLayer;
     }
 
-    createWmsLayer(layerName: string, layerTitle: string, layerDescription: string, visible: boolean = false) {
+    createWmsLayer(
+        layerName: string,
+        layerTitle: string,
+        layerDescription: string,
+        visible: boolean = false
+    ) {
         const wmsLayerContent = {
             id: layerName,
             title: layerTitle,
@@ -211,7 +214,8 @@ export class MainMapProvider implements MapConfigProvider {
                 }),
                 properties: {
                     title: layerTitle,
-                    id: layerName
+                    id: layerName,
+                    type: "WMS"
                 }
             }),
             isBaseLayer: false
@@ -232,7 +236,7 @@ export class MainMapProvider implements MapConfigProvider {
                     title: "OpenStreetMap",
                     olLayer: new TileLayer({
                         source: new OSM(),
-                        properties: { title: "OSM" }
+                        properties: { title: "OSM", type: "OSM" }
                     }),
                     isBaseLayer: true
                 }),
@@ -241,10 +245,7 @@ export class MainMapProvider implements MapConfigProvider {
                     title: "Administrative boundaries",
                     visible: true,
                     id: "administrative_boundaries",
-                    layers: [
-                        this.createRegionLayer("vienna"),
-                        this.createRegionLayer("zala"),
-                    ]
+                    layers: [this.createRegionLayer("vienna"), this.createRegionLayer("zala")]
                 }),
                 // Vienna model results
                 new GroupLayer({
@@ -292,7 +293,11 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP2452050.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(name, title, description)
+                                                            ...this.createWmsLayer(
+                                                                name,
+                                                                title,
+                                                                description
+                                                            )
                                                         })
                                                 )
                                             ]
@@ -306,7 +311,11 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP5852050.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(name, title, description)
+                                                            ...this.createWmsLayer(
+                                                                name,
+                                                                title,
+                                                                description
+                                                            )
                                                         })
                                                 )
                                             ]
@@ -333,7 +342,11 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP2452080.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(name, title, description)
+                                                            ...this.createWmsLayer(
+                                                                name,
+                                                                title,
+                                                                description
+                                                            )
                                                         })
                                                 )
                                             ]
@@ -347,7 +360,11 @@ export class MainMapProvider implements MapConfigProvider {
                                                 ...wmsPluvialFloodingLayersSSP5852080.map(
                                                     ({ name, title, description }) =>
                                                         new SimpleLayer({
-                                                            ...this.createWmsLayer(name, title, description)
+                                                            ...this.createWmsLayer(
+                                                                name,
+                                                                title,
+                                                                description
+                                                            )
                                                         })
                                                 )
                                             ]

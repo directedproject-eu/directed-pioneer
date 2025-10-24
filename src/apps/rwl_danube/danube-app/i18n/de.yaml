@@ -47,6 +47,11 @@ messages:
         county: "Bezirk (Abk.)"
     measurement:
       heading: "Messung"
+    download:
+      heading: "Layer herunterladen"
+      no_layers: "Keine Layer zum Herunterladen verfügbar"
+      button: "Layer herunterladen"
+      loading: "Bereite Download vor..."
 
     operational_layers: "Operationale Layer"
     select_basemap: "Grundkarte auswählen"
