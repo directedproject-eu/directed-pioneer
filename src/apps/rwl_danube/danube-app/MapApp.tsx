@@ -37,7 +37,6 @@ import { MapAnchor, MapContainer, SimpleLayer, useMapModel } from "@open-pioneer
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { Notifier } from "@open-pioneer/notifier";
-import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { useIntl } from "open-pioneer:react-hooks";
 import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
@@ -50,17 +49,18 @@ import { MAP_ID } from "./services/MapProvider";
 import { FeatureInfo } from "featureinfo";
 import { Navbar } from "navbar";
 import { IsimipSelector } from "./controls/IsimipSelector";
+import { StationSelector } from "./services/StationSelector";
+import { LayerZoom } from "./services/LayerZoom";
 import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
-import { Legend as PioneerLegend } from "@open-pioneer/legend";
-
-import { IsimipHandler } from "./services/IsimipHandler";
-import { StationSelector } from "./services/StationSelector";
-import { LayerZoom } from "./services/LayerZoom";
+import ResizeBox from "./components/ResizeBox";
+import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
+import TileLayer from "ol/layer/Tile";
 import DownloadLayer from "./components/DownloadLayer";
+import Legend from "./components/legends/Legend";
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,6 +72,7 @@ export function MapApp() {
 
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
+    const sessionInfo = authState.kind == "authenticated" ? authState.sessionInfo : undefined;
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -88,6 +89,12 @@ export function MapApp() {
 
     const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
+    const { legendMetadata } = useReactiveSnapshot(
+        () => ({
+            legendMetadata: prepSrvc.legendMetadata
+        }),
+        [prepSrvc]
+    );
     const stationService = useService<StationSelector>("app.StationSelector");
     const { stationData } = useReactiveSnapshot(
         () => ({
@@ -321,7 +328,8 @@ export function MapApp() {
                                             marginRight: window.innerWidth * 0.2,
                                             borderRadius: "10px",
                                             backgroundColor: "rgba(255, 255, 255, 0.5)",
-                                            marginTop: "5px"
+                                            marginTop: "5px",
+                                            padding: "5px"
                                         }}
                                     >
                                         <LayerSelector />
@@ -453,6 +461,7 @@ export function MapApp() {
                                             })}
                                             maxHeight={615}
                                             maxWidth={430}
+                                            overflow="hidden"
                                             marginBottom={5}
                                         >
                                             <Box>
@@ -511,18 +520,11 @@ export function MapApp() {
                                                 </Box>
                                             </Box>
                                         </Box>
-                                        {/* <PioneerLegend mapId={MAP_ID} /> */}
-                                        <Flex
-                                            maxHeight={800}
-                                            minWidth={250}
-                                            overflow="auto"
-                                            borderRadius="md"
-                                            boxShadow="lg"
-                                            // marginLeft="auto"
-                                            alignSelf="flex-end"
-                                        >
-                                            <PioneerLegend mapId={MAP_ID} />
-                                        </Flex>
+                                        <Legend
+                                            range={legendMetadata.range}
+                                            variable={legendMetadata.variable}
+                                            isAuthenticated={authState.kind === "authenticated"}
+                                        ></Legend>
                                     </Flex>
                                 </MapAnchor>
 
@@ -584,6 +586,10 @@ export function MapApp() {
                     </Flex>
                 </TitledSection>
             </Flex>
+
+            <ResizeBox title={"Zala Chart"}>
+                <ChartComponentZala></ChartComponentZala>
+            </ResizeBox>
 
             <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
