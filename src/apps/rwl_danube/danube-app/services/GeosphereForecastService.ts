@@ -6,18 +6,18 @@ import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/ma
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
-import { PrecipitationLegend } from "../components/legends/PrecipitationLegend";
+import { PrecipitationForecastLegend } from "../components/legends/PrecipitationForecastLegend";
 
 interface References {
     mapRegistry: MapRegistry;
 }
 
-export interface GeosphereService extends DeclaredService<"app.GeosphereService"> {
+export interface GeosphereForecastService extends DeclaredService<"app.GeosphereForecastService"> {
     setFileUrl(url: string): void;
     getMapModel(): Promise<MapModel | undefined>;
 }
 
-export class GeosphereServiceImpl implements GeosphereService {
+export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
@@ -27,29 +27,27 @@ export class GeosphereServiceImpl implements GeosphereService {
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                source: this.updateSource(
-                    "https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/20240101T000000.tif"
-                ),
+                source: this.updateSource(""),
                 style: {
-                    color: this.createColorGradient()
+                    color: this.createColorGradient([0, 100])
                 },
-                properties: { title: "GeoSphere daily precipitation sum", type: "GeoTIFF" }
+                properties: { title: "Total rainfall amount" }
             });
             model?.layers.addLayer(
                 new GroupLayer({
-                    id: "geosphere_historical",
-                    title: "GeoSphere Historical Data",
+                    id: "geosphere_forecasts",
+                    title: "GeoSphere Forecasts",
                     visible: false,
                     layers: [
                         new SimpleLayer({
-                            id: "daily_precipitation_sum",
-                            title: "Precipitation (2024)",
+                            id: "rain_acc_forecast",
+                            title: "Total Rainfall Amount Forecasts",
                             description:
-                                "Daily precipitation sums for 2024 in Austria provided by GeoSphere.",
+                                "Accumulated total amount of rainfall since start of the forecast, based on GeoSphere's forecast model AROME. Forecasts available for 60 hours at hourly intervals.",
                             olLayer: this.layer,
                             attributes: {
                                 "legend": {
-                                    Component: PrecipitationLegend
+                                    Component: PrecipitationForecastLegend
                                 }
                             },
                             isBaseLayer: false,
@@ -68,8 +66,10 @@ export class GeosphereServiceImpl implements GeosphereService {
 
     setFileUrl(url: string): void {
         if (this.layer) {
+            // update the tile layer source with the new .tif file URL from the JSON
             const newSource = this.updateSource(url);
             this.layer.setSource(newSource);
+            // this.updateStyleForUrl(url, "layer");
         }
     }
 
@@ -88,17 +88,17 @@ export class GeosphereServiceImpl implements GeosphereService {
 
     private precipTotalColorMap = [
         { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
-        { value: 25, color: "#af7ab3", label: "25" },
-        { value: 50, color: "#95649a", label: "50" },
-        { value: 100, color: "#885889", label: "100" },
-        { value: 200, color: "#674571", label: "200" },
-        { value: 300, color: "#503752", label: "300" }
+        { value: 5, color: "#af7ab3", label: "5" },
+        { value: 10, color: "#95649a", label: "10" },
+        { value: 20, color: "#885889", label: "20" },
+        { value: 50, color: "#674571", label: "50" },
+        { value: 100, color: "#503752", label: "100" }
     ];
 
-    private createColorGradient() {
-        const boundaries = this.precipTotalColorMap.map((item) => item.value);
-        const gradientColors = this.precipTotalColorMap.map((item) => item.color);
-
+    private createColorGradient(range: number[]) {
+        const colorMapping = this.precipTotalColorMap;
+        const boundaries = colorMapping.map((item) => item.value);
+        const gradientColors = colorMapping.map((item) => item.color);
         const colorScale = chroma.scale(gradientColors).domain(boundaries).mode("lab");
 
         return [

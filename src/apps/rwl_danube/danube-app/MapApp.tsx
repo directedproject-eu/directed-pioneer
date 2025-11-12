@@ -61,6 +61,7 @@ import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import TileLayer from "ol/layer/Tile";
 import DownloadLayer from "./components/DownloadLayer";
 import Legend from "./components/legends/Legend";
+import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -320,24 +321,10 @@ export function MapApp() {
                                 role="main"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                             >
-                                <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                                    <div
-                                        style={{
-                                            width: window.innerWidth * 0.6,
-                                            marginLeft: window.innerWidth * 0.2,
-                                            marginRight: window.innerWidth * 0.2,
-                                            borderRadius: "10px",
-                                            backgroundColor: "rgba(255, 255, 255, 0.5)",
-                                            marginTop: "5px",
-                                            padding: "5px"
-                                        }}
-                                    >
-                                        <LayerSelector />
-                                    </div>
-                                </MapAnchor>
-
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                    <LayerSelector />
                                     <TimeSlider />
+                                    <GeosphereForecasts />
                                 </MapAnchor>
 
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>

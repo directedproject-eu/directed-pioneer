@@ -60,6 +60,17 @@ messages:
         forest_and_vegetation_fire: "Forest and vegetation fire"
         water_damage: "Water Damage"
         storm_damage: "Storm Damage"
+    slider:
+      geosphere_historical:
+        precipitation: 👆Drag the Slider to Select a Date for Daily Precipitation Sums
+        start_date: "Start Date:"
+        end_date: "End Date:"
+        selected_date: "Selected Date:"
+      geosphere_forecast:
+        precipitation: "👆Drag the Slider to Select a Date and Time for Total Rainfall Amount Forecasts"
+        start_date: "Forecast Start Date:"
+        end_date: "Forecast End Date:"
+        selected_date: "Selected Date:"
   charts:
     button_title: "Crop chart"
     title_chart1: "Crops in Zala region for "

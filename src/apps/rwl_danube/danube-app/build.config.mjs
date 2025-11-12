@@ -45,6 +45,12 @@ export default defineBuildConfig({
             references: {
                 mapRegistry: "map.MapRegistry"
             }
+        },
+        GeosphereForecastServiceImpl: {
+            provides: ["app.GeosphereForecastService"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
         }
     },
     ui: {
@@ -52,6 +58,7 @@ export default defineBuildConfig({
             "authentication.AuthService",
             "http.HttpService",
             "app.GeosphereService",
+            "app.GeosphereForecastService",
             "app.IsimipHandler",
             "app.LayerHighlighter",
             "app.LayerZoom",

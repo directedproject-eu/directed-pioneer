@@ -16,14 +16,14 @@ const l_05 = "#503752"; //rgb (80,55,82)
 // Maximum value is 299.2
 const colorMapping = [
     { value: 0, color: transparentWhite, label: "0" },
-    { value: 25, color: l_01, label: "25" },
-    { value: 50, color: l_02, label: "50" },
-    { value: 100, color: l_03, label: "100" },
-    { value: 200, color: l_04, label: "200" },
-    { value: 300, color: l_05, label: "300" }
+    { value: 5, color: l_01, label: "5" },
+    { value: 10, color: l_02, label: "10" },
+    { value: 20, color: l_03, label: "20" },
+    { value: 50, color: l_04, label: "50" },
+    { value: 100, color: l_05, label: "100" }
 ];
 
-export function PrecipitationLegend(props: LegendItemComponentProps) {
+export function PrecipitationForecastLegend(props: LegendItemComponentProps) {
     const intl = useIntl();
 
     return (

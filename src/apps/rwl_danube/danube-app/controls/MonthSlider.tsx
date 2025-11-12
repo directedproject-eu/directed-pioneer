@@ -42,7 +42,7 @@ export function MonthSlider() {
     }
 
     return (
-        <VStack width={"40%"}>
+        <VStack width={"50%"}>
             <span style={{ width: "80%" }}>
                 <Slider
                     aria-label="slider-ex-1"
