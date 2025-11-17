@@ -3,60 +3,64 @@
 
 import { Box, Text } from "@open-pioneer/chakra-integration";
 import { LegendItemComponentProps } from "@open-pioneer/legend";
-import { useIntl } from "open-pioneer:react-hooks";
+import { useIntl, useService } from "open-pioneer:react-hooks";
+import { useReactiveSnapshot } from "@open-pioneer/reactivity";
+import { GeosphereForecastService } from "../../services/GeosphereForecastService";
 
-// precipitation level colors
-const transparentWhite = "rgba(255, 255, 255, 0)";
-const l_01 = "#af7ab3"; //rgb (175,122,179)
-const l_02 = "#95649a"; //rgb (149,100,154)
-const l_03 = "#885889"; //rgb (136,88,137)
-const l_04 = "#674571"; //rgb (103,69,113)
-const l_05 = "#503752"; //rgb (80,55,82)
-
-// Maximum value is 299.2
-const colorMapping = [
-    { value: 0, color: transparentWhite, label: "0" },
-    { value: 5, color: l_01, label: "5" },
-    { value: 10, color: l_02, label: "10" },
-    { value: 20, color: l_03, label: "20" },
-    { value: 50, color: l_04, label: "50" },
-    { value: 100, color: l_05, label: "100" }
-];
 
 export function PrecipitationForecastLegend(props: LegendItemComponentProps) {
+
     const intl = useIntl();
 
+    const prepSrvc = useService<GeosphereForecastService>("app.GeosphereForecastService");
+    const { legendMetadata } = useReactiveSnapshot(
+        () => ({
+            legendMetadata: prepSrvc.legendMetadata
+        }),
+        [prepSrvc]
+    );
+    const range = legendMetadata.range;
+
+    const tempColors = {
+        color1: "#00000000",
+        color2: "#af7ab3",
+        color3: "#95649a",
+        color4: "#885889",
+        color5: "#674571",
+        color6: "#503752"
+    };
+
+    const increment = (range[1] - range[0]) / 5;
+
+    const to_display = [
+        { label: range[0].toFixed(2), color: tempColors.color1 },
+        { label: (range[0] + increment * 1).toFixed(2), color: tempColors.color2 },
+        { label: (range[0] + increment * 2).toFixed(2), color: tempColors.color3 },
+        { label: (range[0] + increment * 3).toFixed(2), color: tempColors.color4 },
+        { label: (range[0] + increment * 4).toFixed(2), color: tempColors.color5 },
+        { label: (range[0] + increment * 5).toFixed(2), color: tempColors.color6 }
+    ];
+
     return (
-        <Box
-            position="relative"
-            top="10px"
-            right="0px"
-            bg="white"
-            p={4}
-            borderRadius="5px"
-            borderWidth={1}
-            width="300px"
-        >
-            <Text fontWeight="bold" mb={2}>
+        <Box bg={"white"} p={2} borderRadius="md" boxShadow="md" mt="1em">
+            <Text fontWeight="bold" mb={0}>
                 {" "}
                 {props.layer.title}{" "}
             </Text>
             <Text fontWeight="bold" fontSize={15} mb={2}>
-                Units mm/days
+                Unit: mm
             </Text>
-            {colorMapping.map((item, index) => (
-                <Box key={index} display="flex" alignItems="center" mb={1}>
-                    <Box
-                        width="12px"
-                        height="12px"
-                        bg={item.color}
-                        mr={2}
-                        border="2px"
-                        borderColor="black"
-                    />
-                    <Box>{item.label}</Box>
-                </Box>
-            ))}
+            <Box display="flex">
+                <div style={{ marginRight: "3em" }}>
+                    {to_display.map((item, index) => (
+                        <Box key={index} display="flex" mb={1}>
+                            <Box width="12px" height="12px" bg={item.color} mr={2}  border={"2px solid black"} />
+                            <Box>{item.label}</Box>
+                        </Box>
+                    ))}
+                </div>
+            </Box>
         </Box>
     );
-}
+};
+export default PrecipitationForecastLegend;

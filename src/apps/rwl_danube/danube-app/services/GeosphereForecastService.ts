@@ -1,26 +1,60 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
+import { reactive, Reactive } from "@conterra/reactivity-core";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
+import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import chroma from "chroma-js";
-import { PrecipitationForecastLegend } from "../components/legends/PrecipitationForecastLegend";
+import PrecipitationForecastLegend from "../components/legends/PrecipitationForecastLegend";
+
 
 interface References {
     mapRegistry: MapRegistry;
 }
+
 
 export interface GeosphereForecastService extends DeclaredService<"app.GeosphereForecastService"> {
     setFileUrl(url: string): void;
     getMapModel(): Promise<MapModel | undefined>;
 }
 
+
+interface legendMetadata {
+    range: number[];
+}
+
+
+async function getRangeFromGeoTiff(url: string): Promise<number[]> {
+    try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+
+        const tiff = await GeoTIFFJS.fromArrayBuffer(arrayBuffer);
+        const image = await tiff.getImage();
+
+        const rasterData = await image.readRasters();
+        const bandData = rasterData[0]; // expecting only one band in the geotif
+
+        const maxValue = Math.max(...bandData);
+        const minValue = Math.min(...bandData);
+
+        return [minValue, maxValue];
+    } catch (error) {
+        console.error("Error reading GeoTIFF:", error);
+        return NaN;
+    }
+}
+
+
 export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
+
+    #legendMetadata: Reactive<legendMetadata> = reactive({ range: [0, 100] });
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
@@ -69,8 +103,12 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
             // update the tile layer source with the new .tif file URL from the JSON
             const newSource = this.updateSource(url);
             this.layer.setSource(newSource);
-            // this.updateStyleForUrl(url, "layer");
+            this.updateStyle(url);
         }
+    }
+
+    get legendMetadata(): legendMetadata {
+        return this.#legendMetadata.value;
     }
 
     private updateSource(url: string): GeoTIFF {
@@ -86,26 +124,59 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
         });
     }
 
-    private precipTotalColorMap = [
-        { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
-        { value: 5, color: "#af7ab3", label: "5" },
-        { value: 10, color: "#95649a", label: "10" },
-        { value: 20, color: "#885889", label: "20" },
-        { value: 50, color: "#674571", label: "50" },
-        { value: 100, color: "#503752", label: "100" }
-    ];
+    private updateStyle(url: string) {
+        getRangeFromGeoTiff(url)
+            .then((range) => {
+                console.log(range);
+                this.#legendMetadata.value = {
+                    range: range
+                };
+                this.layer?.setStyle({
+                    color: this.createColorGradient([range[0], range[1]])
+                });
+            })
+            .catch((error) => console.error("Error fetching max value:", error));
+    }
 
     private createColorGradient(range: number[]) {
-        const colorMapping = this.precipTotalColorMap;
-        const boundaries = colorMapping.map((item) => item.value);
-        const gradientColors = colorMapping.map((item) => item.color);
-        const colorScale = chroma.scale(gradientColors).domain(boundaries).mode("lab");
+        const tempColors = {
+            color1: "#00000000",
+            color2: "#af7ab3",
+            color3: "#95649a",
+            color4: "#885889",
+            color5: "#674571",
+            color6: "#503752"
+        };
+        const increment = (range[1] - range[0]) / 5;
 
-        return [
-            "interpolate",
-            ["linear"],
-            ["band", 1],
-            ...boundaries.flatMap((boundary) => [boundary, colorScale(boundary).hex()])
+        const boundaries_temp = [
+            range[0],
+            range[0] + increment,
+            range[0] + 2 * increment,
+            range[0] + 3 * increment,
+            range[0] + 4 * increment,
+            range[1]
         ];
+        const gradientColors_temp = [
+            tempColors.color1,
+            tempColors.color2,
+            tempColors.color3,
+            tempColors.color4,
+            tempColors.color5,
+            tempColors.color6
+        ];
+
+        const colorScale_temp = chroma
+            .scale(gradientColors_temp)
+            .domain(boundaries_temp)
+            .mode("lab");
+
+        const tempColorGradient = [
+            "interpolate",
+            ["linear"], // Specify the interpolation type
+            ["band", 1], // The data band
+            ...boundaries_temp.flatMap((boundary) => [boundary, colorScale_temp(boundary).hex()])
+        ];
+        return tempColorGradient;
     }
 }
