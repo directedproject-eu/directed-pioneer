@@ -13,9 +13,10 @@ interface legendmetaData {
     variable: string;
     isAuthenticated?: boolean;
 }
+
+
 const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }) => {
     const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
-
 
     const { legendMetadata } = useReactiveSnapshot(
         () => ({

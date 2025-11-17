@@ -11,10 +11,12 @@ import {
     Text
 } from "@open-pioneer/chakra-integration";
 import { SimpleLayer } from "@open-pioneer/map";
-import { useService } from "open-pioneer:react-hooks";
+import { useService, useIntl } from "open-pioneer:react-hooks";
 import { GeosphereService } from "../services/GeosphereService";
 
 export const TimeSlider = () => {
+    const intl = useIntl();
+
     const [sliderValue, setSliderValue] = useState(0);
     const [totalPrecipLayerVisible, setTotalPrecipVisible] = useState(false);
 
@@ -74,7 +76,7 @@ export const TimeSlider = () => {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div>
             {totalPrecipLayerVisible && (
                 <div
                     style={{
@@ -88,7 +90,9 @@ export const TimeSlider = () => {
                 >
                     <Box padding={4} mb={8}>
                         <Text fontWeight="semibold">
-                            👆Drag the Slider to Select a Date for Daily Precipitation Sums
+                            {intl.formatMessage({
+                                id: "map.slider.geosphere_historical.precipitation"
+                            })}
                         </Text>
                         <div
                             style={{
@@ -97,8 +101,18 @@ export const TimeSlider = () => {
                                 marginBottom: "4px"
                             }}
                         >
-                            <span>Start Date: 2024-01-01</span>
-                            <span>End Date: 2024-12-31</span>
+                            <span>
+                                {intl.formatMessage({
+                                    id: "map.slider.geosphere_historical.start_date"
+                                })}{" "}
+                                2024-01-01
+                            </span>
+                            <span>
+                                {intl.formatMessage({
+                                    id: "map.slider.geosphere_historical.end_date"
+                                })}{" "}
+                                2024-12-31
+                            </span>
                         </div>
                         <Slider
                             aria-label="date-slider"
@@ -115,7 +129,9 @@ export const TimeSlider = () => {
                             <SliderThumb />
                         </Slider>
                         <Text>
-                            Selected Date:{" "}
+                            {intl.formatMessage({
+                                id: "map.slider.geosphere_historical.selected_date"
+                            })}{" "}
                             <Text as="span" fontWeight="normal" color="black">
                                 {valueToTimestamp(sliderValue)}
                             </Text>

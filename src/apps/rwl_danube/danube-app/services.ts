@@ -5,6 +5,7 @@ export { TocServiceImpl } from "./services/TocService";
 export { TokenInterceptor } from "./TokenInterceptor";
 export { MainMapProvider } from "./services/MapProvider";
 export { GeosphereServiceImpl } from "./services/GeosphereService";
+export { GeosphereForecastServiceImpl } from "./services/GeosphereForecastService";
 export { IsimipHandlerImpl } from "./services/IsimipHandler";
 export { LayerHighlighterImpl } from "./services/LayerHighlighter";
 export { LayerZoomImpl } from "./services/LayerZoom";

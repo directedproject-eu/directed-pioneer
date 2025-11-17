@@ -61,6 +61,17 @@ messages:
         forest_and_vegetation_fire: "Wald- und Vegetationsbrand"
         water_damage: "Wasserschaden"
         storm_damage: "Sturmschaden"
+    slider:
+      geosphere_historical:
+        precipitation: 👆Ziehen Sie den Schieberegler, um ein Datum für die täglichen Niederschlagssummen auszuwählen.
+        start_date: "Startdatum:"
+        end_date: "Enddatum:"
+        selected_date: "Ausgewähltes Datum:"
+      geosphere_forecast:
+        precipitation: "👆Ziehen Sie den Schieberegler, um Datum und Uhrzeit für die Vorhersage der Gesamtniederschlagsmenge auszuwählen."
+        start_date: "Vorhersage Startdatum:"
+        end_date: "Vorhersage Enddatum:"
+        selected_date: "Ausgewähltes Datum:"
   charts:
     button_title: "Erntediagramm"
     title_chart1: "Anbauflächen in der Region Zala für "

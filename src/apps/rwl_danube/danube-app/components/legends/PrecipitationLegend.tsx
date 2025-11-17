@@ -37,10 +37,6 @@ export function PrecipitationLegend(props: LegendItemComponentProps) {
             borderWidth={1}
             width="300px"
         >
-            {/* <Text fontWeight="bold" fontSize={20}>
-                {" "}
-                Legend{" "}
-            </Text> */}
             <Text fontWeight="bold" mb={2}>
                 {" "}
                 {props.layer.title}{" "}
