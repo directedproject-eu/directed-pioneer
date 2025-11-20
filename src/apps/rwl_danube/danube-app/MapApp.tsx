@@ -571,10 +571,6 @@ export function MapApp() {
                 </TitledSection>
             </Flex>
 
-            <ResizeBox title={"Zala Chart"}>
-                <ChartComponentZala></ChartComponentZala>
-            </ResizeBox>
-
             <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
