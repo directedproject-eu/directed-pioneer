@@ -19,12 +19,16 @@ import {
     useDisclosure, 
     VStack, 
     Flex, 
-    Text
+    Text, 
+    Spacer
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
-import { FaWater, FaLock } from "react-icons/fa";
+import { FaWater } from "react-icons/fa";
 import { useService } from "open-pioneer:react-hooks";
 import { FloodMapService } from "./FloodMapService";
+import { TaxonomyInfo } from "taxonomy";
+import { useIntl } from "open-pioneer:react-hooks";
+
 
 //interface for the job status response
 interface JobStatusResponse {
@@ -95,6 +99,8 @@ export function SaferPlacesFloodMap() {
     const [userInput, setUserInput] = useState<string>("");
     const [tokenInput, setTokenInput] = useState<string>("");
     const [tokenSubmitted, setTokenSubmitted] = useState(false); 
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
+    const intl = useIntl();
 
 
     const locationDemFiles: Record<string, { dem: string; seamask: string }> = {
@@ -629,6 +635,37 @@ export function SaferPlacesFloodMap() {
                                         ← Change Credentials
                                     </Button>
                                 </Flex>
+                                {activeKeyword && (
+                                    <Flex>
+                                        <TaxonomyInfo
+                                            keyword={activeKeyword}
+                                            onClose={() => setActiveKeyword(null)}
+                                        />
+                                    </Flex>
+                                )}
+                                <Text>
+                                    {" "}
+                                    {intl.formatMessage({ id: "description_saferplaces.text1" })}
+                                    <Spacer />
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("pluvial flood")}
+                                    >
+                                        {intl.formatMessage({ id: "description_saferplaces.keyword1" })}
+                                    </Button>{" "}
+                                    {intl.formatMessage({ id: "description_saferplaces.text2" })}{" "}
+                                    <Button
+                                        variant="link"
+                                        color="#2e9ecc"
+                                        onClick={() => setActiveKeyword("coastal flood")}
+                                    >
+                                        {intl.formatMessage({ id: "description_saferplaces.keyword2" })}
+                                    </Button>
+                                    <Spacer />
+                                    {intl.formatMessage({ id: "description_saferplaces.text3" })}
+                                    .
+                                </Text>
                                 <FormControl isRequired>
                                     <FormLabel padding={0}> Location </FormLabel>
                                     <Select
