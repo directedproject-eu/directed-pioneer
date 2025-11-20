@@ -100,7 +100,7 @@ catalog:
   tsx: ^4.19.1
   typedoc: ^0.28.3
   typescript: ^5.8.3
-  vite: ^6.3.6
+  vite: ^6.4.1
   vite-plugin-eslint: ^1.8.1
   vitest: ^3.1.2
 
