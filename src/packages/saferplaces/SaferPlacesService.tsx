@@ -48,6 +48,7 @@ interface SaferRainInputs {
     rain: string;
     water: string;
     presigned_url_out: boolean;
+    mode: string; // lambda for async default batch for sync
     sync: boolean;
     user: string;
     token: string;
@@ -301,6 +302,7 @@ export function SaferPlacesFloodMap() {
                     dem: selectedDemFile,
                     rain: rainIntensity, //parse string to return integer, even with leading zeros
                     water: `s3://${s3Bucket}/api_data/${outputRain}`, //construct S3 output
+                    mode: "batch",
                     presigned_url_out: true,
                     sync: true,
                     debug: true,
