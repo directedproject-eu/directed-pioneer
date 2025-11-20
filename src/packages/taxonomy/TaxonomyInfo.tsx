@@ -54,9 +54,11 @@ export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
 
     return (
         <Box
-            width="sm"
+            // width="sm"
             bg="white"
-            maxHeight="150px"
+            // maxHeight="150px"
+            maxHeight={275}
+            maxWidth={430}
             overflowY="auto"
             borderWidth="1px"
             borderRadius="md"
