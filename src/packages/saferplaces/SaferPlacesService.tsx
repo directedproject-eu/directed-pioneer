@@ -19,8 +19,7 @@ import {
     useDisclosure, 
     VStack, 
     Flex, 
-    Text, 
-    Spacer
+    Text 
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater } from "react-icons/fa";
@@ -635,6 +634,32 @@ export function SaferPlacesFloodMap() {
                                         ← Change Credentials
                                     </Button>
                                 </Flex>
+                                <Flex justify="flex-start" align="center" mb={1} width="100%">
+                                    <Text width="100%">
+                                        {" "}
+                                        {intl.formatMessage({ id: "description_saferplaces.text1" })}
+                                        {" "}
+                                        <Button
+                                            variant="link"
+                                            color="#2e9ecc"
+                                            onClick={() => setActiveKeyword("pluvial flood")}
+                                        >
+                                            {intl.formatMessage({ id: "description_saferplaces.keyword1" })}
+                                        </Button> 
+                                        {" "}
+                                        {intl.formatMessage({ id: "description_saferplaces.text2" })}{" "}
+                                        <Button
+                                            variant="link"
+                                            color="#2e9ecc"
+                                            onClick={() => setActiveKeyword("coastal flood")}
+                                        >
+                                            {intl.formatMessage({ id: "description_saferplaces.keyword2" })}
+                                        </Button>
+                                        {" "}
+                                        {intl.formatMessage({ id: "description_saferplaces.text3" })}
+                                    .
+                                    </Text>
+                                </Flex>
                                 {activeKeyword && (
                                     <Flex>
                                         <TaxonomyInfo
@@ -643,29 +668,6 @@ export function SaferPlacesFloodMap() {
                                         />
                                     </Flex>
                                 )}
-                                <Text>
-                                    {" "}
-                                    {intl.formatMessage({ id: "description_saferplaces.text1" })}
-                                    <Spacer />
-                                    <Button
-                                        variant="link"
-                                        color="#2e9ecc"
-                                        onClick={() => setActiveKeyword("pluvial flood")}
-                                    >
-                                        {intl.formatMessage({ id: "description_saferplaces.keyword1" })}
-                                    </Button>{" "}
-                                    {intl.formatMessage({ id: "description_saferplaces.text2" })}{" "}
-                                    <Button
-                                        variant="link"
-                                        color="#2e9ecc"
-                                        onClick={() => setActiveKeyword("coastal flood")}
-                                    >
-                                        {intl.formatMessage({ id: "description_saferplaces.keyword2" })}
-                                    </Button>
-                                    <Spacer />
-                                    {intl.formatMessage({ id: "description_saferplaces.text3" })}
-                                    .
-                                </Text>
                                 <FormControl isRequired>
                                     <FormLabel padding={0}> Location </FormLabel>
                                     <Select

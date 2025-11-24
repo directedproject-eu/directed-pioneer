@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
+import { MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
