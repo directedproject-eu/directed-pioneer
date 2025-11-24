@@ -16,6 +16,7 @@ export interface KeywordInfo {
     url?: string;
     headline?: string;
     sources?: string[];
+    id: string; // For search in hub
     [key: string]: string | string[] | undefined;
 }
 
@@ -47,12 +48,13 @@ export class TaxonomyServiceImpl implements TaxonomyService {
             }
 
             const data = await response.json();
-            // const graph = data["@graph"];
-            // return Array.isArray(graph) && graph.length > 0 ? graph[0] : null;
             const graph = data?.["@graph"];
-
             if (Array.isArray(graph) && graph.length > 0) {
-                const keyword = graph[0] as KeywordInfo;
+                const rawKeyword = graph[0];
+                const keyword: KeywordInfo = {
+                    ...rawKeyword,
+                    id: rawKeyword["@id"] // Extract the URI from the @id field and set as keyword ID
+                };
                 return keyword;
             } else {
                 console.warn("No keyword data found");
