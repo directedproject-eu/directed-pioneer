@@ -16,16 +16,15 @@ const l_07 = "#4B0082";
 const l_08 = "#800080";
 const l_09 = "#FF0000";
 
-
 const colorMapping = [
-    { value: 0.00, color: l_01, label: "0" },
+    { value: 0.0, color: l_01, label: "0" },
     { value: 0.05, color: l_02, label: "0.05" },
-    { value: 0.50, color: l_03, label: "0.5" },
-    { value: 1.00, color: l_04, label: "1.00" },
-    { value: 3.00, color: l_05, label: "3.00" },
-    { value: 6.00, color: l_06, label: "6.00" },
-    { value: 10.00, color: l_07, label: "10.00" },
-    { value: 15.00, color: l_08, label: "15.00" },
+    { value: 0.5, color: l_03, label: "0.5" },
+    { value: 1.0, color: l_04, label: "1.00" },
+    { value: 3.0, color: l_05, label: "3.00" },
+    { value: 6.0, color: l_06, label: "6.00" },
+    { value: 10.0, color: l_07, label: "10.00" },
+    { value: 15.0, color: l_08, label: "15.00" },
     { value: 15.01, color: l_09, label: "> 15.00" }
 ];
 

@@ -5,12 +5,12 @@ import { defineBuildConfig } from "@open-pioneer/build-support";
 export default defineBuildConfig({
     services: {
         FloodMapServiceImpl: {
-            provides: ["app.FloodMapService"], 
+            provides: ["app.FloodMapService"],
             references: {
                 mapRegistry: "map.MapRegistry"
             }
         }
-    }, 
+    },
     i18n: ["en", "de", "da"],
     ui: {
         references: ["app.FloodMapService"]

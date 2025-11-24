@@ -16,10 +16,10 @@ import {
     FormControl,
     Input,
     Select,
-    useDisclosure, 
-    VStack, 
-    Flex, 
-    Text 
+    useDisclosure,
+    VStack,
+    Flex,
+    Text
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater } from "react-icons/fa";
@@ -27,7 +27,6 @@ import { useService } from "open-pioneer:react-hooks";
 import { FloodMapService } from "./FloodMapService";
 import { TaxonomyInfo } from "taxonomy";
 import { useIntl } from "open-pioneer:react-hooks";
-
 
 //interface for the job status response
 interface JobStatusResponse {
@@ -97,10 +96,9 @@ export function SaferPlacesFloodMap() {
     // states for user and token input
     const [userInput, setUserInput] = useState<string>("");
     const [tokenInput, setTokenInput] = useState<string>("");
-    const [tokenSubmitted, setTokenSubmitted] = useState(false); 
+    const [tokenSubmitted, setTokenSubmitted] = useState(false);
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
     const intl = useIntl();
-
 
     const locationDemFiles: Record<string, { dem: string; seamask: string }> = {
         Vienna: {
@@ -209,24 +207,25 @@ export function SaferPlacesFloodMap() {
                     if (finalDownloadUrl) {
                         setDownloadLink(finalDownloadUrl); // Update the state for the download button
 
-                        if(!floodMapService){
+                        if (!floodMapService) {
                             console.error(
                                 "ERROR: app.FloodMapService is not available. Check build config or json."
-                            ); 
+                            );
                             setGenerationStatus(
                                 "Success, but failed to add to map (service missing)."
                             );
                         } else {
                             // CALL THE NEW SERVICE TO ADD THE LAYER to the map and TOC
                             floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
-                            setGenerationStatus(`Flood map generated successfully, added to Operational Layers`);
+                            setGenerationStatus(
+                                `Flood map generated successfully, added to Operational Layers`
+                            );
                         }
                     } else {
                         setError("Download URL not found in the API response.");
                         setGenerationStatus("Successful, but no URL found.");
                     }
                     // --- NEW TOC LOGIC END ---
-
 
                     //// OLD WITHOUT ADDING LAYER TO TOC ////
                     // //prioritize presigned_url
@@ -244,7 +243,6 @@ export function SaferPlacesFloodMap() {
                     //     setError("Download URL not found in the API response.");
                     // }
                     //// END OLD NO TOC ////
-
                 } else if (jobStatus.status === "failed" || jobStatus.status === "dismissed") {
                     clearInterval(intervalId);
                     setError(
@@ -459,17 +457,17 @@ export function SaferPlacesFloodMap() {
                 if (finalDownloadUrl) {
                     setDownloadLink(finalDownloadUrl); // Update the state for the download button
 
-                    if(!floodMapService){
+                    if (!floodMapService) {
                         console.error(
                             "ERROR: app.FloodMapService is not available. Check build config or json."
-                        ); 
-                        setGenerationStatus(
-                            "Success, but failed to add to map (service missing)."
                         );
+                        setGenerationStatus("Success, but failed to add to map (service missing).");
                     } else {
                         // CALL THE NEW SERVICE TO ADD THE LAYER to the map and TOC
                         floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
-                        setGenerationStatus(`Flood map generation successful, added to Operational Layers.`);
+                        setGenerationStatus(
+                            `Flood map generation successful, added to Operational Layers.`
+                        );
                     }
                 } else {
                     setError("Download URL not found in the API response.");
@@ -515,8 +513,9 @@ export function SaferPlacesFloodMap() {
     };
 
     const handleCredentialsSubmit = () => {
-        if (tokenInput.trim() && userInput.trim()) { // check for valid inputs
-            setTokenSubmitted(true); // open model config page 
+        if (tokenInput.trim() && userInput.trim()) {
+            // check for valid inputs
+            setTokenSubmitted(true); // open model config page
             setError(""); // clean-up, clear previous errors when moving to next screen
         }
     };
@@ -580,12 +579,12 @@ export function SaferPlacesFloodMap() {
                             // --- TOKEN INPUT VIEW (Page 1) ---
                             <VStack spacing={4} align="stretch">
                                 <Flex align="center">
-                                    <Text fontWeight="semibold">Please enter valid credentials to access the model dialog</Text>
+                                    <Text fontWeight="semibold">
+                                        Please enter valid credentials to access the model dialog
+                                    </Text>
                                 </Flex>
                                 <FormControl isRequired>
-                                    <FormLabel htmlFor="user">
-                                        Username 
-                                    </FormLabel>
+                                    <FormLabel htmlFor="user">Username</FormLabel>
                                     <Input
                                         type="text"
                                         id="user"
@@ -596,9 +595,7 @@ export function SaferPlacesFloodMap() {
                                     />
                                 </FormControl>
                                 <FormControl isRequired>
-                                    <FormLabel htmlFor="token">
-                                        Token
-                                    </FormLabel>
+                                    <FormLabel htmlFor="token">Token</FormLabel>
                                     <Input
                                         type="password"
                                         id="token"
@@ -614,7 +611,7 @@ export function SaferPlacesFloodMap() {
                                     bg={"#2e9ecc"}
                                     onClick={handleCredentialsSubmit}
                                     // Disable if either field is empty
-                                    isDisabled={!tokenInput.trim() || !userInput.trim()} 
+                                    isDisabled={!tokenInput.trim() || !userInput.trim()}
                                 >
                                     Enter
                                 </Button>
@@ -625,7 +622,7 @@ export function SaferPlacesFloodMap() {
                             <VStack spacing={4} align="stretch">
                                 <Flex justify="space-between" align="center" mb={2}>
                                     <Text fontWeight="semibold">🌊 Model Configuration </Text>
-                                    <Button 
+                                    <Button
                                         justifyContent="flex-end"
                                         size="sm"
                                         variant="ghost"
@@ -637,27 +634,34 @@ export function SaferPlacesFloodMap() {
                                 <Flex justify="flex-start" align="center" mb={1} width="100%">
                                     <Text width="100%">
                                         {" "}
-                                        {intl.formatMessage({ id: "description_saferplaces.text1" })}
-                                        {" "}
+                                        {intl.formatMessage({
+                                            id: "description_saferplaces.text1"
+                                        })}{" "}
                                         <Button
                                             variant="link"
                                             color="#2e9ecc"
                                             onClick={() => setActiveKeyword("pluvial flood")}
                                         >
-                                            {intl.formatMessage({ id: "description_saferplaces.keyword1" })}
-                                        </Button> 
-                                        {" "}
-                                        {intl.formatMessage({ id: "description_saferplaces.text2" })}{" "}
+                                            {intl.formatMessage({
+                                                id: "description_saferplaces.keyword1"
+                                            })}
+                                        </Button>{" "}
+                                        {intl.formatMessage({
+                                            id: "description_saferplaces.text2"
+                                        })}{" "}
                                         <Button
                                             variant="link"
                                             color="#2e9ecc"
                                             onClick={() => setActiveKeyword("coastal flood")}
                                         >
-                                            {intl.formatMessage({ id: "description_saferplaces.keyword2" })}
-                                        </Button>
-                                        {" "}
-                                        {intl.formatMessage({ id: "description_saferplaces.text3" })}
-                                    .
+                                            {intl.formatMessage({
+                                                id: "description_saferplaces.keyword2"
+                                            })}
+                                        </Button>{" "}
+                                        {intl.formatMessage({
+                                            id: "description_saferplaces.text3"
+                                        })}
+                                        .
                                     </Text>
                                 </Flex>
                                 {activeKeyword && (
@@ -683,7 +687,7 @@ export function SaferPlacesFloodMap() {
                                         ))}
                                     </Select>
                                 </FormControl>
-                                
+
                                 <FormControl isRequired>
                                     <FormLabel padding={0}> Model </FormLabel>
                                     <Select
@@ -698,7 +702,6 @@ export function SaferPlacesFloodMap() {
                                         <option value="safer_coast">Safer Coast</option>
                                     </Select>
                                 </FormControl>
-                                
 
                                 {model === "safer_rain" && (
                                     <FormControl isRequired>
@@ -736,7 +739,11 @@ export function SaferPlacesFloodMap() {
                                 {downloadLink && (
                                     <Button color={"white"} bg={"#2e9ecc"}>
                                         {" "}
-                                        <a href={downloadLink} target="_blank" rel="noopener noreferrer">
+                                        <a
+                                            href={downloadLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
                                             Download Flood Map
                                         </a>
                                     </Button>

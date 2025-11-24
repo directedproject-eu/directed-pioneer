@@ -10,7 +10,6 @@ import { register } from "ol/proj/proj4";
 import { get as getProjection } from "ol/proj";
 import { FloodMapLegend } from "./FloodMapLegend";
 
-
 interface References {
     mapRegistry: MapRegistry;
 }
@@ -31,11 +30,10 @@ export interface FloodMapService extends DeclaredService<"app.FloodMapService"> 
 export class FloodMapServiceImpl implements FloodMapService {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
-    private addedLayerIds: string[] = []; // List of layer IDs added by service, used for cleanup 
+    private addedLayerIds: string[] = []; // List of layer IDs added by service, used for cleanup
     private NODATA_VALUE = -5.3e37;
-    private FLOOD_MAP_OPACITY = 0.8; 
+    private FLOOD_MAP_OPACITY = 0.8;
     private CRS_CODE = "EPSG:3035";
-
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
@@ -62,7 +60,7 @@ export class FloodMapServiceImpl implements FloodMapService {
             return;
         }
 
-        // DEBUG 
+        // DEBUG
         console.log("DEBUG SUCCESS(1): Map Model found. Attempting to add layer..");
 
         // 1. Define a unique ID for the new layer
@@ -73,12 +71,12 @@ export class FloodMapServiceImpl implements FloodMapService {
             source: new GeoTIFF({
                 projection: this.CRS_CODE,
                 normalize: false,
-                sources: [{ url: url, nodata: this.NODATA_VALUE}] 
+                sources: [{ url: url, nodata: this.NODATA_VALUE }]
             }),
-            style: this.createFloodMapStyle(), 
+            style: this.createFloodMapStyle(),
             properties: { title: title }
         });
-        
+
         olLayer.setZIndex(10); // Ensure it draws on top of base layers
 
         // 3. Wrap it in a SimpleLayer for the TOC
@@ -115,25 +113,24 @@ export class FloodMapServiceImpl implements FloodMapService {
     //             model.layers.removeLayer(layer);
     //         }
     //     });
-    //     this.addedLayerIds = []; 
+    //     this.addedLayerIds = [];
     //     console.log("Cleared all dynamically generated flood map layers.");
     // }
 
     private floodDepthColormap: ColorStop[] = [
-        { value: 0.00, color: "#FFFFFF", label: "0m", opacity: 0.05 }, // Transparent
+        { value: 0.0, color: "#FFFFFF", label: "0m", opacity: 0.05 }, // Transparent
         // Shallow Flood (High Contrast)
-        { value: 0.05, color: "#87CEFA", label: "5cm", opacity: 0.95 }, 
-        { value: 0.50, color: "#00BFFF", label: "0.5m", opacity: 0.95 },
+        { value: 0.05, color: "#87CEFA", label: "5cm", opacity: 0.95 },
+        { value: 0.5, color: "#00BFFF", label: "0.5m", opacity: 0.95 },
         // Medium Flood
-        { value: 1.00, color: "#3282F6", label: "1m", opacity: 0.95 },
-        { value: 3.00, color: "#005BA1", label: "3m", opacity: 0.95 },
+        { value: 1.0, color: "#3282F6", label: "1m", opacity: 0.95 },
+        { value: 3.0, color: "#005BA1", label: "3m", opacity: 0.95 },
         // Deep Flood / Clipping
-        { value: 6.00, color: "#001E64", label: "6m", opacity: 0.95 }, 
-        { value: 10.00, color: "#4B0082", label: "10m", opacity: 1.0 }, // Indigo/Deep Purple
-        { value: 15.00, color: "#800080", label: "15m", opacity: 1.0 }, // Solid Purple
+        { value: 6.0, color: "#001E64", label: "6m", opacity: 0.95 },
+        { value: 10.0, color: "#4B0082", label: "10m", opacity: 1.0 }, // Indigo/Deep Purple
+        { value: 15.0, color: "#800080", label: "15m", opacity: 1.0 }, // Solid Purple
         { value: 15.01, color: "#FF0000", label: "> 15m", opacity: 1.0 } // Alarm Red for clipping
     ];
-
 
     private createFloodMapStyle() {
         const colorMapping = this.floodDepthColormap;
@@ -151,11 +148,11 @@ export class FloodMapServiceImpl implements FloodMapService {
             const rgb = colorScale(boundary).rgb();
             let opacity = this.FLOOD_MAP_OPACITY;
 
-            const stop = colorMapping.find(s => s.value === boundary); 
+            const stop = colorMapping.find((s) => s.value === boundary);
             if (stop && stop.opacity !== undefined) {
                 opacity = stop.opacity;
-            } else if (boundary === 0.00) {
-                opacity = 0.05; // Default low opacity for 0m if not specified 
+            } else if (boundary === 0.0) {
+                opacity = 0.05; // Default low opacity for 0m if not specified
             }
             const roundedRgb = rgb.map(Math.round); // Round rbg values so there are no floating-point RGB values
             const rgbaString = `rgba(${roundedRgb[0]}, ${roundedRgb[1]}, ${roundedRgb[2]}, ${opacity})`;
@@ -165,11 +162,12 @@ export class FloodMapServiceImpl implements FloodMapService {
                 rgbaString // Use RGBA string for transparency
             ];
         });
-        
+
         // Prepend the transparent stop
         const finalInterpolationStops: (number | string)[] = [
             // Absolute lowest value for transparency (Nodata)
-            -100.00, "rgba(255, 255, 255, 0.0)", 
+            -100.0,
+            "rgba(255, 255, 255, 0.0)",
             ...chromaStops // Starts at 0.00m
         ];
 
@@ -182,10 +180,10 @@ export class FloodMapServiceImpl implements FloodMapService {
                 // -10.00, "rgba(255, 255, 0, 1.0)", // solid yellow
                 // 0.00, "rgba(10, 245, 237)", // teal
                 // 100.00, "rgba(245, 49, 10)" // red
-            ], 
+            ],
             variables: {
                 nodata: this.NODATA_VALUE
-            }, 
+            },
             default: "rgba(0, 0, 0, 0.0)" // transparent
         };
     }
