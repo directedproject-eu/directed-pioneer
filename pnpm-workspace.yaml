@@ -6,7 +6,7 @@ packages:
 # Shared version expressions (yaml anchors).
 # This is a yaml feature and is not interpreted by pnpm directly.
 __versions:
-  - &react_version ^19.1.0
+  - &react_version ^19.2.0
   - &core_packages_version ^3.1.0
   - &ol_base_packages_version ^0.10.0
 
@@ -49,60 +49,60 @@ catalog:
   "@chakra-ui/icons": ^2.2.4
   "@chakra-ui/react": ^2.10.6
   "@conterra/reactivity-core": ^0.5.0
-  "@emotion/cache": ^11.13.1
-  "@emotion/react": ^11.13.3
-  "@emotion/styled": ^11.13.0
-  "@formatjs/intl": ^3.1.6
+  "@emotion/cache": ^11.14.0
+  "@emotion/react": ^11.14.0
+  "@emotion/styled": ^11.14.0
+  "@formatjs/intl": ^3.1.8
   chroma-js: ^3.1.2
-  framer-motion: ^12.9.1
-  ol: ^10.5.0
-  ol-ext: ^4.0.33
+  framer-motion: ^12.23.24
+  ol: ^10.7.0
+  ol-ext: ^4.0.36
   react-dom: *react_version
-  react-icons: ^5.3.0
-  react-use: ^17.5.1
+  react-icons: ^5.5.0
+  react-use: ^17.6.0
   react: *react_version
 
   # Devtools
-  "@open-pioneer/build-package-cli": ^3.0.1
-  "@open-pioneer/build-support": ^3.0.1
-  "@open-pioneer/check-pnpm-duplicates": ^0.2.1
+  "@open-pioneer/build-package-cli": ^3.0.4
+  "@open-pioneer/build-support": ^3.0.3
+  "@open-pioneer/check-pnpm-duplicates": ^0.2.4
   "@open-pioneer/vite-plugin-pioneer": ^4.0.1
-  "@testing-library/dom": ^10.4.0
-  "@testing-library/jest-dom": ^6.6.2
+  "@testing-library/dom": ^10.4.1
+  "@testing-library/jest-dom": ^6.9.1
   "@testing-library/react": ^16.3.0
-  "@testing-library/user-event": ^14.5.2
+  "@testing-library/user-event": ^14.6.1
   "@types/js-yaml": ^4.0.9
-  "@types/node": ^20.14.8
-  "@types/react-dom": ^19.1.2
-  "@types/react": ^19.1.2
-  "@typescript-eslint/eslint-plugin": ^8.31.0
-  "@typescript-eslint/parser": ^8.31.0
-  "@vitejs/plugin-react-swc": ^3.9.0
+  "@types/node": ^20.19.22
+  "@types/react-dom": ^19.2.3
+  "@types/react": ^19.2.6
+  "@typescript-eslint/eslint-plugin": ^8.47.0
+  "@typescript-eslint/parser": ^8.47.0
+  "@vitejs/plugin-react-swc": ^4.2.0
   eslint: ^8.57.1
-  eslint-config-prettier: ^10.0.2
-  eslint-import-resolver-typescript: ^4.3.4
+  eslint-config-prettier: ^10.1.8
+  eslint-import-resolver-typescript: ^4.4.4
   eslint-plugin-header: ^3.1.1
-  eslint-plugin-import: ^2.31.0
-  eslint-plugin-jsx-a11y: ^6.10.1
+  eslint-plugin-import: ^2.32.0
+  eslint-plugin-jsx-a11y: ^6.10.2
   eslint-plugin-react: ^7.37.5
   eslint-plugin-react-hooks: ^5.2.0
-  eslint-plugin-unused-imports: ^4.1.4
+  eslint-plugin-unused-imports: ^4.3.0
   fast-glob: ^3.3.3
   handlebars: ^4.7.8
-  happy-dom: ^20.0.2
-  husky: ^9.1.6
-  js-yaml: ^4.1.0
-  jsdom: ^26.0.0
-  lint-staged: ^15.5.1
-  prettier: ^3.5.3
-  rimraf: ^6.0.1
-  sass: ^1.87.0
-  tsx: ^4.19.1
-  typedoc: ^0.28.3
-  typescript: ^5.8.3
-  vite: ^6.3.6
+  happy-dom: ^20.0.10
+  husky: ^9.1.7
+  js-yaml: ^4.1.1
+  jsdom: ^27.2.0
+  lint-staged: ^16.2.7
+  prettier: ^3.6.2
+  rimraf: ^6.1.2
+  sass: ^1.94.2
+  tsx: ^4.20.6
+  typedoc: ^0.28.14
+  typescript: ^5.9.3
+  vite: ^6.4.1
   vite-plugin-eslint: ^1.8.1
-  vitest: ^3.1.2
+  vitest: ^4.0.12
 
 overrides:
   # https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
