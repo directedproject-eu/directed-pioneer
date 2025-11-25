@@ -2,13 +2,28 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useService } from "open-pioneer:react-hooks";
+import { useState } from "react";
 import { IsimipHandler } from "../services/IsimipHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
+import {
+    Button,
+    IconButton, 
+    Flex,
+    Popover, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverTrigger,
+    PopoverArrow
+} from "@open-pioneer/chakra-integration";
+import { FaInfo } from "react-icons/fa";
+import { TaxonomyInfo } from "taxonomy";
+
 
 export function IsimipSelector() {
     const intl = useIntl();
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
     const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const setModel = (option: string) => {
@@ -29,6 +44,60 @@ export function IsimipSelector() {
             marginBottom="10px"
             overflowY="auto"
         >
+            <Popover trigger="hover" openDelay={250} closeDelay={100} placement="right">
+                <PopoverTrigger>
+                    <IconButton
+                        marginLeft="2px" 
+                        size="s"
+                        aria-label="Info"
+                        icon={<FaInfo />}
+                        variant="ghost"
+                        color="black"
+                    />
+                </PopoverTrigger>
+                <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverBody>
+                        {intl.formatMessage({id: "map.layer_select.info1"})}
+                        {" "}
+                        <Button
+                            variant="link"
+                            color="#2e9ecc"
+                            onClick={() => setActiveKeyword("climate model")}
+                        >
+                            {intl.formatMessage({id: "map.layer_select.keyword1"})}
+                        </Button>
+                        {" "}
+                        {intl.formatMessage({id: "map.layer_select.info2"})}
+                        {" "}
+                        <Button
+                            variant="link"
+                            color="#2e9ecc"
+                            onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
+                        >
+                            {intl.formatMessage({id: "map.layer_select.keyword2"})}
+                        </Button>
+                        {intl.formatMessage({id: "map.layer_select.info3"})}
+                        <Button
+                            variant="link"
+                            color="#2e9ecc"
+                            onClick={() => setActiveKeyword("Variables")}
+                        >
+                            {intl.formatMessage({id: "map.layer_select.keyword3"})}
+                        </Button>
+                        {" "}
+                        {intl.formatMessage({id: "map.layer_select.info4"})}
+                    </PopoverBody>
+                </PopoverContent>
+                {activeKeyword && (
+                    <Flex>
+                        <TaxonomyInfo
+                            keyword={activeKeyword}
+                            onClose={() => setActiveKeyword(null)}
+                        />
+                    </Flex>
+                )}
+            </Popover>
             <Selector
                 options={[
                     "canesm5",

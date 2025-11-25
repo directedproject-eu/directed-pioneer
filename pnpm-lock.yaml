@@ -581,6 +581,9 @@ importers:
       react-use:
         specifier: 'catalog:'
         version: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      taxonomy:
+        specifier: workspace:^
+        version: link:../../../packages/taxonomy
 
   src/apps/rwl_emilia_romagna/emilia-romagna-app:
     dependencies:
