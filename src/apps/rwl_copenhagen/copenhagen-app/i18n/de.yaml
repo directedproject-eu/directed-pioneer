@@ -26,7 +26,13 @@ messages:
   legend:
     title: "Legende"
     units: "Einheit"
-    
+  map:
+    download:
+      heading: "Layer herunterladen"
+      no_layers: "Keine Layer zum Herunterladen verfügbar"
+      button: "Layer herunterladen"
+      loading: "Bereite Download vor..."
+      select_layer: "Wähle einen Layer zum Herunterladen aus"    
   ariaLabel:
     header: "Kopfzeile"
     footer: "Fußleiste mit Maßstabsinformationen, räumlichem Bezugssystem und Koordinatenanzeige"

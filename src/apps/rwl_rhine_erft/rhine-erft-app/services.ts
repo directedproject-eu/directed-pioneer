@@ -12,7 +12,7 @@ const Basemap = new SimpleLayer({
     title: "OpenStreetMap",
     olLayer: new TileLayer({
         source: new OSM(),
-        properties: { title: "OSM" }
+        properties: { title: "OSM", type: "OSM" }
     }),
     isBaseLayer: true
 });
@@ -34,7 +34,9 @@ const starkregen_nw_geschw_agw = new SimpleLayer({
         }),
         properties: {
             title: "NW Geschwindigkeiten AGW",
-            id: "nw_geschw_agw"
+            id: "nw_geschw_agw",
+            type: "WMS",
+            source_domain: "geodatenzentrum"
         }
     }),
     attributes: {
@@ -57,7 +59,9 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
         }),
         properties: {
             title: "NW Geschwindigkeiten Extrem",
-            id: "nw_geschw_extrem"
+            id: "nw_geschw_extrem",
+            type: "WMS",
+            source_domain: "geodatenzentrum"
         }
     }),
     attributes: {
@@ -80,7 +84,9 @@ const starkregen_nw_tiefe_agw = new SimpleLayer({
         }),
         properties: {
             title: "NW Tiefe AGW",
-            id: "nw_tiefe_agw"
+            id: "nw_tiefe_agw",
+            type: "WMS",
+            source_domain: "geodatenzentrum"
         }
     }),
     attributes: {
@@ -103,7 +109,9 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
         }),
         properties: {
             title: "NW Tiefe Extrem",
-            id: "nw_tiefe_extrem"
+            id: "nw_tiefe_extrem",
+            type: "WMS",
+            source_domain: "geodatenzentrum"
         }
     }),
     attributes: {
@@ -176,7 +184,9 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
         }),
         properties: {
             title: "DHM Overview",
-            id: "dhm_ubersicht"
+            id: "dhm_ubersicht",
+            type: "WMS",
+            source_domain: "wms.nrw"
         }
     }),
     attributes: {
@@ -199,7 +209,9 @@ const wms_nw_gelaendeneigung = new SimpleLayer({
         }),
         properties: {
             title: "Terrain Snice",
-            id: "terrain_snice"
+            id: "terrain_snice",
+            type: "WMS",
+            source_domain: "wms.nrw"
         }
     }),
     attributes: {
@@ -222,7 +234,9 @@ const wms_nw_gelaendestufen = new SimpleLayer({
         }),
         properties: {
             title: "Terrain Steps",
-            id: "terrain_steps"
+            id: "terrain_steps",
+            type: "WMS",
+            source_domain: "wms.nrw"
         }
     }),
     attributes: {
@@ -245,7 +259,9 @@ const wms_nw_dgm_schummerung = new SimpleLayer({
         }),
         properties: {
             title: "Terrain Shading",
-            id: "terrain_shading"
+            id: "terrain_shading",
+            type: "WMS",
+            source_domain: "wms.nrw"
         }
     }),
     attributes: {
@@ -268,7 +284,9 @@ const wms_nw_hoehenschichten = new SimpleLayer({
         }),
         properties: {
             title: "Height",
-            id: "height"
+            id: "height",
+            type: "WMS",
+            source_domain: "wms.nrw"
         }
     }),
     attributes: {

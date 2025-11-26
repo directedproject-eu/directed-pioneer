@@ -13,3 +13,10 @@ messages:
     title_chart1: "Anbauflächen in der Rhein-Erft Region für "
     explanation: "This graph displays the average value, as well as the 20th to 80th percentile, of
                 predicted crop yields across all models in the Rhine-Erft region."
+  map:
+    download:
+      heading: "Layer herunterladen"
+      no_layers: "Keine Layer zum Herunterladen verfügbar"
+      button: "Layer herunterladen"
+      loading: "Bereite Download vor..."
+      select_layer: "Wähle einen Layer zum Herunterladen aus"

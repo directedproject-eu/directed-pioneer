@@ -13,3 +13,10 @@ messages:
     title_chart1: "Crops in Rhine-Erft region for "
     explanation: "This graph displays the average value, as well as the 20th to 80th percentile, of
                 predicted crop yields across all models in the Rhine-Erft region."
+  map:
+    download:
+      heading: "Download Layer"
+      no_layers: "No layers available for download"
+      button: "Donwload Layer"
+      loading: "Preparing download..."
+      select_layer: "Select a layer to download"

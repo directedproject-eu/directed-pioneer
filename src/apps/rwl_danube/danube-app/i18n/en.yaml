@@ -52,6 +52,7 @@ messages:
       no_layers: "No layers available for download"
       button: "Donwload Layer"
       loading: "Preparing download..."
+      select_layer: "Select a layer to download"
     operational_layers: "Operational Layers"
     select_basemap: "Select basemap"
     legend:

@@ -108,61 +108,99 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
         try {
             const properties = layer.olLayer?.getProperties();
 
-            if (properties?.["type"] === "GeoTIFF") {
-                const source = layer.olLayer?.getSource() as GeoTIFF;
-                if (source && source["key_"]) {
-                    window.open(source["key_"], "_blank");
-                }
-            } else if (properties?.["type"] === "GeoJSON") {
-                const source = layer.olLayer?.getSource() as VectorSource;
-                if (source && source["url_"]) {
-                    const response = await fetch(source["url_"]);
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `${layer.id || "data"}.geojson`;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                }
-            } else if (properties?.["type"] === "OSM") {
+            if (properties?.["type"] === "OSM") {
                 alert(
                     "Direct download of OSM layers is not supported. Please visit https://www.openstreetmap.org to download data."
                 );
             } else if (properties?.["type"] === "WMS") {
-                const id = "directed:" + properties.id;
-                const type = await getLayerInfo(id);
+                const id = properties.id;
+                const source = properties.source_domain;
+                console.log("Preparing download for layer:", id, "from source:", source);
 
-                if (type === "features") {
-                    const baseUrl = "https://directed.dev.52north.org/geoserver/wfs";
+                if (source === "geodatenzentrum") {
+                    const mapExtent = mapModel?.map?.initialExtent;
+                    const resolution = mapModel?.map?.resolution;
+                    
+                    if (!mapExtent || !resolution) {
+                        throw new Error("Map extent or resolution not available");
+                    }
+                    
+                    // Calculate width and height in pixels based on resolution
+                    const widthMeters = mapExtent.xMax - mapExtent.xMin;
+                    const heightMeters = mapExtent.yMax - mapExtent.yMin;
+                    
+                    let widthPx = Math.round(widthMeters / resolution);
+                    let heightPx = Math.round(heightMeters / resolution);
+                    
+                    // Clamp to server max
+                    const MAX_SIZE = 4096;
+                    const scale = Math.min(MAX_SIZE / widthPx, MAX_SIZE / heightPx, 1);
+                    widthPx = Math.round(widthPx * scale);
+                    heightPx = Math.round(heightPx * scale);
+                    
+                    const baseUrl = "https://sgx.geodatenzentrum.de/wms_starkregen";
                     const params = new URLSearchParams({
-                        service: "WFS",
-                        version: "2.0.0",
-                        request: "GetFeature",
-                        typeNames: id,
-                        outputFormat: "shape-zip"
+                        service: "WMS",
+                        version: "1.3.0",
+                        request: "GetMap",
+                        layers: id,
+                        styles: "",
+                        crs: "EPSG:3857",
+                        bbox: `${mapExtent.xMin},${mapExtent.yMin},${mapExtent.xMax},${mapExtent.yMax}`,
+                        width: String(widthPx),
+                        height: String(heightPx),
+                        format: "image/geotiff"
                     });
+                    
                     const url = `${baseUrl}?${params.toString()}`;
+                    console.log("WMS download URL:", url);
+                    
                     const response = await fetch(url);
-                    if (!response.ok) throw new Error("WFS request failed");
+                    if (!response.ok) throw new Error("WMS request failed");
+                    
                     const blob = await response.blob();
                     const link = document.createElement("a");
                     link.href = URL.createObjectURL(blob);
-                    link.download = `${properties.id}.zip`;
+                    link.download = `${properties.id}.tiff`;
                     document.body.appendChild(link);
                     link.click();
                     link.remove();
-                } else if (type === "WCS") {
-                    const baseUrl = "https://directed.dev.52north.org/geoserver/wcs";
+                } else if (source === "wms.nrw") {
+                    const mapExtent = mapModel?.map?.initialExtent;
+                    const resolution = mapModel?.map?.resolution;
+                    
+                    if (!mapExtent || !resolution) {
+                        throw new Error("Map extent or resolution not available");
+                    }
+                    
+                    // Calculate width and height in pixels based on resolution
+                    const widthMeters = mapExtent.xMax - mapExtent.xMin;
+                    const heightMeters = mapExtent.yMax - mapExtent.yMin;
+                    
+                    let widthPx = Math.round(widthMeters / resolution);
+                    let heightPx = Math.round(heightMeters / resolution);
+                    
+                    // Clamp to server max
+                    const MAX_SIZE = 4096;
+                    const scale = Math.min(MAX_SIZE / widthPx, MAX_SIZE / heightPx, 1);
+                    widthPx = Math.round(widthPx * scale);
+                    heightPx = Math.round(heightPx * scale);
+
+                    const baseUrl = "https://www.wms.nrw.de/geobasis";
                     const params = new URLSearchParams({
-                        service: "WCS",
-                        version: "2.0.1",
-                        request: "GetCoverage",
-                        coverageId: id,
-                        format: "image/tiff"
+                        service: "WMS",
+                        version: "1.3.0",
+                        request: "GetMap",
+                        layers: id,
+                        styles: "",
+                        crs: "EPSG:3857",
+                        bbox: `${mapExtent?.xMin},${mapExtent?.yMin},${mapExtent?.xMax},${mapExtent?.yMax}`,
+                        width: String(widthPx),
+                        height: String(heightPx),
+                        format: "image/geotiff"
                     });
                     const url = `${baseUrl}?${params.toString()}`;
+                    console.log("WCS Download URL:", url);
                     const response = await fetch(url);
                     if (!response.ok) throw new Error("WCS request failed");
                     const blob = await response.blob();
@@ -195,7 +233,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
             ) : (
                 <VStack align="stretch" spacing={2} mt={2}>
                     <Select
-                        placeholder="Select a layer to download"
+                        placeholder={intl.formatMessage({ id: "map.download.select_layer" })}
                         value={selectedLayer?.id || ""}
                         onChange={(e) => {
                             const layer =

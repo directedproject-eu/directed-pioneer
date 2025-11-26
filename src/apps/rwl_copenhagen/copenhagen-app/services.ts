@@ -20,7 +20,7 @@ const Basemap = new SimpleLayer({
     title: "OpenStreetMap",
     olLayer: new TileLayer({
         source: new OSM(),
-        properties: { title: "OSM" }
+        properties: { title: "OSM", type: "OSM" }
     }),
     isBaseLayer: true
 });
@@ -422,7 +422,7 @@ export class MainMapProvider implements MapConfigProvider {
                         width: 3
                     })
                 }),
-                properties: { title: "GeoJSON Layer" }
+                properties: { title: "GeoJSON Layer", type: "GeoJSON" }
             }),
             isBaseLayer: false
         });
@@ -444,7 +444,8 @@ export class MainMapProvider implements MapConfigProvider {
                 }),
                 properties: {
                     title: layerTitle,
-                    id: layerName
+                    id: layerName,
+                    type: "WMS"
                 }
             }),
             attributes: {

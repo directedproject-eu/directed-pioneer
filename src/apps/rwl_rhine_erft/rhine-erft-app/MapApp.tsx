@@ -34,7 +34,7 @@ import { useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiChartLineDownLight, PiRulerLight } from "react-icons/pi";
+import { PiChartLineDownLight, PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { FeatureInfo } from "featureinfo";
@@ -44,6 +44,8 @@ import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
 import Swipe from "ol-ext/control/Swipe";
 import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
+import DownloadLayer from "./Components/DownloadLayer";
+import { Group } from "ol/layer";
 
 export function MapApp() {
     const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -54,9 +56,15 @@ export function MapApp() {
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //wms feature info
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
+    const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
     }
+
+    function toggleDownload() {
+        setDownloadIsActive(!downloadIsActive);
+    }    
 
     //////////////////
     /// LayerSwipe ///
@@ -73,7 +81,7 @@ export function MapApp() {
 
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
-                (layer) => layer.olLayer?.getVisible?.() === true
+                (layer) => layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
             );
             setVisibleAvailableLayers(visibleLayers);
         };
@@ -227,6 +235,7 @@ export function MapApp() {
                                     />
                                 </FormControl>
                             </Box>
+                            {downloadIsActive && <DownloadLayer mapID={MAP_ID} />}
                         </MapAnchor>
 
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
@@ -331,6 +340,12 @@ export function MapApp() {
                                     icon={<PiRulerLight />}
                                     isActive={measurementIsActive}
                                     onClick={toggleMeasurement}
+                                />
+                                <ToolButton
+                                    label={intl.formatMessage({ id: "map.download.button" })}
+                                    icon={<PiDownload />}
+                                    isActive={downloadIsActive}
+                                    onClick={toggleDownload}
                                 />
                                 <Geolocation mapId={MAP_ID} />
                                 <InitialExtent mapId={MAP_ID} />

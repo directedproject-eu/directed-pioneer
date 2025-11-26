@@ -133,6 +133,8 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
             } else if (properties?.["type"] === "WMS") {
                 const id = "directed:" + properties.id;
                 const type = await getLayerInfo(id);
+                console.log("Layer ID:", id);
+                console.log("Layer download type:", type);
 
                 if (type === "features") {
                     const baseUrl = "https://directed.dev.52north.org/geoserver/wfs";
@@ -154,21 +156,49 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
                     link.click();
                     link.remove();
                 } else if (type === "WCS") {
-                    const baseUrl = "https://directed.dev.52north.org/geoserver/wcs";
+                    const mapExtent = mapModel?.map?.initialExtent;
+                    const resolution = mapModel?.map?.resolution;
+                    
+                    if (!mapExtent || !resolution) {
+                        throw new Error("Map extent or resolution not available");
+                    }
+                    
+                    // Calculate width and height in pixels based on resolution
+                    const widthMeters = mapExtent.xMax - mapExtent.xMin;
+                    const heightMeters = mapExtent.yMax - mapExtent.yMin;
+                    
+                    let widthPx = Math.round(widthMeters / resolution);
+                    let heightPx = Math.round(heightMeters / resolution);
+                    
+                    // Clamp to server max
+                    const MAX_SIZE = 4096;
+                    const scale = Math.min(MAX_SIZE / widthPx, MAX_SIZE / heightPx, 1);
+                    widthPx = Math.round(widthPx * scale);
+                    heightPx = Math.round(heightPx * scale);
+
+                    const baseUrl = "https://directed.dev.52north.org/geoserver/wms";
                     const params = new URLSearchParams({
-                        service: "WCS",
-                        version: "2.0.1",
-                        request: "GetCoverage",
-                        coverageId: id,
-                        format: "image/tiff"
+                        service: "WMS",
+                        version: "1.3.0",
+                        request: "GetMap",
+                        layers: id,
+                        styles: "",
+                        crs: "EPSG:3857",
+                        bbox: `${mapExtent?.xMin},${mapExtent?.yMin},${mapExtent?.xMax},${mapExtent?.yMax}`,
+                        width: "",
+                        height: "",
+                        format: "image/geotiff"
                     });
                     const url = `${baseUrl}?${params.toString()}`;
+                    console.log("Forced WMS download URL:", url);
+                  
                     const response = await fetch(url);
-                    if (!response.ok) throw new Error("WCS request failed");
+                    if (!response.ok) throw new Error("WMS request failed");
+                  
                     const blob = await response.blob();
                     const link = document.createElement("a");
                     link.href = URL.createObjectURL(blob);
-                    link.download = `${properties.id}.tif`;
+                    link.download = `${id}.tif`;
                     document.body.appendChild(link);
                     link.click();
                     link.remove();
@@ -195,7 +225,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
             ) : (
                 <VStack align="stretch" spacing={2} mt={2}>
                     <Select
-                        placeholder="Select a layer to download"
+                        placeholder={intl.formatMessage({ id: "map.download.select_layer" })}
                         value={selectedLayer?.id || ""}
                         onChange={(e) => {
                             const layer =

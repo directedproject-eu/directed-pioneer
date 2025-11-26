@@ -52,6 +52,7 @@ messages:
       no_layers: "Keine Layer zum Herunterladen verfügbar"
       button: "Layer herunterladen"
       loading: "Bereite Download vor..."
+      select_layer: "Wähle einen Layer zum Herunterladen aus"
 
     operational_layers: "Operationale Layer"
     select_basemap: "Grundkarte auswählen"

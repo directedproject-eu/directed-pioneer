@@ -27,7 +27,7 @@ import { useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import Layer from "ol/layer/Layer";
 import OSM from "ol/source/OSM";
-import { PiRulerLight } from "react-icons/pi";
+import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Legend } from "@open-pioneer/legend";
 import { Navbar } from "navbar";
@@ -43,6 +43,8 @@ import { SaferPlacesFloodMap } from "saferplaces";
 // import { ModelClient } from "modelclient";
 import Swipe from "ol-ext/control/Swipe";
 import { ModelClient } from "mcdm";
+import DownloadLayer from "./Components/DownloadLayer";
+import { Group } from "ol/layer";
 
 export function MapApp() {
     const intl = useIntl();
@@ -61,8 +63,13 @@ export function MapApp() {
     );
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
+    const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
+    }
+    function toggleDownload() {
+        setDownloadIsActive(!downloadIsActive);
     }
 
     //////////////////
@@ -79,9 +86,10 @@ export function MapApp() {
         const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
 
         const updateVisibleLayers = () => {
-            const visibleLayers = allLayers.filter(
-                (layer) => layer.olLayer?.getVisible?.() === true
-            );
+            const visibleLayers = allLayers.filter((layer) => {
+                const ol = layer.olLayer;
+                return ol?.getVisible?.() === true && !(ol instanceof Group);
+            });
             setVisibleAvailableLayers(visibleLayers);
         };
 
@@ -284,6 +292,7 @@ export function MapApp() {
                                     .
                                 </Text>
                             </Box>
+                            {downloadIsActive && <DownloadLayer mapID={MAP_ID1} />}
                         </MapAnchor>
                         {/* zoom to municipalities */}
                         <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
@@ -456,6 +465,12 @@ export function MapApp() {
                                     icon={<PiRulerLight />}
                                     isActive={measurementIsActive}
                                     onClick={toggleMeasurement}
+                                />
+                                <ToolButton
+                                    label={intl.formatMessage({ id: "map.download.heading" })}
+                                    icon={<PiDownload />}
+                                    isActive={downloadIsActive}
+                                    onClick={toggleDownload}
                                 />
                                 <Geolocation mapId={MAP_ID1} />
                                 <InitialExtent mapId={MAP_ID1} />

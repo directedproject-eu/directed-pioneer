@@ -26,6 +26,13 @@ messages:
   legend:
     title: "Legend"
     units: "Units"
+  map:
+    download:
+      heading: "Download Layer"
+      no_layers: "No layers available for download"
+      button: "Donwload Layer"
+      loading: "Preparing download..."
+      select_layer: "Select a layer to download"
 
   ariaLabel:
     header: "Header bar"

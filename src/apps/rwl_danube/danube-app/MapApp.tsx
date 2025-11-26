@@ -4,7 +4,7 @@
 import { useEffect, useId, useState } from "react";
 import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
 import { EventsKey } from "ol/events";
-import { Vector as VectorLayer } from "ol/layer.js";
+import { Group, Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
 import { unByKey } from "ol/Observable";
 import Swipe from "ol-ext/control/Swipe";
@@ -200,7 +200,7 @@ export function MapApp() {
 
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
-                (layer) => layer.olLayer?.getVisible?.() === true
+                (layer) => layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
             );
             setVisibleAvailableLayers(visibleLayers);
         };

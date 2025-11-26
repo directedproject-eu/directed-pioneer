@@ -80,6 +80,13 @@ messages:
   legend:
     title: "da:Legend"
     units: "da:Units"
+  map:
+    download:
+      heading: "da:Download Layer"
+      no_layers: "da:No layers available for download"
+      button: "da:Donwload Layer"
+      loading: "da:Preparing download..."
+      select_layer: "da:Select a layer to download"
   ariaLabel:
     header: "da:Header bar"
     footer: "da:Base bar with scale information, spatial reference system and coordinate display"
