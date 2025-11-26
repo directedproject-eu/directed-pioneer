@@ -30,6 +30,22 @@ export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
     // const [showPopup, setShowPopup] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const getKeywordId = (fullUri: string | undefined): string | null => {
+        if (!fullUri) return null;
+        const segments = fullUri.split("/"); // ID is the last segment of the URI after the last '/'
+        return segments[segments.length - 1] || null;
+    };
+
+    const generateSearchUrl = (termId: string): string => {
+        // Base URL for taxonomy hub search
+        const baseUrl =
+            "https://connectivity-hub.weadapt.org/?resource=https%3A%2F%2Fapi-uat.connectivity-hub.com%2Fapi%2Fkeyword%2F";
+        return `${baseUrl}${termId}.jsonld`;
+    };
+
+    const termId = getKeywordId(info?.id);
+    const searchUrl = termId ? generateSearchUrl(termId) : null;
+
     // const handleClick = async () => {
     //     if (!info) {
     //         setLoading(true);
@@ -54,9 +70,9 @@ export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
 
     return (
         <Box
-            width="sm"
             bg="white"
-            maxHeight="150px"
+            maxHeight={275}
+            maxWidth={430}
             overflowY="auto"
             borderWidth="1px"
             borderRadius="md"
@@ -81,11 +97,20 @@ export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
                 </Text>
             )}
             <Spacer />
-            <Link href="https://connectivity-hub.weadapt.org/" isExternal>
-                <Button size="md" bg="#2e9ecc" color="white" variant="solid" mt={4}>
-                    Search For More Terms
-                </Button>
-            </Link>
+            <Flex direction="column" gap={1} mt={1}>
+                {searchUrl && (
+                    <Link href={searchUrl} isExternal>
+                        <Button size="md" bg="#2e9ecc" color="white" variant="solid" mt={4}>
+                            View Term in Hub
+                        </Button>
+                    </Link>
+                )}
+                <Link href="https://connectivity-hub.weadapt.org/" isExternal>
+                    <Button size="md" bg="#2e9ecc" color="white" variant="solid" mt={4}>
+                        Search Hub Terms
+                    </Button>
+                </Link>
+            </Flex>
         </Box>
     );
 }

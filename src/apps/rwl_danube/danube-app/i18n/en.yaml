@@ -30,6 +30,14 @@ messages:
   map:
     layer_select:
       heading: "Climate projections from ISIMIP"
+      info1: "This component enables the viewing of different"
+      keyword1: "climate model"
+      info2: "projections within three"
+      keyword2: "Shared Socioeconomic Pathway (SSP)"
+      info3: "climate change emission scenarios."
+      keyword3: "Variables"
+      info4: "can be selected at the bottom of this 
+        component and then toggled within the Operational Layers."
       model: "Model"
       scenario: "Scenario"
       variable: "Variable"
@@ -61,20 +69,39 @@ messages:
         forest_and_vegetation_fire: "Forest and vegetation fire"
         water_damage: "Water Damage"
         storm_damage: "Storm Damage"
+    slider:
+      geosphere_historical:
+        precipitation: 👆Drag the Slider to Select a Date for Daily Precipitation Sums
+        start_date: "Start Date:"
+        end_date: "End Date:"
+        selected_date: "Selected Date:"
+      geosphere_forecast:
+        precipitation: "👆Drag the Slider to Select a Date and Time for Total Rainfall Amount Forecasts"
+        start_date: "Forecast Start Date:"
+        end_date: "Forecast End Date:"
+        selected_date: "Selected Date:"
   charts:
     button_title: "Crop chart"
     title_chart1: "Crops in Zala region for "
-    explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of
-                predicted crop yields across all models in the Danube region."
-    explanation2: "There was insufficient yield data for summer barley and lucerne in Western
-                    Danubia for local simulations. Therefore, data from a neighboring region in
-                    Austria was utilized."
+    explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of 
+      predicted"
+    keyword1: "agricultural"
+    explanation2: "crop yields across all models in the Danube region under three different"
+    keyword2: "Shared Socio-economic Pathway (SSP)"
+    explanation3: "climate change emission scenarios."
+    explanation4: "Results may be indicative of"
+    keyword3: "agricultural and ecological drought"
+    explanation5: ", however users are advised to exercise caution when applying this information,
+      as modeled results should be verified independently."
+    explanation6: "There was insufficient yield data for summer barley and lucerne in Western
+      Danubia for local simulations. Therefore, data from a neighboring region in
+      Austria was utilized."
   welcome_window:
     header: "Welcome to the Danube app of the DIRECTED Data Fabric!"
     body:
       "The Danube app is part of the Data Fabric which is developed within the EU-funded DIRECTED project.
       Goal of the app is to support stakeholders in disaster risk reduction and climate change adaptation.
-      The app contains public data which is made available to everyone. Additional access-restricted data will 
+      The app contains public data which is made available to everyone. Additional access-restricted data will
       appear after login (use the login button in the right top corner).
       Please note that the app is still work in progress."
   zoom_buttons:

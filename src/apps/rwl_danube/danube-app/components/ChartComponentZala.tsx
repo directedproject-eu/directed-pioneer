@@ -3,18 +3,21 @@
 
 import { useState } from "react";
 import {
+    Box,
     Button,
     Center,
     Checkbox,
     Stack,
     Text,
-    Flex
+    Flex, 
 } from "@open-pioneer/chakra-integration";
 import { useIntl } from "open-pioneer:react-hooks";
 import EnsembleCrops from "./EnsembleCrops";
+import { TaxonomyInfo } from "taxonomy";
 
 const ChartComponentZala = () => {
     const intl = useIntl();
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
     const [selectedScenario, setSelectedScenario] = useState("ssp585");
     const [selectedCrops, setSelectedCrops] = useState<string[]>(["Potatoes"]);
     const crops = [
@@ -108,12 +111,49 @@ const ChartComponentZala = () => {
             </Center>
             <Text mt={"2em"} size={"2em"}>
                 {intl.formatMessage({id: "charts.explanation1"})}
+                {" "}
+                <Button
+                    variant="link"
+                    color="#2e9ecc"
+                    onClick={() => setActiveKeyword("agriculture")}
+                >
+                    {intl.formatMessage({id: "charts.keyword1"})}
+                </Button>{" "}
+                {intl.formatMessage({id: "charts.explanation2"})}
+                {" "}
+                <Button
+                    variant="link"
+                    color="#2e9ecc"
+                    onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
+                >
+                    {intl.formatMessage({id: "charts.keyword2"})}
+                </Button>{" "}
+                {intl.formatMessage({id: "charts.explanation3"})} {" "}
+                {intl.formatMessage({id: "charts.explanation4"})}
+                {" "}
+                <Button
+                    variant="link"
+                    color="#2e9ecc"
+                    onClick={() => setActiveKeyword("Agricultural and ecological drought")}
+                >
+                    {intl.formatMessage({id: "charts.keyword3"})}
+                </Button> 
+                {intl.formatMessage({id: "charts.explanation5"})}
             </Text>
             <Flex alignItems="center">
                 <Text>
-                    {intl.formatMessage({id: "charts.explanation2"})}
+                    {intl.formatMessage({id: "charts.explanation6"})}
                 </Text>
             </Flex>
+            <Box padding="15px" />
+            {activeKeyword && (
+                <Flex>
+                    <TaxonomyInfo
+                        keyword={activeKeyword}
+                        onClose={() => setActiveKeyword(null)}
+                    />
+                </Flex>
+            )}
         </>
     );
 };

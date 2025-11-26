@@ -30,6 +30,14 @@ messages:
   map:
     layer_select:
       heading: "Layer auswählen"
+      info1: "This component enables the viewing of different"
+      keyword1: "climate model"
+      info2: "projections within three"
+      keyword2: "Shared Socioeconomic Pathway (SSP)"
+      info3: "climate change emission scenarios."
+      keyword3: "Variables"
+      info4: "can be selected at the bottom of this 
+        component and then toggled within the Operational Layers."
       model: "Modell"
       scenario: "Szenario"
       variable: "Variable"
@@ -62,14 +70,33 @@ messages:
         forest_and_vegetation_fire: "Wald- und Vegetationsbrand"
         water_damage: "Wasserschaden"
         storm_damage: "Sturmschaden"
+    slider:
+      geosphere_historical:
+        precipitation: 👆Ziehen Sie den Schieberegler, um ein Datum für die täglichen Niederschlagssummen auszuwählen.
+        start_date: "Startdatum:"
+        end_date: "Enddatum:"
+        selected_date: "Ausgewähltes Datum:"
+      geosphere_forecast:
+        precipitation: "👆Ziehen Sie den Schieberegler, um Datum und Uhrzeit für die Vorhersage der Gesamtniederschlagsmenge auszuwählen."
+        start_date: "Vorhersage Startdatum:"
+        end_date: "Vorhersage Enddatum:"
+        selected_date: "Ausgewähltes Datum:"
   charts:
     button_title: "Erntediagramm"
     title_chart1: "Anbauflächen in der Region Zala für "
-    explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of
-                predicted crop yields across all models in the Danube region."
-    explanation2: "There was insufficient yield data for summer barley and lucerne in Western
-                    Danubia for local simulations. Therefore, data from a neighboring region in
-                    Austria was utilized."
+    explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of 
+      predicted"
+    keyword1: "agricultural"
+    explanation2: "crop yields across all models in the Danube region under three different"
+    keyword2: "Shared Socio-economic Pathway (SSP)"
+    explanation3: "climate change emmission scenarios."
+    explanation4: "Results may be indicative of"
+    keyword3: "agricultural and ecological drought"
+    explanation5: ", however users are advised to exercise caution when applying this information,
+      as modeled reults should be verified independently."
+    explanation6: "There was insufficient yield data for summer barley and lucerne in Western
+      Danubia for local simulations. Therefore, data from a neighboring region in
+      Austria was utilized."
   welcome_window:
     header: "Willkommen in der Danube App des DIRECTED Data Fabric!"
     body:

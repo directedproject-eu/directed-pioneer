@@ -6,9 +6,6 @@ import "highcharts/highcharts-more"; // Note: no "highchartsMore from"
 
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
-import { useService } from "open-pioneer:react-hooks";
-import { IsimipHandler } from "../services/IsimipHandler";
-import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
 type EnsembleProps = {
     regionName: string;

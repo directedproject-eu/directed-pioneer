@@ -3,7 +3,8 @@
     "private": true,
     "dependencies": {
         "@open-pioneer/runtime": "catalog:",
-        "taxonomy": "workspace:^"
+        "taxonomy": "workspace:^",
+        "chroma-js": "catalog:"
     },
     "devDependencies": {
         "@open-pioneer/test-utils": "catalog:"

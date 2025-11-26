@@ -1,0 +1,7 @@
+messages:
+  description_saferplaces:
+    text1: "This interface supports both"
+    text2: "and"
+    text3: "with the SaferPlaces model"
+    keyword1: "pluvial"
+    keyword2: "coastal flooding"

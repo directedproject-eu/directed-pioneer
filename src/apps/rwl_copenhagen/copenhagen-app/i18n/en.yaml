@@ -7,6 +7,11 @@ messages:
     text2: "in the lens of"
     keyword1: "disaster risk"
     keyword2: "climate change"
+  description_saferplaces:
+    text1: "This platform serves as a way to learn about"
+    text2: "in the lens of"
+    keyword1: "pluvial flood"
+    keyword2: "climate change"
   zoom_buttons:
     egedal: "Zoom to Egedal"
     frederikssund: "Zoom to Frederikssund"

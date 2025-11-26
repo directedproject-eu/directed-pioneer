@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
+import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
@@ -36,19 +36,26 @@ export class GeosphereServiceImpl implements GeosphereService {
                 properties: { title: "GeoSphere daily precipitation sum", type: "GeoTIFF" }
             });
             model?.layers.addLayer(
-                new SimpleLayer({
-                    id: "daily_precipitation_sum",
-                    title: "Precipitation",
-                    description:
-                        "Daily precipitation sums for 2024 in Austria provided by GeoSphere.",
-                    olLayer: this.layer,
-                    attributes: {
-                        "legend": {
-                            Component: PrecipitationLegend
-                        }
-                    },
-                    isBaseLayer: false,
-                    visible: false
+                new GroupLayer({
+                    id: "geosphere_historical",
+                    title: "GeoSphere Historical Data",
+                    visible: false,
+                    layers: [
+                        new SimpleLayer({
+                            id: "daily_precipitation_sum",
+                            title: "Precipitation (2024)",
+                            description:
+                                "Daily precipitation sums for 2024 in Austria provided by GeoSphere.",
+                            olLayer: this.layer,
+                            attributes: {
+                                "legend": {
+                                    Component: PrecipitationLegend
+                                }
+                            },
+                            isBaseLayer: false,
+                            visible: false
+                        })
+                    ]
                 })
             );
             this.layer.setZIndex(0);

@@ -25,7 +25,7 @@ export function YearSlider() {
     }
 
     return (
-        <VStack width={"40%"}>
+        <VStack width={"50%"}>
             <span style={{ width: "80%" }}>
                 <Slider
                     aria-label="slider-ex-1"

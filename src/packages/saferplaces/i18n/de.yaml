@@ -1,0 +1,7 @@
+messages:
+  description_saferplaces:
+    text1: "Diese Schnittstelle unterstützt die Simulation von"
+    text2: "und"
+    text3: "mit dem SaferPlaces Modell"
+    keyword1: "Starkregenereignissen"
+    keyword2: "Küstenüberflutungen"

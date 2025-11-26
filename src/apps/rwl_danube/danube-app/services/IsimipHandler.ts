@@ -136,6 +136,10 @@ export class IsimipHandlerImpl implements IsimipHandler {
         });
     }
 
+    async getMapModel() {
+        return await this.mapRegistry.getMapModel(this.MAP_ID);
+    }
+
     setYear(newYear: number): void {
         this.#selectedYear.value = newYear;
         this.updateSource();

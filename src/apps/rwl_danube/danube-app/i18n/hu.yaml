@@ -91,6 +91,14 @@ messages:
   map:
     layer_select:
       heading: "hun:Climate projections from ISIMIP"
+      info1: "This component enables the viewing of different"
+      keyword1: "climate model"
+      info2: "projections within three"
+      keyword2: "Shared Socioeconomic Pathway (SSP)"
+      info3: "climate change emission scenarios."
+      keyword3: "Variables"
+      info4: "can be selected at the bottom of this 
+        component and then toggled within the Operational Layers."
       model: "hun:Model"
       scenario: "hun:Scenario"
       variable: "hun:Variable"
@@ -122,6 +130,17 @@ messages:
         forest_and_vegetation_fire: "hun:Forest and vegetation fire"
         water_damage: "hun:Water Damage"
         storm_damage: "hun:Storm Damage"
+    slider:
+      geosphere_historical:
+        precipitation: 👆hun:Drag the Slider to Select a Date for Daily Precipitation Sums
+        start_date: "hun:Start Date:"
+        end_date: "hun:End Date:"
+        selected_date: "hun:Selected Date:"
+      geosphere_forecast:
+        precipitation: "👆hun:Drag the Slider to Select a Date and Time for Total Rainfall Amount Forecasts"
+        start_date: "hun:Forecast Start Date:"
+        end_date: "hun:Forecast End Date:"
+        selected_date: "hun:Selected Date:"
   charts:
     button_title: "hun:Crop chart"
     title_chart1: "hun:Crops in Zala region for "
