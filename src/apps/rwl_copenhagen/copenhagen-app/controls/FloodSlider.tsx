@@ -143,9 +143,9 @@ export const FloodSlider = () => {
                             <Text as="span" fontWeight="bold" color="blue.600" ml={1}>
                                 {sliderValue} {levelUnit}
                             </Text>
-                            <Text as="span" fontSize="sm" ml={2} color="gray.500">
+                            {/* <Text as="span" fontSize="sm" ml={2} color="gray.500">
                                 (Model: {currentModel})
-                            </Text>
+                            </Text> */}
                         </Text>
                         <div
                             style={{

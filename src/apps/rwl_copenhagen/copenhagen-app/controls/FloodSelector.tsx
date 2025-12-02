@@ -47,7 +47,7 @@ export function FloodSelector() {
                 </PopoverTrigger>
                 <PopoverContent>
                     <PopoverArrow />
-                    <PopoverBody>
+                    <PopoverBody overflow="auto">
                         {intl.formatMessage({id: "map.flood_layer_selector.description"})}
                         {/* {" "}
                         <Button
