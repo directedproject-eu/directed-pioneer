@@ -29,12 +29,12 @@ const modelLocationMap: Record<string, Record<string, string[]>> = {
         "coastal": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
     }, 
     "rim2d": {
-        "pluvial": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
-        "coastal": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
+        "pluvial": ["roskilde_fjord"], 
+        "coastal": ["roskilde_fjord"], 
     }, 
     "scalgo": {
         "pluvial": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
-        "coastal": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
+        "coastal": ["roskilde_fjord"], 
     }, 
 };
 
@@ -95,6 +95,14 @@ export class FloodHandlerImpl implements FloodHandler {
     #selectedModel: Reactive<string> = reactive(DEFAULT_MODEL_ID); 
     #legendMetadata: Reactive<legendMetadata> = reactive({ range: [0, 100], variable: "water_depth" });
 
+    // private getModelAllLocations(modelId: string): string[] {
+    //     const modelKey = modelId as keyof typeof modelLocationMap;
+    //     const pluvial = modelLocationMap[modelKey]?.["pluvial"] || [];
+    //     const coastal = modelLocationMap[modelKey]?.["coastal"] || [];
+    //     // Use Set to get unique locations from both pluvial and coastal lists
+    //     return Array.from(new Set([...pluvial, ...coastal]));
+    // }
+
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
@@ -109,6 +117,9 @@ export class FloodHandlerImpl implements FloodHandler {
                 const locationLayers: Record<string, TileLayer> = (this.modelLayers[modelId] = {} as Record<string, TileLayer>);
                 const locations = modelLocationMap[modelKey]!["pluvial"];
                 if (!locations) { return; }
+
+                // const initialLocations = this.getModelAllLocations(modelId);
+                // if (initialLocations.length === 0) { return; }
                 
                 // Array to collect the SimpleLayer instances
                 const simpleLayers: SimpleLayer[] = []; 
@@ -116,6 +127,8 @@ export class FloodHandlerImpl implements FloodHandler {
                 // Create sublayer for each location
                 locations.forEach((locationId) => {
                     const subLayerId = `${modelKey}-${locationId}`;
+                    // initialLocations.forEach((locationId) => {
+                    //     const subLayerId = `${modelKey}-${locationId}`;
                     
                     const layer = new TileLayer({
                         properties: { title: `${layer_info[modelKey]["title"]} (${locationId})`, type: "WMS" },
@@ -171,6 +184,10 @@ export class FloodHandlerImpl implements FloodHandler {
         const config = (SLIDER_CONFIG[newFloodType] || SLIDER_CONFIG["pluvial"])!;
         this.#selectedFloodType.value = newFloodType;
         this.#selectedFloodLevel.value = config.min;
+        // Update sublayer visibility for all models based on the new flood type
+        // LAYER_IDS.forEach(modelId => {
+        //     this.updateSublayerVisibility(modelId, newFloodType);
+        // });
         this.updateSourceandVisibility();
     }
 
@@ -181,7 +198,10 @@ export class FloodHandlerImpl implements FloodHandler {
 
     setModel(newModel: string): void {
         this.#selectedModel.value = newModel;
-        this.updateSourceandVisibility();
+        this.updateModelVisibility(newModel);
+        this.updateSource(); // Update source data for all models
+        this.updateVisibility(); // Update titles/descriptions for all models
+        // this.updateSourceandVisibility();
     }
 
     get legendMetadata(): legendMetadata {
@@ -262,24 +282,56 @@ export class FloodHandlerImpl implements FloodHandler {
             });
         });
     }
-   
+
     private updateVisibility(): void {
-        const selectedId = this.#selectedModel.value;
         const levelUnit = this.#selectedFloodType.value === "pluvial" ? "mm" : "cm";
         
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             LAYER_IDS.forEach(id => {
                 const groupLayer = model?.layers.getLayerById(id);
                 if (groupLayer) {
-                    if (id === selectedId) {
-                        const infoKey = id as keyof typeof layer_info;
-                        groupLayer.setTitle(layer_info[infoKey]["title"]);
-                        groupLayer.setDescription(`Flood Type: ${this.#selectedFloodType.value.toUpperCase()}. Level: ${this.#selectedFloodLevel.value}${levelUnit}. ${layer_info[infoKey]["description"]}`);
-                    }
-                    // Initially selected layer is visible.
-                    if (id === DEFAULT_MODEL_ID) {
-                        groupLayer.setVisible(true); 
-                    }
+                    const infoKey = id as keyof typeof layer_info;
+                    // Update the description/title for all layers regardless of selection state
+                    groupLayer.setTitle(layer_info[infoKey]["title"]);
+                    groupLayer.setDescription(`Flood Type: ${this.#selectedFloodType.value.toUpperCase()}. Level: ${this.#selectedFloodLevel.value}${levelUnit}. ${layer_info[infoKey]["description"]}`);
+                }
+            });
+        });
+    }
+
+    // private updateSublayerVisibility(modelId: string, floodType: string): void {
+    //     this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+    //         const groupLayer = model?.layers.getLayerById(modelId);
+    //         if (!groupLayer) return;
+
+    //         const modelKey = modelId as keyof typeof modelLocationMap;
+    //         const typeKey = floodType as keyof typeof modelLocationMap[typeof modelKey];
+    //         // Get list of locations for the new floodType
+    //         const requiredLocations = modelLocationMap[modelKey]?.[typeKey] || [];
+    //         // Access model's inner map 
+    //         const initializedLocations = Object.keys(this.modelLayers[modelId] || {});
+    //         // Iterate over all initialized sublayers and set visibility
+    //         initializedLocations.forEach(locationId => {
+    //             // Construct the full ID to fetch the sublayer
+    //             const subLayerId = `${modelId}-${locationId}`; 
+    //             const layersCollection = groupLayer.layers as { getLayerById: (id: string) => SimpleLayer | undefined } | undefined;
+    //             const subLayer = layersCollection?.getLayerById(subLayerId); 
+                
+    //             if (subLayer) {
+    //                 // Check if the current sublayer's location is in the required list
+    //                 const isRequired = requiredLocations.includes(locationId);
+    //                 subLayer.setVisible(isRequired);
+    //             }
+    //         });
+    //     });
+    // }
+
+    private updateModelVisibility(newModelId: string): void {
+        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+            LAYER_IDS.forEach(id => {
+                const groupLayer = model?.layers.getLayerById(id);
+                if (groupLayer) {
+                    groupLayer.setVisible(id === newModelId);
                 }
             });
         });

@@ -856,7 +856,11 @@ export class MainMapProvider implements MapConfigProvider {
         //             url: "https://directed.dev.52north.org/geoserver/directed/wms", 
         //             params: {
         //                 LAYERS: "rwl1_saferplaces_pluvial_roskilde_90mm"
-        //             }
+        //             }, 
+        //             properties: {
+        //                 title: "Layer Title",
+        //                 type: "GeoTIFF"
+        //             },
         //         }),
         //     }),
         //     isBaseLayer: false
@@ -881,7 +885,7 @@ export class MainMapProvider implements MapConfigProvider {
                         this.createMunicipalityLayer("lejre"),
                         this.createMunicipalityLayer("roskilde")
                     ]
-                })
+                }), 
                 // coastalFloodingGroup,
                 // pluvialFloodingGroup,
                 // scalgoGroup
