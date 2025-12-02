@@ -6,7 +6,11 @@ export default defineBuildConfig({
     styles: "./app.css",
     i18n: ["en", "de", "da"],
     ui: {
-        references: ["app.LayerZoom", "app.ForecastService"]
+        references: [
+            "app.LayerZoom", 
+            "app.ForecastService", 
+            "app.FloodHandler"
+        ]
     },
     services: {
         MainMapProvider: {
@@ -20,7 +24,13 @@ export default defineBuildConfig({
         },
         LayerZoomImpl: {
             provides: ["app.LayerZoom"]
-        }
+        }, 
+        FloodHandlerImpl: {
+            provides: ["app.FloodHandler"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
+        },
     },
     properties: {
         userConfig: {}

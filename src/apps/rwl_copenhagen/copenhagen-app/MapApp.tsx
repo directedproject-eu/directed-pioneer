@@ -45,6 +45,10 @@ import Swipe from "ol-ext/control/Swipe";
 import { ModelClient } from "mcdm";
 import DownloadLayer from "./Components/DownloadLayer";
 import { Group } from "ol/layer";
+import { FloodSelector } from "./controls/FloodSelector";
+import { FloodHandler } from "./services/FloodHandler";
+import { FloodSlider } from "./controls/FloodSlider";
+
 
 export function MapApp() {
     const intl = useIntl();
@@ -53,6 +57,8 @@ export function MapApp() {
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
+    const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider 
+
 
     const overviewMapLayer = useMemo(
         () =>
@@ -186,9 +192,11 @@ export function MapApp() {
                     >
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <Forecasts />
+                            <FloodSlider/>
                         </MapAnchor>
 
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                            <FloodSelector/>
                             {/* <Flex>
                                 {measurementIsActive && (
                                     <Box
@@ -481,6 +489,7 @@ export function MapApp() {
                     </MapContainer>
                     {/*END MAP_ID1*/}
                 </Flex>
+                {/* <FloodSlider/> */}
                 <Flex
                     role="region"
                     aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
