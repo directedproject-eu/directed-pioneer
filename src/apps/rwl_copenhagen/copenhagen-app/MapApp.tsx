@@ -236,6 +236,7 @@ export function MapApp() {
                                 // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                 maxHeight={500}
                                 overflow="auto"
+                                marginBottom={"10px"}
                             >
                                 <Toc
                                     mapId={MAP_ID1}
@@ -266,6 +267,7 @@ export function MapApp() {
                                 role="dialog"
                                 maxHeight={100}
                                 overflow="auto"
+                                marginBottom={"10px"}
                             >
                                 <Text fontWeight={600}>
                                     {" "}

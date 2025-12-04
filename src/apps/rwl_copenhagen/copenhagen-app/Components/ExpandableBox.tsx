@@ -20,7 +20,7 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({ title, children }) => {
             borderRadius="lg"
             overflow="hidden"
             p={4}
-            w="300px"
+            // w="300px"
             boxShadow="md"
         >
             <Box display="flex" justifyContent="space-between" alignItems="center">
