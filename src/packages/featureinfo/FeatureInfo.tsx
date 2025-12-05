@@ -19,6 +19,7 @@ import {
     Th
 } from "@open-pioneer/chakra-integration";
 import type { MapBrowserEvent } from "ol";
+import { Box, VStack } from "@open-pioneer/chakra-integration";
 
 interface FeatureInfoProps {
     mapModel: MapModel;
@@ -43,10 +44,11 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
         //get coords and trigger feature info request
         const handleSingleClick = (event: MapBrowserEvent<UIEvent>) => {
             const coordinate = event.coordinate;
+            const pixel = mapModel.olMap.getPixelFromCoordinate(coordinate);
             const viewResolution = mapModel.olMap.getView().getResolution();
 
             if (coordinate && viewResolution) {
-                fetchFeatureInfo(mapModel, coordinate, viewResolution, projection, setFeatureInfo);
+                fetchFeatureInfo(mapModel, coordinate, viewResolution, projection, setFeatureInfo, pixel);
             }
         };
 
@@ -63,43 +65,83 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
     const round = (num: number) => num.toFixed(3);
 
     //render properties in a table from the first feature in the feature collection
-    const renderFeatureProperties = (featureCollection: Record<string, unknown>) => {
-        const features = featureCollection?.features as Array<Record<string, unknown>> | undefined;
-        if (!features || features.length === 0) return <p>No features available</p>;
-
-        const properties = features[0]?.properties as Record<string, unknown> | undefined;
-        if (!properties) return <p>No layer properties available</p>;
-
-        return (
-            <Table size="sm" variant="simple">
-                <Tbody>
-                    {Object.entries(properties).map(([key, value]) => (
-                        <Tr key={key}>
-                            <Th
-                                style={{
-                                    textAlign: "left",
-                                    whiteSpace: "nowrap",
-                                    fontWeight: "bold",
-                                    paddingRight: "10px"
-                                }}
-                            >
-                                {key}
-                            </Th>
-                            <Td
-                                style={{
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    maxWidth: "300px"
-                                }}
-                            >
-                                {typeof value === "number" ? round(value) : String(value)}
-                            </Td>
-                        </Tr>
-                    ))}
-                </Tbody>
-            </Table>
-        );
+    const renderFeatureProperties = (data: Record<string, unknown>) => {    
+        // Fall 1: GeoJSON FeatureCollection
+        if (data.type === "FeatureCollection") {
+            const features = data?.features as Array<Record<string, unknown>> | undefined;
+            if (!features || features.length === 0) return <p>No features available</p>;
+    
+            const properties = features[0]?.properties as Record<string, unknown> | undefined;
+            if (!properties) return <p>No layer properties available</p>;
+    
+            return (
+                <Table size="sm" variant="simple">
+                    <Tbody>
+                        {Object.entries(properties).map(([key, value]) => (
+                            <Tr key={key}>
+                                <Th
+                                    style={{
+                                        textAlign: "left",
+                                        whiteSpace: "nowrap",
+                                        fontWeight: "bold",
+                                        paddingRight: "10px"
+                                    }}
+                                >
+                                    {key}
+                                </Th>
+                                <Td
+                                    style={{
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        maxWidth: "300px"
+                                    }}
+                                >
+                                    {typeof value === "number" ? round(value) : String(value)}
+                                </Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </Table>
+            );
+        }
+    
+        // Fall 2: Einfaches Record (z. B. GeoTIFF-Pixelwert)
+        if (Object.keys(data).length > 0) {
+            return (
+                <Table size="sm" variant="simple">
+                    <Tbody>
+                        {Object.entries(data).map(([key, value]) => (
+                            <Tr key={key}>
+                                <Th
+                                    style={{
+                                        textAlign: "left",
+                                        whiteSpace: "nowrap",
+                                        fontWeight: "bold",
+                                        paddingRight: "10px"
+                                    }}
+                                >
+                                    {key}
+                                </Th>
+                                <Td
+                                    style={{
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        maxWidth: "300px"
+                                    }}
+                                >
+                                    {typeof value === "number" ? round(value) : String(value)}
+                                </Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </Table>
+            );
+        }
+    
+        // Keine Daten vorhanden
+        return <p>No features available</p>;
     };
 
     //render the popup
@@ -114,43 +156,74 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                         zIndex: 1000
                     }}
                 >
-                    <PopoverContent style={{ maxHeight: "400px", overflow: "auto" }}>
+                    <PopoverContent
+                        style={{
+                            maxHeight: "420px",
+                            overflow: "auto",
+                            padding: "8px 0"
+                        }}
+                    >
                         <PopoverArrow style={{ top: "-20px", left: "20px" }} />
                         <PopoverCloseButton onClick={() => setFeatureInfo({ features: null })} />
-                        <PopoverHeader>
-                            <div>
-                                <Text fontWeight={600} fontSize={14}>
-                                    Selected Layers:{" "}
-                                </Text>
-                                <Text fontSize={14}>
-                                    {" "}
-                                    {featureInfo.features.map((f) => f.layerName).join(", ")}{" "}
-                                </Text>
-                            </div>
-                            <div>
-                                <Text fontWeight={600} fontSize={14}>
-                                    Clicked Point:{" "}
-                                </Text>
-                                <Text fontSize={14}>
-                                    {" "}
-                                    X: {clickPosition.x}, Y: {clickPosition.y}{" "}
-                                </Text>
-                            </div>
-                        </PopoverHeader>
-                        {/* put table in popup, map over wms layer response  */}
-                        <PopoverBody>
-                            {featureInfo.features.map((f) => (
-                                <div key={f.layerName} style={{ marginBottom: "10px" }}>
-                                    <Text fontWeight={600} fontSize={14}>
-                                        {f.layerName}
+    
+                        <PopoverHeader
+                            style={{
+                                borderBottom: "1px solid #e2e8f0",
+                                paddingBottom: "8px",
+                                marginBottom: "8px"
+                            }}
+                        >
+                            <VStack align="start" spacing={2}>
+                                {/* Selected layers */}
+                                <Box>
+                                    <Text fontWeight="600" fontSize="14px" color="gray.700">
+                                        Selected Layers:
                                     </Text>
-                                    {renderFeatureProperties(f.data)}
-                                </div>
-                            ))}
+                                    <Text fontSize="14px" color="gray.600">
+                                        {featureInfo.features.map((f) => f.layerName).join(", ")}
+                                    </Text>
+                                </Box>
+    
+                                {/* Clicked point */}
+                                <Box>
+                                    <Text fontWeight="600" fontSize="14px" color="gray.700">
+                                        Clicked Point:
+                                    </Text>
+                                    <Text fontSize="14px" color="gray.600">
+                                        X: {clickPosition.x}, Y: {clickPosition.y}
+                                    </Text>
+                                </Box>
+                            </VStack>
+                        </PopoverHeader>
+    
+                        {/* Data section */}
+                        <PopoverBody>
+                            <VStack align="stretch" spacing={4}>
+                                {featureInfo.features.map((f) => (
+                                    <Box
+                                        key={f.layerName}
+                                        padding="8px 0"
+                                        borderBottom="1px solid #edf2f7"
+                                    >
+                                        <Text
+                                            fontWeight="600"
+                                            fontSize="15px"
+                                            marginBottom="4px"
+                                            color="gray.700"
+                                        >
+                                            {f.layerName}
+                                        </Text>
+    
+                                        <Box marginLeft="4px">
+                                            {renderFeatureProperties(f.data)}
+                                        </Box>
+                                    </Box>
+                                ))}
+                            </VStack>
                         </PopoverBody>
                     </PopoverContent>
                 </div>
             </Portal>
         </Popover>
-    ) : null;
+    ) : null;  
 }

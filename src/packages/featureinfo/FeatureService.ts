@@ -3,6 +3,8 @@
 import { MapModel } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
+import WebGLTileLayer from "ol/layer/WebGLTile";
+import { GeoTIFF } from "ol/source";
 
 //fetch feature info for all visible WMS layers at clicked map coord
 export function fetchFeatureInfo(
@@ -14,14 +16,15 @@ export function fetchFeatureInfo(
         React.SetStateAction<{
             features: Array<{ layerName: string; data: Record<string, unknown> }> | null;
         }>
-    >
+    >,
+    pixel?: number[]
 ) {
     if (!mapModel?.olMap) return;
 
-    //get all layers in map model
+    // all layers in the map model
     const allLayers = mapModel.olMap.getAllLayers();
 
-    //filter for visible layers
+    // filter for visible WMS tile layers
     const visibleWMSTileLayers = allLayers.filter(
         (l) =>
             l.get("visible") &&
@@ -31,8 +34,13 @@ export function fetchFeatureInfo(
             l.getSource() instanceof TileWMS
     ) as TileLayer<TileWMS>[];
 
-    //request each layer's getFeatureInfo (from OLayers), loop over each visible layer using .map
-    const fetches = visibleWMSTileLayers.map((layer) => {
+    // filter for visible GeoTIFF layers
+    const visibleGeoTIFFLayers = allLayers.filter(
+        (l) => l.get("visible") && l.get("id") && l.constructor.name === "WebGLTileLayer"
+    );
+
+    // WMS-FeatureInfo Promises
+    const wmsFetches = visibleWMSTileLayers.map((layer) => {
         const source = layer.getSource();
         const url = source?.getFeatureInfoUrl(coordinate, viewResolution, projection, {
             INFO_FORMAT: "application/json"
@@ -46,14 +54,37 @@ export function fetchFeatureInfo(
                 layerName: layer.get("title"),
                 data
             }))
-            .catch(() => null); //handle failed requests
+            .catch(() => null);
     });
-    //wait for all requests to complete & update state
-    Promise.all(fetches).then((results) => {
+
+    // GeoTIFF pixel value Promises
+    const geoTIFFFetches = visibleGeoTIFFLayers.map(async (layer) => {
+        try {
+            console.log("Clicked coordinate:", coordinate);
+            console.log("Pixel on canvas:", pixel);
+    
+            const valueAtPixel = layer.getData(pixel);
+    
+            console.log("GeoTIFF Layer:", layer.get("title"));
+            console.log("Value at pixel:", valueAtPixel?.toString());
+    
+            return {
+                layerName: layer.get("title"),
+                data: { value: valueAtPixel?.toString() }
+            };
+        } catch (err) {
+            console.error("Error reading GeoTIFF value:", err);
+            return null;
+        }
+    });
+
+    // WMS + GeoTIFF Promises combined
+    Promise.all([...wmsFetches, ...geoTIFFFetches]).then((results) => {
         const filtered = results.filter((r): r is NonNullable<typeof r> => !!r);
         setFeatureInfo({ features: filtered });
     });
 }
+
 
 //OL click handler for feature info
 export function setupClickHandler(

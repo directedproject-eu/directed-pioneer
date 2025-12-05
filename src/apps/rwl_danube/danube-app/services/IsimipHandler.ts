@@ -105,8 +105,9 @@ export class IsimipHandlerImpl implements IsimipHandler {
                     color: this.createColorGradiant([0, 100])
                 },
                 properties: {
-                    title: "Layer Title",
-                    type: "GeoTIFF"
+                    title: "Isimip Layer",
+                    type: "GeoTIFF",
+                    id: "isimip"
                 },
                 extent: [-2782996, 4000985, 4254277, 11753013]
             });
@@ -120,8 +121,8 @@ export class IsimipHandlerImpl implements IsimipHandler {
                 // }),
                 new SimpleLayer({
                     id: "isimip",
-                    description: layer_info["hurs"]["title"],
-                    title: layer_info["hurs"]["description"],
+                    description: layer_info["hurs"]["description"],
+                    title: layer_info["hurs"]["title"],
                     isBaseLayer: false,
                     olLayer: this.layer,
                     visible: false,
