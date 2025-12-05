@@ -131,7 +131,11 @@ export class FloodHandlerImpl implements FloodHandler {
                     //     const subLayerId = `${modelKey}-${locationId}`;
                     
                     const layer = new TileLayer({
-                        properties: { title: `${layer_info[modelKey]["title"]} (${locationId})`, type: "WMS" },
+                        properties: { 
+                            title: `${layer_info[modelKey]["title"]} (${locationId})`, 
+                            type: "WMS", 
+                            id: subLayerId
+                        },
                         extent: [-2782996, 4000985, 4254277, 11753013],
                         visible: true, 
                     });
