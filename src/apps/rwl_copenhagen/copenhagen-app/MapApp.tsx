@@ -274,6 +274,7 @@ export function MapApp() {
                                 role="dialog"
                                 maxHeight={100}
                                 overflow="auto"
+                                marginTop={2}
                             >
                                 <Text fontWeight={600}>
                                     {" "}

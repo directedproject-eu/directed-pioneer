@@ -217,7 +217,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
     };
 
     return (
-        <ExpandableBox title={intl.formatMessage({ id: "map.download.heading" })}>
+        <ExpandableBox title={intl.formatMessage({ id: "map.download.heading" })} marginTop="5px">
             {visibleLayers.length === 0 ? (
                 <Text fontSize="sm" color="gray.500">
                     {intl.formatMessage({ id: "map.download.no_layers" })}

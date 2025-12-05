@@ -31,8 +31,8 @@ export function FloodSelector() {
     return (
         <ExpandableBox
             title={intl.formatMessage({ id: "map.flood_layer_selector.title" })}
-            // marginBottom="5px"
-            // overflow="auto"
+            marginBottom="10px"
+            overflowY="auto"
         >
             <Popover trigger="hover" openDelay={250} closeDelay={100} placement="right">
                 <PopoverTrigger>
