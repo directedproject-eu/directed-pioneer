@@ -7,10 +7,19 @@ import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 
 type ExpandableBoxProps = {
     title: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
+    marginBottom?: string;
+    marginTop?: string;
+    overflowY?: "auto" | "scroll" | "hidden";
 };
 
-const ExpandableBox: React.FC<ExpandableBoxProps> = ({ title, children }) => {
+const ExpandableBox: React.FC<ExpandableBoxProps> = ({
+    title,
+    children,
+    marginBottom,
+    marginTop,
+    overflowY
+}) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -22,6 +31,8 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({ title, children }) => {
             p={4}
             // w="300px"
             boxShadow="md"
+            marginBottom={marginBottom}
+            marginTop={marginTop}
         >
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Text fontWeight="bold">{title}</Text>
@@ -30,7 +41,9 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({ title, children }) => {
                 </Button>
             </Box>
             <Collapse in={isExpanded} animateOpacity>
-                <Box mt={4}>{children}</Box>
+                <Box maxHeight={"15em"} overflow={overflowY} mt={4}>
+                    {children}
+                </Box>
             </Collapse>
         </Box>
     );

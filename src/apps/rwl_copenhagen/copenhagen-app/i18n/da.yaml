@@ -69,7 +69,7 @@ messages:
     roskilde: "da:Zoom to Roskilde"
   layer_swipe:
     title: "da:Select Layers for Comparison"
-    description: "da:➡️ Only layers which have been selected in the Operational Layers are viewable for comparison."
+    description: "da:Only layers which have been selected in the Operational Layers are viewable for comparison."
   forecast:
     sea_level: "da:👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation Forecasts"
     total_precip: "da:👆Drag the Slider to Select a Date and Time for Total Precipitation Forecasts"
@@ -87,6 +87,13 @@ messages:
       button: "da:Donwload Layer"
       loading: "da:Preparing download..."
       select_layer: "da:Select a layer to download"
+    flood_layer_selector: 
+      title: "Flood Category Selector"
+      description: "The flood category selection populates the Operational Layers and Slider with the selected flood's 
+        model outputs. To view these layers in the map, make sure the checkmark next to the desired model is visible
+        in the Operational Layers."
+      floodtype: "To view model outputs, please choose a flooding category"
+
   ariaLabel:
     header: "da:Header bar"
     footer: "da:Base bar with scale information, spatial reference system and coordinate display"

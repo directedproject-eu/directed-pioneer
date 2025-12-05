@@ -4,6 +4,7 @@ import { MapConfig, MapConfigProvider, SimpleLayer, GroupLayer } from "@open-pio
 import { ServiceOptions } from "@open-pioneer/runtime";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
+import WebGLTileLayer from "ol/layer/WebGLTile";
 import OSM from "ol/source/OSM";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
@@ -11,9 +12,12 @@ import GeoJSON from "ol/format/GeoJSON.js";
 import { Stroke, Style } from "ol/style";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
 
+
 export const MAP_ID1 = "main";
 export { LayerZoomImpl } from "./services/LayerZoom";
 export { ForecastServiceImpl } from "./services/ForecastService";
+export { FloodHandlerImpl } from "./services/FloodHandler";
+
 
 const Basemap = new SimpleLayer({
     id: "osm",
@@ -842,6 +846,26 @@ export class MainMapProvider implements MapConfigProvider {
             layers: scalgoLayers.map(({ name }) => this.createWmsLayer(name, name, name))
         });
 
+        // const test = new SimpleLayer({
+        //     id: "saferplaces90",
+        //     title: "saferplaces 90mm ",
+        //     description: "testing saferplaces 90mm pluvial",
+        //     visible: true,
+        //     olLayer: new TileLayer({
+        //         source: new TileWMS({
+        //             url: "https://directed.dev.52north.org/geoserver/directed/wms", 
+        //             params: {
+        //                 LAYERS: "rwl1_saferplaces_pluvial_roskilde_90mm"
+        //             }, 
+        //             properties: {
+        //                 title: "Layer Title",
+        //                 type: "GeoTIFF"
+        //             },
+        //         }),
+        //     }),
+        //     isBaseLayer: false
+        // });
+
         return {
             initialView: {
                 kind: "position",
@@ -861,10 +885,10 @@ export class MainMapProvider implements MapConfigProvider {
                         this.createMunicipalityLayer("lejre"),
                         this.createMunicipalityLayer("roskilde")
                     ]
-                }),
-                coastalFloodingGroup,
-                pluvialFloodingGroup,
-                scalgoGroup
+                }), 
+                // coastalFloodingGroup,
+                // pluvialFloodingGroup,
+                // scalgoGroup
             ]
         };
     }
