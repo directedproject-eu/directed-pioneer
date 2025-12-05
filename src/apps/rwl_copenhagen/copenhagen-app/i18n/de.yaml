@@ -15,7 +15,7 @@ messages:
     roskilde: "Zoom auf Roskilde"
   layer_swipe:
     title: "Layer zum Vergleichen auswählen"
-    description: "➡️ Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
+    description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
   forecast:
     sea_level: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der mittleren Meeresspiegelschwankungen auszuwählen"
     total_precip: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der Gesamtniederschläge auszuwählen"

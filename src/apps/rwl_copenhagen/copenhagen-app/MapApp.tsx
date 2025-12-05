@@ -9,7 +9,13 @@ import {
     VStack,
     Text,
     Select,
-    Spacer
+    Spacer, 
+    IconButton, 
+    Popover, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverTrigger,
+    PopoverArrow
 } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
@@ -48,6 +54,7 @@ import { Group } from "ol/layer";
 import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
+import { FaInfo } from "react-icons/fa";
 
 
 export function MapApp() {
@@ -382,15 +389,30 @@ export function MapApp() {
                                                 justifyContent="center"
                                                 alignItems="center"
                                             ></Flex>
-                                            <Text fontWeight="bold" mt={4}>
-                                                {intl.formatMessage({ id: "layer_swipe.title" })}
-                                            </Text>
+                                            <Flex alignItems="center" mt={1}>
+                                                <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                                    <PopoverTrigger>
+                                                        <IconButton
+                                                            marginLeft="2px" 
+                                                            size="s"
+                                                            aria-label="Info"
+                                                            icon={<FaInfo />}
+                                                            variant="ghost"
+                                                            color="black"
+                                                        />
+                                                    </PopoverTrigger>
+                                                    <PopoverContent>
+                                                        <PopoverArrow />
+                                                        <PopoverBody overflow="auto">
+                                                            {intl.formatMessage({id: "layer_swipe.description"})}
+                                                        </PopoverBody>
+                                                    </PopoverContent>
+                                                </Popover>
+                                                <Text fontWeight="bold" mt={4}>
+                                                    {intl.formatMessage({ id: "layer_swipe.title" })}
+                                                </Text>
+                                            </Flex>
                                             <Spacer />
-                                            <Text fontSize={16}>
-                                                {intl.formatMessage({
-                                                    id: "layer_swipe.description"
-                                                })}
-                                            </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
                                                     placeholder="Select Left Layer"
