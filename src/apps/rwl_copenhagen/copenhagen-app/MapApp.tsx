@@ -9,7 +9,13 @@ import {
     VStack,
     Text,
     Select,
-    Spacer
+    Spacer, 
+    IconButton, 
+    Popover, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverTrigger,
+    PopoverArrow
 } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
