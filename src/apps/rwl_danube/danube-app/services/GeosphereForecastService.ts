@@ -65,7 +65,7 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
                 style: {
                     color: this.createColorGradient([0, 100])
                 },
-                properties: { title: "Total rainfall amount" }
+                properties: { title: "Total rainfall amount", type: "GeoTIFF", id: "geosphere forecast service" }
             });
             model?.layers.addLayer(
                 new GroupLayer({

@@ -59,18 +59,26 @@ export function fetchFeatureInfo(
 
     // GeoTIFF pixel value Promises
     const geoTIFFFetches = visibleGeoTIFFLayers.map(async (layer) => {
+        layer.changed(); //ensure latest data
         try {
-            console.log("Clicked coordinate:", coordinate);
-            console.log("Pixel on canvas:", pixel);
+            // console.log("Clicked coordinate:", coordinate);
+            // console.log("Pixel on canvas:", pixel);
+            // console.log("title:", layer.get("title"));
     
             const valueAtPixel = layer.getData(pixel);
-    
-            console.log("GeoTIFF Layer:", layer.get("title"));
-            console.log("Value at pixel:", valueAtPixel?.toString());
-    
+            let valueAsString: number | null = null;
+
+            if (
+                valueAtPixel instanceof Float32Array ||
+                valueAtPixel instanceof Uint8Array ||
+                valueAtPixel instanceof Uint8ClampedArray
+            ) {
+                valueAsString = valueAtPixel[0]?.toFixed(2);
+            }
+                
             return {
                 layerName: layer.get("title"),
-                data: { value: valueAtPixel?.toString() }
+                data: { value: valueAsString}
             };
         } catch (err) {
             console.error("Error reading GeoTIFF value:", err);

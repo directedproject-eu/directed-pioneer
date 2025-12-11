@@ -10,6 +10,7 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import Legend from "../components/legends/Legend";
 
 import chroma from "chroma-js";
+import { info } from "console";
 
 const layer_info = {
     "hurs": {
@@ -98,6 +99,9 @@ export class IsimipHandlerImpl implements IsimipHandler {
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
+        const variable = this.#selectedVariable.value;
+        const info = layer_info[variable];
+
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
@@ -105,7 +109,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
                     color: this.createColorGradiant([0, 100])
                 },
                 properties: {
-                    title: "Isimip Layer",
+                    title: info.title,
                     type: "GeoTIFF",
                     id: "isimip"
                 },
@@ -121,8 +125,8 @@ export class IsimipHandlerImpl implements IsimipHandler {
                 // }),
                 new SimpleLayer({
                     id: "isimip",
-                    description: layer_info["hurs"]["description"],
-                    title: layer_info["hurs"]["title"],
+                    description: info.description,
+                    title: info.title,
                     isBaseLayer: false,
                     olLayer: this.layer,
                     visible: false,
@@ -281,13 +285,23 @@ export class IsimipHandlerImpl implements IsimipHandler {
         return tempColorGradient;
     }
     private changeLayerInfo() {
+        const info = layer_info[this.#selectedVariable.value];
+
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             model?.layers
                 .getLayerById("isimip")
-                ?.setTitle(layer_info[this.#selectedVariable.value]["title"]);
+                ?.setTitle(info.title);
             model?.layers
                 .getLayerById("isimip")
-                ?.setDescription(layer_info[this.#selectedVariable.value]["description"]);
+                ?.setDescription(info.description);
         });
+    
+
+        if (this.layer) {
+            this.layer.setProperties({
+                title: info.title,
+                description: info.description
+            });
+        }
     }
 }
