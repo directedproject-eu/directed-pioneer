@@ -61,7 +61,7 @@ messages:
       button: "Layer herunterladen"
       loading: "Bereite Download vor..."
       select_layer: "Wähle einen Layer zum Herunterladen aus"
-
+      description: "Nur die sichtbaren Layer in den Operational Layers sind über das Dropdown-Menü zum Herunterladen verfügbar."
     operational_layers: "Operationale Layer"
     select_basemap: "Grundkarte auswählen"
     legend:

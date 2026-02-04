@@ -23,53 +23,16 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     AlertDialogFooter,
-    AlertDialogCloseButton
+    AlertDialogCloseButton,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverBody,
+    IconButton,
+    Spacer
 } from "@open-pioneer/chakra-integration";
-
-// //Expandable box:
-// type ExpandableBoxProps = {
-//     title: string;
-//     children?: React.ReactNode;
-//     marginBottom?: string;
-//     marginTop?: string;
-//     overflowY?: "auto" | "scroll" | "hidden";
-// };
-
-// const ExpandableBox: React.FC<ExpandableBoxProps> = ({
-//     title,
-//     children,
-//     marginBottom,
-//     marginTop,
-//     overflowY
-// }) => {
-//     const [isExpanded, setIsExpanded] = useState(false);
-
-//     return (
-//         <Box
-//             backgroundColor={"white"}
-//             borderWidth="1px"
-//             borderRadius="lg"
-//             overflow="hidden"
-//             p={4}
-//             // w="300px"
-//             boxShadow="md"
-//             marginBottom={marginBottom}
-//             marginTop={marginTop}
-//         >
-//             <Box display="flex" justifyContent="space-between" alignItems="center">
-//                 <Text fontWeight="bold">{title}</Text>
-//                 <Button size="sm" onClick={() => setIsExpanded(!isExpanded)}>
-//                     {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
-//                 </Button>
-//             </Box>
-//             <Collapse in={isExpanded} animateOpacity>
-//                 <Box maxHeight={"15em"} overflow={overflowY} mt={4}>
-//                     {children}
-//                 </Box>
-//             </Collapse>
-//         </Box>
-//     );
-// };
+import { FaInfo } from "react-icons/fa";
 
 export interface LayerDownloadProps {
     mapID: string;
@@ -90,7 +53,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
     const [visibleLayers, setVisibleLayers] = useState<LayerEntry[]>([]);
     const [selectedLayer, setSelectedLayer] = useState<LayerEntry | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-
+    const [popoverIsOpen, setPopoverIsOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (!mapModel?.map) return;
@@ -101,8 +64,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
             const vis = allLayers
                 .filter(
                     (layer) =>
-                        layer.olLayer?.getVisible?.() === true &&
-                        !(layer.olLayer instanceof Group)
+                        layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
                 )
                 .map((layer) => ({
                     id: layer.id,
@@ -134,21 +96,18 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
         const url = `${wmsUrl}?service=WMS&request=GetCapabilities`;
         const res = await fetch(url);
         if (!res.ok) throw new Error("GetCapabilities failed");
-    
+
         const text = await res.text();
         const xml = new DOMParser().parseFromString(text, "text/xml");
-    
-        const maxWidth =
-            xml.querySelector("MaxImageWidth, MaxWidth")?.textContent;
-        const maxHeight =
-            xml.querySelector("MaxImageHeight, MaxHeight")?.textContent;
-    
+
+        const maxWidth = xml.querySelector("MaxImageWidth, MaxWidth")?.textContent;
+        const maxHeight = xml.querySelector("MaxImageHeight, MaxHeight")?.textContent;
+
         return {
             maxWidth: maxWidth ? Number(maxWidth) : 4096,
             maxHeight: maxHeight ? Number(maxHeight) : 4096
         };
     }
-    
 
     const handleDownload = async (layer: LayerEntry) => {
         setLoading(true);
@@ -163,8 +122,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 if (source && source["key_"]) {
                     window.open(source["key_"], "_blank");
                 }
-            }
-            else if (type === "GeoJSON") {
+            } else if (type === "GeoJSON") {
                 const source = layer.olLayer?.getSource() as VectorSource;
                 if (source && source["url_"]) {
                     const response = await fetch(source["url_"]);
@@ -177,8 +135,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     a.click();
                     a.remove();
                 }
-            }
-            else if (type === "WMS_features") {
+            } else if (type === "WMS_features") {
                 console.log("Layer to download: ", layer);
                 const layerIdFromParams = properties.source?.params_?.LAYERS;
                 const urlFromParams = properties.source?.urls[0];
@@ -200,14 +157,13 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
-            }
-            else if (type === "WMS_tiles") {
+            } else if (type === "WMS_tiles") {
                 console.log("Layer to download: ", layer);
                 let layerIdFromParams = properties.source?.params_?.LAYERS;
                 const urlFromParams = properties.source?.urls[0];
 
                 if (urlFromParams === "https://directed.dev.52north.org/geoserver/directed/wms") {
-                    layerIdFromParams = "directed:"+layerIdFromParams;
+                    layerIdFromParams = "directed:" + layerIdFromParams;
                 }
 
                 console.log("urlFromParams:", urlFromParams);
@@ -227,7 +183,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 let heightPx = Math.round(heightMeters / resolution);
 
                 // Clamp to server max
-                const {maxWidth, maxHeight} = await getWmsMaxSize(urlFromParams);
+                const { maxWidth, maxHeight } = await getWmsMaxSize(urlFromParams);
 
                 const scale = Math.min(maxWidth / widthPx, maxHeight / heightPx, 1);
 
@@ -259,19 +215,12 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
-
-            }
-
-            else if (type === "OSM") {
-                alert(
-                    "Downloading OSM layers is not supported due to licensing restrictions."
-                );
-            }
-            else {
+            } else if (type === "OSM") {
+                alert("Downloading OSM layers is not supported due to licensing restrictions.");
+            } else {
                 alert("This layer type is not supported for download.");
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error("Error downloading layer:", error);
         } finally {
             setLoading(false);
@@ -280,12 +229,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
 
     const btnRef = React.useRef<HTMLButtonElement>(null);
     return (
-        <AlertDialog
-            isOpen={isOpen}
-            onClose={onClose}
-            leastDestructiveRef={btnRef}
-            isCentered
-        >
+        <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={btnRef} isCentered>
             <AlertDialogOverlay
                 bg="blackAlpha.500"
                 backdropFilter="auto"
@@ -301,11 +245,33 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     p={4}
                     zIndex={1500}
                 >
-                    <AlertDialogHeader
-                        fontWeight="bold"
-                        borderBottomWidth="1px"
-                        mb={2}
-                    >
+                    <AlertDialogHeader fontWeight="bold" borderBottomWidth="1px" mb={2}>
+                        <Popover
+                            trigger="hover"
+                            openDelay={250}
+                            closeDelay={100}
+                            placement="top"
+                            isOpen={popoverIsOpen}
+                            onOpen={() => setPopoverIsOpen(true)}
+                            onClose={() => setPopoverIsOpen(false)}
+                        >
+                            <PopoverTrigger>
+                                <IconButton
+                                    marginLeft="2px"
+                                    size="s"
+                                    aria-label="Info"
+                                    icon={<FaInfo />}
+                                    variant="ghost"
+                                    color="black"
+                                />
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverBody overflow="auto">
+                                    {intl.formatMessage({ id: "map.download.description" })}
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
                         {intl.formatMessage({ id: "map.download.heading" })}
                     </AlertDialogHeader>
                     <AlertDialogBody>
@@ -316,11 +282,14 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                         ) : (
                             <VStack align="stretch" spacing={3} mt={1}>
                                 <Select
-                                    placeholder={intl.formatMessage({ id: "map.download.select_layer" })}
+                                    placeholder={intl.formatMessage({
+                                        id: "map.download.select_layer"
+                                    })}
                                     value={selectedLayer?.id || ""}
                                     onChange={(e) => {
                                         const layer =
-                                            visibleLayers.find((l) => l.id === e.target.value) || null;
+                                            visibleLayers.find((l) => l.id === e.target.value) ||
+                                            null;
                                         setSelectedLayer(layer);
                                     }}
                                 >
@@ -338,7 +307,8 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                     colorScheme="blue"
                                     isDisabled={
                                         !selectedLayer ||
-                                        selectedLayer.olLayer?.getProperties()?.["type"] === "OSM" ||
+                                        selectedLayer.olLayer?.getProperties()?.["type"] ===
+                                            "OSM" ||
                                         loading
                                     }
                                     onClick={() => selectedLayer && handleDownload(selectedLayer)}
@@ -352,8 +322,10 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                         )}
                     </AlertDialogBody>
                     <AlertDialogFooter borderTopWidth="1px" mt={2}>
-                        <AlertDialogCloseButton onClick={onClose} ref={btnRef}>
-                        </AlertDialogCloseButton>
+                        <AlertDialogCloseButton
+                            onClick={onClose}
+                            ref={btnRef}
+                        ></AlertDialogCloseButton>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialogOverlay>

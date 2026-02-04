@@ -87,6 +87,7 @@ messages:
       button: "da:Donwload Layer"
       loading: "da:Preparing download..."
       select_layer: "da:Select a layer to download"
+      description: "da:Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."
     flood_layer_selector: 
       title: "Flood Category Selector"
       description: "The flood category selection populates the Operational Layers and Slider with the selected flood's 

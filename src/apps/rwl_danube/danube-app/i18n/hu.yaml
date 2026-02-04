@@ -122,6 +122,7 @@ messages:
       button: "hun:Donwload Layer"
       loading: "hun:Preparing download..."
       select_layer: "hun:Select a layer to download"
+      description: "hun:Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."
     operational_layers: "hun:Operational Layers"
     select_basemap: "hun:Select basemap"
     legend:
