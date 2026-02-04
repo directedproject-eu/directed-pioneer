@@ -11,15 +11,18 @@ import { WaterLevelLegend } from "../Components/Legends/WaterLevelLegend";
 const layer_info = {
     "saferplaces": {
         "title": "SaferPlaces Model",
-        "description": "SaferPlaces "
+        "description": 
+            "SaferPlaces is an advanced flood risk model which can be used to assess pluvial, fluvial and coastal flood hazards and risk in consideration of both historical, current and future climate scenarios to provide information about urban flood risks."
     },
     "rim2d": {
         "title": "RIM2D Model",
-        "description": "RIM2D"
+        "description": 
+            "The RIM2D is an advanced hydraulic simulation tool, designed primarily for urban pluvial, fluvial and coastal flood risk assessments and forecasting."
     }, 
     "scalgo": {
         "title": "SCALGO Model",
-        "description": "SCALGO"
+        "description": 
+            "The Scalgo model is a high-resolution 3-dimensional flood model capable of global coverage. The Scalgo model is used in the Copenhagen RWL for data pertaining to flooding within the municipalities along the Roskilde Fjord. "
     }
 };
 
