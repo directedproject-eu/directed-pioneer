@@ -1,0 +1,13 @@
+{
+  "name": "layerdownload",
+  "private": true,
+
+  "main": "index.js",
+  "types": "index.d.ts",
+
+  "dependencies": {
+    "@open-pioneer/runtime": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}

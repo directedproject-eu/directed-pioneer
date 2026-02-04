@@ -107,6 +107,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
         setLoading(true);
         try {
             const properties = layer.olLayer?.getProperties();
+            console.log("Type:", properties?.["type"]);
 
             if (properties?.["type"] === "GeoTIFF") {
                 const source = layer.olLayer?.getSource() as GeoTIFF;

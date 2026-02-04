@@ -116,6 +116,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
                 const id = properties.id;
                 const source = properties.source_domain;
                 console.log("Preparing download for layer:", id, "from source:", source);
+                console.log("Layer properties:", properties);
 
                 if (source === "geodatenzentrum") {
                     const mapExtent = mapModel?.map?.initialExtent;

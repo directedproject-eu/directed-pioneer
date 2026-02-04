@@ -44,8 +44,9 @@ import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
 import Swipe from "ol-ext/control/Swipe";
 import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
-import DownloadLayer from "./Components/DownloadLayer";
+// import DownloadLayer from "./Components/DownloadLayer";
 import { Group } from "ol/layer";
+import { LayerDownload } from "layerdownload";
 
 export function MapApp() {
     const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -235,7 +236,15 @@ export function MapApp() {
                                     />
                                 </FormControl>
                             </Box>
-                            {downloadIsActive && <DownloadLayer mapID={MAP_ID} />}
+                            {/* {downloadIsActive && <DownloadLayer mapID={MAP_ID} />} */}
+                            {downloadIsActive && (
+                                <LayerDownload
+                                    mapID={MAP_ID}
+                                    intl={intl}
+                                    isOpen={downloadIsActive}
+                                    onClose={() => setDownloadIsActive(false)}
+                                />
+                            )}
                         </MapAnchor>
 
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>

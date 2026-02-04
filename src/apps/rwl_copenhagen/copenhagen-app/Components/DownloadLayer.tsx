@@ -13,6 +13,7 @@ import { useIntl } from "open-pioneer:react-hooks";
 import { GeoTIFF } from "ol/source";
 import { Vector as VectorSource } from "ol/source.js";
 import { Group } from "ol/layer";
+import { URLSearchParams } from "url";
 
 type DownloadLayerProps = {
     mapID: string;
@@ -51,6 +52,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
                 }));
         
             setVisibleLayers(vis);
+            console.log("Visible layers updated:", vis);
         };
 
         updateVisibleLayers();
@@ -73,6 +75,7 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
             "https://directed.dev.52north.org/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities";
         const response = await fetch(url);
         const xmlText = await response.text();
+        console.log(xmlText);
 
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "application/xml");
@@ -107,9 +110,11 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
         setLoading(true);
         try {
             const properties = layer.olLayer?.getProperties();
+            console.log("Downloading layer:", layer.id, "with properties:", properties, "and type :", properties?.["type"]);
 
             if (properties?.["type"] === "GeoTIFF") {
                 const source = layer.olLayer?.getSource() as GeoTIFF;
+                console.log("GeoTIFF source:", source);
                 if (source && source["key_"]) {
                     window.open(source["key_"], "_blank");
                 }
@@ -131,10 +136,9 @@ const DownloadLayer = ({ mapID }: DownloadLayerProps) => {
                     "Direct download of OSM layers is not supported. Please visit https://www.openstreetmap.org to download data."
                 );
             } else if (properties?.["type"] === "WMS") {
-                const id = "directed:" + properties.id;
+                const layerIdFromParams = "directed:" + properties.source?.params_?.LAYERS;
+                const id = layerIdFromParams;
                 const type = await getLayerInfo(id);
-                console.log("Layer ID:", id);
-                console.log("Layer download type:", type);
 
                 if (type === "features") {
                     const baseUrl = "https://directed.dev.52north.org/geoserver/wfs";

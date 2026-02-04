@@ -197,7 +197,8 @@ export class MainMapProvider implements MapConfigProvider {
     createWmsLayer(
         layerName: string,
         layerTitle: string,
-        layerDescription: string,
+        layerDescription: string,   
+        layerType: string,
         visible: boolean = false
     ) {
         const wmsLayerContent = {
@@ -215,7 +216,7 @@ export class MainMapProvider implements MapConfigProvider {
                 properties: {
                     title: layerTitle,
                     id: layerName,
-                    type: "WMS"
+                    type: layerType
                 }
             }),
             isBaseLayer: false
@@ -268,7 +269,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsPluvialFloodingLayersRef.map(
                                             ({ name, title, description }) =>
                                                 new SimpleLayer({
-                                                    ...this.createWmsLayer(name, title, description)
+                                                    ...this.createWmsLayer(name, title, description, "WMS_tiles")
                                                 })
                                         )
                                     ],
@@ -296,7 +297,8 @@ export class MainMapProvider implements MapConfigProvider {
                                                             ...this.createWmsLayer(
                                                                 name,
                                                                 title,
-                                                                description
+                                                                description,
+                                                                "WMS_tiles"
                                                             )
                                                         })
                                                 )
@@ -314,7 +316,8 @@ export class MainMapProvider implements MapConfigProvider {
                                                             ...this.createWmsLayer(
                                                                 name,
                                                                 title,
-                                                                description
+                                                                description,
+                                                                "WMS_tiles"
                                                             )
                                                         })
                                                 )
@@ -345,7 +348,8 @@ export class MainMapProvider implements MapConfigProvider {
                                                             ...this.createWmsLayer(
                                                                 name,
                                                                 title,
-                                                                description
+                                                                description,
+                                                                "WMS_tiles"
                                                             )
                                                         })
                                                 )
@@ -363,7 +367,8 @@ export class MainMapProvider implements MapConfigProvider {
                                                             ...this.createWmsLayer(
                                                                 name,
                                                                 title,
-                                                                description
+                                                                description,
+                                                                "WMS_tiles"
                                                             )
                                                         })
                                                 )
@@ -386,7 +391,8 @@ export class MainMapProvider implements MapConfigProvider {
                                             ...this.createWmsLayer(
                                                 "Vienna_lidar_2m_ViennaCenter_32633",
                                                 "Lidar",
-                                                "Lidar elevation map with 2 m resolution"
+                                                "Lidar elevation map with 2 m resolution",
+                                                "WMS_tiles",
                                             ),
                                             attributes: {
                                                 "legend": {
@@ -398,21 +404,24 @@ export class MainMapProvider implements MapConfigProvider {
                                             ...this.createWmsLayer(
                                                 "Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021",
                                                 "Soil Clay Content",
-                                                "Soil clay content"
+                                                "Soil clay content",
+                                                "WMS_tiles"
                                             )
                                         }),
                                         new SimpleLayer({
                                             ...this.createWmsLayer(
                                                 "Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021",
                                                 "Soil Sand Content",
-                                                "Soil sand content"
+                                                "Soil sand content",
+                                                "WMS_tiles"
                                             )
                                         }),
                                         new SimpleLayer({
                                             ...this.createWmsLayer(
                                                 "osm_buildings_162014",
                                                 "OSM Buildings",
-                                                "OSM Buildings"
+                                                "OSM Buildings",
+                                                "WMS_tiles"
                                             )
                                         })
                                     ]
@@ -433,7 +442,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersHistoricalFlooding.map(
                                             ({ name, title, description }) =>
                                                 new SimpleLayer({
-                                                    ...this.createWmsLayer(name, title, description)
+                                                    ...this.createWmsLayer(name, title, description, "WMS_tiles")
                                                 })
                                         )
                                     ],
@@ -451,7 +460,7 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersHistoricalDamage.map(
                                             ({ name, title, description }) =>
                                                 new SimpleLayer({
-                                                    ...this.createWmsLayer(name, title, description)
+                                                    ...this.createWmsLayer(name, title, description, "WMS_tiles")
                                                 })
                                         )
                                     ],
@@ -476,6 +485,7 @@ export class MainMapProvider implements MapConfigProvider {
                                 "euh_danube_bigrivers_10",
                                 "10-Year Flood Depth",
                                 "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull).",
+                                "WMS_features",
                                 true
                             )
                         })
@@ -490,7 +500,8 @@ export class MainMapProvider implements MapConfigProvider {
                     ...this.createWmsLayer(
                         "euh_danube_wsurf_gt1km2_c",
                         "Reservoirs And Lakes",
-                        "Large reservoirs and lakes in the Danube region"
+                        "Large reservoirs and lakes in the Danube region",
+                        "WMS_features"
                     )
                 })
             ]

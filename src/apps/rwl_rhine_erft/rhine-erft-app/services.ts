@@ -35,7 +35,7 @@ const starkregen_nw_geschw_agw = new SimpleLayer({
         properties: {
             title: "NW Geschwindigkeiten AGW",
             id: "nw_geschw_agw",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "geodatenzentrum"
         }
     }),
@@ -60,7 +60,7 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
         properties: {
             title: "NW Geschwindigkeiten Extrem",
             id: "nw_geschw_extrem",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "geodatenzentrum"
         }
     }),
@@ -85,7 +85,7 @@ const starkregen_nw_tiefe_agw = new SimpleLayer({
         properties: {
             title: "NW Tiefe AGW",
             id: "nw_tiefe_agw",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "geodatenzentrum"
         }
     }),
@@ -110,7 +110,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
         properties: {
             title: "NW Tiefe Extrem",
             id: "nw_tiefe_extrem",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "geodatenzentrum"
         }
     }),
@@ -185,7 +185,7 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
         properties: {
             title: "DHM Overview",
             id: "dhm_ubersicht",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "wms.nrw"
         }
     }),
@@ -202,15 +202,15 @@ const wms_nw_gelaendeneigung = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis",
+            url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendeneigung",
             params: {
-                LAYERS: "wms_nw_gelaendeneigung"
+                LAYERS: "nw_gelaendeneigung_10"
             }
         }),
         properties: {
             title: "Terrain Snice",
             id: "terrain_snice",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "wms.nrw"
         }
     }),
@@ -227,15 +227,15 @@ const wms_nw_gelaendestufen = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis",
+            url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendestufen",
             params: {
-                LAYERS: "wms_nw_gelaendestufen"
+                LAYERS: "nw_gelaendestufen"
             }
         }),
         properties: {
             title: "Terrain Steps",
             id: "terrain_steps",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "wms.nrw"
         }
     }),
@@ -252,15 +252,15 @@ const wms_nw_dgm_schummerung = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis",
+            url: "https://www.wms.nrw.de/geobasis/wms_nw_dgm-schummerung",
             params: {
-                LAYERS: "wms_nw_dgm-schummerung"
+                LAYERS: "nw_dgm-schummerung_col_ne"
             }
         }),
         properties: {
             title: "Terrain Shading",
             id: "terrain_shading",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "wms.nrw"
         }
     }),
@@ -277,15 +277,15 @@ const wms_nw_hoehenschichten = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis",
+            url: "https://www.wms.nrw.de/geobasis/wms_nw_hoehenschichten",
             params: {
-                LAYERS: "wms_nw_hoehenschichten"
+                LAYERS: "nw_hoehenschichten_rgb"
             }
         }),
         properties: {
             title: "Height",
             id: "height",
-            type: "WMS",
+            type: "WMS_tiles",
             source_domain: "wms.nrw"
         }
     }),

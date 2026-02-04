@@ -49,12 +49,14 @@ import { SaferPlacesFloodMap } from "saferplaces";
 // import { ModelClient } from "modelclient";
 import Swipe from "ol-ext/control/Swipe";
 import { ModelClient } from "mcdm";
-import DownloadLayer from "./Components/DownloadLayer";
+// import DownloadLayer from "./Components/DownloadLayer";
 import { Group } from "ol/layer";
 import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
 import { FaInfo } from "react-icons/fa";
+
+import { LayerDownload } from "layerdownload";
 
 
 export function MapApp() {
@@ -308,7 +310,8 @@ export function MapApp() {
                                     .
                                 </Text>
                             </Box>
-                            {downloadIsActive && <DownloadLayer mapID={MAP_ID1} />}
+                            {/* {downloadIsActive && <DownloadLayer mapID={MAP_ID1} />} */}
+                            {downloadIsActive && <LayerDownload mapID={MAP_ID1} intl={intl} isOpen={downloadIsActive} onClose={() => setDownloadIsActive(false)}/>}
                         </MapAnchor>
                         {/* zoom to municipalities */}
                         <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>

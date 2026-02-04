@@ -32,6 +32,7 @@
         "navbar": "workspace:^",
         "taxonomy": "workspace:^",
         "saferplaces": "workspace:^",
-        "mcdm": "workspace:^"
+        "mcdm": "workspace:^",
+        "layerdownload": "workspace:^"
     }
 }

@@ -35,6 +35,7 @@
         "react-icons": "catalog:",
         "react-use": "catalog:",
         "navbar": "workspace:^",
-        "taxonomy": "workspace:^"
+        "taxonomy": "workspace:^",
+        "layerdownload": "workspace:^"
     }
 }
