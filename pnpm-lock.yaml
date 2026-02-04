@@ -560,6 +560,9 @@ importers:
       highcharts-react-official:
         specifier: ^3.2.1
         version: 3.2.3(highcharts@12.4.0)(react@19.2.0)
+      layerdownload:
+        specifier: workspace:^
+        version: link:../../../packages/layerdownload
       navbar:
         specifier: workspace:^
         version: link:../../../packages/navbar
@@ -722,6 +725,9 @@ importers:
       featureinfo:
         specifier: workspace:^
         version: link:../../../packages/featureinfo
+      layerdownload:
+        specifier: workspace:^
+        version: link:../../../packages/layerdownload
       navbar:
         specifier: workspace:^
         version: link:../../../packages/navbar
