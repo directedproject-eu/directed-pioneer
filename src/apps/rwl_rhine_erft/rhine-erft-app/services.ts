@@ -177,9 +177,9 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis",
+            url: "https://www.wms.nrw.de/geobasis/wms_nw_dhm-uebersicht",
             params: {
-                LAYERS: "wms_nw_dhm-ubersicht"
+                LAYERS: "nw_dhm-uebersicht_planung_2024-2028"
             }
         }),
         properties: {
