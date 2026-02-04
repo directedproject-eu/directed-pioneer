@@ -74,7 +74,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 }));
 
             setVisibleLayers(vis);
-            console.log("Visible layers updated:", vis);
+            // console.log("Visible layers updated:", vis);
         };
 
         updateVisibleLayers();
@@ -114,11 +114,11 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
         try {
             const properties = layer.olLayer?.getProperties();
             const type = properties?.type;
-            console.log("Downloading layer:", layer.id, properties, type);
+            // console.log("Downloading layer:", layer.id, properties, type);
 
             if (type === "GeoTIFF") {
                 const source = layer.olLayer?.getSource() as GeoTIFF;
-                console.log("GeoTIFF source:", source);
+                // console.log("GeoTIFF source:", source);
                 if (source && source["key_"]) {
                     window.open(source["key_"], "_blank");
                 }
@@ -136,7 +136,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     a.remove();
                 }
             } else if (type === "WMS_features") {
-                console.log("Layer to download: ", layer);
+                // console.log("Layer to download: ", layer);
                 const layerIdFromParams = properties.source?.params_?.LAYERS;
                 const urlFromParams = properties.source?.urls[0];
 
@@ -158,7 +158,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 link.click();
                 link.remove();
             } else if (type === "WMS_tiles") {
-                console.log("Layer to download: ", layer);
+                // console.log("Layer to download: ", layer);
                 let layerIdFromParams = properties.source?.params_?.LAYERS;
                 const urlFromParams = properties.source?.urls[0];
 
@@ -166,7 +166,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     layerIdFromParams = "directed:" + layerIdFromParams;
                 }
 
-                console.log("urlFromParams:", urlFromParams);
+                // console.log("urlFromParams:", urlFromParams);
 
                 const mapExtent = mapModel?.map?.initialExtent;
                 const resolution = mapModel?.map?.resolution;
@@ -203,7 +203,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     format: "image/tiff"
                 });
                 const url = `${urlFromParams}?${params.toString()}`;
-                console.log("Forced WMS download URL:", url);
+                // console.log("Forced WMS download URL:", url);
 
                 const response = await fetch(url);
                 if (!response.ok) throw new Error("WMS request failed");

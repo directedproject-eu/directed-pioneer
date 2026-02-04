@@ -59,7 +59,6 @@ import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
 import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
-// import DownloadLayer from "./components/DownloadLayer";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
 
@@ -393,7 +392,6 @@ export function MapApp() {
                                             />
                                         </FormControl>
                                     </Box>
-                                    {/* {downloadIsActive && <DownloadLayer mapID={MAP_ID} />} */}
                                     {downloadIsActive && <LayerDownload mapID={MAP_ID} intl={intl} isOpen={downloadIsActive} onClose={() => setDownloadIsActive(false)} />}
                                 </MapAnchor>
 

@@ -44,7 +44,6 @@ import Layer from "ol/layer/Layer";
 import { Legend } from "@open-pioneer/legend";
 import Swipe from "ol-ext/control/Swipe";
 import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
-// import DownloadLayer from "./Components/DownloadLayer";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 
@@ -236,7 +235,6 @@ export function MapApp() {
                                     />
                                 </FormControl>
                             </Box>
-                            {/* {downloadIsActive && <DownloadLayer mapID={MAP_ID} />} */}
                             {downloadIsActive && (
                                 <LayerDownload
                                     mapID={MAP_ID}
