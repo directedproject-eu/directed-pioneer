@@ -36,6 +36,7 @@ export class ForecastServiceImpl implements ForecastService {
             //DKSS sea level mean deviation
             this.layer = new WebGLTileLayer({
                 source: this.updateSource(""),
+                opacity: 0.6, // Set opactiy directly in the WebGLTileLayer instance
                 style: {
                     color: this.createColorGradient([0, 100], "layer")
                 },
@@ -44,6 +45,7 @@ export class ForecastServiceImpl implements ForecastService {
             //Harmonie total precip
             this.total_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
+                opacity: 0.6,
                 style: {
                     color: this.createColorGradient([0, 100], "total_precip")
                 },
@@ -52,6 +54,7 @@ export class ForecastServiceImpl implements ForecastService {
             //Harmonie precipitation rate
             this.rate_precip = new WebGLTileLayer({
                 source: this.updateSource(""),
+                opacity: 0.6,
                 style: {
                     color: this.createColorGradient([0, 100], "rate_precip")
                 },
@@ -104,7 +107,22 @@ export class ForecastServiceImpl implements ForecastService {
                             },
                             isBaseLayer: false,
                             visible: false
-                        })
+                        }), 
+                        // uncomment when service ready/confirmed 
+                        // new SimpleLayer({
+                        //     id: "wind_speed_forecast",
+                        //     title: "Wind Speed Forecasts",
+                        //     description:
+                        //         "Precipitation rate forecasts from the HARMONIE weather model via DMI. Forecasts available for 3 days at hourly intervals.",
+                        //     olLayer: this.rate_precip,
+                        //     attributes: {
+                        //         "legend": {
+                        //             Component: PrecipitationRateLegend
+                        //         }
+                        //     },
+                        //     isBaseLayer: false,
+                        //     visible: false
+                        // })
                     ]
                 })
             );
@@ -165,11 +183,11 @@ export class ForecastServiceImpl implements ForecastService {
 
     private precipRateColorMap = [
         { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
-        { value: 0.015, color: "#af7ab3", label: "0.015", opacity: 0.20 },
-        { value: 0.03, color: "#95649a", label: "0.030", opacity: 0.20 },
-        { value: 0.045, color: "#885889", label: "0.045", opacity: 0.20 },
-        { value: 0.06, color: "#674571", label: "0.06", opacity: 0.20 },
-        { value: 0.075, color: "#503752", label: "0.075", opacity: 0.20 }
+        { value: 0.015, color: "#af7ab3", label: "0.015" },
+        { value: 0.03, color: "#95649a", label: "0.030" },
+        { value: 0.045, color: "#885889", label: "0.045" },
+        { value: 0.06, color: "#674571", label: "0.06" },
+        { value: 0.075, color: "#503752", label: "0.075" }
     ];
 
     private seaLevelColorMap = [
