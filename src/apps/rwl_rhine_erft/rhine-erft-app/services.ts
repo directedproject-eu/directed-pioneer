@@ -8,6 +8,9 @@ import { WmsLegend } from "./Components/Legends/WMSLegend";
 
 export const MAP_ID = "main";
 
+const description_bkg = `The layer is provided by the Federal Agency for Cartography and Geodesy (BKG) and shows simulation results of potential heavy rainfall scenarios. More information can be found online via https://gdz.bkg.bund.de/index.php/default/wms-hinweiskarte-starkregengefahren-wms-starkregen.html.`;
+const description_geobasis_nrw = `The layer is provided by the District Council Cologne. More information can be found online via https://www.bezreg-koeln.nrw.de/geobasis-nrw/webdienste/geodatendienste.`;
+
 const Basemap = new SimpleLayer({
     title: "OpenStreetMap",
     olLayer: new TileLayer({
@@ -25,6 +28,7 @@ const Basemap = new SimpleLayer({
 const starkregen_nw_geschw_agw = new SimpleLayer({
     title: "Heavy rain - flow velocity (extraordinary)",
     visible: false,
+    description: description_bkg,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -50,6 +54,7 @@ const starkregen_nw_geschw_agw = new SimpleLayer({
 const starkregen_nw_geschw_extrem = new SimpleLayer({
     title: "Heavy rain - flow velocity (extreme)",
     visible: false,
+    description: description_bkg,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -61,7 +66,7 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
             title: "NW Geschwindigkeiten Extrem",
             id: "nw_geschw_extrem",
             type: "WMS_tiles",
-            source_domain: "geodatenzentrum"
+            source_domain: "geodatenzentrum",
         }
     }),
     attributes: {
@@ -75,6 +80,7 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
 const starkregen_nw_tiefe_agw = new SimpleLayer({
     title: "Heavy rain - water depth (extraordinary)",
     visible: false,
+    description: description_bkg,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -100,6 +106,7 @@ const starkregen_nw_tiefe_agw = new SimpleLayer({
 const starkregen_nw_tiefe_extrem = new SimpleLayer({
     title: "Heavy rain - water depth (extreme)",
     visible: true,
+    description: description_bkg,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://sgx.geodatenzentrum.de/wms_starkregen",
@@ -175,6 +182,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
 const wms_nw_dhm_ubersicht = new SimpleLayer({
     title: "Digital Terrain Model - overview",
     visible: false,
+    description: description_geobasis_nrw,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis/wms_nw_dhm-uebersicht",
@@ -200,6 +208,7 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
 const wms_nw_gelaendeneigung = new SimpleLayer({
     title: "Terrain Slope",
     visible: false,
+    description: description_geobasis_nrw,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendeneigung",
@@ -225,6 +234,7 @@ const wms_nw_gelaendeneigung = new SimpleLayer({
 const wms_nw_gelaendestufen = new SimpleLayer({
     title: "Terrain Steps",
     visible: false,
+    description: description_geobasis_nrw,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendestufen",
@@ -250,6 +260,7 @@ const wms_nw_gelaendestufen = new SimpleLayer({
 const wms_nw_dgm_schummerung = new SimpleLayer({
     title: "Terrain Shading",
     visible: false,
+    description: description_geobasis_nrw,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis/wms_nw_dgm-schummerung",
@@ -275,6 +286,7 @@ const wms_nw_dgm_schummerung = new SimpleLayer({
 const wms_nw_hoehenschichten = new SimpleLayer({
     title: "Digital Terrain Model - elevation layers",
     visible: false,
+    description: description_geobasis_nrw,
     olLayer: new TileLayer({
         source: new TileWMS({
             url: "https://www.wms.nrw.de/geobasis/wms_nw_hoehenschichten",
