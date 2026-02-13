@@ -23,7 +23,7 @@ const Basemap = new SimpleLayer({
 
 //starkregen layers
 const starkregen_nw_geschw_agw = new SimpleLayer({
-    title: "NW Geschwindigkeiten AGW",
+    title: "Heavy rain - flow velocity (extraordinary)",
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
@@ -48,7 +48,7 @@ const starkregen_nw_geschw_agw = new SimpleLayer({
 });
 
 const starkregen_nw_geschw_extrem = new SimpleLayer({
-    title: "NW Geschwindigkeiten Extrem",
+    title: "Heavy rain - flow velocity (extreme)",
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
@@ -73,7 +73,7 @@ const starkregen_nw_geschw_extrem = new SimpleLayer({
 });
 
 const starkregen_nw_tiefe_agw = new SimpleLayer({
-    title: "NW Tiefe AGW",
+    title: "Heavy rain - water depth (extraordinary)",
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
@@ -98,7 +98,7 @@ const starkregen_nw_tiefe_agw = new SimpleLayer({
 });
 
 const starkregen_nw_tiefe_extrem = new SimpleLayer({
-    title: "NW Tiefe Extrem",
+    title: "Heavy rain - water depth (extreme)",
     visible: true,
     olLayer: new TileLayer({
         source: new TileWMS({
@@ -173,7 +173,7 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
 
 //district gov köln layers
 const wms_nw_dhm_ubersicht = new SimpleLayer({
-    title: "DHM Overview",
+    title: "Digital Terrain Model - overview",
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
@@ -198,7 +198,7 @@ const wms_nw_dhm_ubersicht = new SimpleLayer({
 });
 
 const wms_nw_gelaendeneigung = new SimpleLayer({
-    title: "Terrain Snice",
+    title: "Terrain Slope",
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
@@ -273,7 +273,7 @@ const wms_nw_dgm_schummerung = new SimpleLayer({
 });
 
 const wms_nw_hoehenschichten = new SimpleLayer({
-    title: "Height",
+    title: "Digital Terrain Model - elevation layers",
     visible: false,
     olLayer: new TileLayer({
         source: new TileWMS({
