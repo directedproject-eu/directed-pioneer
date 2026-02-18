@@ -54,6 +54,8 @@ import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
 import { FaInfo } from "react-icons/fa";
+import { ChakraProvider } from "@open-pioneer/chakra-integration";
+import { theme } from "theme";
 
 import { LayerDownload } from "layerdownload";
 
@@ -253,13 +255,15 @@ export function MapApp() {
                                 maxHeight={500}
                                 overflow="auto"
                             >
-                                <Toc
-                                    mapId={MAP_ID1}
-                                    showTools={true}
-                                    collapsibleGroups={true}
-                                    initiallyCollapsed={true}
-                                    showBasemapSwitcher={false}
-                                />
+                                <ChakraProvider theme={theme}>
+                                    <Toc
+                                        mapId={MAP_ID1}
+                                        showTools={true}
+                                        collapsibleGroups={true}
+                                        initiallyCollapsed={true}
+                                        showBasemapSwitcher={false}
+                                    />
+                                </ChakraProvider>
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
