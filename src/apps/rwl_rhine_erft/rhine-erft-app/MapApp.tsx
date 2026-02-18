@@ -46,6 +46,8 @@ import Swipe from "ol-ext/control/Swipe";
 import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
+import { ChakraProvider } from "@open-pioneer/chakra-integration";
+import { theme } from "theme"; 
 
 export function MapApp() {
     const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -221,7 +223,9 @@ export function MapApp() {
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                             >
-                                <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
+                                <ChakraProvider theme={theme}>
+                                    <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
+                                </ChakraProvider>
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">

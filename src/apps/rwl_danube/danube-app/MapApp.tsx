@@ -61,6 +61,8 @@ import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
+import { ChakraProvider } from "@open-pioneer/chakra-integration";
+import { theme } from "theme"; 
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -373,13 +375,15 @@ export function MapApp() {
                                         aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                         marginBottom="10px"
                                     >
-                                        <Toc
-                                            mapId={MAP_ID}
-                                            showTools={true}
-                                            collapsibleGroups={true}
-                                            initiallyCollapsed={true}
-                                            showBasemapSwitcher={false}
-                                        />
+                                        <ChakraProvider theme={theme}>
+                                            <Toc
+                                                mapId={MAP_ID}
+                                                showTools={true}
+                                                collapsibleGroups={true}
+                                                initiallyCollapsed={true}
+                                                showBasemapSwitcher={false}
+                                            />
+                                        </ChakraProvider>
                                         <FormControl>
                                             <FormLabel mt={2}>
                                                 <Text as="b">

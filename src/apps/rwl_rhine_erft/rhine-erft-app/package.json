@@ -29,6 +29,7 @@
         "react-use": "catalog:",
         "navbar": "workspace:^",
         "featureinfo": "workspace:^",
-        "layerdownload": "workspace:^"
+        "layerdownload": "workspace:^", 
+        "theme": "workspace:^"
     }
 }
