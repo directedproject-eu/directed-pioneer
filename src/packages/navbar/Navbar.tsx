@@ -279,6 +279,15 @@ const NAV_ITEMS: Array<NavItem> = [
                 href: "https://github.com/Skadesokonomi"
             }
         ]
+    }, 
+    {
+        label: "Getting Started",
+        children: [
+            {
+                label: "User Manual",
+                href: "https://directed-eu.gitbook.io/data-fabric-manual/"
+            }
+        ]
     }
 ];
 
