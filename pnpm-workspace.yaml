@@ -127,9 +127,28 @@ overrides:
   "esbuild@<0.25.0": ">=0.25.0"
   # https://github.com/advisories/GHSA-968p-4wvh-cqc8
   "@babel/runtime": ">=7.26.10"
+  # https://github.com/advisories/GHSA-7h2j-956f-4vf2
+  "@isaacs/brace-expansion@<=5.0.0": "^5.0.1"
+  # https://github.com/advisories/GHSA-38c4-r59v-3vqw
+  "markdown-it@>=13.0.0 <14.1.1": "^14.1.1"
+
+# Configure a release cooldown
+minimumReleaseAge: 4320 # 3 days in minutes
+minimumReleaseAgeExclude:
+  - "@open-pioneer/*"
+  - "@conterra/*"
+  - "@isaacs/brace-expansion@5.0.1" # see overrides
 
 auditConfig:
-  ignoreCves: []
+  ignoreCves:
+    # This affects ajv, which is a transitive dependency of eslint.
+    # Eslint depends on ajv@v6, and an update to v8 might not be trivial.
+    # Only dev dependencies are (potentially) affected.
+    # https://github.com/advisories/GHSA-2g4f-4pwh-qvx6
+    - CVE-2025-69873
+
+    # See CVE CVE-2025-69873
+    - CVE-2026-26996
 
 patchedDependencies:
   # Ensure valids ids for aria-activedescendant and fix touch events in shadow DOM
