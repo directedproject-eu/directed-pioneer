@@ -19,10 +19,16 @@ import {
     useDisclosure,
     VStack,
     Flex,
-    Text
+    Text, 
+    Popover, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverTrigger,
+    PopoverArrow, 
+    IconButton
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
-import { FaWater } from "react-icons/fa";
+import { FaWater, FaInfo } from "react-icons/fa";
 import { useService } from "open-pioneer:react-hooks";
 import { FloodMapService } from "./FloodMapService";
 import { TaxonomyInfo } from "taxonomy";
@@ -704,9 +710,25 @@ export function SaferPlacesFloodMap() {
                                 </FormControl>
 
                                 {model === "safer_rain" && (
-                                    <FormControl isRequired>
+                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                        <PopoverTrigger>
+                                            <IconButton
+                                                marginLeft="2px"
+                                                size="s"
+                                                aria-label="Info"
+                                                icon={<FaInfo />}
+                                                variant="ghost"
+                                                color="black" />
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverBody overflow="auto">
+                                                {intl.formatMessage({ id: "info_icon_saferrain.description" })}
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    </Popover><FormControl isRequired>
                                         <FormLabel padding={0} htmlFor="rain">
-                                            Rain Intensity (mm){" "}
+                                                    Rain Intensity (mm){" "}
                                         </FormLabel>
                                         <Input
                                             type="text"
@@ -714,15 +736,30 @@ export function SaferPlacesFloodMap() {
                                             value={rainIntensity}
                                             onChange={handleRainIntensityChange}
                                             placeholder="Input Value, e.g. 10"
-                                            variant="outline"
-                                        />
-                                    </FormControl>
+                                            variant="outline" />
+                                    </FormControl></>
                                 )}
 
                                 {model === "safer_coast" && (
-                                    <FormControl isRequired>
+                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                        <PopoverTrigger>
+                                            <IconButton
+                                                marginLeft="2px"
+                                                size="s"
+                                                aria-label="Info"
+                                                icon={<FaInfo />}
+                                                variant="ghost"
+                                                color="black" />
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverBody overflow="auto">
+                                                {intl.formatMessage({ id: "info_icon_safercoast.description" })}
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    </Popover><FormControl isRequired>
                                         <FormLabel padding={0} htmlFor="esl">
-                                            Extreme Sea Level (m)
+                                                    Extreme Sea Level (m)
                                         </FormLabel>
                                         <Input
                                             type="number"
@@ -730,9 +767,8 @@ export function SaferPlacesFloodMap() {
                                             value={extremeSeaLevel === null ? "" : extremeSeaLevel}
                                             onChange={handleESLChange}
                                             placeholder="Input Value, e.g. 1"
-                                            variant="outline"
-                                        />
-                                    </FormControl>
+                                            variant="outline" />
+                                    </FormControl></>
                                 )}
                                 {generationStatus && <p>Status: {generationStatus}</p>}
                                 {error && <p style={{ color: "red" }}>Error: {error}</p>}

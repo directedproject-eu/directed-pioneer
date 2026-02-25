@@ -5,3 +5,7 @@ messages:
     text3: "with the SaferPlaces model"
     keyword1: "pluvial"
     keyword2: "coastal flooding"
+  info_icon_safercoast:
+    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."
+  info_icon_saferrain:
+    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."

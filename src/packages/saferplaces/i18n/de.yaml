@@ -5,3 +5,7 @@ messages:
     text3: "mit dem SaferPlaces Modell"
     keyword1: "Starkregenereignissen"
     keyword2: "Küstenüberflutungen"
+  info_icon_safercoast:
+    description: "DE: Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."
+  info_icon_saferrain:
+    description: "DE: Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."

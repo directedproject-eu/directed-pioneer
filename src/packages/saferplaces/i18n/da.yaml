@@ -5,3 +5,7 @@ messages:
     text3: "med SaferPlaces-modellen"
     keyword1: "regn"
     keyword2: "kystnære oversvømmelser"
+  info_icon_safercoast:
+    description: "DA: Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."
+  info_icon_saferrain:
+    description: "DA: Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."
