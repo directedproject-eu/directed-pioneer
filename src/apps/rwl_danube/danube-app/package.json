@@ -37,6 +37,7 @@
         "navbar": "workspace:^",
         "taxonomy": "workspace:^",
         "layerdownload": "workspace:^", 
-        "theme": "workspace:^"
+        "theme": "workspace:^", 
+        "featureinfo": "workspace:^"
     }
 }
