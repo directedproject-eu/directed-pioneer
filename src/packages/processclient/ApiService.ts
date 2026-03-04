@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
+
 import { DeclaredService } from "@open-pioneer/runtime";
 
 
@@ -8,11 +9,17 @@ export interface JobStatusResponse {
     status?: "accepted" | "running" | "successful" | "failed" | "dismissed"; // Status is optional for synchronous responses
     message?: string;
     presigned_url?: string;
-    outputs?: Record<string, { href: string }>;
+    outputs?: {
+        [key: string]: {
+            href: string; //the URL to the output
+            title?: string;
+            type?: string;
+        };
+    };
 }
 
 export interface ApiService extends DeclaredService<"app.ApiService"> {
-    executeProcess(url: string, payload: any, sync?: boolean): Promise<Response>;
+    executeProcess(url: string, payload: Record<string, unknown>, sync?: boolean): Promise<Response>;
     pollJobStatus(
         jobStatusUrl: string, 
         onUpdate: (status: JobStatusResponse) => void, 
@@ -22,7 +29,7 @@ export interface ApiService extends DeclaredService<"app.ApiService"> {
 
 export class ApiServiceImpl implements ApiService {
     // Executes a process and returns either result (sync) or a job URL (async)
-    async executeProcess(url: string, payload: any, sync: boolean = true): Promise<Response> {
+    async executeProcess(url: string, payload: Record<string, unknown>, sync: boolean = true): Promise<Response> {
         const headers: HeadersInit = { "Content-Type": "application/json" };
         headers["Prefer"] = sync ? "respond-sync" : "respond-async";
 

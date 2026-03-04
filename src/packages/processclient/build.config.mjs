@@ -5,8 +5,7 @@ import { defineBuildConfig } from "@open-pioneer/build-support";
 export default defineBuildConfig({
     services: {
         ApiServiceImpl: {
-            provides: ["processclient.ApiService"],
+            provides: ["app.ApiService"],
         }
-    },
-    i18n: ["en", "de", "da"],
+    }
 });
