@@ -31,39 +31,26 @@ import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater, FaInfo } from "react-icons/fa";
 import { useService } from "open-pioneer:react-hooks";
 import { FloodMapService } from "./FloodMapService";
+import { ApiService, JobStatusResponse } from "processclient";
 import { TaxonomyInfo } from "taxonomy";
 import { useIntl } from "open-pioneer:react-hooks";
 
-//interface for the job status response
-interface JobStatusResponse {
-    jobID?: string; //jobID option, might not be present for synchronous responses ?
-    status?: "accepted" | "running" | "successful" | "failed" | "dismissed"; //status is optional for synchronous responses
-    message?: string;
-    progress?: number; //optional
-    outputs?: {
-        [key: string]: {
-            href: string; //the URL to the output s3:// etc
-            title?: string;
-            type?: string;
-        };
-    };
-    presigned_url?: string;
-}
 
-//define interfaces for the inputs
+// --- Interfaces ---
+
 interface SaferRainInputs {
     dem: string;
     rain: string;
     water: string;
     presigned_url_out: boolean;
-    mode: string; // lambda for async default batch for sync
+    mode: string; // Lambda for async default batch for sync
     sync: boolean;
     user: string;
     token: string;
     debug: boolean;
 }
 
-interface SaferRainPayload {
+type SaferRainPayload = {
     inputs: SaferRainInputs;
 }
 
@@ -79,33 +66,43 @@ interface SaferCoastInputs {
     debug: boolean;
 }
 
-interface SaferCoastPayload {
+type SaferCoastPayload = {
     inputs: SaferCoastInputs;
 }
 
-//union type for all possible payloads
+// Union type for all possible payloads
 type ProcessExecutionPayload = SaferRainPayload | SaferCoastPayload;
 
 export function SaferPlacesFloodMap() {
+    // --- UI States ---
     const [selectedLocation, setSelectedLocation] = useState<string>("");
     const [rainIntensity, setRainIntensity] = useState<string>("");
     const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null);
-    // const [barrierFile, setBarrierFile] = useState<File | null>(null); //file object or null
+    // const [barrierFile, setBarrierFile] = useState<File | null>(null); // File object or null
     const [model, setModel] = useState<string>("");
     const [generationStatus, setGenerationStatus] = useState<string>("");
     const [downloadLink, setDownloadLink] = useState<string>("");
     const [error, setError] = useState<string>("");
-    const [jobId, setJobId] = useState<string | null>(null); //to store the job ID
-    const [pollingIntervalId, setPollingIntervalId] = useState<number | null>(null); //to store the interval ID for clearing
-    const { isOpen, onOpen, onClose } = useDisclosure(); //for model dialog
-    const floodMapService = useService<FloodMapService>("app.FloodMapService"); // FloodMapService to add new layer to TOC
-    // states for user and token input
+    const [jobId, setJobId] = useState<string | null>(null); 
+    // States for user and token input
     const [userInput, setUserInput] = useState<string>("");
     const [tokenInput, setTokenInput] = useState<string>("");
     const [tokenSubmitted, setTokenSubmitted] = useState(false);
-    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-    const intl = useIntl();
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
 
+    const intl = useIntl();
+    const { isOpen, onOpen, onClose } = useDisclosure(); // For model dialog
+
+    // --- Services ---
+    const floodMapService = useService<FloodMapService>("app.FloodMapService"); // FloodMapService to add new layer to TOC
+    const apiService = useService<ApiService>("app.ApiService"); // API service for OGC processes 
+
+    // --- API Process URLs ---
+    const API_BASE_URL = "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"; // SaferPlaces pygeoapi
+    const API_PROCESS_RAIN_URL = `${API_BASE_URL}/processes/safer-rain-process/execution`;
+    const API_PROCESS_COAST_URL = `${API_BASE_URL}/processes/safer-coast-process/execution`;
+
+    // Pre-determined location DEM files
     const locationDemFiles: Record<string, { dem: string; seamask: string }> = {
         Vienna: {
             dem: "s3://s3-directed/api_data/c5298b37096499d3c8bcfc49e449b393/dem_building.tif",
@@ -117,10 +114,7 @@ export function SaferPlacesFloodMap() {
         }
     };
 
-    const API_BASE_URL = "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"; //saferplaces pygeoapi
-    const API_PROCESS_RAIN_URL = `${API_BASE_URL}/processes/safer-rain-process/execution`;
-    const API_PROCESS_COAST_URL = `${API_BASE_URL}/processes/safer-coast-process/execution`;
-
+    // --- Input Handlers ---
     const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedLocation(event.target.value);
     };
@@ -130,7 +124,7 @@ export function SaferPlacesFloodMap() {
     };
 
     const handleESLChange = (event: ChangeEvent<HTMLInputElement>) => {
-        //if input is empty, set state to null, otherwise parse to float
+        // If input is empty, set state to null, otherwise parse to float
         const value = event.target.value;
         setExtremeSeaLevel(value === "" ? null : parseFloat(value));
     };
@@ -146,135 +140,41 @@ export function SaferPlacesFloodMap() {
     // const handleBarrierFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     const files = event.target.files;
 
-    //     if (files && files.length > 0) {
-    //         const selectedFile = files[0];
-    //         if (selectedFile) {
-    //             setBarrierFile(selectedFile);
-    //         } else {
-    //             setBarrierFile(null); //if files[0] is undefined
-    //         }
-    //     } else {
-    //         setBarrierFile(null); //if no file is selected
-    //     }
-    // };
-
-    const pollJobStatus = async (jobStatusUrl: string) => {
-        const maxAttempts = 60; //poll for up to 5 minutes (60 * 5 seconds)
-        let attempts = 0;
-
-        //clear any existing interval to prevent multiple polling loops
-        if (pollingIntervalId) {
-            clearInterval(pollingIntervalId);
-            setPollingIntervalId(null);
+    const processFinalResult = (data: JobStatusResponse) => {
+        let finalDownloadUrl = "";
+        const generatedMapTitle = `${selectedLocation} Flood Map (${model} - ${new Date().toLocaleTimeString()})`;
+    
+        // Logic specific to SaferPlaces process(s)
+        if (data.presigned_url) {
+            finalDownloadUrl = data.presigned_url;
+        } else if (data.outputs?.water_depth_file) {
+            const s3Url = data.outputs.water_depth_file.href;
+            finalDownloadUrl = s3Url.startsWith("s3://") 
+                ? s3Url.replace("s3://", "https://s3.amazonaws.com/") 
+                : s3Url;
         }
+    
+        if (finalDownloadUrl) {
+            setDownloadLink(finalDownloadUrl); // Update the state for the download button
 
-        const intervalId = window.setInterval(async () => {
-            if (attempts >= maxAttempts) {
-                clearInterval(intervalId);
-                setGenerationStatus("Job polling timed out.");
-                setError("Flood map generation took too long or timed out.");
-                setJobId(null);
-                setPollingIntervalId(null);
-                return;
+            if (!floodMapService) {
+                console.error(
+                    "ERROR: app.FloodMapService is not available. Check build config or json."
+                );
+                setGenerationStatus(
+                    "Success, but failed to add to map (service missing)."
+                );
+            } else {
+                // Call the floodmapservice to add the layer to the TOC and map
+                floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
+                setGenerationStatus(
+                    `Flood map generated successfully, added to Operational Layers`
+                );
             }
-
-            try {
-                const response = await fetch(jobStatusUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const jobStatus: JobStatusResponse = await response.json();
-                console.log(`Job Status (${jobStatus.jobID}):`, jobStatus.status, jobStatus);
-
-                setGenerationStatus(`Status: ${jobStatus.status}`);
-
-                if (jobStatus.status === "successful") {
-                    clearInterval(intervalId);
-                    setGenerationStatus("Flood map generated successfully!");
-                    setJobId(null);
-                    setPollingIntervalId(null);
-
-                    // --- NEW TOC LOGIC START ---
-                    let finalDownloadUrl = "";
-                    const generatedMapTitle = `${selectedLocation} Flood Map (${model} - ${new Date().toLocaleTimeString()})`;
-
-                    // Prioritize presigned_url
-                    if (jobStatus.presigned_url) {
-                        finalDownloadUrl = jobStatus.presigned_url;
-                    } else if (jobStatus.outputs && jobStatus.outputs.water_depth_file) {
-                        // Fallback to water_depth_file if presigned_url isn't directly present
-                        const s3OutputUrl = jobStatus.outputs.water_depth_file.href;
-                        // S3 URLs need conversion if directly from S3 paths
-                        finalDownloadUrl = s3OutputUrl.startsWith("s3://")
-                            ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                            : s3OutputUrl; // use as-is if already a direct URL
-                    }
-
-                    if (finalDownloadUrl) {
-                        setDownloadLink(finalDownloadUrl); // Update the state for the download button
-
-                        if (!floodMapService) {
-                            console.error(
-                                "ERROR: app.FloodMapService is not available. Check build config or json."
-                            );
-                            setGenerationStatus(
-                                "Success, but failed to add to map (service missing)."
-                            );
-                        } else {
-                            // CALL THE NEW SERVICE TO ADD THE LAYER to the map and TOC
-                            floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
-                            setGenerationStatus(
-                                `Flood map generated successfully, added to Operational Layers`
-                            );
-                        }
-                    } else {
-                        setError("Download URL not found in the API response.");
-                        setGenerationStatus("Successful, but no URL found.");
-                    }
-                    // --- NEW TOC LOGIC END ---
-
-                    //// OLD WITHOUT ADDING LAYER TO TOC ////
-                    // //prioritize presigned_url
-                    // if (jobStatus.presigned_url) {
-                    //     setDownloadLink(jobStatus.presigned_url);
-                    // } else if (jobStatus.outputs && jobStatus.outputs.water_depth_file) {
-                    //     //fallback to water_depth_file if presigned_url isn't directly present
-                    //     const s3OutputUrl = jobStatus.outputs.water_depth_file.href;
-                    //     //S3 URLs need conversion if directly from S3 paths
-                    //     const downloadUrl = s3OutputUrl.startsWith("s3://")
-                    //         ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                    //         : s3OutputUrl; //use as-is if already a direct URL
-                    //     setDownloadLink(downloadUrl);
-                    // } else {
-                    //     setError("Download URL not found in the API response.");
-                    // }
-                    //// END OLD NO TOC ////
-                } else if (jobStatus.status === "failed" || jobStatus.status === "dismissed") {
-                    clearInterval(intervalId);
-                    setError(
-                        `Flood map generation failed: ${jobStatus.message || "Unknown error"}`
-                    );
-                    setGenerationStatus("Failed.");
-                    setJobId(null);
-                    setPollingIntervalId(null);
-                    console.log(`DEBUG FAILURE: Job failed with status: ${jobStatus.status}`);
-                }
-            } catch (err: unknown) {
-                clearInterval(intervalId);
-                if (err instanceof Error) {
-                    setError(`An error occurred while polling the job status: ${err.message}`);
-                } else {
-                    setError(`An unknown error occurred while polling the job status.`);
-                }
-                setGenerationStatus("Failed.");
-                setJobId(null);
-                setPollingIntervalId(null);
-                console.log("DEBUG POLLING ERROR: Fetching job status failed.");
-            }
-            attempts++;
-        }, 5000); //poll every 5 seconds
-
-        setPollingIntervalId(intervalId);
+        } else {
+            setError("Download URL not found in the API response.");
+            setGenerationStatus("Successful, but no URL found.");
+        }
     };
 
     const handleGenerateMap = async () => {
@@ -282,12 +182,7 @@ export function SaferPlacesFloodMap() {
         setError("");
         setDownloadLink("");
         setJobId(null);
-        if (pollingIntervalId) {
-            clearInterval(pollingIntervalId); //clear any existing polling
-            setPollingIntervalId(null);
-        }
 
-        // let requestDataPayload = {};
         let requestDataPayload: ProcessExecutionPayload | null = null;
         let apiUrl = "";
         const outputRain = `watermap_rain_${Date.now()}.tif`;
@@ -309,8 +204,8 @@ export function SaferPlacesFloodMap() {
             requestDataPayload = {
                 inputs: {
                     dem: selectedDemFile,
-                    rain: rainIntensity, //parse string to return integer, even with leading zeros
-                    water: `s3://${s3Bucket}/api_data/${outputRain}`, //construct S3 output
+                    rain: rainIntensity, // Parse string to return integer, even with leading zeros
+                    water: `s3://${s3Bucket}/api_data/${outputRain}`, // Construct S3 output
                     mode: "batch",
                     presigned_url_out: true,
                     sync: true,
@@ -323,7 +218,7 @@ export function SaferPlacesFloodMap() {
             if (extremeSeaLevel === null || extremeSeaLevel <= 0) {
                 setError("For the Safer Coast Model, ESL must be a positive number");
                 setGenerationStatus("Failed");
-                return; //exit if validation fails
+                return; // Exit if validation fails
             }
             apiUrl = API_PROCESS_COAST_URL;
             requestDataPayload = {
@@ -331,7 +226,7 @@ export function SaferPlacesFloodMap() {
                     file_dem: selectedDemFile,
                     file_seamask: selectedSeamaskFile!,
                     barrier:
-                        // "s3://s3-disasterbrain/api_data/09d06de7c80ba18d0a099a05b3cedc8f/barrier.shp", //from jupyter
+                        // "s3://s3-disasterbrain/api_data/09d06de7c80ba18d0a099a05b3cedc8f/barrier.shp", // From jupyter
                         null,
                     esl: extremeSeaLevel,
                     presigned_url_out: true,
@@ -348,229 +243,56 @@ export function SaferPlacesFloodMap() {
         }
 
         try {
-            const headers: HeadersInit = {
-                "Content-Type": "application/json"
-            };
+            // Find if sync/async from payload, otherwise default true
+            const isSync = (model === "safer_rain" && "sync" in requestDataPayload.inputs) 
+                ? requestDataPayload.inputs.sync 
+                : true;
 
-            if (model === "safer_rain" && "sync" in requestDataPayload.inputs) {
-                if (requestDataPayload.inputs.sync === false) {
-                    headers["Prefer"] = "respond-async";
-                } else {
-                    headers["Prefer"] = "respond-sync";
-                }
-            } else {
-                //for safer_coast or if 'sync' property is not present (or add another model)
-                headers["Prefer"] = "respond-sync";
-            }
+            const response = await apiService.executeProcess(apiUrl, requestDataPayload, isSync);
 
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify(requestDataPayload)
-            });
-
-            if (response.status === 202 || response.status === 201) {
-                //asynchronous response (job created / accepted)
+            // Case 1: Asynchronous Response (201/202)
+            if (response.status === 201 || response.status === 202) {
                 const locationHeader = response.headers.get("Location");
-                console.log("debug: Location header received by JS:", locationHeader); //for async process debug
-                console.log("debug: All response headers (JS):", [...response.headers.entries()]);
-
-                let responseData: JobStatusResponse | null = null; //initialize as null
-
-                //attempt to parse response body if it's JSON and not empty,
-                //in case 201/202 also provides initial job details.
-                const contentType = response.headers.get("content-type");
-                if (contentType && contentType.includes("application/json")) {
-                    try {
-                        const textBody = await response.text();
-                        if (textBody.trim() !== "" && textBody.trim() !== "null") {
-                            responseData = JSON.parse(textBody);
-                        }
-                    } catch (jsonParseError) {
-                        console.warn(
-                            "201/202 response body was not valid JSON, proceeding with Location header.",
-                            jsonParseError
-                        );
-                        //warning, as Location header is primary for async jobs.
-                    }
-                }
-
                 if (locationHeader) {
-                    //prioritize jobID from responseData if available, else parse from Location header
-                    const receivedJobId = responseData?.jobID || locationHeader.split("/").pop();
-                    setJobId(receivedJobId || null);
-                    setGenerationStatus(
-                        `Job accepted, ID: ${receivedJobId}. Status: ${responseData?.status || "unknown"}. Polling for results...`
-                    );
-                    console.log("Job status URL:", locationHeader);
-                    pollJobStatus(locationHeader); //start polling
+                    setGenerationStatus("Job accepted. Polling for results...");
+                    
+                    await apiService.pollJobStatus(locationHeader, (statusUpdate: JobStatusResponse) => {
+                        setGenerationStatus(`Status: ${statusUpdate.status}`);
+                        
+                        if (statusUpdate.status === "successful") {
+                            processFinalResult(statusUpdate);
+                        }
+                    });
                 } else {
-                    setError(
-                        "Process accepted (201/202), but no Location header for job status found. Cannot poll."
-                    );
-                    setGenerationStatus("Failed to start polling.");
+                    throw new Error("Process accepted, but no Location header found for polling.");
                 }
-            } else if (response.ok) {
-                //this block is for synchronous 200 OK responses with a full body
-                const contentType = response.headers.get("content-type");
-                let responseBody: JobStatusResponse | null = null;
-
-                if (contentType && contentType.includes("application/json")) {
-                    try {
-                        responseBody = await response.json();
-                    } catch (jsonError: unknown) {
-                        console.error(
-                            "Failed to parse JSON for synchronous OK response:",
-                            jsonError
-                        );
-                        setError(`API returned OK status but invalid JSON response.`);
-                        setGenerationStatus("Failed.");
-                        return;
-                    }
-                } else {
-                    const rawText = await response.text();
-                    console.warn("Synchronous OK response is not JSON:", rawText);
-                    setError(
-                        `API returned OK status but non-JSON response: ${rawText.substring(0, 100)}...`
-                    );
-                    setGenerationStatus("Failed.");
-                    return;
-                }
-
-                if (!responseBody) {
-                    setError("API returned a successful status but no valid response data.");
-                    setGenerationStatus("Failed.");
-                    return;
-                }
-
-                setGenerationStatus("Flood map generated successfully!");
-                console.log("Synchronous API Response Data:", responseBody);
-
-                // --- NEW TOC LOGIC START ---
-                let finalDownloadUrl = "";
-                const generatedMapTitle = `${selectedLocation} Flood Map (${model} - ${new Date().toLocaleTimeString()})`;
-
-                // Prioritize presigned_url
-                if (responseBody.presigned_url) {
-                    finalDownloadUrl = responseBody.presigned_url;
-                } else if (responseBody.outputs && responseBody.outputs.water_depth_file) {
-                    const s3OutputUrl = responseBody.outputs.water_depth_file.href;
-                    finalDownloadUrl = s3OutputUrl.startsWith("s3://")
-                        ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                        : s3OutputUrl; // use as-is if already a direct URL
-                }
-
-                if (finalDownloadUrl) {
-                    setDownloadLink(finalDownloadUrl); // Update the state for the download button
-
-                    if (!floodMapService) {
-                        console.error(
-                            "ERROR: app.FloodMapService is not available. Check build config or json."
-                        );
-                        setGenerationStatus("Success, but failed to add to map (service missing).");
-                    } else {
-                        // CALL THE NEW SERVICE TO ADD THE LAYER to the map and TOC
-                        floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
-                        setGenerationStatus(
-                            `Flood map generation successful, added to Operational Layers.`
-                        );
-                    }
-                } else {
-                    setError("Download URL not found in the API response.");
-                    setGenerationStatus("Successful, but no URL found.");
-                }
-                // --- NEW TOC LOGIC END ---
-
-                // if (responseBody.presigned_url) {
-                //     setDownloadLink(responseBody.presigned_url);
-                // } else if (responseBody.outputs?.water_depth_file) {
-                //     const s3OutputUrl = responseBody.outputs.water_depth_file.href;
-                //     const downloadUrl = s3OutputUrl.startsWith("s3://")
-                //         ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                //         : s3OutputUrl;
-                //     setDownloadLink(downloadUrl);
-                // } else {
-                //     setError("Download URL not found in the synchronous API response.");
-                // }
-            } else {
-                //handles non-2xx failures (e.g., 4xx, 5xx)
-                const responseBody = await response.text();
-                let errorData;
-                try {
-                    errorData = JSON.parse(responseBody);
-                    setError(
-                        `API Error: ${response.status}: ${errorData.message || response.statusText}`
-                    );
-                } catch (_jsonError) {
-                    setError(
-                        `API response was not valid JSON: ${responseBody || response.statusText}`
-                    );
-                }
+            } 
+            // Case 2: Synchronous Response (200 OK)
+            else if (response.ok) {
+                const responseBody = await response.json();
+                processFinalResult(responseBody);
+            } 
+            // Case 3: Error
+            else {
+                const errorBody = await response.text();
+                setError(`API Error ${response.status}: ${errorBody}`);
                 setGenerationStatus("Failed.");
             }
+
         } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(`An error occurred during the fetch: ${err.message}`);
-            } else {
-                setError(`An unknown error occurred during the fetch.`);
-            }
+            const errorMessage = err instanceof Error ? err.message : "An error occurred during process execution.";
+            setError(errorMessage);
             setGenerationStatus("Failed.");
         }
     };
 
     const handleCredentialsSubmit = () => {
         if (tokenInput.trim() && userInput.trim()) {
-            // check for valid inputs
-            setTokenSubmitted(true); // open model config page
-            setError(""); // clean-up, clear previous errors when moving to next screen
+            // Check for valid inputs
+            setTokenSubmitted(true); // Open model config page
+            setError(""); // Clean-up, clear previous errors when moving to next screen
         }
     };
-
-    //         //old response, only sychronous no polling
-    //         const responseBody = await response.text();
-    //         console.log("Response status:", response.status);
-    //         console.log("Raw Response Body:", responseBody);
-
-    //         //parse the response body as JSON
-    //         let responseData;
-    //         try {
-    //             responseData = JSON.parse(responseBody);
-    //         } catch (jsonError) {
-    //             //ff not a valid JSON, handle it as a plain text error
-    //             setError(`API response was not valid JSON: ${responseBody || response.statusText}`);
-    //             setGenerationStatus("Failed.");
-    //             return;
-    //         }
-
-    //         if (!response.ok) {
-    //             setError(
-    //                 `Flood map generation failed: ${responseData.message || response.statusText}`
-    //             );
-    //             setGenerationStatus("Failed.");
-    //             return;
-    //         }
-
-    //         //if response.ok is true and parsing was successful
-    //         setGenerationStatus("Flood map generated successfully!");
-    //         console.log("Parsed API Response Data:", responseData);
-
-    //         if (model === "safer_coast") {
-    //             if (responseData && responseData.files && responseData.files.file_water) {
-    //                 const s3OutputUrl = responseData.files.file_water;
-    //                 const downloadUrl = s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/");
-    //                 setDownloadLink(downloadUrl);
-    //             } else {
-    //                 setError("Download URL not found in the API response for coastal model.");
-    //             }
-    //         } else if (model === "safer_rain") {
-    //             //download link for safer_rain already set above
-    //         }
-    //     } catch (err) {
-    //         setError(`An error occurred during the fetch: ${err.message}`);
-    //         setGenerationStatus("Failed.");
-    //     }
-    // };
-    // //end old response
 
     return (
         <Box>
@@ -796,8 +518,8 @@ export function SaferPlacesFloodMap() {
                                     onClick={handleGenerateMap}
                                     disabled={
                                         !selectedLocation ||
-                                        (model === "safer_rain" && !rainIntensity) || //only rainIntensity for safer_rain
-                                        (model === "safer_coast" && extremeSeaLevel === 0) || //only ESL for safer_coast
+                                        (model === "safer_rain" && !rainIntensity) || // Only rainIntensity for safer_rain
+                                        (model === "safer_coast" && extremeSeaLevel === 0) || // Only ESL for safer_coast
                                         !!jobId
                                     }
                                 >

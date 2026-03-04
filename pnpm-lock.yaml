@@ -268,7 +268,7 @@ importers:
         version: 0.2.6
       '@open-pioneer/vite-plugin-pioneer':
         specifier: 'catalog:'
-        version: 4.0.2(@open-pioneer/runtime@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.14)(typescript@5.9.3))(rollup@4.59.0)(sass@1.97.3)(vite@6.4.1(@types/node@20.19.33)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2))
+        version: 4.0.2(@open-pioneer/runtime@3.1.0(@types/react@19.2.14)(typescript@5.9.3))(rollup@4.59.0)(sass@1.97.3)(vite@6.4.1(@types/node@20.19.33)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2))
       '@testing-library/dom':
         specifier: 'catalog:'
         version: 10.4.1
@@ -563,6 +563,9 @@ importers:
       chroma-js:
         specifier: 'catalog:'
         version: 3.2.0
+      featureinfo:
+        specifier: workspace:^
+        version: link:../../../packages/featureinfo
       highcharts:
         specifier: ^12.1.2
         version: 12.5.0
@@ -807,6 +810,16 @@ importers:
         specifier: 'catalog:'
         version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(typescript@5.9.3)
 
+  src/packages/processclient:
+    dependencies:
+      '@open-pioneer/runtime':
+        specifier: 'catalog:'
+        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.14)(typescript@5.9.3)
+    devDependencies:
+      '@open-pioneer/test-utils':
+        specifier: 'catalog:'
+        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(typescript@5.9.3)
+
   src/packages/saferplaces:
     dependencies:
       '@open-pioneer/runtime':
@@ -815,6 +828,9 @@ importers:
       chroma-js:
         specifier: 'catalog:'
         version: 3.2.0
+      processclient:
+        specifier: workspace:^
+        version: link:../processclient
       taxonomy:
         specifier: workspace:^
         version: link:../taxonomy
@@ -5635,7 +5651,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@open-pioneer/vite-plugin-pioneer@4.0.2(@open-pioneer/runtime@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.14)(typescript@5.9.3))(rollup@4.59.0)(sass@1.97.3)(vite@6.4.1(@types/node@20.19.33)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2))':
+  '@open-pioneer/vite-plugin-pioneer@4.0.2(@open-pioneer/runtime@3.1.0(@types/react@19.2.14)(typescript@5.9.3))(rollup@4.59.0)(sass@1.97.3)(vite@6.4.1(@types/node@20.19.33)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@babel/generator': 7.29.1
       '@babel/template': 7.28.6
