@@ -8,10 +8,10 @@ export interface JobStatusResponse {
     jobID?: string;
     status?: "accepted" | "running" | "successful" | "failed" | "dismissed"; // Status is optional for synchronous responses
     message?: string;
-    presigned_url?: string;
+    presigned_url?: string; // SaferPlaces specific
     outputs?: {
         [key: string]: {
-            href: string; //the URL to the output
+            href: string; 
             title?: string;
             type?: string;
         };
