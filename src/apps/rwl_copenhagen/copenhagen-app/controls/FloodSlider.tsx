@@ -6,13 +6,10 @@ import { watch } from "@conterra/reactivity-core";
 import {
     Box,
     Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
     Text,
     Spinner,
     Center
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import { useService, useIntl } from "open-pioneer:react-hooks";
 import { FloodHandler } from "../services/FloodHandler";
 
@@ -80,12 +77,16 @@ export const FloodSlider = () => {
     // Keep only the single, correct declaration for 'config'
     const config = (SLIDER_CONFIG[floodType] || SLIDER_CONFIG["pluvial"]) as SliderConfigType;
 
-    const onChange = (val: number) => {
+    const onChange = (details: {value: number[]}) => {
+        const val = details.value[0];
+        if (val === undefined) return;
         setSliderValue(val);
     };
     
     // When finished dragging slider, update service
-    const onChangeEnd = (val: number) => {
+    const onChangeEnd = (details: {value: number[]}) => {
+        const val = details.value[0];
+        if (val === undefined) return;
         setIsLoading(true);
         prepSrvc.setFloodLevel(val); 
         setTimeout(() => setIsLoading(false), 1500); 
@@ -118,26 +119,29 @@ export const FloodSlider = () => {
                 
                 {isLoading ? (
                     <Center height="80px">
-                        <Spinner size="md" color="blue.500" thickness="4px" />
+                        <Spinner size="md" color="blue.500" borderWidth="4px" />
                         <Text ml={3} fontSize="sm">Loading Flood Data...</Text>
                     </Center>
                 ) : (
                     <>
-                        <Slider
-                            aria-label="level-slider"
+                        <Slider.Root
+                            aria-label={["level-slider"]}
                             min={config.min}
                             max={config.max}
-                            value={sliderValue}
-                            onChange={onChange}
-                            onChangeEnd={onChangeEnd}
+                            value={[sliderValue]}
+                            onValueChange={onChange}
+                            onValueChangeEnd={onChangeEnd}
                             step={config.step}
                             colorScheme="blue"
                         >
-                            <SliderTrack bg="blue.100">
-                                <SliderFilledTrack bg="blue.500" />
-                            </SliderTrack>
-                            <SliderThumb boxSize={6} />
-                        </Slider>
+                            <Slider.Track bg="blue.100">
+                                <Slider.Range bg="blue.500" />
+                            </Slider.Track>
+                            <Slider.Thumb
+                                index = {0} 
+                                boxSize={6} 
+                            />
+                        </Slider.Root>
                         <Text mt={2} fontSize="md">
                             Selected Level: 
                             <Text as="span" fontWeight="bold" color="blue.600" ml={1}>

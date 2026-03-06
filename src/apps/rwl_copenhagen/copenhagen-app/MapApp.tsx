@@ -4,19 +4,14 @@ import {
     Box,
     Button,
     Flex,
-    FormControl,
-    FormLabel,
+    Field,
     VStack,
     Text,
-    Select,
+    NativeSelect,
     Spacer, 
     IconButton, 
-    Popover, 
-    PopoverBody, 
-    PopoverContent, 
-    PopoverTrigger,
-    PopoverArrow
-} from "@open-pioneer/chakra-integration";
+    HoverCard,
+} from "@chakra-ui/react";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
@@ -56,6 +51,7 @@ import { FloodSlider } from "./controls/FloodSlider";
 import { FaInfo } from "react-icons/fa";
 
 import { LayerDownload } from "layerdownload";
+import { MainMapProvider } from "../../rwl_danube/danube-app/services";
 
 
 export function MapApp() {
@@ -175,7 +171,7 @@ export function MapApp() {
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
-            <Notifier position="bottom" />
+            <Notifier/>
             {/* <ModelClient /> */}
             <TitledSection
                 title={
@@ -194,10 +190,10 @@ export function MapApp() {
                 <Flex flex="1" direction="column" position="relative">
                     {/*MAP_ID1*/}
                     <MapContainer
-                        mapId={MAP_ID1}
+                        map={mapModel.map}
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
-                    >
+                    > 
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <Forecasts />
                             <FloodSlider/>
@@ -254,23 +250,23 @@ export function MapApp() {
                                 overflow="auto"
                             >
                                 <Toc
-                                    mapId={MAP_ID1}
+                                    map={mapModel.map}
                                     showTools={true}
                                     collapsibleGroups={true}
                                     initiallyCollapsed={true}
                                     showBasemapSwitcher={false}
                                 />
-                                <FormControl>
-                                    <FormLabel mt={2}>
+                                <Field.Root>
+                                    <Field.Label mt={2}>
                                         <Text as="b">
                                             {intl.formatMessage({ id: "basemapLabel" })}
                                         </Text>
-                                    </FormLabel>
+                                    </Field.Label>
                                     <BasemapSwitcher
-                                        mapId={MAP_ID1}
+                                        map={mapModel.map}
                                         allowSelectingEmptyBasemap={true}
                                     />
-                                </FormControl>
+                                </Field.Root>
                             </Box>
                             <Box
                                 flexDirection="column"
@@ -292,7 +288,7 @@ export function MapApp() {
                                     {intl.formatMessage({ id: "description.text1" })}
                                     <Spacer />
                                     <Button
-                                        variant="link"
+                                        variant="plain"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Disaster Risk")}
                                     >
@@ -300,7 +296,7 @@ export function MapApp() {
                                     </Button>{" "}
                                     {intl.formatMessage({ id: "description.text2" })}{" "}
                                     <Button
-                                        variant="link"
+                                        variant="plain"
                                         color="#2e9ecc"
                                         onClick={() => setActiveKeyword("Climate Change")}
                                     >
@@ -313,7 +309,7 @@ export function MapApp() {
                         </MapAnchor>
                         {/* zoom to municipalities */}
                         <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
-                            <VStack align="stretch" spacing={2}>
+                            <VStack align="stretch" gap={2}>
                                 <Button
                                     size="sm"
                                     onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
@@ -356,10 +352,10 @@ export function MapApp() {
                                         projection="EPSG:3857"
                                     />
                                 ))} */}
-
-                            {mapModel && (
+                            
+                            {mapModel?.map && (
                                 <FeatureInfo
-                                    mapModel={mapModel.map!}
+                                    mapModel={mapModel.map}
                                     projection="EPSG:3857"
                                     layerId={""}
                                 />
@@ -391,57 +387,64 @@ export function MapApp() {
                                                 alignItems="center"
                                             ></Flex>
                                             <Flex alignItems="center" mt={1}>
-                                                <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
-                                                    <PopoverTrigger>
+                                                <HoverCard.Root 
+                                                    openDelay={250} 
+                                                    closeDelay={100} 
+                                                    // placement="top"
+                                                >
+                                                    <HoverCard.Trigger>
                                                         <IconButton
                                                             marginLeft="2px" 
-                                                            size="s"
+                                                            size="sm"
                                                             aria-label="Info"
-                                                            icon={<FaInfo />}
                                                             variant="ghost"
                                                             color="black"
-                                                        />
-                                                    </PopoverTrigger>
-                                                    <PopoverContent>
-                                                        <PopoverArrow />
-                                                        <PopoverBody overflow="auto">
+                                                        >
+                                                            <FaInfo/>
+                                                        </IconButton>
+                                                   </HoverCard.Trigger>
+                                                    <HoverCard.Content>
+                                                        <HoverCard.Arrow />
                                                             {intl.formatMessage({id: "layer_swipe.description"})}
-                                                        </PopoverBody>
-                                                    </PopoverContent>
-                                                </Popover>
+                                                    </HoverCard.Content>
+                                                </HoverCard.Root>
                                                 <Text fontWeight="bold" mt={4}>
                                                     {intl.formatMessage({ id: "layer_swipe.title" })}
                                                 </Text>
                                             </Flex>
                                             <Spacer />
                                             <Flex direction="row" gap={4} p={4}>
-                                                <Select
-                                                    placeholder="Select Left Layer"
-                                                    value={selectedLeftLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedLeftLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-
-                                                <Select
-                                                    placeholder="Select Right Layer"
-                                                    value={selectedRightLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedRightLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
+                                                <NativeSelect.Root>
+                                                    <NativeSelect.Field
+                                                        placeholder="Select Left Layer"
+                                                        value={selectedLeftLayer ?? ""}
+                                                        onChange={(e) =>
+                                                            setSelectedLeftLayer(e.target.value)
+                                                        }
+                                                    >
+                                                        {visibleAvailableLayers.map((layer) => (
+                                                            <option key={layer.id} value={layer.id}>
+                                                                {layer.title || layer.id}
+                                                            </option>
+                                                        ))}
+                                                    </NativeSelect.Field>
+                                                </NativeSelect.Root>
+                                                
+                                                <NativeSelect.Root>
+                                                    <NativeSelect.Field
+                                                        placeholder="Select Right Layer"
+                                                        value={selectedRightLayer ?? ""}
+                                                        onChange={(e) =>
+                                                            setSelectedRightLayer(e.target.value)
+                                                        }
+                                                    >
+                                                        {visibleAvailableLayers.map((layer) => (
+                                                            <option key={layer.id} value={layer.id}>
+                                                                {layer.title || layer.id}
+                                                            </option>
+                                                        ))}
+                                                    </NativeSelect.Field>
+                                                </NativeSelect.Root>
                                             </Flex>
                                         </Box>
                                     </Box>
@@ -476,7 +479,7 @@ export function MapApp() {
                                     // marginLeft="auto"
                                     alignSelf="flex-end"
                                 >
-                                    <Legend mapId={MAP_ID1} />
+                                    <Legend map={mapModel.map} />
                                 </Flex>
                             </Flex>
                         </MapAnchor>
@@ -495,19 +498,19 @@ export function MapApp() {
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
-                                    isActive={measurementIsActive}
+                                    active={measurementIsActive}
                                     onClick={toggleMeasurement}
                                 />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "map.download.heading" })}
                                     icon={<PiDownload />}
-                                    isActive={downloadIsActive}
+                                    active={downloadIsActive}
                                     onClick={toggleDownload}
                                 />
-                                <Geolocation mapId={MAP_ID1} />
-                                <InitialExtent mapId={MAP_ID1} />
-                                <ZoomIn mapId={MAP_ID1} />
-                                <ZoomOut mapId={MAP_ID1} />
+                                <Geolocation map={mapModel.map} />
+                                <InitialExtent map={mapModel.map} />
+                                <ZoomIn map={mapModel.map} />
+                                <ZoomOut map={mapModel.map} />
                             </Flex>
                         </MapAnchor>
                     </MapContainer>
@@ -521,9 +524,9 @@ export function MapApp() {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <CoordinateViewer mapId={MAP_ID1} precision={2} />
-                    <ScaleBar mapId={MAP_ID1} />
-                    <ScaleViewer mapId={MAP_ID1} />
+                    <CoordinateViewer map={mapModel.map} precision={2} />
+                    <ScaleBar map={mapModel.map} />
+                    <ScaleViewer map={mapModel.map} />
                 </Flex>
             </TitledSection>
         </Flex>

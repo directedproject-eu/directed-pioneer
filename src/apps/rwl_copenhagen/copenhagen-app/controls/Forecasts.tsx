@@ -6,11 +6,8 @@ import { useIntl } from "open-pioneer:react-hooks";
 import {
     Box,
     Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
     Text
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import { MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import { useService } from "open-pioneer:react-hooks";
 import { ForecastService } from "../services/ForecastService";
@@ -134,7 +131,10 @@ export const Forecasts = () => {
         init();
     }, [prepSrvc]);
 
-    const onChange = (val: number) => {
+    const onChange = (details: { value: number[]}) => {
+        const val = details.value[0];
+        if (val === undefined) return;
+
         setSliderValue(val);
         const selectedTimestamp = timestamps[val];
         //check selectedTimestamp is defined before using it for URL
@@ -150,7 +150,10 @@ export const Forecasts = () => {
         }
     };
 
-    const onChange2 = (val: number) => {
+    const onChange2 = (details:{value: number[]}) => {
+        const val = details.value[0];
+        if (val === undefined) return;
+
         setSliderValue2(val);
         const selectedTimestamp2 = timestamps2[val];
         if (selectedTimestamp2) {
@@ -165,7 +168,10 @@ export const Forecasts = () => {
         }
     };
 
-    const onChange3 = (val: number) => {
+    const onChange3 = (details: { value: number[]}) => {
+        const val = details.value[0];
+        if (val === undefined) return;
+
         setSliderValue3(val);
         const selectedTimestamp3 = timestamps3[val];
         if (selectedTimestamp3) {
@@ -225,20 +231,22 @@ export const Forecasts = () => {
                                 {formatTimestamp(timestamps[timestamps.length - 1] ?? "")}
                             </span>
                         </div>
-                        <Slider
-                            aria-label="date-slider"
-                            defaultValue={0}
+                        <Slider.Root
+                            aria-label={["date-slider"]}
+                            defaultValue={[0]}
                             min={0}
                             max={timestamps.length - 1}
-                            value={sliderValue}
-                            onChange={onChange}
+                            value={[sliderValue]}
+                            onValueChange={onChange}
                             step={1}
                         >
-                            <SliderTrack>
-                                <SliderFilledTrack />
-                            </SliderTrack>
-                            <SliderThumb />
-                        </Slider>
+                            <Slider.Track>
+                                <Slider.Range />
+                            </Slider.Track>
+                            <Slider.Thumb
+                                index={0}
+                            />
+                        </Slider.Root>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
                             {intl.formatMessage({ id: "forecast.selected_date" })}{" "}
@@ -281,20 +289,22 @@ export const Forecasts = () => {
                                 {formatTimestamp(timestamps2[timestamps2.length - 1] ?? "")}
                             </span>
                         </div>
-                        <Slider
-                            aria-label="date-slider-2"
-                            defaultValue={0}
+                        <Slider.Root
+                            aria-label={["date-slider-2"]}
+                            defaultValue={[0]}
                             min={0}
                             max={timestamps2.length - 1}
-                            value={sliderValue2}
-                            onChange={onChange2}
+                            value={[sliderValue2]}
+                            onValueChange={onChange2}
                             step={1}
                         >
-                            <SliderTrack>
-                                <SliderFilledTrack />
-                            </SliderTrack>
-                            <SliderThumb />
-                        </Slider>
+                            <Slider.Track>
+                                <Slider.Range />
+                            </Slider.Track>
+                            <Slider.Thumb
+                                index={0}
+                            />
+                        </Slider.Root>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
                             {intl.formatMessage({ id: "forecast.selected_date" })}{" "}
@@ -336,20 +346,22 @@ export const Forecasts = () => {
                                 {formatTimestamp(timestamps3[timestamps3.length - 1] ?? "")}
                             </span>
                         </div>
-                        <Slider
-                            aria-label="date-slider-3"
-                            defaultValue={0}
+                        <Slider.Root
+                            aria-label={["date-slider-3"]}
+                            defaultValue={[0]}
                             min={0}
                             max={timestamps3.length - 1}
-                            value={sliderValue3}
-                            onChange={onChange3}
+                            value={[sliderValue3]}
+                            onValueChange={onChange3}
                             step={1}
                         >
-                            <SliderTrack>
-                                <SliderFilledTrack />
-                            </SliderTrack>
-                            <SliderThumb />
-                        </Slider>
+                            <Slider.Track>
+                                <Slider.Range />
+                            </Slider.Track>
+                            <Slider.Thumb
+                                index={0}
+                            />
+                        </Slider.Root>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
                             {intl.formatMessage({ id: "forecast.selected_date" })}{" "}

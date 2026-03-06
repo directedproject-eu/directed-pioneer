@@ -68,8 +68,6 @@
             "ignoreCves": []
         },
         "patchedDependencies": {
-            "react-select": "patches/react-select@5.8.0.patch",
-            "@chakra-ui/hooks": "patches/@chakra-ui__hooks.patch"
         },
         "peerDependencyRules": {}
     },

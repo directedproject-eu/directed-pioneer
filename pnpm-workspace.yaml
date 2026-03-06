@@ -6,9 +6,9 @@ packages:
 # Shared version expressions (yaml anchors).
 # This is a yaml feature and is not interpreted by pnpm directly.
 __versions:
-  - &react_version ^19.2.0
-  - &core_packages_version ^3.1.0
-  - &ol_base_packages_version ^0.10.0
+  - &react_version ^19.2.3
+  - &core_packages_version ^4.4.0
+  - &ol_base_packages_version ^1.2.0
 
 # https://pnpm.io/catalogs
 catalog:
@@ -26,7 +26,6 @@ catalog:
   "@open-pioneer/overview-map": *ol_base_packages_version
   "@open-pioneer/scale-bar": *ol_base_packages_version
   "@open-pioneer/scale-viewer": *ol_base_packages_version
-  "@open-pioneer/theme": *ol_base_packages_version
   "@open-pioneer/toc": *ol_base_packages_version
 
   # Trails core packages
@@ -34,7 +33,6 @@ catalog:
   "@open-pioneer/authentication": *core_packages_version
   "@open-pioneer/authentication-keycloak": *core_packages_version
   "@open-pioneer/base-theme": *core_packages_version
-  "@open-pioneer/chakra-integration": *core_packages_version
   "@open-pioneer/core": *core_packages_version
   "@open-pioneer/http": *core_packages_version
   "@open-pioneer/integration": *core_packages_version
@@ -43,11 +41,12 @@ catalog:
   "@open-pioneer/runtime-react-support": *core_packages_version
   "@open-pioneer/runtime": *core_packages_version
   "@open-pioneer/test-utils": *core_packages_version
+  "@open-pioneer/chakra-snippets": *core_packages_version
+  "@open-pioneer/reactivity": *core_packages_version
 
 
   # Other dependencies
-  "@chakra-ui/icons": ^2.2.4
-  "@chakra-ui/react": ^2.10.6
+  "@chakra-ui/react": ^3.31.0
   "@conterra/reactivity-core": ^0.5.0
   "@emotion/cache": ^11.14.0
   "@emotion/react": ^11.14.0
