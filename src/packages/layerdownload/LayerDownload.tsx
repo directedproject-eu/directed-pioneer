@@ -13,25 +13,14 @@ import GeoTIFF from "ol/source/GeoTIFF";
 import VectorSource from "ol/source/Vector";
 import {
     Button,
-    Select,
+    NativeSelect,
     Spinner,
     VStack,
     Text,
-    AlertDialog,
-    AlertDialogHeader,
-    AlertDialogBody,
-    AlertDialogContent,
-    AlertDialogOverlay,
-    AlertDialogFooter,
-    AlertDialogCloseButton,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverArrow,
-    PopoverBody,
+    Dialog,
+    HoverCard,
     IconButton,
-    Spacer
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import { FaInfo } from "react-icons/fa";
 
 export interface LayerDownloadProps {
@@ -229,14 +218,14 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
 
     const btnRef = React.useRef<HTMLButtonElement>(null);
     return (
-        <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={btnRef} isCentered>
-            <AlertDialogOverlay
+        <Dialog.Root open={isOpen} onOpenChange={onClose} initialFocusEl={() => btnRef.current} placement={"center"}>
+            <Dialog.Backdrop
                 bg="blackAlpha.500"
                 backdropFilter="auto"
                 backdropBlur="4px"
                 zIndex={1400}
             >
-                <AlertDialogContent
+                <Dialog.Content
                     borderRadius="lg"
                     boxShadow="2xl"
                     maxW="lg"
@@ -245,67 +234,66 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     p={4}
                     zIndex={1500}
                 >
-                    <AlertDialogHeader fontWeight="bold" borderBottomWidth="1px" mb={2}>
-                        <Popover
-                            trigger="hover"
+                    <Dialog.Header fontWeight="bold" borderBottomWidth="1px" mb={2}>
+                        <HoverCard.Root
                             openDelay={250}
                             closeDelay={100}
-                            placement="top"
-                            isOpen={popoverIsOpen}
-                            onOpen={() => setPopoverIsOpen(true)}
-                            onClose={() => setPopoverIsOpen(false)}
+                            positioning={{placement: "top"}}
+                            open={popoverIsOpen}
+                            onOpenChange={() => setPopoverIsOpen(!popoverIsOpen)}
                         >
-                            <PopoverTrigger>
+                            <HoverCard.Trigger asChild>
                                 <IconButton
                                     marginLeft="2px"
-                                    size="s"
+                                    size="sm"
                                     aria-label="Info"
-                                    icon={<FaInfo />}
                                     variant="ghost"
                                     color="black"
-                                />
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <PopoverArrow />
-                                <PopoverBody overflow="auto">
+                                >
+                                    <FaInfo />
+                                </IconButton>
+                            </HoverCard.Trigger>
+                            <HoverCard.Content>
+                                <HoverCard.Arrow />
                                     {intl.formatMessage({ id: "map.download.description" })}
-                                </PopoverBody>
-                            </PopoverContent>
-                        </Popover>
+                            </HoverCard.Content>
+                        </HoverCard.Root>
                         {intl.formatMessage({ id: "map.download.heading" })}
-                    </AlertDialogHeader>
-                    <AlertDialogBody>
+                    </Dialog.Header>
+                    <Dialog.Body>
                         {visibleLayers.length === 0 ? (
                             <Text fontSize="sm" color="gray.600">
                                 {intl.formatMessage({ id: "map.download.no_layers" })}
                             </Text>
                         ) : (
-                            <VStack align="stretch" spacing={3} mt={1}>
-                                <Select
-                                    placeholder={intl.formatMessage({
-                                        id: "map.download.select_layer"
-                                    })}
-                                    value={selectedLayer?.id || ""}
-                                    onChange={(e) => {
-                                        const layer =
-                                            visibleLayers.find((l) => l.id === e.target.value) ||
-                                            null;
-                                        setSelectedLayer(layer);
-                                    }}
-                                >
-                                    {visibleLayers.map(
-                                        (layer) =>
-                                            layer.olLayer?.getProperties()?.type !== "OSM" && (
-                                                <option key={layer.id} value={layer.id}>
-                                                    {layer.title || layer.id}
-                                                </option>
-                                            )
-                                    )}
-                                </Select>
+                            <VStack align="stretch" gap={3} mt={1}>
+                                <NativeSelect.Root>
+                                    <NativeSelect.Field
+                                        placeholder={intl.formatMessage({
+                                            id: "map.download.select_layer"
+                                        })}
+                                        value={selectedLayer?.id || ""}
+                                        onChange={(e) => {
+                                            const layer =
+                                                visibleLayers.find((l) => l.id === e.target.value) ||
+                                                null;
+                                            setSelectedLayer(layer);
+                                        }}
+                                    >
+                                        {visibleLayers.map(
+                                            (layer) =>
+                                                layer.olLayer?.getProperties()?.type !== "OSM" && (
+                                                    <option key={layer.id} value={layer.id}>
+                                                        {layer.title || layer.id}
+                                                    </option>
+                                                )
+                                        )}
+                                    </NativeSelect.Field>
+                                </NativeSelect.Root>
 
                                 <Button
                                     colorScheme="blue"
-                                    isDisabled={
+                                    disabled={
                                         !selectedLayer ||
                                         selectedLayer.olLayer?.getProperties()?.["type"] ===
                                             "OSM" ||
@@ -320,15 +308,15 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                 </Button>
                             </VStack>
                         )}
-                    </AlertDialogBody>
-                    <AlertDialogFooter borderTopWidth="1px" mt={2}>
-                        <AlertDialogCloseButton
+                    </Dialog.Body>
+                    <Dialog.Footer borderTopWidth="1px" mt={2}>
+                        <Dialog.CloseTrigger
                             onClick={onClose}
                             ref={btnRef}
-                        ></AlertDialogCloseButton>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
+                        />
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog.Backdrop>
+        </Dialog.Root>
     );
 }

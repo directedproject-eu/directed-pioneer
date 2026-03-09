@@ -8,15 +8,14 @@ import {
     Image,
     useDisclosure,
     Button,
-    useColorModeValue,
-    PopoverTrigger,
-    PopoverContent,
-    Collapse,
+    Collapsible,
     Icon,
-    Popover,
-    Text
-} from "@open-pioneer/chakra-integration";
-import { HamburgerIcon, CloseIcon, ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
+    Text,
+    HoverCard
+} from "@chakra-ui/react";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { CgClose } from "react-icons/cg";
+import { SlArrowRight, SlArrowDown  } from "react-icons/sl";
 import React from "react";
 export const BASE_URL = import.meta.env.DEV
     ? import.meta.env.VITE_DEV_URL
@@ -43,7 +42,7 @@ type NavbarProps = {
 };
 
 const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
-    const { isOpen, onToggle } = useDisclosure();
+    const { open, onToggle } = useDisclosure();
 
     const authState = useReactiveSnapshot(
         () => (authService ? authService.getAuthState() : undefined),
@@ -54,14 +53,18 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
         <Box>
             <Flex
                 bg={"white"}
-                color={useColorModeValue("#2e9ecc", "gray.200")}
+                color="#2e9ecc"
                 minH={"60px"}
                 py={{ base: 2 }}
                 px={{ base: 4 }}
                 borderBottom={1}
                 borderStyle={"none"}
-                borderColor={useColorModeValue("gray.200", "gray.900")}
+                borderColor="gray.200"
                 align={"center"}
+                _dark={{
+                    color: "gray.200",
+                    borderColor: "gray.900"
+                }}
             >
                 <Flex
                     flex={{ base: 1, md: "auto" }}
@@ -70,10 +73,11 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                 >
                     <IconButton
                         onClick={onToggle}
-                        icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
                         variant={"ghost"}
                         aria-label={"Toggle Navigation"}
-                    />
+                    >
+                        (open ? <Icon as={CgClose} w={3} h={3} /> : <Icon as={RxHamburgerMenu} w={3} h={3} />)
+                    </IconButton>
                 </Flex>
                 <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align="center">
                     <Image
@@ -108,24 +112,26 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                 </div>
             </Flex>
 
-            <Collapse in={isOpen} animateOpacity>
-                <MobileNav />
-            </Collapse>
+            <Collapsible.Root open={open}>
+                <Collapsible.Content>
+                    <MobileNav />
+                </Collapsible.Content>
+            </Collapsible.Root>
         </Box>
     );
 };
 
 const DesktopNav = () => {
     return (
-        <Stack direction={"row"} spacing={4}>
+        <Stack direction={"row"} gap={4}>
             {NAV_ITEMS.map((navItem) => (
                 <Box key={navItem.label}>
-                    <Popover trigger={"hover"} placement={"bottom-start"}>
-                        <PopoverTrigger>
+                    <HoverCard.Root positioning={{placement:"bottom-start"}}>
+                        <HoverCard.Trigger>
                             <Box
                                 as="a"
                                 p={2}
-                                href={navItem.href ?? "#"}
+                                ref={navItem.href ?? "#"}
                                 fontSize={"md"}
                                 fontWeight={500}
                                 color={"#2e9ecc"}
@@ -133,9 +139,9 @@ const DesktopNav = () => {
                             >
                                 {navItem.label}
                             </Box>
-                        </PopoverTrigger>
+                        </HoverCard.Trigger>
                         {navItem.children && (
-                            <PopoverContent
+                            <HoverCard.Content
                                 border={0}
                                 boxShadow={"xl"}
                                 p={4}
@@ -147,9 +153,9 @@ const DesktopNav = () => {
                                         <DesktopSubNav key={child.label} {...child} />
                                     ))}
                                 </Stack>
-                            </PopoverContent>
+                            </HoverCard.Content>
                         )}
-                    </Popover>
+                    </HoverCard.Root>
                 </Box>
             ))}
         </Stack>
@@ -160,10 +166,11 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
     return (
         <Box
             as="a"
-            href={href}
+            ref={href}
             p={2}
             rounded={"md"}
-            _hover={{ bg: useColorModeValue("gray.200", "gray.900") }}
+            _hover={{ bg: "gray.200" }}
+            _dark={{ _hover: { bg: "gray.900" } }}
         >
             <Stack direction={"row"} align={"center"}>
                 <Box>
@@ -171,7 +178,7 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
                     <Flex fontSize={"md"}>{subLabel}</Flex>
                 </Box>
                 <Flex justify={"flex-end"} align={"center"} flex={1}>
-                    <Icon color={"#2e9ecc"} w={5} h={5} as={ChevronRightIcon} />
+                    <Icon color={"#2e9ecc"} w={5} h={5} as={SlArrowRight} />
                 </Flex>
             </Stack>
         </Box>
@@ -189,30 +196,32 @@ const MobileNav = () => {
 };
 
 const MobileNavItem = ({ label, children, href }: NavItem) => {
-    const { isOpen, onToggle } = useDisclosure();
+    const { open, onToggle } = useDisclosure();
 
     return (
-        <Stack spacing={4} onClick={children && onToggle}>
-            <Box py={2} as="a" href={href ?? "#"}>
+        <Stack gap={4} onClick={children && onToggle}>
+            <Box py={2} as="a" ref={href ?? "#"}>
                 <Flex fontWeight={600}>{label}</Flex>
                 {children && (
                     <Icon
-                        as={ChevronDownIcon}
+                        as={SlArrowDown}
                         w={6}
                         h={6}
-                        transform={isOpen ? "rotate(180deg)" : ""}
+                        transform={open ? "rotate(180deg)" : ""}
                     />
                 )}
             </Box>
-            <Collapse in={isOpen} animateOpacity>
-                <Stack mt={2} pl={4} borderLeft={1} align={"start"}>
-                    {children?.map((child) => (
-                        <Box as="a" key={child.label} py={2} href={child.href}>
-                            {child.label}
-                        </Box>
-                    ))}
-                </Stack>
-            </Collapse>
+            <Collapsible.Root open={open}>
+                <Collapsible.Content>
+                    <Stack mt={2} pl={4} borderLeft={1} align={"start"}>
+                        {children?.map((child) => (
+                            <Box as="a" key={child.label} py={2} ref={child.href}>
+                                {child.label}
+                            </Box>
+                        ))}
+                    </Stack>
+                </Collapsible.Content>
+            </Collapsible.Root>
         </Stack>
     );
 };

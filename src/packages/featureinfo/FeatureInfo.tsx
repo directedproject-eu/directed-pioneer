@@ -5,21 +5,13 @@ import { MapModel } from "@open-pioneer/map";
 import { fetchFeatureInfo } from "./FeatureService";
 import {
     Popover,
-    PopoverBody,
     PopoverContent,
-    PopoverCloseButton,
-    PopoverHeader,
     Portal,
-    PopoverArrow,
     Table,
-    Tbody,
     Text,
-    Tr,
-    Td,
-    Th
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import type { MapBrowserEvent } from "ol";
-import { Box, VStack } from "@open-pioneer/chakra-integration";
+import { Box, VStack } from "@chakra-ui/react";
 
 interface FeatureInfoProps {
     mapModel: MapModel;
@@ -65,21 +57,21 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
     const round = (num: number) => num.toFixed(3);
 
     //render properties in a table from the first feature in the feature collection
-    const renderFeatureProperties = (data: Record<string, unknown>) => {    
+    const renderFeatureProperties = (data: Record<string, unknown>) => {
         // Fall 1: GeoJSON FeatureCollection
         if (data.type === "FeatureCollection") {
             const features = data?.features as Array<Record<string, unknown>> | undefined;
             if (!features || features.length === 0) return <p>No features available</p>;
-    
+
             const properties = features[0]?.properties as Record<string, unknown> | undefined;
             if (!properties) return <p>No layer properties available</p>;
-    
+
             return (
-                <Table size="sm" variant="simple">
-                    <Tbody>
+                <Table.Root size="sm" variant="line">
+                    <Table.Body>
                         {Object.entries(properties).map(([key, value]) => (
-                            <Tr key={key}>
-                                <Th
+                            <Table.Row key={key}>
+                                <Table.ColumnHeader
                                     style={{
                                         textAlign: "left",
                                         whiteSpace: "nowrap",
@@ -88,8 +80,8 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                     }}
                                 >
                                     {key}
-                                </Th>
-                                <Td
+                                </Table.ColumnHeader>
+                                <Table.Cell
                                     style={{
                                         whiteSpace: "nowrap",
                                         overflow: "hidden",
@@ -98,22 +90,22 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                     }}
                                 >
                                     {typeof value === "number" ? round(value) : String(value)}
-                                </Td>
-                            </Tr>
+                                </Table.Cell>
+                            </Table.Row>
                         ))}
-                    </Tbody>
-                </Table>
+                    </Table.Body>
+                </Table.Root>
             );
         }
-    
+
         // Fall 2: Einfaches Record (z. B. GeoTIFF-Pixelwert)
         if (Object.keys(data).length > 0) {
             return (
-                <Table size="sm" variant="simple">
-                    <Tbody>
+                <Table.Root size="sm" variant="line">
+                    <Table.Body>
                         {Object.entries(data).map(([key, value]) => (
-                            <Tr key={key}>
-                                <Th
+                            <Table.Row key={key}>
+                                <Table.ColumnHeader
                                     style={{
                                         textAlign: "left",
                                         whiteSpace: "nowrap",
@@ -122,8 +114,8 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                     }}
                                 >
                                     {key}
-                                </Th>
-                                <Td
+                                </Table.ColumnHeader>
+                                <Table.Cell
                                     style={{
                                         whiteSpace: "nowrap",
                                         overflow: "hidden",
@@ -132,21 +124,21 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                     }}
                                 >
                                     {typeof value === "number" ? round(value) : String(value)}
-                                </Td>
-                            </Tr>
+                                </Table.Cell>
+                            </Table.Row>
                         ))}
-                    </Tbody>
-                </Table>
+                    </Table.Body>
+                </Table.Root>
             );
         }
-    
+
         // Keine Daten vorhanden
         return <p>No features available</p>;
     };
 
     //render the popup
     return featureInfo.features && clickPosition ? (
-        <Popover isOpen={true}>
+        <Popover.Root open={true}>
             <Portal>
                 <div
                     style={{
@@ -156,74 +148,76 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                         zIndex: 1000
                     }}
                 >
-                    <PopoverContent
-                        style={{
-                            maxHeight: "420px",
-                            overflow: "auto",
-                            padding: "8px 0"
-                        }}
-                    >
-                        <PopoverArrow style={{ top: "-20px", left: "20px" }} />
-                        <PopoverCloseButton onClick={() => setFeatureInfo({ features: null })} />
-    
-                        <PopoverHeader
+                    <Popover.Positioner>
+                        <Popover.Content
                             style={{
-                                borderBottom: "1px solid #e2e8f0",
-                                paddingBottom: "8px",
-                                marginBottom: "8px"
+                                maxHeight: "420px",
+                                overflow: "auto",
+                                padding: "8px 0"
                             }}
                         >
-                            <VStack align="start" spacing={2}>
-                                {/* Selected layers */}
-                                <Box>
-                                    <Text fontWeight="600" fontSize="14px" color="gray.700">
-                                        Selected Layers:
-                                    </Text>
-                                    <Text fontSize="14px" color="gray.600">
-                                        {featureInfo.features.map((f) => f.layerName).join(", ")}
-                                    </Text>
-                                </Box>
-    
-                                {/* Clicked point */}
-                                <Box>
-                                    <Text fontWeight="600" fontSize="14px" color="gray.700">
-                                        Clicked Point:
-                                    </Text>
-                                    <Text fontSize="14px" color="gray.600">
-                                        X: {clickPosition.x}, Y: {clickPosition.y}
-                                    </Text>
-                                </Box>
-                            </VStack>
-                        </PopoverHeader>
-    
-                        {/* Data section */}
-                        <PopoverBody>
-                            <VStack align="stretch" spacing={4}>
-                                {featureInfo.features.map((f) => (
-                                    <Box
-                                        key={f.layerName}
-                                        padding="8px 0"
-                                        borderBottom="1px solid #edf2f7"
-                                    >
-                                        <Text
-                                            fontWeight="600"
-                                            fontSize="15px"
-                                            marginBottom="4px"
-                                            color="gray.700"
-                                        >
-                                            {f.layerName}
+                            <Popover.Arrow style={{ top: "-20px", left: "20px" }} />
+                            <Popover.CloseTrigger onClick={() => setFeatureInfo({ features: null })} />
+
+                            <Popover.Title
+                                style={{
+                                    borderBottom: "1px solid #e2e8f0",
+                                    paddingBottom: "8px",
+                                    marginBottom: "8px"
+                                }}
+                            >
+                                <VStack align="start" gap={2}>
+                                    {/* Selected layers */}
+                                    <Box>
+                                        <Text fontWeight="600" fontSize="14px" color="gray.700">
+                                            Selected Layers:
                                         </Text>
-    
-                                        <Box marginLeft="4px">
-                                            {renderFeatureProperties(f.data)}
-                                        </Box>
+                                        <Text fontSize="14px" color="gray.600">
+                                            {featureInfo.features.map((f) => f.layerName).join(", ")}
+                                        </Text>
                                     </Box>
-                                ))}
-                            </VStack>
-                        </PopoverBody>
-                    </PopoverContent>
+
+                                    {/* Clicked point */}
+                                    <Box>
+                                        <Text fontWeight="600" fontSize="14px" color="gray.700">
+                                            Clicked Point:
+                                        </Text>
+                                        <Text fontSize="14px" color="gray.600">
+                                            X: {clickPosition.x}, Y: {clickPosition.y}
+                                        </Text>
+                                    </Box>
+                                </VStack>
+                            </Popover.Title>
+
+                            {/* Data section */}
+                            <Popover.Body>
+                                <VStack align="stretch" gap={4}>
+                                    {featureInfo.features.map((f) => (
+                                        <Box
+                                            key={f.layerName}
+                                            padding="8px 0"
+                                            borderBottom="1px solid #edf2f7"
+                                        >
+                                            <Text
+                                                fontWeight="600"
+                                                fontSize="15px"
+                                                marginBottom="4px"
+                                                color="gray.700"
+                                            >
+                                                {f.layerName}
+                                            </Text>
+
+                                            <Box marginLeft="4px">
+                                                {renderFeatureProperties(f.data)}
+                                            </Box>
+                                        </Box>
+                                    ))}
+                                </VStack>
+                            </Popover.Body>
+                        </Popover.Content>
+                    </Popover.Positioner>
                 </div>
             </Portal>
-        </Popover>
-    ) : null;  
+        </Popover.Root>
+    ) : null;
 }

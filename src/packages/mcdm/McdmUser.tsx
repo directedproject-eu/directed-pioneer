@@ -5,26 +5,17 @@ import React, { useState, useMemo, ChangeEvent } from "react";
 import {
     Box,
     Button,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalCloseButton,
-    FormLabel,
-    FormControl,
     useDisclosure,
     Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
-    Tooltip,
     Flex,
-    Input
-} from "@open-pioneer/chakra-integration";
+    Input,
+    Dialog,
+    Field
+} from "@chakra-ui/react";
+import { Tooltip } from "@open-pioneer/chakra-snippets/tooltip";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
-import { Spinner, Center, Text } from "@open-pioneer/chakra-integration";
+import { Spinner, Center, Text } from "@chakra-ui/react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useService } from "open-pioneer:react-hooks";
@@ -148,7 +139,7 @@ export function ModelClient() {
     const [ranksData, setRanksData] = useState<Record<string, number> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { open, onOpen, onClose } = useDisclosure();
     // const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Default mode ranks
 
     const [weights, setWeights] = useState<Weights>({
@@ -162,7 +153,9 @@ export function ModelClient() {
     });
 
     // Handles changes to slider values for each criteria
-    const handleWeightChange = (criteria: keyof Weights, newValue: number) => {
+    const handleWeightChange = (criteria: keyof Weights, details: {value: number[]}) => {
+        const newValue = details.value[0];
+        if (newValue === undefined) return;
         setWeights((prevWeights) => ({
             ...prevWeights,
             [criteria]: newValue
@@ -393,17 +386,17 @@ export function ModelClient() {
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
             />
-            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="full">
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>CLIMADA Multi-Criteria Decision Making (MCDM)</ModalHeader>
-                    <ModalCloseButton isDisabled={loading} />
-                    <ModalBody>
+            <Dialog.Root closeOnInteractOutside={false} open={open} onOpenChange={onClose} size="full">
+                <Dialog.Backdrop />
+                <Dialog.Content>
+                    <Dialog.Header>CLIMADA Multi-Criteria Decision Making (MCDM)</Dialog.Header>
+                    <Dialog.CloseTrigger disabled={loading} />
+                    <Dialog.Body>
                         {!tokenSubmitted ? (
-                            <FormControl>
-                                <FormLabel padding={2} htmlFor="token">
+                            <Field.Root>
+                                <Field.Label padding={2} htmlFor="token">
                                     Please enter a token to access the MCDM Dialog{" "}
-                                </FormLabel>
+                                </Field.Label>
                                 <Input
                                     type="text"
                                     id="token"
@@ -419,11 +412,11 @@ export function ModelClient() {
                                             setTokenSubmitted(true); // Move on to criteria weightings
                                         }
                                     }}
-                                    isDisabled={!tokenInput.trim()}
+                                    disabled={!tokenInput.trim()}
                                 >
                                     Continue
                                 </Button>
-                            </FormControl>
+                            </Field.Root>
                         ) : (
                             <>
                                 {loading ? (
@@ -488,10 +481,10 @@ export function ModelClient() {
                                                     "Implementation Time: How important is the time it takes to implement the measure?"
                                             };
                                             return (
-                                                <FormControl key={typedCriteria} mb={4}>
-                                                    <FormLabel>
+                                                <Field.Root key={typedCriteria} mb={4}>
+                                                    <Field.Label>
                                                         {criterionDisplayNames[typedCriteria]}
-                                                    </FormLabel>
+                                                    </Field.Label>
                                                     <Box padding={2}>
                                                         <Flex justify="space-between" mb={1}>
                                                             <Text fontSize="sm">Not important</Text>
@@ -502,34 +495,34 @@ export function ModelClient() {
                                                                 Highly important
                                                             </Text>
                                                         </Flex>
-                                                        <Slider
-                                                            value={weights[typedCriteria]}
+                                                        <Slider.Root
+                                                            value={[weights[typedCriteria]]}
                                                             min={0}
                                                             max={1}
                                                             step={0.01}
-                                                            onChange={(newValue) =>
+                                                            onValueChange={(newValue) =>
                                                                 handleWeightChange(
                                                                     typedCriteria,
                                                                     newValue
                                                                 )
                                                             }
-                                                            defaultValue={0}
+                                                            defaultValue={[0]}
                                                         >
-                                                            <SliderTrack>
-                                                                <SliderFilledTrack />
-                                                            </SliderTrack>
+                                                            <Slider.Track>
+                                                                <Slider.Range />
+                                                            </Slider.Track>
                                                             <Tooltip
-                                                                hasArrow
-                                                                color="white"
-                                                                placement="top"
-                                                                isOpen
-                                                                label={weights[typedCriteria]}
+                                                                showArrow
+                                                                contentProps={{css : {"--tooltip-bg": "white"}}}
+                                                                positioning={{placement: "top"}}
+                                                                open
+                                                                content={weights[typedCriteria]}
                                                             >
-                                                                <SliderThumb />
+                                                                <Slider.Thumb index={0}/>
                                                             </Tooltip>
-                                                        </Slider>
+                                                        </Slider.Root>
                                                     </Box>
-                                                </FormControl>
+                                                </Field.Root>
                                             );
                                         })}
 
@@ -537,7 +530,7 @@ export function ModelClient() {
                                             type="button"
                                             size="md"
                                             onClick={handleSubmit}
-                                            isDisabled={loading}
+                                            disabled={loading}
                                         >
                                             Submit Criteria Weights
                                         </Button>
@@ -545,7 +538,7 @@ export function ModelClient() {
                                         <Flex paddingY={4} />
                                         <Flex justifyContent="space-between" alignItems="center">
                                             <Tooltip
-                                                label="This chart shows the ranking of measures in all possible combinations of criteria weightings; it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 50% of the time."
+                                                content="This chart shows the ranking of measures in all possible combinations of criteria weightings; it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 50% of the time."
                                                 aria-label="A tooltip"
                                             >
                                                 <FaInfoCircle color="gray" cursor="pointer" />
@@ -560,7 +553,7 @@ export function ModelClient() {
                                                 alignItems="center"
                                             >
                                                 <Tooltip
-                                                    label="This chart shows the ranking of measures based on the criteria weightings which were submitted. For example, if cost was weighted as highly important to you, this chart shows which measures align best with this, with 1 being the best possible rank."
+                                                    content="This chart shows the ranking of measures based on the criteria weightings which were submitted. For example, if cost was weighted as highly important to you, this chart shows which measures align best with this, with 1 being the best possible rank."
                                                     aria-label="A tooltip"
                                                 >
                                                     <FaInfoCircle color="gray" cursor="pointer" />
@@ -576,9 +569,9 @@ export function ModelClient() {
                                 )}
                             </>
                         )}
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
+                    </Dialog.Body>
+                </Dialog.Content>
+            </Dialog.Root>
         </Box>
     );
 }
