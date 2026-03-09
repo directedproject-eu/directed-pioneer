@@ -2,7 +2,8 @@
     "name": "mcdm",
     "private": true,
     "dependencies": {
-        "@open-pioneer/runtime": "catalog:"
+        "@open-pioneer/runtime": "catalog:", 
+        "processclient": "workspace:^"
     },
     "devDependencies": {
         "@open-pioneer/test-utils": "catalog:"
