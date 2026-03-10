@@ -6,6 +6,6 @@ messages:
     keyword1: "pluvial"
     keyword2: "coastal flooding"
   info_icon_safercoast:
-    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."
+    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
   info_icon_saferrain:
-    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. Always consult outside opinion(s) to verify information."
+    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
