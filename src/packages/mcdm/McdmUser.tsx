@@ -20,13 +20,20 @@ import {
     SliderThumb,
     Tooltip,
     Flex,
-    Input
+    Input, 
+    Popover, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverTrigger,
+    PopoverArrow, 
+    IconButton
 } from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
-import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
+import { FaBalanceScale, FaInfoCircle, FaInfo } from "react-icons/fa";
 import { Spinner, Center, Text } from "@open-pioneer/chakra-integration";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { useIntl } from "open-pioneer:react-hooks";
 import { useService } from "open-pioneer:react-hooks";
 import { McdmService } from "./McdmService";
 import type { ProcessExecution } from "./McdmService";
@@ -149,6 +156,7 @@ export function ModelClient() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const intl = useIntl(); // i18n
     // const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Default mode ranks
 
     const [weights, setWeights] = useState<Weights>({
@@ -438,6 +446,23 @@ export function ModelClient() {
                                                 ⚖️ Please weight each criteria and press submit to
                                                 view results.
                                             </Text>
+                                            <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                                <PopoverTrigger>
+                                                    <IconButton
+                                                        marginLeft="2px"
+                                                        size="s"
+                                                        aria-label="Info"
+                                                        icon={<FaInfo />}
+                                                        variant="ghost"
+                                                        color="black" />
+                                                </PopoverTrigger>
+                                                <PopoverContent>
+                                                    <PopoverArrow />
+                                                    <PopoverBody overflow="auto">
+                                                        {intl.formatMessage({ id: "info_mcdm.text1" })}
+                                                    </PopoverBody>
+                                                </PopoverContent>
+                                            </Popover>
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
