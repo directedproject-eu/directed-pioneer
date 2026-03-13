@@ -4,20 +4,14 @@ import {
     Box,
     Button,
     Flex,
-    FormControl,
-    FormLabel,
+    Field,
     Text,
-    Select,
+    NativeSelect,
     Spacer,
     useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalHeader,
-    ModalContent,
-    ModalBody,
-    ModalCloseButton,
-    ModalFooter
-} from "@open-pioneer/chakra-integration";
+    Dialog,
+    Alert
+} from "@chakra-ui/react";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
@@ -48,7 +42,7 @@ import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 
 export function MapApp() {
-    const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
+    const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -162,7 +156,9 @@ export function MapApp() {
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
-            <Notifier position="bottom" />
+            <Notifier
+                // position = "bottom"
+            />
             <TitledSection
                 title={
                     <Box
@@ -179,7 +175,7 @@ export function MapApp() {
             >
                 <Flex flex="1" direction="column" position="relative">
                     <MapContainer
-                        mapId={MAP_ID}
+                        map={mapModel.map}
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
@@ -206,7 +202,7 @@ export function MapApp() {
                                                 </SectionHeading>
                                             }
                                         >
-                                            <Measurement mapId={MAP_ID} />
+                                            <Measurement map={mapModel.map} />
                                         </TitledSection>
                                     </Box>
                                 </Box>
@@ -221,19 +217,19 @@ export function MapApp() {
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                             >
-                                <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
-                                <FormControl>
-                                    <FormLabel mt={2}>
+                                <Toc map={mapModel.map} showBasemapSwitcher={false} showTools={true} />
+                                <Field.Root>
+                                    <Field.Label mt={2}>
                                         <Text as="b">
                                             {/* {intl.formatMessage({ id: "basemapLabel" })} */}
                                             Basemap
                                         </Text>
-                                    </FormLabel>
+                                    </Field.Label>
                                     <BasemapSwitcher
-                                        mapId={MAP_ID}
+                                        map={mapModel.map}
                                         allowSelectingEmptyBasemap={true}
                                     />
-                                </FormControl>
+                                </Field.Root>
                             </Box>
                             {downloadIsActive && (
                                 <LayerDownload
@@ -276,33 +272,36 @@ export function MapApp() {
                                                 Operational Layers are viewable for comparison
                                             </Text>
                                             <Flex direction="row" gap={4} p={4}>
-                                                <Select
-                                                    placeholder="Select Left Layer"
-                                                    value={selectedLeftLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedLeftLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-
-                                                <Select
-                                                    placeholder="Select Right Layer"
-                                                    value={selectedRightLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedRightLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
+                                                <NativeSelect.Root>
+                                                    <NativeSelect.Field
+                                                        placeholder="Select Left Layer"
+                                                        value={selectedLeftLayer ?? ""}
+                                                        onChange={(e) =>
+                                                            setSelectedLeftLayer(e.target.value)
+                                                        }
+                                                    >
+                                                        {visibleAvailableLayers.map((layer) => (
+                                                            <option key={layer.id} value={layer.id}>
+                                                                {layer.title || layer.id}
+                                                            </option>
+                                                        ))}
+                                                    </NativeSelect.Field>
+                                                </NativeSelect.Root>
+                                                <NativeSelect.Root>
+                                                    <NativeSelect.Field
+                                                        placeholder="Select Right Layer"
+                                                        value={selectedRightLayer ?? ""}
+                                                        onChange={(e) =>
+                                                            setSelectedRightLayer(e.target.value)
+                                                        }
+                                                    >
+                                                        {visibleAvailableLayers.map((layer) => (
+                                                            <option key={layer.id} value={layer.id}>
+                                                                {layer.title || layer.id}
+                                                            </option>
+                                                        ))}
+                                                    </NativeSelect.Field>
+                                                </NativeSelect.Root>
                                             </Flex>
                                         </Box>
                                     </Box>
@@ -315,7 +314,7 @@ export function MapApp() {
                                     boxShadow="lg"
                                     alignSelf="flex-end"
                                 >
-                                    <Legend mapId={MAP_ID} />
+                                    <Legend map={mapModel.map} />
                                 </Flex>
                             </Flex>
                             {mapModel && (
@@ -345,19 +344,19 @@ export function MapApp() {
                                 <ToolButton
                                     label={intl.formatMessage({ id: "measurementTitle" })}
                                     icon={<PiRulerLight />}
-                                    isActive={measurementIsActive}
+                                    active={measurementIsActive}
                                     onClick={toggleMeasurement}
                                 />
                                 <ToolButton
                                     label={intl.formatMessage({ id: "map.download.button" })}
                                     icon={<PiDownload />}
-                                    isActive={downloadIsActive}
+                                    active={downloadIsActive}
                                     onClick={toggleDownload}
                                 />
-                                <Geolocation mapId={MAP_ID} />
-                                <InitialExtent mapId={MAP_ID} />
-                                <ZoomIn mapId={MAP_ID} />
-                                <ZoomOut mapId={MAP_ID} />
+                                <Geolocation map={mapModel.map} />
+                                <InitialExtent map={mapModel.map} />
+                                <ZoomIn map={mapModel.map} />
+                                <ZoomOut map={mapModel.map} />
                             </Flex>
                         </MapAnchor>
                     </MapContainer>
@@ -369,28 +368,30 @@ export function MapApp() {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <CoordinateViewer mapId={MAP_ID} precision={2} />
-                    <ScaleBar mapId={MAP_ID} />
-                    <ScaleViewer mapId={MAP_ID} />
+                    <CoordinateViewer map={mapModel.map} precision={2} />
+                    <ScaleBar map={mapModel.map} />
+                    <ScaleViewer map={mapModel.map} />
                 </Flex>
             </TitledSection>
 
-            <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Rhine-Erft Chart</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <ChartComponentRhineErft></ChartComponentRhineErft>
-                    </ModalBody>
+            <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} size={"full"}>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                    <Dialog.Content>
+                        <Dialog.Header>Rhine-Erft Chart</Dialog.Header>
+                        <Dialog.CloseTrigger />
+                        <Dialog.Body>
+                            <ChartComponentRhineErft></ChartComponentRhineErft>
+                        </Dialog.Body>
 
-                    <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+                        <Dialog.Footer>
+                            <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
+                                Close
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog.Positioner>
+            </Dialog.Root>
         </Flex>
     );
 }

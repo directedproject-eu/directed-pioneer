@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useState } from "react";
-import { Button, Checkbox, Stack , Text} from "@open-pioneer/chakra-integration";
+import { Button, Checkbox, Stack , Text} from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
 import EnsembleCrops from "./EnsembleCrops";
 
@@ -86,18 +86,21 @@ const ChartComponentRhineErft = () => {
                 {" "}
                 {/* Added wrap and margin for better layout */}
                 {crops.map((crop, id) => (
-                    <Checkbox
+                    <Checkbox.Root
                         key={id}
                         // Use isChecked to control the component's state
-                        isChecked={selectedCrops.includes(crop)}
+                        checked={selectedCrops.includes(crop)}
                         onChange={() => handleCheckboxChange(crop)}
                         mr={4} // Add some margin between checkboxes
                     >
                         {crop}
-                    </Checkbox>
+                    </Checkbox.Root>
                 ))}
             </Stack>
-            <Text mt={"2em"} size={"2em"}>
+            <Text
+                mt={"2em"}
+                // size={"2em"}
+            >
                 {intl.formatMessage({id: "charts.explanation"})}
             </Text>
         </>
