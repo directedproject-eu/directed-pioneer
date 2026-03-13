@@ -11,7 +11,8 @@ import {
     Collapsible,
     Icon,
     Text,
-    HoverCard
+    HoverCard,
+    Link
 } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { CgClose } from "react-icons/cg";
@@ -128,17 +129,17 @@ const DesktopNav = () => {
                 <Box key={navItem.label}>
                     <HoverCard.Root positioning={{placement:"bottom-start"}}>
                         <HoverCard.Trigger>
-                            <Box
+                            <Link
                                 as="a"
                                 p={2}
-                                ref={navItem.href ?? "#"}
+                                href={navItem.href ?? "#"}
                                 fontSize={"md"}
                                 fontWeight={500}
                                 color={"#2e9ecc"}
                                 _hover={{ textDecoration: "none", color: "gray" }}
                             >
                                 {navItem.label}
-                            </Box>
+                            </Link>
                         </HoverCard.Trigger>
                         {navItem.children && (
                             <HoverCard.Content
@@ -164,9 +165,9 @@ const DesktopNav = () => {
 
 const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
     return (
-        <Box
+        <Link
             as="a"
-            ref={href}
+            href={href}
             p={2}
             rounded={"md"}
             _hover={{ bg: "gray.200" }}
@@ -181,7 +182,7 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
                     <Icon color={"#2e9ecc"} w={5} h={5} as={SlArrowRight} />
                 </Flex>
             </Stack>
-        </Box>
+        </Link>
     );
 };
 
@@ -200,7 +201,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
 
     return (
         <Stack gap={4} onClick={children && onToggle}>
-            <Box py={2} as="a" ref={href ?? "#"}>
+            <Link py={2} as="a" href={href ?? "#"}>
                 <Flex fontWeight={600}>{label}</Flex>
                 {children && (
                     <Icon
@@ -210,14 +211,14 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
                         transform={open ? "rotate(180deg)" : ""}
                     />
                 )}
-            </Box>
+            </Link>
             <Collapsible.Root open={open}>
                 <Collapsible.Content>
                     <Stack mt={2} pl={4} borderLeft={1} align={"start"}>
                         {children?.map((child) => (
-                            <Box as="a" key={child.label} py={2} ref={child.href}>
+                            <Link as="a" key={child.label} py={2} href={child.href}>
                                 {child.label}
-                            </Box>
+                            </Link>
                         ))}
                     </Stack>
                 </Collapsible.Content>
