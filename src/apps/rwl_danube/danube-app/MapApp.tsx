@@ -62,12 +62,13 @@ import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
-import { theme } from "theme"; 
+import { theme } from "theme";
+
+type ActiveChartType = "zala_crop" | "future_chart" | null;
 
 export function MapApp() {
-    // const { isOpen, onOpen, onClose } = useDisclosure();
     const mapModel = useMapModel(MAP_ID);
-    const zoomService = useService<LayerZoom>("app.LayerZoom"); // administrative boundary layer zoom service
+    const zoomService = useService<LayerZoom>("app.LayerZoom");
     const vectorSourceFactory = useService<OgcFeaturesVectorSourceFactory>(
         "ogc-features.VectorSourceFactory"
     );
@@ -80,6 +81,8 @@ export function MapApp() {
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+
+    const [activeChart, setActiveChart] = useState<ActiveChartType>(null);
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
@@ -97,7 +100,7 @@ export function MapApp() {
         }),
         [prepSrvc]
     );
-    const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
+
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
     /////////////////////////
@@ -195,7 +198,8 @@ export function MapApp() {
 
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
-                (layer) => layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
+                (layer) =>
+                    layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
             );
             setVisibleAvailableLayers(visibleLayers);
         };
@@ -396,7 +400,14 @@ export function MapApp() {
                                             />
                                         </FormControl>
                                     </Box>
-                                    {downloadIsActive && <LayerDownload mapID={MAP_ID} intl={intl} isOpen={downloadIsActive} onClose={() => setDownloadIsActive(false)} />}
+                                    {downloadIsActive && (
+                                        <LayerDownload
+                                            mapID={MAP_ID}
+                                            intl={intl}
+                                            isOpen={downloadIsActive}
+                                            onClose={() => setDownloadIsActive(false)}
+                                        />
+                                    )}
                                 </MapAnchor>
 
                                 {/* zoom to region and feature info */}
@@ -508,7 +519,6 @@ export function MapApp() {
                                             overflow="auto"
                                             borderRadius="md"
                                             boxShadow="lg"
-                                            // marginLeft="auto"
                                             alignSelf="flex-end"
                                         >
                                             <PioneerLegend mapId={MAP_ID} />
@@ -539,13 +549,15 @@ export function MapApp() {
                                             isActive={downloadIsActive}
                                             onClick={toggleDownload}
                                         />
+
                                         <ToolButton
                                             label={intl.formatMessage({
                                                 id: "charts.button_title"
                                             })}
                                             icon={<PiChartLineDownLight />}
-                                            onClick={onOpenChart}
+                                            onClick={() => setActiveChart("zala_crop")}
                                         />
+
                                         <ToolButton
                                             label={intl.formatMessage({ id: "measurementTitle" })}
                                             icon={<PiRulerLight />}
@@ -575,17 +587,24 @@ export function MapApp() {
                 </TitledSection>
             </Flex>
 
-            <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
+            {/* --- NEW LOGIC: Dynamic modal that changes based on the activeChart state --- */}
+            <Modal isOpen={activeChart !== null} onClose={() => setActiveChart(null)} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Zala Chart</ModalHeader>
+                    <ModalHeader>
+                        {activeChart === "zala_crop" && "Zala Chart"}
+                        {activeChart === "future_chart" && "Future Chart"}
+                    </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <ChartComponentZala></ChartComponentZala>
+                        {activeChart === "zala_crop" && <ChartComponentZala />}
+                        {activeChart === "future_chart" && (
+                            <div>Future Chart Content Will Go Here!</div>
+                        )}
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
+                        <Button colorScheme="blue" mr={3} onClick={() => setActiveChart(null)}>
                             Close
                         </Button>
                     </ModalFooter>
