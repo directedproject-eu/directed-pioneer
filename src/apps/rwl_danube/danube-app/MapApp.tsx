@@ -57,6 +57,7 @@ import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
+import ChartComponentForestry from "./components/ChartComponentForestry";
 import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
@@ -64,7 +65,7 @@ import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
 import { theme } from "theme";
 
-type ActiveChartType = "zala_crop" | "future_chart" | null;
+type ActiveChartType = "zala_crop" | "foresty" | null;
 
 export function MapApp() {
     const mapModel = useMapModel(MAP_ID);
@@ -552,10 +553,18 @@ export function MapApp() {
 
                                         <ToolButton
                                             label={intl.formatMessage({
-                                                id: "charts.button_title"
+                                                id: "charts.zala_crop.button_title"
                                             })}
                                             icon={<PiChartLineDownLight />}
                                             onClick={() => setActiveChart("zala_crop")}
+                                        />
+
+                                        <ToolButton
+                                            label={intl.formatMessage({
+                                                id: "charts.forestry.button_title"
+                                            })}
+                                            icon={<PiChartLineDownLight />}
+                                            onClick={() => setActiveChart("forestry")}
                                         />
 
                                         <ToolButton
@@ -587,22 +596,18 @@ export function MapApp() {
                 </TitledSection>
             </Flex>
 
-            {/* --- NEW LOGIC: Dynamic modal that changes based on the activeChart state --- */}
             <Modal isOpen={activeChart !== null} onClose={() => setActiveChart(null)} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
                         {activeChart === "zala_crop" && "Zala Chart"}
-                        {activeChart === "future_chart" && "Future Chart"}
+                        {activeChart === "forestry" && "Forestry Data Chart"}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {activeChart === "zala_crop" && <ChartComponentZala />}
-                        {activeChart === "future_chart" && (
-                            <div>Future Chart Content Will Go Here!</div>
-                        )}
+                        {activeChart === "forestry" && <ChartComponentForestry/>}
                     </ModalBody>
-
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} onClick={() => setActiveChart(null)}>
                             Close
