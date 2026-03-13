@@ -15,7 +15,7 @@ import {
     Text,
     IconButton,
     Portal
-} from "@open-pioneer/chakra-integration"; // or "@chakra-ui/react"
+} from "@chakra-ui/react"; // or "@chakra-ui/react"
 
 type PopoverProps = {
     description: string;

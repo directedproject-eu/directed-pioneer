@@ -3,11 +3,8 @@
 
 import {
     Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
     VStack
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { IsimipHandler } from "../services/IsimipHandler";
 import { useService } from "open-pioneer:react-hooks";
@@ -35,28 +32,29 @@ export function MonthSlider() {
         intl.formatMessage({ id: "global.months.dec" })
     ];
 
-    function onChange(val: number): void {
+    function onChange(details: {value: number[]}): void {
+        const val = details.value[0];
+        if (val === undefined || months[val] === undefined) return;
         setSliderValue(val);
-        setDisplayDate(months[val]);
+        if (months[val] === undefined) return;
         prepSrvc.setMonth(val + 1);
     }
 
     return (
         <VStack width={"50%"}>
             <span style={{ width: "80%" }}>
-                <Slider
-                    aria-label="slider-ex-1"
-                    value={sliderValue}
-                    onChange={(val) => onChange(val)}
+                <Slider.Root
+                    aria-label={["slider-ex-1"]}
+                    value={[sliderValue]}
+                    onValueChange={(val) => onChange(val)}
                     min={0}
                     max={11}
-                    focusThumbOnChange={false}
                 >
-                    <SliderTrack>
-                        <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb />
-                </Slider>
+                    <Slider.Track>
+                        <Slider.Range />
+                    </Slider.Track>
+                    <Slider.Thumb index={0} />
+                </Slider.Root>
             </span>
             <span> {displayDate} </span>
         </VStack>

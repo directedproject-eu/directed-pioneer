@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Box, Button, Text } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import { IoIosClose } from "react-icons/io";
 
 type ClosableBoxProps = {
     title: string;
@@ -32,7 +32,7 @@ const ClosableBox: React.FC<ClosableBoxProps> = ({ title, closeRef, children, ma
                         closeRef.current.remove();
                     }}
                 >
-                    <CloseIcon />
+                    <IoIosClose />
                 </Button>
             </Box>
             <Box mt={4}>{children}</Box>

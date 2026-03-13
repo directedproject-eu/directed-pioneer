@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { ChevronRightIcon } from "@chakra-ui/icons";
+import { SlArrowRight } from "react-icons/sl";
 
 interface SelectorItemProps {
     selected: boolean;
@@ -22,7 +22,7 @@ const SelectorItem: React.FC<SelectorItemProps> = ({ selected, children, onClick
                 }}
                 onClick={onClick}
             >
-                {selected && <ChevronRightIcon />}
+                {selected && <SlArrowRight />}
                 {children}
             </div>
         </>

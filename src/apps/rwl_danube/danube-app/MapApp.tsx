@@ -15,21 +15,15 @@ import {
     Button,
     Container,
     Flex,
-    FormControl,
-    FormLabel,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
+    Dialog,
+    Field,
     Select,
     Spacer,
     Text,
     useDisclosure,
-    VStack
-} from "@open-pioneer/chakra-integration";
+    VStack,
+    NativeSelect
+} from "@chakra-ui/react";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Legend as PioneerLegend } from "@open-pioneer/legend";
@@ -50,7 +44,7 @@ import { FeatureInfo } from "featureinfo";
 import { Navbar } from "navbar";
 import { IsimipSelector } from "./controls/IsimipSelector";
 import { IsimipHandler } from "./services/IsimipHandler";
-import { StationSelector } from "./services/StationSelector";
+import { StationSelector, StationSelectorImpl } from "./services/StationSelector";
 import { LayerZoom } from "./services/LayerZoom";
 import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
@@ -95,8 +89,8 @@ export function MapApp() {
         }),
         [prepSrvc]
     );
-    const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
-    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
+    const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
+    const { open, onClose } = useDisclosure({ defaultOpen: true });
 
     /////////////////////////
     /// Past event layers ///
@@ -268,7 +262,7 @@ export function MapApp() {
             <Flex height="100%" direction="column" overflow="hidden">
                 <Navbar authService={authService}></Navbar>
                 <Container p={5}></Container>
-                <Notifier position="bottom" />
+                <Notifier />
                 <TitledSection
                     title={
                         <Box
@@ -284,32 +278,34 @@ export function MapApp() {
                     }
                 >
                     <Flex flex="1" direction="column" position="relative">
-                        <Modal
-                            closeOnOverlayClick={false}
-                            isOpen={isOpen}
-                            onClose={onClose}
-                            size={"5xl"}
-                            isCentered={true}
+                        <Dialog.Root
+                            closeOnInteractOutside={false}
+                            open={open}
+                            onOpenChange={onClose}
+                            size={"xl"}
+                            placement={"center"}
                         >
-                            <ModalOverlay />
-                            <ModalContent>
-                                <ModalHeader>
-                                    {intl.formatMessage({ id: "welcome_window.header" })}
-                                </ModalHeader>
-                                <ModalCloseButton />
-                                <ModalBody pb={6}>
-                                    <Text as="b">
-                                        {intl.formatMessage({ id: "welcome_window.body" })}
-                                    </Text>
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button onClick={onClose}>Close</Button>
-                                </ModalFooter>
-                            </ModalContent>
-                        </Modal>
+                            <Dialog.Backdrop />
+                            <Dialog.Positioner>
+                                <Dialog.Content>
+                                    <Dialog.Header>
+                                        {intl.formatMessage({ id: "welcome_window.header" })}
+                                    </Dialog.Header>
+                                    <Dialog.CloseTrigger />
+                                    <Dialog.Body pb={6}>
+                                        <Text as="b">
+                                            {intl.formatMessage({ id: "welcome_window.body" })}
+                                        </Text>
+                                    </Dialog.Body>
+                                    <Dialog.Footer>
+                                        <Button onClick={onClose}>Close</Button>
+                                    </Dialog.Footer>
+                                </Dialog.Content>
+                            </Dialog.Positioner>
+                        </Dialog.Root>
                         {authState.kind !== "pending" && (
                             <MapContainer
-                                mapId={MAP_ID}
+                                map={mapModel.map}
                                 role="main"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                             >
@@ -358,7 +354,7 @@ export function MapApp() {
                                                         </SectionHeading>
                                                     }
                                                 >
-                                                    <Measurement mapId={MAP_ID} />
+                                                    <Measurement map={mapModel.map} />
                                                 </TitledSection>
                                             </Box>
                                         </Box>
@@ -374,23 +370,23 @@ export function MapApp() {
                                         marginBottom="10px"
                                     >
                                         <Toc
-                                            mapId={MAP_ID}
+                                            map={mapModel.map}
                                             showTools={true}
                                             collapsibleGroups={true}
                                             initiallyCollapsed={true}
                                             showBasemapSwitcher={false}
                                         />
-                                        <FormControl>
-                                            <FormLabel mt={2}>
+                                        <Field.Root>
+                                            <Field.Label mt={2}>
                                                 <Text as="b">
                                                     {intl.formatMessage({ id: "basemapLabel" })}
                                                 </Text>
-                                            </FormLabel>
+                                            </Field.Label>
                                             <BasemapSwitcher
-                                                mapId={MAP_ID}
+                                                map={mapModel.map}
                                                 allowSelectingEmptyBasemap={true}
                                             />
-                                        </FormControl>
+                                        </Field.Root>
                                     </Box>
                                     {downloadIsActive && <LayerDownload mapID={MAP_ID} intl={intl} isOpen={downloadIsActive} onClose={() => setDownloadIsActive(false)} />}
                                 </MapAnchor>
@@ -401,7 +397,7 @@ export function MapApp() {
                                     horizontalGap={15}
                                     verticalGap={60}
                                 >
-                                    <VStack align="stretch" spacing={2}>
+                                    <VStack align="stretch" gap={2}>
                                         <Button
                                             size="sm"
                                             onClick={() => zoomService.zoomToVienna(mapModel.map!)}
@@ -459,41 +455,44 @@ export function MapApp() {
                                                         comparison.
                                                     </Text>
                                                     <Flex direction="row" gap={4} p={4}>
-                                                        <Select
-                                                            placeholder="Select Left Layer"
-                                                            value={selectedLeftLayer ?? ""}
-                                                            onChange={(e) =>
-                                                                setSelectedLeftLayer(e.target.value)
-                                                            }
-                                                        >
-                                                            {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
-                                                                    {layer.title || layer.id}
-                                                                </option>
-                                                            ))}
-                                                        </Select>
-
-                                                        <Select
-                                                            placeholder="Select Right Layer"
-                                                            value={selectedRightLayer ?? ""}
-                                                            onChange={(e) =>
-                                                                setSelectedRightLayer(
-                                                                    e.target.value
-                                                                )
-                                                            }
-                                                        >
-                                                            {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
-                                                                    {layer.title || layer.id}
-                                                                </option>
-                                                            ))}
-                                                        </Select>
+                                                        <NativeSelect.Root>
+                                                            <NativeSelect.Field
+                                                                placeholder="Select Left Layer"
+                                                                value={selectedLeftLayer ?? ""}
+                                                                onChange={(e) =>
+                                                                    setSelectedLeftLayer(e.target.value)
+                                                                }
+                                                            >
+                                                                {visibleAvailableLayers.map((layer) => (
+                                                                    <option
+                                                                        key={layer.id}
+                                                                        value={layer.id}
+                                                                    >
+                                                                        {layer.title || layer.id}
+                                                                    </option>
+                                                                ))}
+                                                            </NativeSelect.Field>
+                                                        </NativeSelect.Root>
+                                                        <NativeSelect.Root>
+                                                            <NativeSelect.Field
+                                                                placeholder="Select Right Layer"
+                                                                value={selectedRightLayer ?? ""}
+                                                                onChange={(e) =>
+                                                                    setSelectedRightLayer(
+                                                                        e.target.value
+                                                                    )
+                                                                }
+                                                            >
+                                                                {visibleAvailableLayers.map((layer) => (
+                                                                    <option
+                                                                        key={layer.id}
+                                                                        value={layer.id}
+                                                                    >
+                                                                        {layer.title || layer.id}
+                                                                    </option>
+                                                                ))}
+                                                            </NativeSelect.Field>
+                                                        </NativeSelect.Root>
                                                     </Flex>
                                                 </Box>
                                             </Box>
@@ -507,7 +506,7 @@ export function MapApp() {
                                             // marginLeft="auto"
                                             alignSelf="flex-end"
                                         >
-                                            <PioneerLegend mapId={MAP_ID} />
+                                            <PioneerLegend map={mapModel.map} />
                                         </Flex>
                                     </Flex>
                                 </MapAnchor>
@@ -532,7 +531,7 @@ export function MapApp() {
                                                 id: "map.download.button"
                                             })}
                                             icon={<PiDownload />}
-                                            isActive={downloadIsActive}
+                                            active={downloadIsActive}
                                             onClick={toggleDownload}
                                         />
                                         <ToolButton
@@ -545,13 +544,13 @@ export function MapApp() {
                                         <ToolButton
                                             label={intl.formatMessage({ id: "measurementTitle" })}
                                             icon={<PiRulerLight />}
-                                            isActive={measurementIsActive}
+                                            active={measurementIsActive}
                                             onClick={toggleMeasurement}
                                         />
-                                        <Geolocation mapId={MAP_ID} />
-                                        <InitialExtent mapId={MAP_ID} />
-                                        <ZoomIn mapId={MAP_ID} />
-                                        <ZoomOut mapId={MAP_ID} />
+                                        <Geolocation map={mapModel.map} />
+                                        <InitialExtent map={mapModel.map} />
+                                        <ZoomIn map={mapModel.map} />
+                                        <ZoomOut map={mapModel.map} />
                                     </Flex>
                                 </MapAnchor>
                             </MapContainer>
@@ -564,29 +563,31 @@ export function MapApp() {
                         alignItems="center"
                         justifyContent="center"
                     >
-                        <CoordinateViewer mapId={MAP_ID} precision={2} />
-                        <ScaleBar mapId={MAP_ID} />
-                        <ScaleViewer mapId={MAP_ID} />
+                        <CoordinateViewer map={mapModel.map} precision={2} />
+                        <ScaleBar map={mapModel.map} />
+                        <ScaleViewer map={mapModel.map} />
                     </Flex>
                 </TitledSection>
             </Flex>
 
-            <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Zala Chart</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <ChartComponentZala></ChartComponentZala>
-                    </ModalBody>
+            <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} size={"full"}>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                    <Dialog.Content>
+                        <Dialog.Header>Zala Chart</Dialog.Header>
+                        <Dialog.CloseTrigger />
+                        <Dialog.Body>
+                            <ChartComponentZala></ChartComponentZala>
+                        </Dialog.Body>
 
-                    <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+                        <Dialog.Footer>
+                            <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
+                                Close
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog.Positioner>
+            </Dialog.Root>
         </>
     );
 }

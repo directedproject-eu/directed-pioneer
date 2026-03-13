@@ -5,11 +5,8 @@ import { useEffect, useState } from "react";
 import {
     Box,
     Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
     Text
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import { SimpleLayer } from "@open-pioneer/map";
 import { useService, useIntl } from "open-pioneer:react-hooks";
 import { GeosphereService } from "../services/GeosphereService";
@@ -69,7 +66,9 @@ export const TimeSlider = () => {
         return `https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/${year}${month}${day}T${hours}${minutes}${seconds}.tif`;
     };
 
-    const onChange = (val: number) => {
+    const onChange = (details: {value: number[]}) => {
+        const val = details.value[0];
+        if (val === undefined) return;
         setSliderValue(val);
         const selectedUrl = valueToUrl(val);
         prepSrvc.setFileUrl(selectedUrl);
@@ -114,20 +113,20 @@ export const TimeSlider = () => {
                                 2024-12-31
                             </span>
                         </div>
-                        <Slider
-                            aria-label="date-slider"
-                            defaultValue={0}
+                        <Slider.Root
+                            aria-label={["date-slider"]}
+                            defaultValue={[0]}
                             min={0}
                             max={365}
-                            value={sliderValue}
-                            onChange={onChange}
+                            value={[sliderValue]}
+                            onValueChange={onChange}
                             step={1}
                         >
-                            <SliderTrack>
-                                <SliderFilledTrack />
-                            </SliderTrack>
-                            <SliderThumb />
-                        </Slider>
+                            <Slider.Track>
+                                <Slider.Range />
+                            </Slider.Track>
+                            <Slider.Thumb index={0} />
+                        </Slider.Root>
                         <Text>
                             {intl.formatMessage({
                                 id: "map.slider.geosphere_historical.selected_date"

@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { Box, Button, Checkbox, IconButton, Stack, Text } from "@open-pioneer/chakra-integration";
+import { Box, Button, Checkbox, IconButton, Stack, Text } from "@chakra-ui/react";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import { useService } from "open-pioneer:react-hooks";
 import { useEffect, useState } from "react";
 import { TocService } from "../../services/TocService";
-import { HamburgerIcon } from "@chakra-ui/icons";
 import PopoverToc from "./PopoverToc";
 
 interface TocMetaData {
@@ -68,13 +67,19 @@ const OwnToc: React.FC<TocMetaData> = ({ mapId }) => {
                             alignItems="center"
                             width="100%"
                         >
-                            <Checkbox
+                            <Checkbox.Root
                                 key={item.id}
-                                isChecked={checkedItems[item.id]}
+                                checked={checkedItems[item.id]}
                                 onChange={(e) => setChecked(item.id, e.target.checked, item.name)}
                             >
-                                {item.name}
-                            </Checkbox>
+                                <Checkbox.HiddenInput />
+                                <Checkbox.Control>
+                                    <Checkbox.Indicator />
+                                </Checkbox.Control>
+                                <Checkbox.Label>
+                                    {item.name}
+                                </Checkbox.Label>
+                            </Checkbox.Root>
                             <PopoverToc
                                 description={item.description}
                                 layerTitle={item.name}

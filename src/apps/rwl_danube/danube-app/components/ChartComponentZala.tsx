@@ -10,7 +10,7 @@ import {
     Stack,
     Text,
     Flex, 
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
 import EnsembleCrops from "./EnsembleCrops";
 import { TaxonomyInfo } from "taxonomy";
@@ -97,23 +97,29 @@ const ChartComponentZala = () => {
                     {" "}
                     {/* Added wrap and margin for better layout */}
                     {crops.map((crop, id) => (
-                        <Checkbox
+                        <Checkbox.Root
                             key={id}
                             // Use isChecked to control the component's state
-                            isChecked={selectedCrops.includes(crop)}
+                            checked={selectedCrops.includes(crop)}
                             onChange={() => handleCheckboxChange(crop)}
                             mr={4} // Add some margin between checkboxes
                         >
-                            {crop}
-                        </Checkbox>
+                            <Checkbox.HiddenInput />
+                            <Checkbox.Control>
+                                <Checkbox.Indicator/>
+                            </Checkbox.Control>
+                            <Checkbox.Label>
+                                {crop}
+                            </Checkbox.Label>
+                        </Checkbox.Root>
                     ))}
                 </Stack>
             </Center>
-            <Text mt={"2em"} size={"2em"}>
+            <Text mt={"2em"} textStyle={"2em"}>
                 {intl.formatMessage({id: "charts.explanation1"})}
                 {" "}
                 <Button
-                    variant="link"
+                    variant="plain"
                     color="#2e9ecc"
                     onClick={() => setActiveKeyword("agriculture")}
                 >
@@ -122,7 +128,7 @@ const ChartComponentZala = () => {
                 {intl.formatMessage({id: "charts.explanation2"})}
                 {" "}
                 <Button
-                    variant="link"
+                    variant="plain"
                     color="#2e9ecc"
                     onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
                 >
@@ -132,7 +138,7 @@ const ChartComponentZala = () => {
                 {intl.formatMessage({id: "charts.explanation4"})}
                 {" "}
                 <Button
-                    variant="link"
+                    variant="plain"
                     color="#2e9ecc"
                     onClick={() => setActiveKeyword("Agricultural and ecological drought")}
                 >
