@@ -37,9 +37,8 @@ const getUnit = (variable: string) => {
 
 const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, selectedLocation, locationName }) => {
     const [seriesData, setSeriesData] = useState<SeriesData[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     
-    // 1. Add a ref to track if this is the chart's initial mount
     const isFirstRender = useRef(true);
 
     useEffect(() => {
@@ -47,8 +46,20 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
 
         setIsLoading(true);
 
+        setSeriesData([]); 
+
         const fetchVariable = async (variable: string, axisIndex: number, color: string): Promise<SeriesData | null> => {
             if (variable === "none") return null;
+
+            const isValidDataPoint = (varName: string, value: number | null) => {
+                if (value === null || isNaN(value)) return false;
+                
+                if (varName.includes("soil_moisture")) {
+                    return value >= 0 && value <= 100;
+                }
+                
+                return true; 
+            };
 
             try {
                 const res = await fetch(`https://52n-directed.obs.eu-de.otc.t-systems.com/data/forestry/${selectedLocation}/${variable}.json`);
@@ -63,7 +74,7 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
                         new Date(item.time).getTime(),
                         item.val
                     ])
-                    .filter((point: number[]) => !isNaN(point[0]) && point[1] !== null)
+                    .filter((point: number[]) => !isNaN(point[0]) && isValidDataPoint(variable, point[1]))
                     .sort((a: number[], b: number[]) => a[0] - b[0]);
 
                 return {
@@ -98,16 +109,11 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
 
     }, [leftVariable, rightVariable, selectedLocation]);
 
-    // 2. Once we successfully load data for the first time, mark initial render as complete
     useEffect(() => {
         if (seriesData.length > 0) {
             isFirstRender.current = false;
         }
     }, [seriesData]);
-
-    if (isLoading && seriesData.length === 0) {
-        return <div>loading...</div>;
-    }
 
     const options = {
         title: {
@@ -115,21 +121,21 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
         },
         rangeSelector: {
             enabled: true,
-            // 3. Conditionally apply the selected index so it doesn't force a reset on every re-render
-            selected: isFirstRender.current ? 1 : undefined, 
-            buttons: [
-                { type: "week", count: 1, text: "1w" },
-                { type: "month", count: 1, text: "1m" }, 
-                { type: "month", count: 6, text: "6m" },
-                { type: "year", count: 1, text: "1y" },
-                { type: "all", text: "All" }
-            ]
+            inputEnabled: false,
+            ...(isFirstRender.current ? {
+                selected: 1, 
+                buttons: [
+                    { type: "week", count: 1, text: "1w" },
+                    { type: "month", count: 1, text: "1m" }, 
+                    { type: "month", count: 6, text: "6m" },
+                    { type: "year", count: 1, text: "1y" },
+                    { type: "all", text: "All" }
+                ]
+            } : {})
         },
         xAxis: {
             type: "datetime",
             title: { text: "Time" },
-            // 4. Added ordinal: false. This is a best practice for Highstock datetime axes
-            // so it doesn't artificially compress time gaps and mess up auto-scaling on series updates.
             ordinal: false 
         },
         navigator: {
@@ -164,11 +170,47 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
     };
 
     return (
-        <HighchartsReact 
-            highcharts={Highcharts} 
-            constructorType={"stockChart"} 
-            options={options} 
-        />
+        <div style={{ position: "relative", width: "100%", height: "100%", minHeight: "400px" }}>
+            {isLoading && (
+                <div 
+                    style={{
+                        position: "absolute",
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.7)",
+                        zIndex: 10,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
+                >
+                    <div 
+                        style={{
+                            width: "40px",
+                            height: "40px",
+                            border: "4px solid #f3f3f3",
+                            borderTop: "4px solid #4363D8",
+                            borderRadius: "50%",
+                            animation: "spin 1s linear infinite"
+                        }}
+                    />
+                    <style>{`
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    `}</style>
+                </div>
+            )}
+            
+            {seriesData.length > 0 && !isLoading && (
+                <HighchartsReact 
+                    key={selectedLocation}
+                    highcharts={Highcharts} 
+                    constructorType={"stockChart"} 
+                    options={options} 
+                />
+            )}
+        </div>
     );
 };
 

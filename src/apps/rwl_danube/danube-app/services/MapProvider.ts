@@ -170,22 +170,35 @@ export class MainMapProvider implements MapConfigProvider {
     }
 
     createForestryLayer() {
-        const point1 = new Feature({ geometry: new Point(fromLonLat([17.2, 46.8])) });
-        point1.set("locationId", "keszthelyi_erdeszet_vallus");
+        const stationData = [
+            { id: "bakonybel_2_ti5", lon: 17.7245, lat: 47.2501, name: "Bakonybél (2 TI5)" },
+            { id: "bakonyszentlaszlo_erdeszet_hodo", lon: 17.8003, lat: 47.3500, name: "Bakonyszentlászló (Hódo)" },
+            { id: "csehbanya_20ep", lon: 17.6833, lat: 47.1833, name: "Csehbánya (20ÉP)" },
+            { id: "devecser_59_d", lon: 17.4367, lat: 47.1064, name: "Devecser (59 D)" },
+            { id: "devecseri_edeszet_sarosfo", lon: 17.3848, lat: 47.0554, name: "Sárosfő (Devecseri Erdészet)" },
+            { id: "dorgicse_18_ey", lon: 17.7219, lat: 46.9170, name: "Dörgicse (18 EY)" },
+            { id: "keszthelyi_erdeszet_vallus", lon: 17.3092, lat: 46.8412, name: "Vállus (Keszthelyi Erdészet)" },
+            { id: "kup_24_ti", lon: 17.4635, lat: 47.2477, name: "Kup (24 TI)" },
+            { id: "saska_61_vf", lon: 17.4789, lat: 46.9358, name: "Sáska (61 VF)" },
+            { id: "tuskevar_36_c", lon: 17.3167, lat: 47.1167, name: "Tüskevár (36 C)" },
+            { id: "zalaerdod_29_a", lon: 17.1392, lat: 47.0564, name: "Zalaerdőd (29 A)" }
+        ];
 
-        const point2 = new Feature({ geometry: new Point(fromLonLat([16.8, 46.7])) });
-        point2.set("locationId", "placeholder_1");
-
-        const point3 = new Feature({ geometry: new Point(fromLonLat([16.9, 46.5])) });
-        point3.set("locationId", "placeholder_2");
+        const features = stationData.map(station => {
+            const feature = new Feature({ geometry: new Point(fromLonLat([station.lon, station.lat])) });
+            feature.set("locationId", station.id);
+            feature.set("name", station.name); 
+            return feature;
+        });
 
         return new SimpleLayer({
             id: "forestry_stations",
             title: "Forestry Stations",
             visible: true,
+            description: "Displays the locations of regional forestry management stations.",
             olLayer: new VectorLayer({
                 source: new VectorSource({
-                    features: [point1, point2, point3]
+                    features: features
                 }),
                 style: new Style({
                     image: new CircleStyle({

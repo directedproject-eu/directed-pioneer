@@ -15,9 +15,17 @@ import { useIntl } from "open-pioneer:react-hooks";
 import ForestryChart from "./ForestryChart";
 
 const locations = [
+    { id: "bakonybel_2_ti5", name: "Bakonybél (2 TI5)" },
+    { id: "bakonyszentlaszlo_erdeszet_hodo", name: "Bakonyszentlászló Erdészet Hódo" },
+    { id: "csehbanya_20ep", name: "Csehbánya (20ÉP)" },
+    { id: "devecser_59_d", name: "Devecser (59 D)" },
+    { id: "devecseri_edeszet_sarosfo", name: "Devecseri Erdészet Sárosfő" },
+    { id: "dorgicse_18_ey", name: "Dörgicse (18 EY)" },
     { id: "keszthelyi_erdeszet_vallus", name: "Keszthelyi Erdészet Vállus" },
-    { id: "placeholder_1", name: "Platzhalter Ort 1" },
-    { id: "placeholder_2", name: "Platzhalter Ort 2" }
+    { id: "kup_24_ti", name: "Kup (24 TI)" },
+    { id: "saska_61_vf", name: "Sáska (61 VF)" },
+    { id: "tuskevar_36_c", name: "Tüskevár (36 C)" },
+    { id: "zalaerdod_29_a", name: "Zalaerdőd (29 A)" }
 ];
 
 const variables = [
