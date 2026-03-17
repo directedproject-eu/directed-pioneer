@@ -169,7 +169,6 @@ export class MainMapProvider implements MapConfigProvider {
         this.pygeoapiBaseUrl = config.pygeoapiBaseUrl;
     }
 
-
     createForestryLayer() {
         const point1 = new Feature({ geometry: new Point(fromLonLat([17.2, 46.8])) });
         point1.set("locationId", "keszthelyi_erdeszet_vallus");
@@ -232,7 +231,7 @@ export class MainMapProvider implements MapConfigProvider {
     createWmsLayer(
         layerName: string,
         layerTitle: string,
-        layerDescription: string,   
+        layerDescription: string,
         layerType: string,
         visible: boolean = false
     ) {
@@ -278,7 +277,7 @@ export class MainMapProvider implements MapConfigProvider {
                 }),
                 // Aufruf der neuen Ebene (Layer) hier einfügen!
                 this.createForestryLayer(),
-                
+
                 // Administrative boundaries
                 new GroupLayer({
                     title: "Administrative boundaries",
@@ -307,7 +306,12 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsPluvialFloodingLayersRef.map(
                                             ({ name, title, description }) =>
                                                 new SimpleLayer({
-                                                    ...this.createWmsLayer(name, title, description, "WMS_tiles")
+                                                    ...this.createWmsLayer(
+                                                        name,
+                                                        title,
+                                                        description,
+                                                        "WMS_tiles"
+                                                    )
                                                 })
                                         )
                                     ],
@@ -430,7 +434,7 @@ export class MainMapProvider implements MapConfigProvider {
                                                 "Vienna_lidar_2m_ViennaCenter_32633",
                                                 "Lidar",
                                                 "Lidar elevation map with 2 m resolution",
-                                                "WMS_tiles",
+                                                "WMS_tiles"
                                             ),
                                             attributes: {
                                                 "legend": {
@@ -480,7 +484,12 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersHistoricalFlooding.map(
                                             ({ name, title, description }) =>
                                                 new SimpleLayer({
-                                                    ...this.createWmsLayer(name, title, description, "WMS_tiles")
+                                                    ...this.createWmsLayer(
+                                                        name,
+                                                        title,
+                                                        description,
+                                                        "WMS_tiles"
+                                                    )
                                                 })
                                         )
                                     ],
@@ -498,7 +507,12 @@ export class MainMapProvider implements MapConfigProvider {
                                         ...wmsLayersHistoricalDamage.map(
                                             ({ name, title, description }) =>
                                                 new SimpleLayer({
-                                                    ...this.createWmsLayer(name, title, description, "WMS_tiles")
+                                                    ...this.createWmsLayer(
+                                                        name,
+                                                        title,
+                                                        description,
+                                                        "WMS_tiles"
+                                                    )
                                                 })
                                         )
                                     ],

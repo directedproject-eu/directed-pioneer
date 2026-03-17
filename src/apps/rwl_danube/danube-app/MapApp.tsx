@@ -68,8 +68,6 @@ import { ForestrySelector } from "./services/ForestrySelector";
 
 type ActiveChartType = "zala_crop" | "forestry" | null;
 
-
-
 export function MapApp() {
     const mapModel = useMapModel(MAP_ID);
     const zoomService = useService<LayerZoom>("app.LayerZoom");
@@ -107,7 +105,7 @@ export function MapApp() {
     );
 
     const forestrySelector = useService<ForestrySelector>("app.ForestrySelector");
-    
+
     const { clickedForestryLocation } = useReactiveSnapshot(
         () => ({
             clickedForestryLocation: forestrySelector.selectedLocationId
@@ -203,12 +201,11 @@ export function MapApp() {
                 "green"
             )
         );
-
     }, [authState.kind, mapModel]);
 
     const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
     const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); 
+    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]);
 
     useEffect(() => {
         if (!mapModel.map) return;
@@ -622,7 +619,9 @@ export function MapApp() {
                     <ModalCloseButton />
                     <ModalBody>
                         {activeChart === "zala_crop" && <ChartComponentZala />}
-                        {activeChart === "forestry" && <ChartComponentForestry initialLocation={forestryLocation} />}
+                        {activeChart === "forestry" && (
+                            <ChartComponentForestry initialLocation={forestryLocation} />
+                        )}
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} onClick={closeChartModal}>

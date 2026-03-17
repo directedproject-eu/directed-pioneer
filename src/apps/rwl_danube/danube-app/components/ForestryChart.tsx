@@ -24,16 +24,13 @@ type SeriesData = {
     marker: { enabled: boolean };
 };
 
-const distinctColors = [
-    "#E6194B", 
-    "#3CB44B", 
-    "#4363D8", 
-    "#F58231", 
-    "#911EB4", 
-    "#42D4F4"  
-];
+const distinctColors = ["#E6194B", "#3CB44B", "#4363D8", "#F58231", "#911EB4", "#42D4F4"];
 
-const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables, selectedLocation, locationName }) => {
+const ForestryChart: React.FC<ForestryProps> = ({
+    selectedVariables,
+    selectedLocation,
+    locationName
+}) => {
     const [seriesData, setSeriesData] = useState<SeriesData[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -46,10 +43,12 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables, selectedLoc
         setIsLoading(true);
 
         const fetchPromises = selectedVariables.map((variable) =>
-            // Hier wird der ausgewählte Ort dynamisch in die URL eingefügt
-            fetch(`https://52n-directed.obs.eu-de.otc.t-systems.com/data/forestry/${selectedLocation}/${variable}.json`)
+            fetch(
+                `https://52n-directed.obs.eu-de.otc.t-systems.com/data/forestry/${selectedLocation}/${variable}.json`
+            )
                 .then((res) => {
-                    if (!res.ok) throw new Error(`Failed to fetch ${variable} for ${selectedLocation}`);
+                    if (!res.ok)
+                        throw new Error(`Failed to fetch ${variable} for ${selectedLocation}`);
                     return res.json();
                 })
                 .then((data: DataPoint[]) => {
@@ -57,24 +56,28 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables, selectedLoc
                         new Date(item.time).getTime(),
                         item.val
                     ]);
-                    
+
                     return {
-                        name: variable.charAt(0).toUpperCase() + variable.slice(1).replace(/_/g, " "),
+                        name:
+                            variable.charAt(0).toUpperCase() + variable.slice(1).replace(/_/g, " "),
                         data: formattedData,
                         variable: variable
                     };
                 })
                 .catch((err) => {
-                    console.warn(err); // Warnung in der Konsole, wenn Platzhalter-URLs nicht existieren
+                    console.warn(err);
                     return null;
                 })
         );
 
         Promise.all(fetchPromises)
             .then((results) => {
-                // Filtert fehlgeschlagene Anfragen (z.B. Platzhalter) heraus
-                const validResults = results.filter((res) => res !== null) as { name: string, data: number[][], variable: string }[];
-                
+                const validResults = results.filter((res) => res !== null) as {
+                    name: string;
+                    data: number[][];
+                    variable: string;
+                }[];
+
                 const highchartsSeries: SeriesData[] = validResults.map((result, index) => ({
                     name: result.name,
                     data: result.data,
@@ -82,12 +85,11 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables, selectedLoc
                     color: distinctColors[index % distinctColors.length],
                     marker: { enabled: false }
                 }));
-                
+
                 setSeriesData(highchartsSeries);
             })
             .catch((error) => console.error("Error formatting forestry data:", error))
             .finally(() => setIsLoading(false));
-
     }, [selectedVariables, selectedLocation]);
 
     if (isLoading && seriesData.length === 0) {
@@ -96,7 +98,7 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables, selectedLoc
 
     const options = {
         title: {
-            text: `Forestry Data - ${locationName}` // Dynamischer Chart-Titel
+            text: `Forestry Data - ${locationName}`
         },
         xAxis: {
             type: "datetime",

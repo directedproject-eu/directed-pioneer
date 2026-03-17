@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import {
     Box,
     Center,
-    Checkbox,
-    Stack,
     Text,
     Select,
-    Flex
+    Flex,
+    FormLabel,
+    FormControl
 } from "@open-pioneer/chakra-integration";
 import { useIntl } from "open-pioneer:react-hooks";
 import ForestryChart from "./ForestryChart";
@@ -20,59 +20,46 @@ const locations = [
     { id: "placeholder_2", name: "Platzhalter Ort 2" }
 ];
 
-// NEU: Interface für die Properties hinzufügen
+const variables = [
+    { id: "none", name: "--- Nichts ausgewählt ---" },
+    { id: "temperature", name: "Temperature" },
+    { id: "wind_speed", name: "Wind Speed" },
+    { id: "soil_moisture_10cm", name: "Soil Moisture 10cm" },
+    { id: "soil_moisture_25cm", name: "Soil Moisture 25cm" },
+    { id: "soil_moisture_50cm", name: "Soil Moisture 50cm" },
+    { id: "soil_moisture_70cm", name: "Soil Moisture 70cm" }
+];
+
 interface Props {
     initialLocation?: string;
 }
 
-// NEU: Die Komponente nimmt jetzt 'initialLocation' entgegen
 const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
     const intl = useIntl();
-    
-    const [selectedVariables, setSelectedVariables] = useState<string[]>(["temperature"]);
-    
-    // NEU: Wir nutzen 'initialLocation' als Startwert (oder den Fallback)
-    const [selectedLocation, setSelectedLocation] = useState<string>(initialLocation || "keszthelyi_erdeszet_vallus");
 
-    // NEU: Wenn ein neuer Punkt auf der Karte geklickt wird, updaten wir das Dropdown
+    const [selectedLocation, setSelectedLocation] = useState<string>(
+        initialLocation || "keszthelyi_erdeszet_vallus"
+    );
+
+    const [leftAxisVariable, setLeftAxisVariable] = useState<string>("temperature");
+    const [rightAxisVariable, setRightAxisVariable] = useState<string>("wind_speed");
+
     useEffect(() => {
         if (initialLocation) {
             setSelectedLocation(initialLocation);
         }
     }, [initialLocation]);
-    
-    const variables = [
-        "temperature",
-        "wind_speed",
-        "soil_moisture_10cm",
-        "soil_moisture_25cm",
-        "soil_moisture_50cm",
-        "soil_moisture_70cm"
-    ];
 
-    const handleCheckboxChange = (variable: string) => {
-        setSelectedVariables((prevSelected) => {
-            const isChecked = prevSelected.includes(variable);
-            if (isChecked) {
-                return prevSelected.filter((id) => id !== variable);
-            } else {
-                return [...prevSelected, variable];
-            }
-        });
-    };
+    const currentLocationName = locations.find((loc) => loc.id === selectedLocation)?.name || "";
 
-    const formatLabel = (str: string) => {
-        return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, " ");
-    };
-
-    const currentLocationName = locations.find(loc => loc.id === selectedLocation)?.name || "";
+    const selectedVariables = [leftAxisVariable, rightAxisVariable].filter((v) => v !== "none");
 
     return (
         <>
             <Flex justifyContent="center" mb={4}>
                 <Box width="300px">
-                    <Select 
-                        value={selectedLocation} 
+                    <Select
+                        value={selectedLocation}
                         onChange={(e) => setSelectedLocation(e.target.value)}
                     >
                         {locations.map((loc) => (
@@ -84,31 +71,48 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
                 </Box>
             </Flex>
 
-            <ForestryChart 
-                selectedVariables={selectedVariables} 
+            <ForestryChart
+                selectedVariables={selectedVariables}
                 selectedLocation={selectedLocation}
                 locationName={currentLocationName}
             />
-            
-            <Center>
-                <Stack direction="row" wrap="wrap" mt={4}>
-                    {variables.map((variable, id) => (
-                        <Checkbox
-                            key={id}
-                            isChecked={selectedVariables.includes(variable)}
-                            onChange={() => handleCheckboxChange(variable)}
-                            mr={4}
+
+            <Center mt={4}>
+                <Flex gap={8} width="100%" maxWidth="600px" justifyContent="center">
+                    <FormControl>
+                        <FormLabel textAlign="center">Linke Y-Achse</FormLabel>
+                        <Select
+                            value={leftAxisVariable}
+                            onChange={(e) => setLeftAxisVariable(e.target.value)}
                         >
-                            {formatLabel(variable)}
-                        </Checkbox>
-                    ))}
-                </Stack>
+                            {variables.map((v) => (
+                                <option key={`left-${v.id}`} value={v.id}>
+                                    {v.name}
+                                </option>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <FormControl>
+                        <FormLabel textAlign="center">Rechte Y-Achse</FormLabel>
+                        <Select
+                            value={rightAxisVariable}
+                            onChange={(e) => setRightAxisVariable(e.target.value)}
+                        >
+                            {variables.map((v) => (
+                                <option key={`right-${v.id}`} value={v.id}>
+                                    {v.name}
+                                </option>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Flex>
             </Center>
-            
+
             <Text mt={"2em"} size={"2em"}>
-                {intl.formatMessage({id: "charts.forestry.explanation1"})}
+                {intl.formatMessage({ id: "charts.forestry.explanation1" })}
             </Text>
-            
+
             <Box padding="15px" />
         </>
     );

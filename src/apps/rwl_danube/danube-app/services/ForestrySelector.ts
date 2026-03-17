@@ -27,26 +27,26 @@ export class ForestrySelectorImpl implements ForestrySelector {
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
-        
+
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             const map = model?.olMap;
             if (!map) return;
 
             map.on("click", (event) => {
                 let foundId: string | null = null;
-                
+
                 map.forEachFeatureAtPixel(event.pixel, (feature) => {
                     const locId = feature.get("locationId");
                     if (locId) {
                         foundId = locId as string;
-                        return true; 
+                        return true;
                     }
                 });
 
                 if (foundId) {
-                    event.stopPropagation(); 
+                    event.stopPropagation();
                     this.#forestryData.value = { id: foundId };
-                }            
+                }
             });
         });
     }
