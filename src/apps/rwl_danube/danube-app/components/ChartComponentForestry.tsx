@@ -72,7 +72,8 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
             </Flex>
 
             <ForestryChart
-                selectedVariables={selectedVariables}
+                leftVariable={leftAxisVariable}
+                rightVariable={rightAxisVariable}
                 selectedLocation={selectedLocation}
                 locationName={currentLocationName}
             />
