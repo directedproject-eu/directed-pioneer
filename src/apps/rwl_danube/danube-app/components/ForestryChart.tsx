@@ -204,7 +204,7 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
             
             {seriesData.length > 0 && !isLoading && (
                 <HighchartsReact 
-                    key={selectedLocation}
+                    key={selectedLocation}  
                     highcharts={Highcharts} 
                     constructorType={"stockChart"} 
                     options={options} 

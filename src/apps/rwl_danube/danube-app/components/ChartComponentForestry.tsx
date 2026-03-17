@@ -89,7 +89,7 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
             <Center mt={4}>
                 <Flex gap={8} width="100%" maxWidth="600px" justifyContent="center">
                     <FormControl>
-                        <FormLabel textAlign="center">Linke Y-Achse</FormLabel>
+                        <FormLabel textAlign="center">Left Y-axis</FormLabel>
                         <Select
                             value={leftAxisVariable}
                             onChange={(e) => setLeftAxisVariable(e.target.value)}
@@ -103,7 +103,7 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
                     </FormControl>
 
                     <FormControl>
-                        <FormLabel textAlign="center">Rechte Y-Achse</FormLabel>
+                        <FormLabel textAlign="center">Right Y-axis</FormLabel>
                         <Select
                             value={rightAxisVariable}
                             onChange={(e) => setRightAxisVariable(e.target.value)}
