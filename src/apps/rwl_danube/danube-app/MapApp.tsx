@@ -64,8 +64,11 @@ import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
 import { theme } from "theme";
+import { ForestrySelector } from "./services/ForestrySelector";
 
-type ActiveChartType = "zala_crop" | "foresty" | null;
+type ActiveChartType = "zala_crop" | "forestry" | null;
+
+
 
 export function MapApp() {
     const mapModel = useMapModel(MAP_ID);
@@ -84,6 +87,7 @@ export function MapApp() {
     const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
 
     const [activeChart, setActiveChart] = useState<ActiveChartType>(null);
+    const [forestryLocation, setForestryLocation] = useState<string>("keszthelyi_erdeszet_vallus");
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
@@ -102,11 +106,29 @@ export function MapApp() {
         [prepSrvc]
     );
 
+    const forestrySelector = useService<ForestrySelector>("app.ForestrySelector");
+    
+    const { clickedForestryLocation } = useReactiveSnapshot(
+        () => ({
+            clickedForestryLocation: forestrySelector.selectedLocationId
+        }),
+        [forestrySelector]
+    );
+
+    useEffect(() => {
+        if (clickedForestryLocation) {
+            setForestryLocation(clickedForestryLocation);
+            setActiveChart("forestry");
+        }
+    }, [clickedForestryLocation]);
+
+    const closeChartModal = () => {
+        setActiveChart(null);
+        forestrySelector.clearSelection();
+    };
+
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
-    /////////////////////////
-    /// Past event layers ///
-    ////////////////////////
     function createPastEventLayer(
         collectionId: string,
         id: string,
@@ -114,7 +136,7 @@ export function MapApp() {
         description: string,
         color: string
     ) {
-        const pastEventLayer = new SimpleLayer({
+        return new SimpleLayer({
             id: `${id}`,
             title: intl.formatMessage({ id: `map.legend.event_variables.${title}` }),
             description: `${description}`,
@@ -137,7 +159,6 @@ export function MapApp() {
             }),
             isBaseLayer: false
         });
-        return pastEventLayer;
     }
 
     useEffect(() => {
@@ -182,14 +203,12 @@ export function MapApp() {
                 "green"
             )
         );
-    }, [authState.kind]);
 
-    //////////////////
-    /// LayerSwipe ///
-    //////////////////
+    }, [authState.kind, mapModel]);
+
     const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
     const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
+    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); 
 
     useEffect(() => {
         if (!mapModel.map) return;
@@ -411,7 +430,6 @@ export function MapApp() {
                                     )}
                                 </MapAnchor>
 
-                                {/* zoom to region and feature info */}
                                 <MapAnchor
                                     position="bottom-left"
                                     horizontalGap={15}
@@ -441,7 +459,6 @@ export function MapApp() {
                                     )}
                                 </MapAnchor>
 
-                                {/* layerswipe and legend */}
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
                                     <Flex direction="column" gap={4}>
                                         <Box
@@ -527,7 +544,6 @@ export function MapApp() {
                                     </Flex>
                                 </MapAnchor>
 
-                                {/* tool buttons */}
                                 <MapAnchor
                                     position="bottom-right"
                                     horizontalGap={10}
@@ -596,7 +612,7 @@ export function MapApp() {
                 </TitledSection>
             </Flex>
 
-            <Modal isOpen={activeChart !== null} onClose={() => setActiveChart(null)} size={"full"}>
+            <Modal isOpen={activeChart !== null} onClose={closeChartModal} size={"full"}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
@@ -606,10 +622,10 @@ export function MapApp() {
                     <ModalCloseButton />
                     <ModalBody>
                         {activeChart === "zala_crop" && <ChartComponentZala />}
-                        {activeChart === "forestry" && <ChartComponentForestry/>}
+                        {activeChart === "forestry" && <ChartComponentForestry initialLocation={forestryLocation} />}
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={() => setActiveChart(null)}>
+                        <Button colorScheme="blue" mr={3} onClick={closeChartModal}>
                             Close
                         </Button>
                     </ModalFooter>

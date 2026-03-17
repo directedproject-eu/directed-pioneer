@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 
 type ForestryProps = {
     selectedVariables: string[];
+    selectedLocation: string;
+    locationName: string;
 };
 
 type DataPoint = {
@@ -31,12 +33,12 @@ const distinctColors = [
     "#42D4F4"  
 ];
 
-const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables }) => {
+const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables, selectedLocation, locationName }) => {
     const [seriesData, setSeriesData] = useState<SeriesData[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (selectedVariables.length === 0) {
+        if (selectedVariables.length === 0 || !selectedLocation) {
             setSeriesData([]);
             return;
         }
@@ -44,9 +46,10 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables }) => {
         setIsLoading(true);
 
         const fetchPromises = selectedVariables.map((variable) =>
-            fetch(`https://52n-directed.obs.eu-de.otc.t-systems.com/data/forestry/keszthelyi_erdeszet_vallus/${variable}.json`)
+            // Hier wird der ausgewählte Ort dynamisch in die URL eingefügt
+            fetch(`https://52n-directed.obs.eu-de.otc.t-systems.com/data/forestry/${selectedLocation}/${variable}.json`)
                 .then((res) => {
-                    if (!res.ok) throw new Error(`Failed to fetch ${variable}`);
+                    if (!res.ok) throw new Error(`Failed to fetch ${variable} for ${selectedLocation}`);
                     return res.json();
                 })
                 .then((data: DataPoint[]) => {
@@ -61,11 +64,18 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables }) => {
                         variable: variable
                     };
                 })
+                .catch((err) => {
+                    console.warn(err); // Warnung in der Konsole, wenn Platzhalter-URLs nicht existieren
+                    return null;
+                })
         );
 
         Promise.all(fetchPromises)
             .then((results) => {
-                const highchartsSeries: SeriesData[] = results.map((result, index) => ({
+                // Filtert fehlgeschlagene Anfragen (z.B. Platzhalter) heraus
+                const validResults = results.filter((res) => res !== null) as { name: string, data: number[][], variable: string }[];
+                
+                const highchartsSeries: SeriesData[] = validResults.map((result, index) => ({
                     name: result.name,
                     data: result.data,
                     type: "line",
@@ -75,10 +85,10 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables }) => {
                 
                 setSeriesData(highchartsSeries);
             })
-            .catch((error) => console.error("Error fetching forestry data:", error))
+            .catch((error) => console.error("Error formatting forestry data:", error))
             .finally(() => setIsLoading(false));
 
-    }, [selectedVariables]);
+    }, [selectedVariables, selectedLocation]);
 
     if (isLoading && seriesData.length === 0) {
         return <div>loading...</div>;
@@ -86,7 +96,7 @@ const ForestryChart: React.FC<ForestryProps> = ({ selectedVariables }) => {
 
     const options = {
         title: {
-            text: "Forestry Data - Keszthelyi Erdészet Vállus"
+            text: `Forestry Data - ${locationName}` // Dynamischer Chart-Titel
         },
         xAxis: {
             type: "datetime",

@@ -1,21 +1,45 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     Center,
     Checkbox,
     Stack,
     Text,
+    Select,
+    Flex
 } from "@open-pioneer/chakra-integration";
 import { useIntl } from "open-pioneer:react-hooks";
 import ForestryChart from "./ForestryChart";
 
-const ChartComponentForestry = () => {
+const locations = [
+    { id: "keszthelyi_erdeszet_vallus", name: "Keszthelyi Erdészet Vállus" },
+    { id: "placeholder_1", name: "Platzhalter Ort 1" },
+    { id: "placeholder_2", name: "Platzhalter Ort 2" }
+];
+
+// NEU: Interface für die Properties hinzufügen
+interface Props {
+    initialLocation?: string;
+}
+
+// NEU: Die Komponente nimmt jetzt 'initialLocation' entgegen
+const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
     const intl = useIntl();
     
     const [selectedVariables, setSelectedVariables] = useState<string[]>(["temperature"]);
+    
+    // NEU: Wir nutzen 'initialLocation' als Startwert (oder den Fallback)
+    const [selectedLocation, setSelectedLocation] = useState<string>(initialLocation || "keszthelyi_erdeszet_vallus");
+
+    // NEU: Wenn ein neuer Punkt auf der Karte geklickt wird, updaten wir das Dropdown
+    useEffect(() => {
+        if (initialLocation) {
+            setSelectedLocation(initialLocation);
+        }
+    }, [initialLocation]);
     
     const variables = [
         "temperature",
@@ -41,9 +65,30 @@ const ChartComponentForestry = () => {
         return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, " ");
     };
 
+    const currentLocationName = locations.find(loc => loc.id === selectedLocation)?.name || "";
+
     return (
         <>
-            <ForestryChart selectedVariables={selectedVariables} />
+            <Flex justifyContent="center" mb={4}>
+                <Box width="300px">
+                    <Select 
+                        value={selectedLocation} 
+                        onChange={(e) => setSelectedLocation(e.target.value)}
+                    >
+                        {locations.map((loc) => (
+                            <option key={loc.id} value={loc.id}>
+                                {loc.name}
+                            </option>
+                        ))}
+                    </Select>
+                </Box>
+            </Flex>
+
+            <ForestryChart 
+                selectedVariables={selectedVariables} 
+                selectedLocation={selectedLocation}
+                locationName={currentLocationName}
+            />
             
             <Center>
                 <Stack direction="row" wrap="wrap" mt={4}>

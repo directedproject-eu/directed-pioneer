@@ -25,6 +25,12 @@ export default defineBuildConfig({
                 mapRegistry: "map.MapRegistry"
             }
         },
+        ForestrySelectorImpl: {
+            provides: ["app.ForestrySelector"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
+        },
         TokenInterceptor: {
             provides: ["http.Interceptor"],
             references: {
@@ -37,6 +43,7 @@ export default defineBuildConfig({
                 mapRegistry: "map.MapRegistry"
             }
         },
+
         LayerZoomImpl: {
             provides: ["app.LayerZoom"]
         },
@@ -63,6 +70,7 @@ export default defineBuildConfig({
             "app.LayerHighlighter",
             "app.LayerZoom",
             "app.StationSelector",
+            "app.ForestrySelector",
             "ogc-features.VectorSourceFactory",
             "ogc-features.SearchSourceFactory"
         ]

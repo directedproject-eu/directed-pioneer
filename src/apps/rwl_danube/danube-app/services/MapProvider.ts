@@ -1,11 +1,14 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
+import { fromLonLat } from "ol/proj";
+import { Circle as CircleStyle, Fill, Stroke, Style } from "ol/style"; // Zusammengefasster Import
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 import GeoJSON from "ol/format/GeoJSON.js";
-import { Stroke, Style } from "ol/style";
 import TileWMS from "ol/source/TileWMS";
 import { ServiceOptions } from "@open-pioneer/runtime";
 import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
@@ -166,6 +169,38 @@ export class MainMapProvider implements MapConfigProvider {
         this.pygeoapiBaseUrl = config.pygeoapiBaseUrl;
     }
 
+
+    createForestryLayer() {
+        const point1 = new Feature({ geometry: new Point(fromLonLat([17.2, 46.8])) });
+        point1.set("locationId", "keszthelyi_erdeszet_vallus");
+
+        const point2 = new Feature({ geometry: new Point(fromLonLat([16.8, 46.7])) });
+        point2.set("locationId", "placeholder_1");
+
+        const point3 = new Feature({ geometry: new Point(fromLonLat([16.9, 46.5])) });
+        point3.set("locationId", "placeholder_2");
+
+        return new SimpleLayer({
+            id: "forestry_stations",
+            title: "Forestry Stations",
+            visible: true,
+            olLayer: new VectorLayer({
+                source: new VectorSource({
+                    features: [point1, point2, point3]
+                }),
+                style: new Style({
+                    image: new CircleStyle({
+                        radius: 8,
+                        fill: new Fill({ color: "purple" }),
+                        stroke: new Stroke({ color: "white", width: 2 })
+                    })
+                }),
+                properties: { title: "Forestry Stations" }
+            }),
+            isBaseLayer: false
+        });
+    }
+
     capitalizeFirstLetter(word: string) {
         return String(word).charAt(0).toUpperCase() + String(word).slice(1);
     }
@@ -241,6 +276,9 @@ export class MainMapProvider implements MapConfigProvider {
                     }),
                     isBaseLayer: true
                 }),
+                // Aufruf der neuen Ebene (Layer) hier einfügen!
+                this.createForestryLayer(),
+                
                 // Administrative boundaries
                 new GroupLayer({
                     title: "Administrative boundaries",

@@ -10,3 +10,4 @@ export { IsimipHandlerImpl } from "./services/IsimipHandler";
 export { LayerHighlighterImpl } from "./services/LayerHighlighter";
 export { LayerZoomImpl } from "./services/LayerZoom";
 export { StationSelectorImpl } from "./services/StationSelector";
+export { ForestrySelectorImpl } from "./services/ForestrySelector";
