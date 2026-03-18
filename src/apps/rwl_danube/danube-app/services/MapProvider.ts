@@ -14,6 +14,7 @@ import { ServiceOptions } from "@open-pioneer/runtime";
 import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import { BuildingDamageLegend } from "../components/legends/BuildingDamageLegend";
 import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
+import { FluvialFloodReturnPeriodShiftLegend } from "../components/legends/FluvialFloodReturnPeriodShiftLegend";
 import { LidarLegend } from "../components/legends/LidarLegend ";
 import { WaterLevelLegend } from "../components/legends/WaterLevelLegend";
 
@@ -172,29 +173,46 @@ export class MainMapProvider implements MapConfigProvider {
     createForestryLayer() {
         const stationData = [
             { id: "bakonybel_2_ti5", lon: 17.7245, lat: 47.2501, name: "Bakonybél (2 TI5)" },
-            { id: "bakonyszentlaszlo_erdeszet_hodo", lon: 17.8003, lat: 47.3500, name: "Bakonyszentlászló (Hódo)" },
+            {
+                id: "bakonyszentlaszlo_erdeszet_hodo",
+                lon: 17.8003,
+                lat: 47.35,
+                name: "Bakonyszentlászló (Hódo)"
+            },
             { id: "csehbanya_20ep", lon: 17.6833, lat: 47.1833, name: "Csehbánya (20ÉP)" },
             { id: "devecser_59_d", lon: 17.4367, lat: 47.1064, name: "Devecser (59 D)" },
-            { id: "devecseri_edeszet_sarosfo", lon: 17.3848, lat: 47.0554, name: "Sárosfő (Devecseri Erdészet)" },
-            { id: "dorgicse_18_ey", lon: 17.7219, lat: 46.9170, name: "Dörgicse (18 EY)" },
-            { id: "keszthelyi_erdeszet_vallus", lon: 17.3092, lat: 46.8412, name: "Vállus (Keszthelyi Erdészet)" },
+            {
+                id: "devecseri_edeszet_sarosfo",
+                lon: 17.3848,
+                lat: 47.0554,
+                name: "Sárosfő (Devecseri Erdészet)"
+            },
+            { id: "dorgicse_18_ey", lon: 17.7219, lat: 46.917, name: "Dörgicse (18 EY)" },
+            {
+                id: "keszthelyi_erdeszet_vallus",
+                lon: 17.3092,
+                lat: 46.8412,
+                name: "Vállus (Keszthelyi Erdészet)"
+            },
             { id: "kup_24_ti", lon: 17.4635, lat: 47.2477, name: "Kup (24 TI)" },
             { id: "saska_61_vf", lon: 17.4789, lat: 46.9358, name: "Sáska (61 VF)" },
             { id: "tuskevar_36_c", lon: 17.3167, lat: 47.1167, name: "Tüskevár (36 C)" },
             { id: "zalaerdod_29_a", lon: 17.1392, lat: 47.0564, name: "Zalaerdőd (29 A)" }
         ];
 
-        const features = stationData.map(station => {
-            const feature = new Feature({ geometry: new Point(fromLonLat([station.lon, station.lat])) });
+        const features = stationData.map((station) => {
+            const feature = new Feature({
+                geometry: new Point(fromLonLat([station.lon, station.lat]))
+            });
             feature.set("locationId", station.id);
-            feature.set("name", station.name); 
+            feature.set("name", station.name);
             return feature;
         });
 
         return new SimpleLayer({
             id: "forestry_stations",
             title: "Forestry Stations",
-            visible: true,
+            visible: false,
             description: "Displays the locations of regional forestry management stations.",
             olLayer: new VectorLayer({
                 source: new VectorSource({
@@ -271,6 +289,55 @@ export class MainMapProvider implements MapConfigProvider {
         return wmsLayerContent;
     }
 
+    createReturnPeriodShiftLayers(ssp: string) {
+        const layerNames = [
+            {
+                "name": `danube_flood_return_period_shifts_r010s_${ssp}`,
+                "title": `Future return intervals - SSP ${ssp} - RP10`,
+                "description": `Future average return intervals of 10-year flood events in the Danube River basin for the climate scenario ISIMIP SSP ${ssp} based on 10 CMIP6 realisations. Reference period: 2001-2030. Future period: 2061-2090.`
+            },
+            {
+                "name": `danube_flood_return_period_shifts_r025s_${ssp}`,
+                "title": `Future return intervals - SSP ${ssp} - RP25`,
+                "description": `Future average return intervals of 25-year flood events in the Danube River basin for the climate scenario ISIMIP SSP ${ssp} based on 10 CMIP6 realisations. Reference period: 2001-2030. Future period: 2061-2090.`
+            },
+            {
+                "name": `danube_flood_return_period_shifts_r050s_${ssp}`,
+                "title": `Future return intervals - SSP ${ssp} - RP50`,
+                "description": `Future average return intervals of 50-year flood events in the Danube River basin for the climate scenario ISIMIP SSP ${ssp} based on 10 CMIP6 realisations. Reference period: 2001-2030. Future period: 2061-2090.`
+            },
+            {
+                "name": `danube_flood_return_period_shifts_r100s_${ssp}`,
+                "title": `Future return intervals - SSP ${ssp} - RP100`,
+                "description": `Future average return intervals of 100-year flood events in the Danube River basin for the climate scenario ISIMIP SSP ${ssp} based on 10 CMIP6 realisations. Reference period: 2001-2030. Future period: 2061-2090.`
+            },
+            {
+                "name": `danube_flood_return_period_shifts_r250s_${ssp}`,
+                "title": `Future return intervals - SSP ${ssp} - RP250`,
+                "description": `Future average return intervals of 250-year flood events in the Danube River basin for the climate scenario ISIMIP SSP ${ssp} based on 10 CMIP6 realisations. Reference period: 2001-2030. Future period: 2061-2090.`
+            }
+        ];
+
+        const layers = layerNames.map((layer) => {
+            const l = new SimpleLayer({
+                ...this.createWmsLayer(
+                    layer.name,
+                    layer.title,
+                    layer.description,
+                    "WMS_features",
+                    false
+                ),
+                attributes: {
+                    "legend": {
+                        Component: FluvialFloodReturnPeriodShiftLegend
+                    }
+                }
+            });
+            return l;
+        });
+        return layers;
+    }
+
     async getMapConfig(): Promise<MapConfig> {
         return {
             initialView: {
@@ -288,8 +355,6 @@ export class MainMapProvider implements MapConfigProvider {
                     }),
                     isBaseLayer: true
                 }),
-                // Aufruf der neuen Ebene (Layer) hier einfügen!
-                this.createForestryLayer(),
 
                 // Administrative boundaries
                 new GroupLayer({
@@ -298,6 +363,10 @@ export class MainMapProvider implements MapConfigProvider {
                     id: "administrative_boundaries",
                     layers: [this.createRegionLayer("vienna"), this.createRegionLayer("zala")]
                 }),
+
+                // Aufruf der neuen Ebene (Layer) hier einfügen!
+                this.createForestryLayer(),
+
                 // Vienna model results
                 new GroupLayer({
                     title: "Vienna",
@@ -483,6 +552,7 @@ export class MainMapProvider implements MapConfigProvider {
                                 })
                             ]
                         }),
+
                         // Historical layers
                         new GroupLayer({
                             title: "Historical Layers",
@@ -539,12 +609,32 @@ export class MainMapProvider implements MapConfigProvider {
                         })
                     ]
                 }),
+
                 // Fluvial flood layers
                 new GroupLayer({
                     title: "Fluvial Flooding",
                     visible: true,
                     id: "fluvial_flooding",
                     layers: [
+                        new GroupLayer({
+                            title: "Future average return intervals",
+                            visible: false,
+                            id: "fluvial_flooding_future_return_intervals",
+                            layers: [
+                                new GroupLayer({
+                                    title: "SSP 370",
+                                    visible: false,
+                                    id: "fluvial_flooding_future_return_intervals_ssp370",
+                                    layers: [...this.createReturnPeriodShiftLayers("370")]
+                                }),
+                                new GroupLayer({
+                                    title: "SSP 585",
+                                    visible: false,
+                                    id: "fluvial_flooding_future_return_intervals_ssp585",
+                                    layers: [...this.createReturnPeriodShiftLayers("585")]
+                                })
+                            ]
+                        }),
                         new SimpleLayer({
                             ...this.createWmsLayer(
                                 "euh_danube_bigrivers_10",
@@ -552,14 +642,14 @@ export class MainMapProvider implements MapConfigProvider {
                                 "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull).",
                                 "WMS_features",
                                 true
-                            )
+                            ),
+                            attributes: {
+                                "legend": {
+                                    Component: FluvialFloodLegend
+                                }
+                            }
                         })
-                    ],
-                    attributes: {
-                        "legend": {
-                            Component: FluvialFloodLegend
-                        }
-                    }
+                    ]
                 }),
                 new SimpleLayer({
                     ...this.createWmsLayer(
