@@ -134,7 +134,7 @@ export function SaferPlacesFloodMap() {
         if (typeof details.value[0] === "string") {
             setModel(details.value[0]);
         }
-    }
+    };
 
     const handleRainIntensityChange = (event: ChangeEvent<HTMLInputElement>) => {
         setRainIntensity(event.target.value);

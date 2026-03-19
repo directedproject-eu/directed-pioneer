@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useService } from "open-pioneer:react-hooks";
-import { useState } from "react";
 import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../Components/ExpandableBox";
@@ -45,8 +44,8 @@ export function FloodSelector() {
                 <HoverCard.Positioner>
                     <HoverCard.Content>
                         <HoverCard.Arrow />
-                            {intl.formatMessage({id: "map.flood_layer_selector.description"})}
-                            {/* {" "}
+                        {intl.formatMessage({id: "map.flood_layer_selector.description"})}
+                        {/* {" "}
                             <Button
                                 variant="link"
                                 color="#2e9ecc"

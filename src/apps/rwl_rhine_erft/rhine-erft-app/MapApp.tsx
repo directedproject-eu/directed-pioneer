@@ -9,8 +9,7 @@ import {
     NativeSelect,
     Spacer,
     useDisclosure,
-    Dialog,
-    Alert
+    Dialog
 } from "@chakra-ui/react";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";

@@ -3,8 +3,6 @@
 import { MapModel } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
-import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
 
 //fetch feature info for all visible WMS layers at clicked map coord
 export function fetchFeatureInfo(

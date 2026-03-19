@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import React from "react";
-import {IconButton, Tooltip} from "@open-pioneer/chakra-integration";
+import {IconButton} from "@chakra-ui/react";
+import { Tooltip } from "@open-pioneer/chakra-snippets/tooltip";
 import { FaInfo } from "react-icons/fa";
 
 interface Props{
@@ -12,19 +13,20 @@ const Disclaimer: React.FC<Props> = ({ children }) => {
     
     return (
         <Tooltip
-            label={children}
+            content={children}
             openDelay={250}
             closeDelay={100}
-            placement="top"
+            positioning={{placement: "top"}}
         >
             <IconButton
                 marginLeft={"0.5em"}
-                size={"s"}
+                size={"xs"}
                 aria-label="Info"
-                icon={<FaInfo />}
                 variant="ghost"
                 color={"black"}
-            />
+            >
+                <FaInfo />
+            </IconButton>
         </Tooltip>
     );
 };

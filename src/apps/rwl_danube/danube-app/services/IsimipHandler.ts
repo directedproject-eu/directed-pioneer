@@ -10,7 +10,6 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import Legend from "../components/legends/Legend";
 
 import chroma from "chroma-js";
-import { info } from "console";
 
 const layer_info = {
     "hurs": {

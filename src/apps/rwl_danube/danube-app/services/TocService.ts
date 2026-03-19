@@ -2,10 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { reactive, Reactive } from "@conterra/reactivity-core";
-import { Layer, MapRegistry, SimpleLayer } from "@open-pioneer/map";
+import { MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
 
 interface References {
     mapRegistry: MapRegistry;

@@ -255,7 +255,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                             </HoverCard.Trigger>
                             <HoverCard.Content>
                                 <HoverCard.Arrow />
-                                    {intl.formatMessage({ id: "map.download.description" })}
+                                {intl.formatMessage({ id: "map.download.description" })}
                             </HoverCard.Content>
                         </HoverCard.Root>
                         {intl.formatMessage({ id: "map.download.heading" })}

@@ -17,7 +17,6 @@ import {
     Flex,
     Dialog,
     Field,
-    Select,
     Spacer,
     Text,
     useDisclosure,
@@ -44,14 +43,13 @@ import { FeatureInfo } from "featureinfo";
 import { Navbar } from "navbar";
 import { IsimipSelector } from "./controls/IsimipSelector";
 import { IsimipHandler } from "./services/IsimipHandler";
-import { StationSelector, StationSelectorImpl } from "./services/StationSelector";
+import { StationSelector } from "./services/StationSelector";
 import { LayerZoom } from "./services/LayerZoom";
 import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
-import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";

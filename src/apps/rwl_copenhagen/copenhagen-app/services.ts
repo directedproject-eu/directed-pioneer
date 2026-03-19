@@ -4,7 +4,6 @@ import { MapConfig, MapConfigProvider, SimpleLayer, GroupLayer } from "@open-pio
 import { ServiceOptions } from "@open-pioneer/runtime";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
-import WebGLTileLayer from "ol/layer/WebGLTile";
 import OSM from "ol/source/OSM";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";

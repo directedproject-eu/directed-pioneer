@@ -1,3 +1,5 @@
+/* eslint-disable header/header */
+
 declare module "ol-ext/control/Swipe" {
     import { Control } from "ol/control";
     import Layer from "ol/layer/Layer";

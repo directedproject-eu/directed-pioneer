@@ -6,9 +6,6 @@ settings:
 
 catalogs:
   default:
-    '@chakra-ui/icons':
-      specifier: ^2.2.4
-      version: 2.2.4
     '@emotion/react':
       specifier: ^11.14.0
       version: 11.14.0
@@ -16,74 +13,68 @@ catalogs:
       specifier: ^11.14.0
       version: 11.14.1
     '@open-pioneer/authentication':
-      specifier: ^3.1.0
-      version: 3.1.0
+      specifier: ^4.4.0
+      version: 4.4.0
     '@open-pioneer/authentication-keycloak':
-      specifier: ^3.1.0
-      version: 3.1.0
+      specifier: ^4.4.0
+      version: 4.4.0
     '@open-pioneer/basemap-switcher':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/build-package-cli':
       specifier: ^3.0.4
       version: 3.0.4
     '@open-pioneer/build-support':
       specifier: ^3.0.3
       version: 3.0.3
-    '@open-pioneer/chakra-integration':
-      specifier: ^3.1.0
-      version: 3.1.0
     '@open-pioneer/check-pnpm-duplicates':
       specifier: ^0.2.4
       version: 0.2.4
     '@open-pioneer/coordinate-viewer':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/geolocation':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/legend':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/map':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/map-navigation':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/map-ui-components':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/measurement':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/notifier':
-      specifier: ^3.1.0
-      version: 3.1.0
+      specifier: ^4.4.0
+      version: 4.4.0
     '@open-pioneer/ogc-features':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/overview-map':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/runtime':
-      specifier: ^3.1.0
-      version: 3.1.0
+      specifier: ^4.4.0
+      version: 4.4.0
     '@open-pioneer/scale-bar':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/scale-viewer':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/test-utils':
-      specifier: ^3.1.0
-      version: 3.1.0
-    '@open-pioneer/theme':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^4.4.0
+      version: 4.4.0
     '@open-pioneer/toc':
-      specifier: ^0.10.0
-      version: 0.10.0
+      specifier: ^1.2.0
+      version: 1.2.0
     '@open-pioneer/vite-plugin-pioneer':
       specifier: ^4.0.1
       version: 4.0.2
@@ -181,11 +172,11 @@ catalogs:
       specifier: ^3.6.2
       version: 3.6.2
     react:
-      specifier: ^19.2.0
-      version: 19.2.0
+      specifier: ^19.2.3
+      version: 19.2.4
     react-dom:
-      specifier: ^19.2.0
-      version: 19.2.0
+      specifier: ^19.2.3
+      version: 19.2.4
     react-icons:
       specifier: ^5.5.0
       version: 5.5.0
@@ -232,14 +223,6 @@ overrides:
   '@babel/runtime': '>=7.26.10'
   entities@4.5.0: ^6.0.0
 
-patchedDependencies:
-  '@chakra-ui/hooks':
-    hash: 0425e59e5963f540970162a0320f192637dd4f5e74c54014680d4dd4f2e5c16b
-    path: patches/@chakra-ui__hooks.patch
-  react-select:
-    hash: 76074e6c05936addacb06b7e4bf08d0f5101ba64a00cae84d8c9ed60c62254de
-    path: patches/react-select@5.8.0.patch
-
 importers:
 
   .:
@@ -249,7 +232,7 @@ importers:
         version: 3.1.2
       html-react-parser:
         specifier: 5.2.5
-        version: 5.2.5(@types/react@19.2.7)(react@19.2.0)
+        version: 5.2.5(@types/react@19.2.7)(react@19.2.4)
     devDependencies:
       '@open-pioneer/build-package-cli':
         specifier: 'catalog:'
@@ -262,7 +245,7 @@ importers:
         version: 0.2.4
       '@open-pioneer/vite-plugin-pioneer':
         specifier: 'catalog:'
-        version: 4.0.2(@open-pioneer/runtime@3.1.0(@types/react@19.2.7)(typescript@5.9.3))(sass@1.94.2)(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))
+        version: 4.0.2(@open-pioneer/runtime@4.4.0(@types/react@19.2.7)(typescript@5.9.3))(sass@1.94.2)(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))
       '@testing-library/dom':
         specifier: 'catalog:'
         version: 10.4.1
@@ -271,7 +254,7 @@ importers:
         version: 6.9.1
       '@testing-library/react':
         specifier: 'catalog:'
-        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@testing-library/user-event':
         specifier: 'catalog:'
         version: 14.6.1(@testing-library/dom@10.4.1)
@@ -295,7 +278,7 @@ importers:
         version: 8.48.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitejs/plugin-react-swc':
         specifier: 'catalog:'
-        version: 4.2.2(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))
+        version: 4.2.2(@swc/helpers@0.5.19)(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))
       eslint:
         specifier: 'catalog:'
         version: 8.57.1
@@ -349,7 +332,7 @@ importers:
         version: 3.6.2
       react:
         specifier: 'catalog:'
-        version: 19.2.0
+        version: 19.2.4
       rimraf:
         specifier: 'catalog:'
         version: 6.1.2
@@ -377,75 +360,63 @@ importers:
 
   src/apps/landing/landing-app:
     dependencies:
-      '@open-pioneer/chakra-integration':
-        specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       navbar:
         specifier: workspace:^
         version: link:../../../packages/navbar
 
   src/apps/rwl_copenhagen/copenhagen-app:
     dependencies:
-      '@chakra-ui/icons':
-        specifier: 'catalog:'
-        version: 2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
       '@emotion/react':
         specifier: 'catalog:'
-        version: 11.14.0(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.0(@types/react@19.2.7)(react@19.2.4)
       '@emotion/styled':
         specifier: 'catalog:'
-        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react@19.2.4)
       '@open-pioneer/basemap-switcher':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
-      '@open-pioneer/chakra-integration':
-        specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/coordinate-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/geolocation':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/legend':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/map-navigation':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map-ui-components':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/measurement':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/notifier':
         specifier: 'catalog:'
-        version: 3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/overview-map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/scale-bar':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/scale-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/theme':
-        specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/toc':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       chroma-js:
         specifier: 'catalog:'
         version: 3.1.2
@@ -466,16 +437,16 @@ importers:
         version: 4.0.36(ol@10.7.0)
       react:
         specifier: 'catalog:'
-        version: 19.2.0
+        version: 19.2.4
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.0(react@19.2.0)
+        version: 19.2.4(react@19.2.4)
       react-icons:
         specifier: 'catalog:'
-        version: 5.5.0(react@19.2.0)
+        version: 5.5.0(react@19.2.4)
       react-use:
         specifier: 'catalog:'
-        version: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 17.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       saferplaces:
         specifier: workspace:^
         version: link:../../../packages/saferplaces
@@ -485,72 +456,63 @@ importers:
 
   src/apps/rwl_danube/danube-app:
     dependencies:
-      '@chakra-ui/icons':
-        specifier: 'catalog:'
-        version: 2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
       '@emotion/react':
         specifier: 'catalog:'
-        version: 11.14.0(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.0(@types/react@19.2.7)(react@19.2.4)
       '@emotion/styled':
         specifier: 'catalog:'
-        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react@19.2.4)
       '@open-pioneer/authentication':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
+        version: 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/authentication-keycloak':
         specifier: 'catalog:'
-        version: 3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
+        version: 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/basemap-switcher':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
-      '@open-pioneer/chakra-integration':
-        specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/coordinate-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/geolocation':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/legend':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/map-navigation':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map-ui-components':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/measurement':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/notifier':
         specifier: 'catalog:'
-        version: 3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/ogc-features':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/overview-map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/scale-bar':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/scale-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/theme':
-        specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/toc':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       chroma-js:
         specifier: 'catalog:'
         version: 3.1.2
@@ -559,7 +521,7 @@ importers:
         version: 12.4.0
       highcharts-react-official:
         specifier: ^3.2.1
-        version: 3.2.3(highcharts@12.4.0)(react@19.2.0)
+        version: 3.2.3(highcharts@12.4.0)(react@19.2.4)
       layerdownload:
         specifier: workspace:^
         version: link:../../../packages/layerdownload
@@ -577,73 +539,64 @@ importers:
         version: 5.5.3
       react:
         specifier: 'catalog:'
-        version: 19.2.0
+        version: 19.2.4
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.0(react@19.2.0)
+        version: 19.2.4(react@19.2.4)
       react-icons:
         specifier: 'catalog:'
-        version: 5.5.0(react@19.2.0)
+        version: 5.5.0(react@19.2.4)
       react-use:
         specifier: 'catalog:'
-        version: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 17.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       taxonomy:
         specifier: workspace:^
         version: link:../../../packages/taxonomy
 
   src/apps/rwl_emilia_romagna/emilia-romagna-app:
     dependencies:
-      '@chakra-ui/icons':
-        specifier: 'catalog:'
-        version: 2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
       '@emotion/react':
         specifier: 'catalog:'
-        version: 11.14.0(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.0(@types/react@19.2.7)(react@19.2.4)
       '@emotion/styled':
         specifier: 'catalog:'
-        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react@19.2.4)
       '@open-pioneer/basemap-switcher':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
-      '@open-pioneer/chakra-integration':
-        specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/coordinate-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/geolocation':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/map-navigation':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map-ui-components':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/measurement':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/notifier':
         specifier: 'catalog:'
-        version: 3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/overview-map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/scale-bar':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/scale-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/theme':
-        specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       navbar:
         specifier: workspace:^
         version: link:../../../packages/navbar
@@ -652,76 +605,67 @@ importers:
         version: 10.7.0
       react:
         specifier: 'catalog:'
-        version: 19.2.0
+        version: 19.2.4
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.0(react@19.2.0)
+        version: 19.2.4(react@19.2.4)
       react-icons:
         specifier: 'catalog:'
-        version: 5.5.0(react@19.2.0)
+        version: 5.5.0(react@19.2.4)
       react-use:
         specifier: 'catalog:'
-        version: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 17.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
   src/apps/rwl_rhine_erft/rhine-erft-app:
     dependencies:
-      '@chakra-ui/icons':
-        specifier: 'catalog:'
-        version: 2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
       '@emotion/react':
         specifier: 'catalog:'
-        version: 11.14.0(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.0(@types/react@19.2.7)(react@19.2.4)
       '@emotion/styled':
         specifier: 'catalog:'
-        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0)
+        version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react@19.2.4)
       '@open-pioneer/basemap-switcher':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
-      '@open-pioneer/chakra-integration':
-        specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/coordinate-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/geolocation':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/legend':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/map-navigation':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/map-ui-components':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/measurement':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/notifier':
         specifier: 'catalog:'
-        version: 3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/overview-map':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       '@open-pioneer/scale-bar':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/scale-viewer':
         specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/theme':
-        specifier: 'catalog:'
-        version: 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       '@open-pioneer/toc':
         specifier: 'catalog:'
-        version: 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
+        version: 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
       featureinfo:
         specifier: workspace:^
         version: link:../../../packages/featureinfo
@@ -739,64 +683,64 @@ importers:
         version: 4.0.36(ol@10.7.0)
       react:
         specifier: 'catalog:'
-        version: 19.2.0
+        version: 19.2.4
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.0(react@19.2.0)
+        version: 19.2.4(react@19.2.4)
       react-icons:
         specifier: 'catalog:'
-        version: 5.5.0(react@19.2.0)
+        version: 5.5.0(react@19.2.4)
       react-use:
         specifier: 'catalog:'
-        version: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 17.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
   src/packages/featureinfo:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'
-        version: 3.1.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
 
   src/packages/layerdownload:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       react:
         specifier: 'catalog:'
-        version: 19.2.0
+        version: 19.2.4
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.0(react@19.2.0)
+        version: 19.2.4(react@19.2.4)
 
   src/packages/mcdm:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'
-        version: 3.1.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
 
   src/packages/navbar:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'
-        version: 3.1.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
 
   src/packages/saferplaces:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       chroma-js:
         specifier: 'catalog:'
         version: 3.1.2
@@ -806,30 +750,30 @@ importers:
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'
-        version: 3.1.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
 
   src/packages/taxonomy:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       taxonomy:
         specifier: workspace:^
         version: 'link:'
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'
-        version: 3.1.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
 
   src/packages/tilefeatureinfo:
     dependencies:
       '@open-pioneer/runtime':
         specifier: 'catalog:'
-        version: 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
     devDependencies:
       '@open-pioneer/test-utils':
         specifier: 'catalog:'
-        version: 3.1.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
+        version: 4.4.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
 
 packages:
 
@@ -838,6 +782,12 @@ packages:
 
   '@adobe/css-tools@4.4.4':
     resolution: {integrity: sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg==}
+
+  '@ark-ui/react@5.34.1':
+    resolution: {integrity: sha512-RJlXCvsHzbK9LVxUVtaSD5pyF1PL8IUR1rHHkf0H0Sa397l6kOFE4EH7MCSj3pDumj2NsmKDVeVgfkfG0KCuEw==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
 
   '@asamuzakjp/css-color@4.1.0':
     resolution: {integrity: sha512-9xiBAtLn4aNsa4mDnpovJvBn72tNEIACyvlqaNJ+ADemR+yeMJWnBudOi2qGDviJa7SwcDOU/TRh5dnET7qk0w==}
@@ -893,49 +843,18 @@ packages:
     resolution: {integrity: sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==}
     engines: {node: '>=6.9.0'}
 
-  '@chakra-ui/anatomy@2.3.6':
-    resolution: {integrity: sha512-TjmjyQouIZzha/l8JxdBZN1pKZTj7sLpJ0YkFnQFyqHcbfWggW9jKWzY1E0VBnhtFz/xF3KC6UAVuZVSJx+y0g==}
-
-  '@chakra-ui/hooks@2.4.5':
-    resolution: {integrity: sha512-601fWfHE2i7UjaxK/9lDLlOni6vk/I+04YDbM0BrelJy+eqxdlOmoN8Z6MZ3PzFh7ofERUASor+vL+/HaCaZ7w==}
-    peerDependencies:
-      react: '>=18'
-
-  '@chakra-ui/icons@2.2.4':
-    resolution: {integrity: sha512-l5QdBgwrAg3Sc2BRqtNkJpfuLw/pWRDwwT58J6c4PqQT6wzXxyNa8Q0PForu1ltB5qEiFb1kxr/F/HO1EwNa6g==}
-    peerDependencies:
-      '@chakra-ui/react': '>=2.0.0'
-      react: '>=18'
-
-  '@chakra-ui/react@2.10.9':
-    resolution: {integrity: sha512-lhdcgoocOiURwBNR3L8OioCNIaGCZqRfuKioLyaQLjOanl4jr0PQclsGb+w0cmito252vEWpsz2xRqF7y+Flrw==}
+  '@chakra-ui/react@3.34.0':
+    resolution: {integrity: sha512-VLhpVwv5IVxhwajO10KnS1VQT4hDqQMQP/A796Ya+uVu8AdoSX+5HHyTLTkYIeXIDMe0xLqJfov04OBKbBchJA==}
     peerDependencies:
       '@emotion/react': '>=11'
-      '@emotion/styled': '>=11'
-      framer-motion: '>=4.0.0'
       react: '>=18'
       react-dom: '>=18'
 
-  '@chakra-ui/styled-system@2.12.4':
-    resolution: {integrity: sha512-oa07UG7Lic5hHSQtGRiMEnYjuhIa8lszyuVhZjZqR2Ap3VMF688y1MVPJ1pK+8OwY5uhXBgVd5c0+rI8aBZlwg==}
+  '@conterra/reactivity-core@0.8.1':
+    resolution: {integrity: sha512-aAPmMFhHHZ2AsPVvscu8N+Uu+XFsCOk0JQjwEuqS59Eq2JD1c1VCoVYCW2hEgkXdBC7L2NZPhPL3t8o5ZZhdkw==}
 
-  '@chakra-ui/theme-tools@2.2.9':
-    resolution: {integrity: sha512-PcbYL19lrVvEc7Oydy//jsy/MO/rZz1DvLyO6AoI+bI/+Kwz9WfOKsspbulEhRg5COayE0R/IZPsskXZ7Mp4bA==}
-    peerDependencies:
-      '@chakra-ui/styled-system': '>=2.0.0'
-
-  '@chakra-ui/theme@3.4.9':
-    resolution: {integrity: sha512-GAom2SjSdRWTcX76/2yJOFJsOWHQeBgaynCUNBsHq62OafzvELrsSHDUw0bBqBb1c2ww0CclIvGilPup8kXBFA==}
-    peerDependencies:
-      '@chakra-ui/styled-system': '>=2.8.0'
-
-  '@chakra-ui/utils@2.2.5':
-    resolution: {integrity: sha512-KTBCK+M5KtXH6p54XS39ImQUMVtAx65BoZDoEms3LuObyTo1+civ1sMm4h3nRT320U6H5H7D35WnABVQjqU/4g==}
-    peerDependencies:
-      react: '>=16.8.0'
-
-  '@conterra/reactivity-core@0.5.0':
-    resolution: {integrity: sha512-c2jLcn1fNjP1vePU4as2zJNHeltBh7stFa1weqW9/PlLJdw3BzK4Y7iB9Fd/krj+wB/QHva7dFpM2ZIp7QJiSg==}
+  '@conterra/reactivity-events@0.8.1':
+    resolution: {integrity: sha512-3YclFCLOgeN4Sw3SBpjJVsLDIvfadZ1q5Jddv9iZS8Lv8dm+qHee2ph+F+0M3xDfvLL8kWrUGlB2bo65yt0X5Q==}
 
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
@@ -1206,32 +1125,35 @@ packages:
     resolution: {integrity: sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  '@floating-ui/core@1.7.3':
-    resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
+  '@floating-ui/core@1.7.5':
+    resolution: {integrity: sha512-1Ih4WTWyw0+lKyFMcBHGbb5U5FtuHJuujoyyr5zTaWS5EYMeT6Jb2AuDeftsCsEuchO+mM2ij5+q9crhydzLhQ==}
 
-  '@floating-ui/dom@1.7.4':
-    resolution: {integrity: sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==}
+  '@floating-ui/dom@1.7.6':
+    resolution: {integrity: sha512-9gZSAI5XM36880PPMm//9dfiEngYoC6Am2izES1FF406YFsjvyBMmeJ2g4SAju3xWwtuynNRFL2s9hgxpLI5SQ==}
 
-  '@floating-ui/utils@0.2.10':
-    resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+  '@floating-ui/utils@0.2.11':
+    resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
 
-  '@formatjs/ecma402-abstract@2.3.6':
-    resolution: {integrity: sha512-HJnTFeRM2kVFVr5gr5kH1XP6K0JcJtE7Lzvtr3FS/so5f1kpsqqqxy5JF+FRaO6H2qmcMfAUIox7AJteieRtVw==}
+  '@formatjs/bigdecimal@0.2.0':
+    resolution: {integrity: sha512-GeaxHZbUoYvHL9tC5eltHLs+1zU70aPw0s7LwqgktIzF5oMhNY4o4deEtusJMsq7WFJF3Ye2zQEzdG8beVk73w==}
 
-  '@formatjs/fast-memoize@2.2.7':
-    resolution: {integrity: sha512-Yabmi9nSvyOMrlSeGGWDiH7rf3a7sIwplbvo/dlz9WCIjzIQAfy1RMf4S0X3yG724n5Ghu2GmEl5NJIV6O9sZQ==}
+  '@formatjs/ecma402-abstract@3.2.0':
+    resolution: {integrity: sha512-dHnqHgBo6GXYGRsepaE1wmsC2etaivOWd5VaJstZd+HI2zR3DCUjbDVZRtoPGkkXZmyHvBwrdEUuqfvzhF/DtQ==}
 
-  '@formatjs/icu-messageformat-parser@2.11.4':
-    resolution: {integrity: sha512-7kR78cRrPNB4fjGFZg3Rmj5aah8rQj9KPzuLsmcSn4ipLXQvC04keycTI1F7kJYDwIXtT2+7IDEto842CfZBtw==}
+  '@formatjs/fast-memoize@3.1.1':
+    resolution: {integrity: sha512-CbNbf+tlJn1baRnPkNePnBqTLxGliG6DDgNa/UtV66abwIjwsliPMOt0172tzxABYzSuxZBZfcp//qI8AvBWPg==}
 
-  '@formatjs/icu-skeleton-parser@1.8.16':
-    resolution: {integrity: sha512-H13E9Xl+PxBd8D5/6TVUluSpxGNvFSlN/b3coUp0e0JpuWXXnQDiavIpY3NnvSp4xhEMoXyyBvVfdFX8jglOHQ==}
+  '@formatjs/icu-messageformat-parser@3.5.3':
+    resolution: {integrity: sha512-HJWZ9S6JWey6iY5+YXE3Kd0ofWU1sC2KTTp56e1168g/xxWvVvr8k9G4fexIgwYV9wbtjY7kGYK5FjoWB3B2OQ==}
 
-  '@formatjs/intl-localematcher@0.6.2':
-    resolution: {integrity: sha512-XOMO2Hupl0wdd172Y06h6kLpBz6Dv+J4okPLl4LPtzbr8f66WbIoy4ev98EBuZ6ZK4h5ydTN6XneT4QVpD7cdA==}
+  '@formatjs/icu-skeleton-parser@2.1.3':
+    resolution: {integrity: sha512-9mFp8TJ166ZM2pcjKwsBWXrDnOJGT7vMEScVgLygUODPOsE8S6f/FHoacvrlHK1B4dYZk8vSCNruyPU64AfgJQ==}
 
-  '@formatjs/intl@3.1.8':
-    resolution: {integrity: sha512-LWXgwI5zTMatvR8w8kCNh/priDTOF/ZssokMBHJ7ZWXFoYLVOYo0EJERD9Eajv+xsfQO1QkuAt77KWQ1OI4mOQ==}
+  '@formatjs/intl-localematcher@0.8.2':
+    resolution: {integrity: sha512-q05KMYGJLyqFNFtIb8NhWLF5X3aK/k0wYt7dnRFuy6aLQL+vUwQ1cg5cO4qawEiINybeCPXAWlprY2mSBjSXAQ==}
+
+  '@formatjs/intl@4.1.4':
+    resolution: {integrity: sha512-y5aZ5p5zO74mZPdQMe9gq8SR1P6rlPQkaYOVFHyRzWrViif4sRKIQX01GYbKJvaGanupVVX+0WoKJqLVsP+X3Q==}
     peerDependencies:
       typescript: ^5.6.0
     peerDependenciesMeta:
@@ -1253,6 +1175,12 @@ packages:
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
+
+  '@internationalized/date@3.11.0':
+    resolution: {integrity: sha512-BOx5huLAWhicM9/ZFs84CzP+V3gBW6vlpM02yzsdYC7TGlZJX1OJiEEHcSayF00Z+3jLlm4w79amvSt6RqKN3Q==}
+
+  '@internationalized/number@3.6.5':
+    resolution: {integrity: sha512-6hY4Kl4HPBvtfS62asS/R22JzNNy8vi/Ssev7x6EobfCp+9QIB2hKvI2EtbdJ0VSQacxVNtqhE/NmF/NZ0gm6g==}
 
   '@isaacs/balanced-match@4.0.1':
     resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
@@ -1290,17 +1218,17 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@open-pioneer/authentication-keycloak@3.1.0':
-    resolution: {integrity: sha512-pH6PbirwruJlHUdIATnNO6plNQNQ45YjJMTZ704CmWyIs03AFv1UEwl/KErw+09QDp8bvfbhEhTmbguZJ6P+Qg==}
+  '@open-pioneer/authentication-keycloak@4.4.0':
+    resolution: {integrity: sha512-pjdPEJQVpri6nVH9QLIh0jmoc8c2Zit8qxmsrCm/GtGyTSj+a5dokTxzBvJHfHHlTCawr7p1LBlZu8iXZjkSgQ==}
 
-  '@open-pioneer/authentication@3.1.0':
-    resolution: {integrity: sha512-cqNJprKsRCqDlZsqNa0SlB21LEBw2QPOMOVZQ+t5xGomtU+l7zlAfZbfGfEoMcm1hVTM2hqfW69kjLXwCSTtwg==}
+  '@open-pioneer/authentication@4.4.0':
+    resolution: {integrity: sha512-1t1Pk5qMcVqnpCN9+cdd8zoHXOzAHZ0SeThNWj/+VV3B2hxhoaxZsiovWk1rIE6cBg2euCd7liBhCt4FcZBvmw==}
 
-  '@open-pioneer/base-theme@3.1.0':
-    resolution: {integrity: sha512-JLUOj5TQJQ24TYue/g7XyXpDTbQpOIL8IqHuSxkw1t/XWX5CV+xJUX+8Po+puCvZQnIss3Qj/REDQP0Tp58YjA==}
+  '@open-pioneer/base-theme@4.4.0':
+    resolution: {integrity: sha512-ht47RJt5LQLj3m7w/qWNDrpIud91rslt21mUpDUWgGlCqmFf/3cjo2gtFXUuxig6uZkcVqHIUWDt7qPEaXB3Ew==}
 
-  '@open-pioneer/basemap-switcher@0.10.0':
-    resolution: {integrity: sha512-3JPhp1L6p1S5jTv8FY6BX8SdvJF/P4VB5EaVyEFltLWT5qMoJEp7XpREaCIfK4SlTMjhgG6r2F/QkWICA6J6/A==}
+  '@open-pioneer/basemap-switcher@1.2.0':
+    resolution: {integrity: sha512-VSKCk2kADW+otKOY+WDoi+JPDthidmPguLruLSIWQpWh4ryTLy/kP0sJcqF7BFF5hz0gD4vnfOd7h0U8eeWE9A==}
 
   '@open-pioneer/build-common@3.1.0':
     resolution: {integrity: sha512-YcLgVRW/Dn+FllZWWOap8bZC018/ehfp6Deslil4nFIfhhwIzuzIoQXgIFj11eSU2UBziQ5TQrNYEnj37skqbw==}
@@ -1327,76 +1255,70 @@ packages:
     resolution: {integrity: sha512-9ot/Va6BmrFJcwcjj3SrU+OoJFe5r9s/te1e0Pvr0BsGm4+Fs6ky2utEn0GLqt/aXjoMWUSGNHKzF43Jr/UBNg==}
     engines: {node: '>= 20'}
 
-  '@open-pioneer/chakra-integration@3.1.0':
-    resolution: {integrity: sha512-BifqxD+dIEaGqoqwLPvh8xrko9eWc8lYQRq1tH8afoVfBxUekE+mYFm0ZzjOidl8YXckI1pprLFDW6X28mrDEA==}
+  '@open-pioneer/chakra-snippets@4.4.0':
+    resolution: {integrity: sha512-vzvfSVFclhNfHf8n9BflTeXcuRbxP+Lz9Y7M2DzC8wSTK6WNThw2JbeRnK3qBOqAL6A8X8tgLFbtKuuvu1FCcw==}
 
   '@open-pioneer/check-pnpm-duplicates@0.2.4':
     resolution: {integrity: sha512-s5bQUAtGdBxSC5eyx3jp9gPiZnNtmR/zMaDS+uvmBTQfa6KGccMFjlibGeVFQ7s2uz2UMriKwr9laFKLPDAwVA==}
     engines: {node: '>= 20'}
     hasBin: true
 
-  '@open-pioneer/coordinate-viewer@0.10.0':
-    resolution: {integrity: sha512-8r7FM3MO5v5q741wJ9Ds4xhYfXQ+kJaB/iU43kebAdGwt5XilSHWojYj+XPK9oMrt6UaEojkux4gcUhjC3S1wg==}
+  '@open-pioneer/coordinate-viewer@1.2.0':
+    resolution: {integrity: sha512-1qH6q+C1dc6RwXwd8rVG+8kXD6k7BipkGjFyHDLspp4OsogKawZr9B1fK+0B9a+qCBUnc0XKTilSqBUTgPwsqA==}
 
-  '@open-pioneer/core@3.1.0':
-    resolution: {integrity: sha512-WO/1xoPrK5kUqN3HYj9HzsF9lZXQOodkZ6sRroG+xzbbMkr3/x2jvCJyif2EeSUU//Az7hRcGz08xya0p9iUiA==}
+  '@open-pioneer/core@4.4.0':
+    resolution: {integrity: sha512-0EpJ67zjYBFUQVNitzvFxbIFQHaTznXH3dzE4t+JgvqxpdFMgEAm3vBMU2VuvW66QmDXz6KR/pkp4UPwTU8+xw==}
 
-  '@open-pioneer/geolocation@0.10.0':
-    resolution: {integrity: sha512-2CSnYrGfrqhPkjleChve7cCywmKb/fJL3rwFFD3SJG1IAamxyRuH3U+u0MOehtwiK6gFM7xDHQz6MAU35aQbOQ==}
+  '@open-pioneer/geolocation@1.2.0':
+    resolution: {integrity: sha512-hue9z68k1kq43y+h3nMv4z9PZlpBky6LNYmuY41n3KToQJejv2prUueXm9m1UmdaQMCtlzCwVk2e7Uk+W4l9Pw==}
 
-  '@open-pioneer/http@3.1.0':
-    resolution: {integrity: sha512-KbUDeylZyi+gYqJ3sb6n5Kg/efg+Bta4WhnZFoDOcWd13lyFS4CG8ivEx6hOauKaJ3nxycuifAp8TYNftvgZDQ==}
+  '@open-pioneer/http@4.4.0':
+    resolution: {integrity: sha512-FWLHRheEgt66MLlaFuAZRs8j/dib1ZodhIeKR7Oe4s4W8//TJWWsYQry8v3LWsvO4wDdlkKIqGo5CP0R7rxOkg==}
 
-  '@open-pioneer/legend@0.10.0':
-    resolution: {integrity: sha512-2U4WP6mHb6kDnCxPJvXHTWr5O/W9Y76xu+GqlAtnMTzld0v82C8J9F5v31cCmtW11vNmeIOY4eOMDKsMKmqOCQ==}
+  '@open-pioneer/legend@1.2.0':
+    resolution: {integrity: sha512-B1N97mm7YOKzx0o0JtFNcr7vSaotdxHp1ufA/Cat4CFLA5A67mOQeBGsXYtIlI8ElW9R5Rrz22/NvSNQHV3swQ==}
 
-  '@open-pioneer/map-navigation@0.10.0':
-    resolution: {integrity: sha512-0zSsXme/+ZIQlF1i0vMmJTEZsyIxPCdVFSwqXxRfi9O9MYgzp/ZGx98+KJUTHZLfUaSzGxYOD9btMF7v+DEBLA==}
+  '@open-pioneer/map-navigation@1.2.0':
+    resolution: {integrity: sha512-0mb1cSGDmI5spSpYbjywqL3Sr8X0LCC4QaG0uQFivbkVRu5AMxTcusXPSph/cznjmHmTeSsbWpI9tO3/ikQkZA==}
 
-  '@open-pioneer/map-ui-components@0.10.0':
-    resolution: {integrity: sha512-w9ik87Puu19pBQvumaG+FNI3OQMvtW9oQnT58svPfLGUfkK2mUAHD48IoBK7QCF34KKYPmgXUNzY7nZk7pZaCg==}
+  '@open-pioneer/map-ui-components@1.2.0':
+    resolution: {integrity: sha512-JXyM9UJJaCi34Ug6Ply5s7I4UaeWY0CvgNC6DMd4UprJfJwzbmjYFzVHpXhhgctpMP4apoNcY1sPzNQDza6S9Q==}
 
-  '@open-pioneer/map@0.10.0':
-    resolution: {integrity: sha512-bUQMJialWZPHiUro0J4tSZgOdI4dczD+zRMWjwwOoHIIm18M2vgHQVkvVR+b4m3aYMaqAKUxHcm76FKLRIhEbA==}
+  '@open-pioneer/map@1.2.0':
+    resolution: {integrity: sha512-/+QQ0bHuIr+i08Zu9xA5sP6pbyY6AjqtoBI1mRk1Un4dH1tXCOxrU/HhMEVc0PEidU5cqgXo0BN9+S5pTYmIdQ==}
 
-  '@open-pioneer/measurement@0.10.0':
-    resolution: {integrity: sha512-a+YzrhpsZnzBAc03L7wx3jejXZKjISy1CkUDFxNfvihkOLPtN4EoN8kZVnrujR3i/0j8ETQFvP++h9b1SNVULw==}
+  '@open-pioneer/measurement@1.2.0':
+    resolution: {integrity: sha512-pTsYxPL1BVmkw9zATpUtyaljtGogtn5fOmD2xfhiu6V/AQIoYl+hIHHWit9TPhSmlSKTccfBAuGwkPVqaFzAbA==}
 
-  '@open-pioneer/notifier@3.1.0':
-    resolution: {integrity: sha512-3yT9DrdAhK5iH2sZIitDKIVXQqhAHRz0GO+mWuChhWERiGmuuJy5Y43uluxxmXF+wbCvWHxX0+64G0tUYm1gUg==}
+  '@open-pioneer/notifier@4.4.0':
+    resolution: {integrity: sha512-2WsLVFlEJLczYQB6mXI3WwMUXz5XKrro50GePiKoWI6qPhRhY7P+bm96c2XfPNbvD+OyjqJ/8afSMxN4HH3hpA==}
 
-  '@open-pioneer/ogc-features@0.10.0':
-    resolution: {integrity: sha512-Q8w9Rwa7BlUjXgt0bSHnmfkVtlhn1Y3alYfN4u4H60bedvsUILl3tZCNuU1CJTd9t9J8uW4UzVRWqRIByUDlwA==}
+  '@open-pioneer/ogc-features@1.2.0':
+    resolution: {integrity: sha512-3n+HGxUQgAcqMawVG4Oqc21RSMDqWesoD5qY5sfn9egsNLb3+DfpZoKgkY5NKrPVH6irScSE4vUKqzo/I4tXmA==}
 
-  '@open-pioneer/overview-map@0.10.0':
-    resolution: {integrity: sha512-OPkuI+MSz5uhyuI/GuNAhnYl+Ry6w4dzCnn6vAow8hebv/4g9ni9XJpIlqYnsh/+LOi/vs1GDp60QDNXXwxcZA==}
+  '@open-pioneer/overview-map@1.2.0':
+    resolution: {integrity: sha512-o7v6VHQ7FVXrWGayf5xpGGDlaibcFPAu8Pz+JkxAYRr67nTRyekaaNiwfr50NKUg50AVrnZ2I3dGixu0qpvUpw==}
 
-  '@open-pioneer/react-utils@3.1.0':
-    resolution: {integrity: sha512-e2WPRIcU3ODyBy/j2To1ZpiaDHGtikK+9OuTb0oEQPvBbBUuw/LX2QfuPiWGf02MnqLbQobeYt/kXdhd0gbIlA==}
+  '@open-pioneer/react-utils@4.4.0':
+    resolution: {integrity: sha512-OIdwu7XsZgd7yKTiVBc9qtXUZ51S3VxhivgeccTA+pGAwLXhDoqtSQ2aX+2npE4ys3t7nvDJsZAH8t14mUsxBg==}
 
-  '@open-pioneer/reactivity@3.1.0':
-    resolution: {integrity: sha512-p8sTOcbEOChb0eREEDDjB6OsCoQXSzg/lQ1YSJ4Ya56udFx/yYE+q2QrT9yRFHdHBQ/AYgvHhfLglA/JTnih8g==}
+  '@open-pioneer/reactivity@4.4.0':
+    resolution: {integrity: sha512-Pqln+7dQ/NhoLY0yJkb/ucmluY+L6CM11NwXrBr7RGUjsANRHDz2eTtKy0L8tgKvWQMZWoAQjj9AgbdD2D3HRw==}
 
-  '@open-pioneer/runtime-react-support@3.1.0':
-    resolution: {integrity: sha512-1PsGvbwlKGPYNDNnAocuOYnwmV2myTGu4fZ4oYO2Jd0eWNkZc7R/7oe6WKDBis8GxrG2IkumlCMasMUI5/9Zaw==}
+  '@open-pioneer/runtime@4.4.0':
+    resolution: {integrity: sha512-Dy28RkBkQBe1Y0dOQnauOM/WP35l8dI2SppRfB3xV1/MWci2JufVS+MdYydRHzOwI4dJkhz3J+T3AgwlyEJv4Q==}
 
-  '@open-pioneer/runtime@3.1.0':
-    resolution: {integrity: sha512-aO1JB/CNrPOB+m9ZdV0sHxNyAW6FVgsqefZLZ8wZyr5lonbBkpG1vZxHknhWgMWfQq0crttTjfYXxPQxxgr55w==}
+  '@open-pioneer/scale-bar@1.2.0':
+    resolution: {integrity: sha512-z8cUmFI148DyG0vFOGKtLJRngr5+qWAUJre608NkJAjdABQhrCGFh5vGsEVBq/89vx3MsauXF9HyFhWNUYUMbA==}
 
-  '@open-pioneer/scale-bar@0.10.0':
-    resolution: {integrity: sha512-jOaXHHM6O4O3F9yeLOzkgRKqjTGr/0qIrm64T5+19gnirkNThyDmHoC7AAVVXmgLy+X91eLvfbAuIQz56lHTkw==}
+  '@open-pioneer/scale-viewer@1.2.0':
+    resolution: {integrity: sha512-Bb5Bgr5GNeXWBF6ZZphJdxwDDznFZcyxBizE5xAZxYOxqKRVNdEYF49JpNYo3ArWYtDCBt5IJxIRJGjR8mOGHA==}
 
-  '@open-pioneer/scale-viewer@0.10.0':
-    resolution: {integrity: sha512-yp7KvlCxUsoB9WXiEE8FTIT4cX0VyAUU0/2kvax5ZW2lE7vBCqyFlCrLct9624viQwDYhaJ4qbFoX6krWBWlyA==}
+  '@open-pioneer/test-utils@4.4.0':
+    resolution: {integrity: sha512-s08uaXs5RhaTQQumCIH3qFpk/ru1jYKf9bq4XOsiv/CXEcob4LrT5R5qUcoKLyN5g3RNz8LrVbgdTD48va9K2A==}
 
-  '@open-pioneer/test-utils@3.1.0':
-    resolution: {integrity: sha512-JZGNq15rdcOYXm58QjT4ZANAo4Gr5H6oJnhjc5FrGNtbkHJbVz6DSUdeRiLSqhUms2c5qxAi68tu/lb3umMotw==}
-
-  '@open-pioneer/theme@0.10.0':
-    resolution: {integrity: sha512-71TlIi8vstqow27YskBzl2trAmXU74oIIciKSyCD/ksG130cNfns0xXLCxdv9pqUpgHFmDIFNZ9oERGfgywf+Q==}
-
-  '@open-pioneer/toc@0.10.0':
-    resolution: {integrity: sha512-uxWmnHl4yqWs9cQpqEv4pcvbyVqBUwdZZXRA/b27vMwHmc15WCx41XlD37sgwukMu2Y1jc3LIdcoQ1n9DCD5QA==}
+  '@open-pioneer/toc@1.2.0':
+    resolution: {integrity: sha512-JQY32DrTDoaZ2Ib0x6HO+hsuV7H55EJJyhW7o/lezApWjuOP2l1+vKk+nPUzsIdXbOhMsFM0Mm98v+WEVOYO3A==}
 
   '@open-pioneer/vite-plugin-pioneer@4.0.2':
     resolution: {integrity: sha512-zIN/RPoFlAW7EUACFhNgPuzGIjwjOwPg1Sc1V/p/fKRgd2HNEyWgiXqjKBuKLuKyQLTZWbjvfbeBxDtAqHmPYA==}
@@ -1405,6 +1327,9 @@ packages:
       '@open-pioneer/runtime': '*'
       sass: ^1.77.6
       vite: ^6.0.0
+
+  '@pandacss/is-valid-prop@1.9.0':
+    resolution: {integrity: sha512-AZvpXWGyjbHc8TC+YVloQ31Z2c4j2xMvYj6UfVxuZdB5w4c9+4N8wy5R7I/XswNh8e4cfUlkvsEGDXjhJRgypw==}
 
   '@parcel/watcher-android-arm64@2.5.1':
     resolution: {integrity: sha512-KF8+j9nNbUN8vzOFDpRMsaKBHZ/mcjEjMToVMJOhTozkDonQFFrRcfdLWn6yWKCmJKmdVxSgHiYvTCef4/qcBA==}
@@ -1576,11 +1501,8 @@ packages:
     resolution: {integrity: sha512-blFO4Ws97tWv/SNE6N39ZdGmZBrocXnBOfVp0ln4kELmns4pGPZizqyRtR8EjfOLMLstbmNCTReBoDvLz1isVg==}
     engines: {node: '>=18.12'}
 
-  '@popperjs/core@2.11.8':
-    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
-
-  '@preact/signals-core@1.8.0':
-    resolution: {integrity: sha512-OBvUsRZqNmjzCZXWLxkZfhcgT+Fk8DDcT/8vD6a1xhDemodyy87UJRJfASMuSD8FaAIeGgGm85ydXhm7lr4fyA==}
+  '@preact/signals-core@1.12.1':
+    resolution: {integrity: sha512-BwbTXpj+9QutoZLQvbttRg5x3l5468qaV2kufh+51yha1c53ep5dY4kTuZR35+3pAZxpfQerGJiQqg34ZNZ6uA==}
 
   '@rolldown/pluginutils@1.0.0-beta.47':
     resolution: {integrity: sha512-8QagwMH3kNCuzD8EWL8R2YPW5e4OrHNSAHRFDdmFqEwEaD/KcNKjVoumo+gP2vW5eKB2UPbM6vTYiGZX0ixLnw==}
@@ -1810,6 +1732,9 @@ packages:
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
 
+  '@swc/helpers@0.5.19':
+    resolution: {integrity: sha512-QamiFeIK3txNjgUTNppE6MiG3p7TdninpZu0E0PbqVh1a9FNLT2FRhisaa4NcaX52XVhA5l7Pk58Ft7Sqi/2sA==}
+
   '@swc/types@0.1.25':
     resolution: {integrity: sha512-iAoY/qRhNH8a/hBvm3zKj9qQ4oc2+3w1unPJa2XvTK3XjeLXtzcCingVPw/9e5mn1+0yPqxcBGp9Jf0pkfMb1g==}
 
@@ -1823,6 +1748,21 @@ packages:
 
   '@testing-library/react@16.3.0':
     resolution: {integrity: sha512-kFSyxiEDwv1WLl2fgsq6pPBbw5aWKrsY2/noi1Id0TK0UParSF62oFQFGHXIyaG4pp2tEub/Zlel+fjjZILDsw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@testing-library/dom': ^10.0.0
+      '@types/react': ^18.0.0 || ^19.0.0
+      '@types/react-dom': ^18.0.0 || ^19.0.0
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@testing-library/react@16.3.2':
+    resolution: {integrity: sha512-XU5/SytQM+ykqMnAnvB2umaJNIOsLF3PVv//1Ew4CTcpz0/BRyy/af40qqrt7SjKpDdT1saBMc42CUok5gaw+g==}
     engines: {node: '>=18'}
     peerDependencies:
       '@testing-library/dom': ^10.0.0
@@ -1875,21 +1815,11 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/lodash.mergewith@4.6.9':
-    resolution: {integrity: sha512-fgkoCAOF47K7sxrQ7Mlud2TH023itugZs2bUg8h/KzT+BnZNrR2jAOmaokbLunHNnobXVWOezAeNn/lZqwxkcw==}
-
-  '@types/lodash@4.17.21':
-    resolution: {integrity: sha512-FOvQ0YPD5NOfPgMzJihoT+Za5pdkDJWcbpuj1DjaKZIr/gxodQjY/uWEFlTNqW2ugXHUiL8lRQgw63dzKHZdeQ==}
-
   '@types/node@20.19.25':
     resolution: {integrity: sha512-ZsJzA5thDQMSQO788d7IocwwQbI8B5OPzmqNvpf3NY/+MHDAS759Wo0gd2WQeXYt5AAAQjzcrTVC6SKCuYgoCQ==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
-
-  '@types/proj4@2.19.0':
-    resolution: {integrity: sha512-mirdnXu5sW9+IphQ4r+ZVii2JVLDbXgMp1lxqbiCppdgL22EwMwL4Dy/cyHVaJ2y/mi7LUQHghpILd3w3j2bnA==}
-    deprecated: This is a stub types definition. proj4 provides its own type definitions, so you do not need this installed.
 
   '@types/rbush@4.0.0':
     resolution: {integrity: sha512-+N+2H39P8X+Hy1I5mC6awlTX54k3FhiUmvt7HWzGJZvF+syUAAxP/stwppS8JE84YHqFgRMv6fCy31202CMFxQ==}
@@ -1898,11 +1828,6 @@ packages:
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
       '@types/react': ^19.2.0
-
-  '@types/react-transition-group@4.4.12':
-    resolution: {integrity: sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==}
-    peerDependencies:
-      '@types/react': '*'
 
   '@types/react@19.2.7':
     resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
@@ -2111,14 +2036,234 @@ packages:
   '@xobotyi/scrollbar-width@1.9.5':
     resolution: {integrity: sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==}
 
-  '@zag-js/dom-query@0.31.1':
-    resolution: {integrity: sha512-oiuohEXAXhBxpzzNm9k2VHGEOLC1SXlXSbRPcfBZ9so5NRQUA++zCE7cyQJqGLTZR0t3itFLlZqDbYEXRrefwg==}
+  '@zag-js/accordion@1.35.3':
+    resolution: {integrity: sha512-wmw6yo5Zr6ShiKGTc5ICEOJCurWAOSGubIpGISiHi3cZ4tlxKF/vpATIUT3eq8xzdB56YK57yKCujs/WmwqqoA==}
 
-  '@zag-js/element-size@0.31.1':
-    resolution: {integrity: sha512-4T3yvn5NqqAjhlP326Fv+w9RqMIBbNN9H72g5q2ohwzhSgSfZzrKtjL4rs9axY/cw9UfMfXjRjEE98e5CMq7WQ==}
+  '@zag-js/anatomy@1.35.3':
+    resolution: {integrity: sha512-oqU9iLNNylrtJMBX5Xu4DsxnPNvtZLiobryv2oNtsDI1mi1Fca/XHghQC9K5aYT0qNsmHj1M3W5WAWTaOtPLkQ==}
 
-  '@zag-js/focus-visible@0.31.1':
-    resolution: {integrity: sha512-dbLksz7FEwyFoANbpIlNnd3bVm0clQSUsnP8yUVQucStZPsuWjCrhL2jlAbGNrTrahX96ntUMXHb/sM68TibFg==}
+  '@zag-js/angle-slider@1.35.3':
+    resolution: {integrity: sha512-HXRlmsbNEJSBT53fq9XQKL/vwZWwJC3nprskI7s4f/jy8a4uXPTlv7N7zuBYjew+ScTMzZah6fLWzUztBehmSg==}
+
+  '@zag-js/aria-hidden@1.35.3':
+    resolution: {integrity: sha512-dk5POebn10WneQfLrEgbTzwolaXWpCSHL6F3jCTinW9IbOx7BXghzJD21iU5Iun+y9CorqJPW3p7LplYNUMO5Q==}
+
+  '@zag-js/async-list@1.35.3':
+    resolution: {integrity: sha512-SXX3wGzLK/maKS1PJ3XfLIGWbu0022f/OhcFsT1PbiHnoFZTH7h2fBhirrCBfy2TYFQ6r5uxgjkhPUNkuaeYnA==}
+
+  '@zag-js/auto-resize@1.35.3':
+    resolution: {integrity: sha512-ufG8HSqzLd9h5rnos8aumj8iORlRskeR/gbpJu1NHrnHBWIrpuXm6KJJR2oZhTFY1BUMMk8eYIBA2QkVuiJzWA==}
+
+  '@zag-js/avatar@1.35.3':
+    resolution: {integrity: sha512-lbQ2Q4Va8AAScKULOHw2tCQez+0JRYGHSMFq6i+dJmeT3dlSgRanm69ra6K2po6hM9E4v6pRe+xOVE+9QMDnuA==}
+
+  '@zag-js/carousel@1.35.3':
+    resolution: {integrity: sha512-F+b8HzUeZfB+xUkAkLG4r0Ubui8pj7pSgZhi26ZiWgsM7tsd7cD+xRMXkvPEITN5Fd5QCe3KlVBuE00w5byjmg==}
+
+  '@zag-js/cascade-select@1.35.3':
+    resolution: {integrity: sha512-Nifdx77hEuAdXqr1wpZSPjLXqygRhq/WvnPjGhCeSqFPpy62uT4JZ3avyjUZ4I0UhvIpkleUcXtFwQ3cSMh4ww==}
+
+  '@zag-js/checkbox@1.35.3':
+    resolution: {integrity: sha512-8XBt/Wg2zSQWqV2ZFqZBQUjYRkOYHA2O3IEi0VVYtds3S1n7Pu/HqkZT5qDw+E/SY2+X9Uyx4hO7h2XrlsiZQQ==}
+
+  '@zag-js/clipboard@1.35.3':
+    resolution: {integrity: sha512-obTwynBpp6c17fLHe5tg//FQ497QsyCEry+K3bTdlrivWW200wvfHxZ6RKVbKwDAwhH+ye0bI1xkYAId8j7sdA==}
+
+  '@zag-js/collapsible@1.35.3':
+    resolution: {integrity: sha512-IweG8JOBCerJwLO6QzTZGEMlsYUmQfQSeD0jniFguMM8vcunvGVSrM+AaL8pDbmXd+snXokaGyJpGO3vzMW6Fw==}
+
+  '@zag-js/collection@1.35.3':
+    resolution: {integrity: sha512-BYoWJ4b7ma2PgiuQbRSnP603f2DlK6se5JtViUHTamZScLLLWnWHuQ6zFa1KS5kiIkbb7CFM6/bJ3WNYLch8Ig==}
+
+  '@zag-js/color-picker@1.35.3':
+    resolution: {integrity: sha512-i9roSgtqeA1b4Q+jWqnxjXB//BQXMP5m1FQ4YcZVq/0yT14A53JIknchuqrh3wC3yPsJMXFqCoKg+NET2+OVig==}
+
+  '@zag-js/color-utils@1.35.3':
+    resolution: {integrity: sha512-vxkEVgz4YdSbdaPvjiRI1VsJAdwzu/dUNvzqOaiVcPDrHr/FFgmUbv0SOFjnfSb2QWGI8EDEMn02RW9ym+BzGw==}
+
+  '@zag-js/combobox@1.35.3':
+    resolution: {integrity: sha512-s1qmttTGJTMjlDakL+uvWSEggpafKr1vhOeZCh8j+N4eFt9bLAwaffjuh/1JzWBvzovw7WoMVkizdTXPlN8oYg==}
+
+  '@zag-js/core@1.35.3':
+    resolution: {integrity: sha512-fGAHyqOYSEFmo52t7wI4dvbFfLyJmUlyf7wknsiUlzUHlrn3yv5PAZYZ2TibpOD1hwXIp4AoCjbiIPPZBxirZw==}
+
+  '@zag-js/date-picker@1.35.3':
+    resolution: {integrity: sha512-4G10h6pzzLbd84SE2CKtqi6Z9wEBhSyx4GRSxxy3tsf5wAxnz4anRFat9CGwn2YVUYcUJpD+umYgBMPt6zGDnA==}
+    peerDependencies:
+      '@internationalized/date': '>=3.0.0'
+
+  '@zag-js/date-utils@1.35.3':
+    resolution: {integrity: sha512-1co0FPpZ6nO5dN8sZtECkMYaf+3E5zu0KSIJZpZiXb4TgsZMDyHu7K7IsiKFHk9qmhuF6AdPpNxBju91pSXMFg==}
+    peerDependencies:
+      '@internationalized/date': '>=3.0.0'
+
+  '@zag-js/dialog@1.35.3':
+    resolution: {integrity: sha512-byosV+aBHH5LoFKnjEgC7WdqJid7bP9UhgWLSC7+IXbxrif9Czg1YVp6ZlQM6Nx6uD1vnty4touI3P7D7CTKcw==}
+
+  '@zag-js/dismissable@1.35.3':
+    resolution: {integrity: sha512-XPk+lqmsZp2Z1yMb5K1yj/e7Sobv4D7zK66B1GS97lk9Xzz8vuSgsimcLy0p7RXQl3KL6H5L69inSuQa2exybQ==}
+
+  '@zag-js/dom-query@1.35.3':
+    resolution: {integrity: sha512-1RbFZoT4CjlHN9TUNse1++ZVOyKo45ktucTIT349o6HMsoWWKmTJDPvFkMBbmu/qY6XXn4dT+LJEp4bL3DR+Qw==}
+
+  '@zag-js/drawer@1.35.3':
+    resolution: {integrity: sha512-DN5bwa7bDCDaUSbNzFxMc2U/WmbLcXvPSQjyOpKI6CC3VbW2kKaOnjJ5qQG+W5YBO0FpmJBtaxRV7lke4sZH2w==}
+
+  '@zag-js/editable@1.35.3':
+    resolution: {integrity: sha512-HcjeacS61vQXfNT9IalZj/+oS45yW5bIDO2NjJWV7zNe5AG29NCceUnvBhy+hrUKPnKcjfDocdW5rCL+Lvs/CQ==}
+
+  '@zag-js/file-upload@1.35.3':
+    resolution: {integrity: sha512-oIYwnDct4ERo2mfmcxsBIJnlmpzjrzYx82SQsXWD3NGKx3cgdh2lwBX+ebItaLH1jkgzBa3z0TWxc6rfvcUXbw==}
+
+  '@zag-js/file-utils@1.35.3':
+    resolution: {integrity: sha512-Tb05RCzx4swc156hd4jLiO7z+Gxg/HQ+JCds03jgTbrFJAz2D56YaMeI7gSDc1m4Xre3nyqQpSo9AeX5nzbE/w==}
+
+  '@zag-js/floating-panel@1.35.3':
+    resolution: {integrity: sha512-nTZypcS0X46Oo1kpCQTnP5UlzjhypOAj3B4dq2z/3bAOC0TntYTnFkj8PbEJtExk7364xfMyxfgZOiv7Aqq01w==}
+
+  '@zag-js/focus-trap@1.35.3':
+    resolution: {integrity: sha512-evErLlGFdDVCI8xipNS5k0rAvO+KFRA9g273bbfWAL1+mT54mcB/XHa85nC3QpPgMNrSh+6LUNq9fapyOGoyYg==}
+
+  '@zag-js/focus-visible@1.35.3':
+    resolution: {integrity: sha512-g4F8PRGIoFoKBrHiQ1HQh5AjCS7brFRXHvpbDNb9+T11FGlF5Turb+6OVRoNV8MmiuqMltO2I28l36YsGc//uQ==}
+
+  '@zag-js/highlight-word@1.35.3':
+    resolution: {integrity: sha512-K+mvEBbf3SUFjQeMeJQYb3cjri3x6sPaPhcKWayalelSLB/StWEGqcpmz+a6uUYrCUAK5kEi3Hn0YLGfn0GOig==}
+
+  '@zag-js/hover-card@1.35.3':
+    resolution: {integrity: sha512-xVoKOtvrnzhYzciZ1csgiV76IQ4DRtx1lsJeFSrfg5MH0kYWeC/pcmm3yCd2+Qh/45J7DbSXeZneqxpyiF5Vvw==}
+
+  '@zag-js/i18n-utils@1.35.3':
+    resolution: {integrity: sha512-k7UcNxbnC2jvGwCoHYAkFD3ZaRSMQNVHfuy8TujZQ+ci3IJovwgWLveZoRfFbXHkTLfhmbpE2tFXBdpwOVZutg==}
+
+  '@zag-js/image-cropper@1.35.3':
+    resolution: {integrity: sha512-1PH6bg8JAQESHzNqjka2TJ0QGNBGBAO6rb7AZ+9CaCCLw0pIzbUJhqPMkwd9GhdWGKGP+e7wFitnjcT4W5Js8g==}
+
+  '@zag-js/interact-outside@1.35.3':
+    resolution: {integrity: sha512-tOcuo/IztzpU7UKXtjVrLZtXzzcbhP4n2WynKwDRkTkq3mRCp61xXJp1csIBycI3JHm/CMeAEcPdRIioxIT/Zw==}
+
+  '@zag-js/json-tree-utils@1.35.3':
+    resolution: {integrity: sha512-nOv2dPJf+1mxsobYiSlYt96hR1MK7iHKG1iDLoO5wLggS6GQA3ix1BerHJK0zdehoEZ71R45el5ghCG1HB9VzQ==}
+
+  '@zag-js/listbox@1.35.3':
+    resolution: {integrity: sha512-FE6FOuBr6aWtOb8U8oDvAvcUzD6JKLXAe8WngiLFG+b2yyW4nlaz2AcKRG1bjjB066UMxMo9/+2p4D0Kf5Id1Q==}
+
+  '@zag-js/live-region@1.35.3':
+    resolution: {integrity: sha512-64rWcfggYpyr2Fn4pdrB/lljMgm3quwn9is+vdDN85Vv3WShKWoz08T4njidm0hwcIbzas0bRqQYWDLLsAoSJQ==}
+
+  '@zag-js/marquee@1.35.3':
+    resolution: {integrity: sha512-bKZVpmAJWPDORP7WOWnS+65W5ZQBQmRs8zvV33ZfCpFbkXjhRiqKSzIj223/VOc2NEDjyWagz2vioAxrFYVzww==}
+
+  '@zag-js/menu@1.35.3':
+    resolution: {integrity: sha512-KyY0EZXkIU57Mjt+Lg+pupiePk3LcnQcB3Gl05Vva61bNjBjdKV71qwCQru/OxPZEwYgPo46L7TDIb56kfK/VQ==}
+
+  '@zag-js/navigation-menu@1.35.3':
+    resolution: {integrity: sha512-8cCHx0X/KjEpr2BaMOxJS5LiA6fs/CNqVTF/sTTgZAv7Dm+MH0yNuKm4kpPvcLaVeBpVE09bnyCHrNKzZes+Fw==}
+
+  '@zag-js/number-input@1.35.3':
+    resolution: {integrity: sha512-uqawVybAcLcefVEHMVONuAA5kDSDPP5TsROr5PnAyFlhM1iD85+r3KAfCueoDX5w2X4ibbu9o2tdV6zTFKD/nQ==}
+
+  '@zag-js/pagination@1.35.3':
+    resolution: {integrity: sha512-fKm4s5KAd12RiCI/EDmmGKjPQ+i2qS/UsJPdMe65yb/4mY5OibwV2zyHcVeFsOD4gBZpnU6kYlDAGSttmLWLlQ==}
+
+  '@zag-js/password-input@1.35.3':
+    resolution: {integrity: sha512-etd0gm6ELAm3y+cFhPU+TYm8khm9cL5Mg5m2DcZxu1Mqpj7JY0LsXZ8SFOdCZgTIHuMEhKBiYfnuyMAd4CJztA==}
+
+  '@zag-js/pin-input@1.35.3':
+    resolution: {integrity: sha512-ZFt+WIHMdVlSg29BrQLFq5ijabiUO3tXMhoKhjjzTSe/tLqfNeu3UxFB6y/FYpn8+Cvn6xwvhu3lgnORYmI0zQ==}
+
+  '@zag-js/popover@1.35.3':
+    resolution: {integrity: sha512-+MIEENPsbKPxzoNuDI/C5d5ZN9uxnfZ+MBDc5C5XSgjjg9FcvMXClNq7IFM1aZi24peRXg9cMNf//lApVRT37w==}
+
+  '@zag-js/popper@1.35.3':
+    resolution: {integrity: sha512-gpB7Xn9WtlfrUsIVbSgNQGDwgNOL/cSGt0Id3wEQKArmqVC704EWtPvXzOMMybBEdm8YW2hQrXuo+o66abI1Sg==}
+
+  '@zag-js/presence@1.35.3':
+    resolution: {integrity: sha512-ev5E7+U9IZAGvEaflpdVLHaZl8ZaQMhGB3ypd0yKhPwXeM51obV8w3+5HjzTqHPl8TKuoHWL31YaiUBd5EuS6w==}
+
+  '@zag-js/progress@1.35.3':
+    resolution: {integrity: sha512-u0GxQN1AfXMAgzYOUMxKQA12DyuAP0svh2S//KvOorTSv7d5hAa8nZXi2cEv5abYsyfKJ6/bc1Z56byzW1jVZw==}
+
+  '@zag-js/qr-code@1.35.3':
+    resolution: {integrity: sha512-t0Ehwogr49vTNtWyNdQU2tYex7uJyfAn7N/5LgD7FXw8aa+RBMWZWlqjCUvHqJ929tVMrn+LIrQnZCcwNunalA==}
+
+  '@zag-js/radio-group@1.35.3':
+    resolution: {integrity: sha512-kOzocjqWk3dXuRfyfsHwfw63Z99NHbc7rvVUutSsfXANXi+DFYZHuqdPUwMt+29LfaL15XTOfuGV+yUXDCgQHQ==}
+
+  '@zag-js/rating-group@1.35.3':
+    resolution: {integrity: sha512-BmhJZdbaTnd3nFWMY+nR+HF952UhWXfaXXxiBWptSLMBfAYImQTWBMrLgTHCSnVfmFATj4Gb7xQe79FQU8T5fA==}
+
+  '@zag-js/react@1.35.3':
+    resolution: {integrity: sha512-x2PxYUCQ6OgOpUdmSkG5tbL9JWVqYRh42r4V2UeAdMh0MRwjAJtxjvAy50DZ8Sfia5o4UGdZMXJyDY2O7Pdhyw==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+
+  '@zag-js/rect-utils@1.35.3':
+    resolution: {integrity: sha512-mt/oD3RXdyaX6ZPSd8BO13vvPBJ7QpVWieubE3O0WM3OPhU7ykDMRp/tR7cYMQrzUm04GlY9pbkmSSw2uABxlA==}
+
+  '@zag-js/remove-scroll@1.35.3':
+    resolution: {integrity: sha512-e59z9SbEpPiw0qwNQa2cB5/h30ZCLREaHsCw1TKTANFhwg7v85k9Lq1H/G/49li1CAjmiaOU9BNGlDvbzpNETQ==}
+
+  '@zag-js/scroll-area@1.35.3':
+    resolution: {integrity: sha512-IQwdUws/AckRIHK1z/wHdHurnOeGd8h8Dmspfh3VT7NkwTnxeJ4SW9di9smuD+d25eXkJRuX5zGEDHAyx2IaPQ==}
+
+  '@zag-js/scroll-snap@1.35.3':
+    resolution: {integrity: sha512-NVa2yRm2DQnF6hTV9k7Xz7l8YCZBagZTiqSwNvWKUulKD1csjt2fpBxvUt2cK+1iQnLOey2ydhs7MMsAnXPbJA==}
+
+  '@zag-js/select@1.35.3':
+    resolution: {integrity: sha512-ztszGHWvlbBDE0YT5LYPH+sMd6VH1ct5pH/M9VSzIUO6C5PARkW0NwSVQ1rCQJMj4sfvSE1gC1/r7urRzqEcUQ==}
+
+  '@zag-js/signature-pad@1.35.3':
+    resolution: {integrity: sha512-jvtxxzAQ8fre11zWUh6HflG4Ycr5z83Wba4pONRJbUE/vNgkJQ7yJgfyUl1QTlkn8Arfg2Zwoxu9GIq80HLZWg==}
+
+  '@zag-js/slider@1.35.3':
+    resolution: {integrity: sha512-Th142JO4Fqla5AWhGrTW6CQicwvTw87PdVpur/WotQ7brlZIww5HipzEMh5eQJSWfwpKD4PI2bYK9V/ZE/mpXA==}
+
+  '@zag-js/splitter@1.35.3':
+    resolution: {integrity: sha512-IsIbRwzjr5amGANEDsZDSToaSn8wHUWvS2l0XHmf3BiiguVApaZgQTlfqthVQC9hBHMOaGIXIW1CFUOrQYkvUQ==}
+
+  '@zag-js/steps@1.35.3':
+    resolution: {integrity: sha512-TYIrqV+v9/ULhvrTRBtQFFvJQPPTWOmjFXxlIxDwozek5R4dCIyeUYt1/ChJEc2mNETocbfDVSTxRO1dwCFpwQ==}
+
+  '@zag-js/store@1.35.3':
+    resolution: {integrity: sha512-7kEV4T/20DU36UIfVMzuDlLhWSSEy/vabmpiB700tcdD9BBBODTiSg3ZeljW17dQbvE545vZOFEjVf/cQ5LVGA==}
+
+  '@zag-js/switch@1.35.3':
+    resolution: {integrity: sha512-EP/2cJ46sd+6C5x5+89jn/9NOpM05CRESYB4RMhOnTe/WFtcS4IpiYtVHFhikdXkvJoibm67O2EHep2Pm/Xj4w==}
+
+  '@zag-js/tabs@1.35.3':
+    resolution: {integrity: sha512-lZKlDmxE25miCikj9QZCCnL02SVV2K14KZy5bn7+XDgrWlfSNTpNTj8r5E3zGlSgio5pkTGou57ASqS7WaPDWg==}
+
+  '@zag-js/tags-input@1.35.3':
+    resolution: {integrity: sha512-HqyoQ3DZFhByOGnDShFfxi6u0bIf7aSVTlwmAvcL+b2ZhyU6/wIMGc4WJE7BMx1NYWM/jNLHedvGExAI8R0kXQ==}
+
+  '@zag-js/timer@1.35.3':
+    resolution: {integrity: sha512-edmgitbRgsq+msxvVB4wc17Q5d5k63zMWaLJnWjUdDGAgEtM6/HNxwGb3riv46S2U3RgYxaaHTNZ/M7EE5mvYw==}
+
+  '@zag-js/toast@1.35.3':
+    resolution: {integrity: sha512-whlR791GHdnMD21nNPsl2Dbql8+qu1wBZl75QzwYrjR8FlKjp8bhr3gXKzQEddcBXe9GPEFGvUs4iCyXsuTbpg==}
+
+  '@zag-js/toggle-group@1.35.3':
+    resolution: {integrity: sha512-Gn6JHzkQ4tlttjZcE0ZjIdxYkFeVp9VHrcMVizjJTkGZRmQ+kPZ5G/wOsZhIrvLX3Dw6Y0NkuBcP+jDHz/o3TA==}
+
+  '@zag-js/toggle@1.35.3':
+    resolution: {integrity: sha512-aFfHKuR4sKzglhkmWLA+0RTNPs9dfeqwtc96qljawGYfAYWJXkEPYK9dFfVa+arZ7L84xBi24QSLiTg7LGSFLw==}
+
+  '@zag-js/tooltip@1.35.3':
+    resolution: {integrity: sha512-/pImDGYl79MfLdvEphj3rSvNdj2tLW4GwGEncgdLM/GKwQiEUjfi/9EJOfLYP23M4lOOnoW7orehJ9xeaXOAkA==}
+
+  '@zag-js/tour@1.35.3':
+    resolution: {integrity: sha512-DI2aCXmZaE9KcPZDs9itc2BO7ixLApJ/yVRfM69pXwVOrucdSeDDNPFkfbhj5XwB+9VjjZEkqWFHKntRIyPl5g==}
+
+  '@zag-js/tree-view@1.35.3':
+    resolution: {integrity: sha512-DbHaLxSNa1goE3o3IsXxEdzp8P5dvmkk1rVWgNUUIhpA+44idEjSSNXJkHPl18Mk5blqSMVjK1EX91oqai01Vw==}
+
+  '@zag-js/types@1.35.3':
+    resolution: {integrity: sha512-Fnm3AMs1lfb55hlkip/eJeWHOjFB3gSi1JkZlkkdltG2l7y/zsHkumPSe6jIKy+DRRIFKRCyXVTatbPN27bO3w==}
+
+  '@zag-js/utils@1.35.3':
+    resolution: {integrity: sha512-LHcC+9y6TFhDsIz9I3koYxONl2JFfx5yQDzc6ZEQO2cqzXedRcN0R9IPqNGCX7JuhGt14ctDkVCm1JWGP2J6Wg==}
 
   '@zkochan/js-yaml@0.0.9':
     resolution: {integrity: sha512-SsdK25Upg5wLeGK2Wm8y5bDloMMxN/qE5H6aNOiPRh07a9/fQPYVhlLZz2zRFg9il9XOlpFdrnQnPKsU7FJIpQ==}
@@ -2176,10 +2321,6 @@ packages:
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
-
-  aria-hidden@1.2.6:
-    resolution: {integrity: sha512-ik3ZgC9dY/lYVVM++OISsaYDeg1tb0VtP5uL3ouh1koGOaUMDPpbFIei4JkFimWUFPn90sbMNMXQAIVOlnYKJA==}
-    engines: {node: '>=10'}
 
   aria-query@5.3.0:
     resolution: {integrity: sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A==}
@@ -2286,14 +2427,6 @@ packages:
     resolution: {integrity: sha512-p4Z49OGG5W/WBCPSS/dH3jQ73kD6tiMmUM+bckNK6Jr5JHMG3k9bg/BvKR8lKmtVBKmOiuVaV2ws8s9oSbwysg==}
     engines: {node: '>=18'}
 
-  chakra-react-select@5.0.5:
-    resolution: {integrity: sha512-bD8JxL+9SXdQ0vsq+m2FwdAMpaQOKDAM/2gTnbPJStFXEVUnxM6Mg4QrDOoU2zU235jRN+0Z/dmVS+c3ieXChg==}
-    peerDependencies:
-      '@chakra-ui/react': 2.x
-      '@emotion/react': ^11.8.1
-      react: '>=18'
-      react-dom: '>=18'
-
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
@@ -2326,9 +2459,6 @@ packages:
 
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
-
-  color2k@2.0.3:
-    resolution: {integrity: sha512-zW190nQTIoXcGCaU08DvVNFTmQhUpnJfVuAKfWqUQkflXKpaDdpaYoM0iluLS9lgJNHyBF58KKA2FBEwkD7wog==}
 
   colorette@2.0.20:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
@@ -2445,9 +2575,6 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
-  detect-node-es@1.1.0:
-    resolution: {integrity: sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==}
-
   doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
@@ -2461,9 +2588,6 @@ packages:
 
   dom-accessibility-api@0.6.3:
     resolution: {integrity: sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w==}
-
-  dom-helpers@5.2.1:
-    resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
@@ -2760,30 +2884,9 @@ packages:
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
 
-  focus-lock@1.3.6:
-    resolution: {integrity: sha512-Ik/6OCk9RQQ0T5Xw+hKNLWrjSMtv51dD4GRmJjbD5a58TIEpI5a5iXagKVl3Z5UuyslMCA8Xwnu76jQob62Yhg==}
-    engines: {node: '>=10'}
-
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
-
-  framer-motion@12.23.24:
-    resolution: {integrity: sha512-HMi5HRoRCTou+3fb3h9oTLyJGBxHfW+HnNE25tAXOvVx/IvwMHK0cx7IR4a2ZU6sh3IX1Z+4ts32PcYBOqka8w==}
-    peerDependencies:
-      '@emotion/is-prop-valid': '*'
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
-    peerDependenciesMeta:
-      '@emotion/is-prop-valid':
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-
-  framesync@6.1.2:
-    resolution: {integrity: sha512-jBTqhX6KaQVDyus8muwZbBeGGP0XgujBRbQ7gM7BRdS3CadCZIHiawyzYLnafYcvZIh5j8WE7cxZKFn7dXhu9g==}
 
   fs-extra@11.3.2:
     resolution: {integrity: sha512-Xr9F6z6up6Ws+NjzMCZc6WXg2YFRlrLP9NQDO3VQrWrfiojdhS56TzueT88ze0uBdCTwEIhQ3ptnmKeWGFAe0A==}
@@ -2822,10 +2925,6 @@ packages:
   get-intrinsic@1.3.0:
     resolution: {integrity: sha512-9fSjSaos/fRIVIp+xSJlE6lfwhES7LNtKaCBIamHsjr2na1BiABJPo0mOjjz8GJDURarmCPGqaiVg5mfjb98CQ==}
     engines: {node: '>= 0.4'}
-
-  get-nonce@1.0.1:
-    resolution: {integrity: sha512-FJhYRoDaiatfEkUK8HKlicmu/3SGFD51q3itKDGoSTysQJBnfOcxU5GxnhE1E6soB76MbT0MBtnKJuXyAx+96Q==}
-    engines: {node: '>=6'}
 
   get-npm-tarball-url@2.1.0:
     resolution: {integrity: sha512-ro+DiMu5DXgRBabqXupW38h7WPZ9+Ad8UjwhvsmmN8w1sU7ab0nzAXvVZ4kqYg57OrqomRtJvepX5/xvFKNtjA==}
@@ -3017,8 +3116,8 @@ packages:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
     engines: {node: '>= 0.4'}
 
-  intl-messageformat@10.7.18:
-    resolution: {integrity: sha512-m3Ofv/X/tV8Y3tHXLohcuVuhWKo7BBq62cqY15etqmLxg2DZ34AGGgQDeR+SCta2+zICb1NX83af0GJmbQ1++g==}
+  intl-messageformat@11.2.0:
+    resolution: {integrity: sha512-IhghAA8n4KSlXuWKzYsWyWb82JoYTzShfyvdSF85oJPnNOjvv4kAo7S7Jtkm3/vJ53C7dQNRO+Gpnj3iWgTjBQ==}
 
   is-array-buffer@3.0.5:
     resolution: {integrity: sha512-DDfANUiiG2wC1qawP66qlTugJeL5HyzMpfr8lLK+jMQirGzNod0B12cFB/9q838Ru27sBwfw78/rdoU7RERz6A==}
@@ -3205,8 +3304,8 @@ packages:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
 
-  keycloak-js@26.2.1:
-    resolution: {integrity: sha512-bZt6fQj/TLBAmivXSxSlqAJxBx/knNZDQGJIW4ensGYGN4N6tUKV8Zj3Y7/LOV8eIpvWsvqV70fbACihK8Ze0Q==}
+  keycloak-js@26.2.3:
+    resolution: {integrity: sha512-widjzw/9T6bHRgEp6H/Se3NCCarU7u5CwFKBcwtu7xfA1IfdZb+7Q7/KGusAnBo34Vtls8Oz9vzSqkQvQ7+b4Q==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -3247,9 +3346,6 @@ packages:
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
-  lodash.mergewith@4.6.2:
-    resolution: {integrity: sha512-GK3g5RPZWTRSeLSpgP8Xhra+pnjBC56q9FZYe1d5RN3TJ35dbkGy3YqBSMbyCrlbi+CM9Z3Jk5yTL7RCsqboyQ==}
-
   log-update@6.1.0:
     resolution: {integrity: sha512-9ie8ItPR6tjY5uYJh8K/Zrv/RMZ5VOlOWvtZdEHYSTFKZfIBPQa9tOAEeAWhd+AnIneLJ22w5fjOYtoutpWq5w==}
     engines: {node: '>=18'}
@@ -3288,9 +3384,6 @@ packages:
 
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
-
-  memoize-one@6.0.0:
-    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -3338,12 +3431,6 @@ packages:
 
   mlly@1.8.0:
     resolution: {integrity: sha512-l8D9ODSRWLe2KHJSifWGwBqpTZXIXTeo8mlKjY+E2HAakaTeNpqAyBZ8GSqLzHgw4XmHmC8whvpjJNMbFZN7/g==}
-
-  motion-dom@12.23.23:
-    resolution: {integrity: sha512-n5yolOs0TQQBRUFImrRfs/+6X4p3Q4n1dUEqt/H58Vx7OW6RF+foWEgmTVDhIWJIMXOuNNL0apKH2S16en9eiA==}
-
-  motion-utils@12.23.6:
-    resolution: {integrity: sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==}
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -3508,6 +3595,9 @@ packages:
     resolution: {integrity: sha512-SuLdBvS42z33m8ejRbInMapQe8n0D3vN/Xd5fmWM3tufNgRQFBpaW2YVJxQZV4iPNqb0vEFvssMEo5w9c6BTIA==}
     hasBin: true
 
+  perfect-freehand@1.2.3:
+    resolution: {integrity: sha512-bHZSfqDHGNlPpgH2yxXgPHlQSPpEbo+qg7li0M78J9vNAi2yjwLeA4x79BEQhX44lEWpCLSFCeRZwpw0niiXPA==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -3570,6 +3660,12 @@ packages:
   protocol-buffers-schema@3.6.0:
     resolution: {integrity: sha512-TdDRD+/QNdrCGCE7v8340QyuXd4kIWIgapsE2+n/SaGiSSbomYl4TjHlvIoCWRpE7wFt02EpB35VVA2ImcBVqw==}
 
+  proxy-compare@3.0.1:
+    resolution: {integrity: sha512-V9plBAt3qjMlS1+nC8771KNf6oJ12gExvaxnNzN/9yVRLdTv/lc+oJlnSzrdYDAvBfTStPCoiaCOTmTs0adv7Q==}
+
+  proxy-memoize@3.0.1:
+    resolution: {integrity: sha512-VDdG/VYtOgdGkWJx7y0o7p+zArSf2383Isci8C+BP3YXgMYDoPd3cCBjw0JdWb6YBb9sFiOPbAADDVTPJnh+9g==}
+
   punycode.js@2.3.1:
     resolution: {integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==}
     engines: {node: '>=6'}
@@ -3591,27 +3687,10 @@ packages:
   rbush@4.0.1:
     resolution: {integrity: sha512-IP0UpfeWQujYC8Jg162rMNc01Rf0gWMMAb2Uxus/Q0qOFw4lCcq6ZnQEZwUoJqWyUGJ9th7JjwI4yIWo+uvoAQ==}
 
-  react-clientside-effect@1.2.8:
-    resolution: {integrity: sha512-ma2FePH0z3px2+WOu6h+YycZcEvFmmxIlAb62cF52bG86eMySciO/EQZeQMXd07kPCYB0a1dWDT5J+KE9mCDUw==}
+  react-dom@19.2.4:
+    resolution: {integrity: sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
-
-  react-dom@19.2.0:
-    resolution: {integrity: sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==}
-    peerDependencies:
-      react: ^19.2.0
-
-  react-fast-compare@3.2.2:
-    resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
-
-  react-focus-lock@2.13.6:
-    resolution: {integrity: sha512-ehylFFWyYtBKXjAO9+3v8d0i+cnc1trGS0vlTGhzFW1vbFXVUTmR8s2tt/ZQG8x5hElg6rhENlLG1H3EZK0Llg==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
+      react: ^19.2.4
 
   react-icons@5.5.0:
     resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
@@ -3627,48 +3706,6 @@ packages:
   react-property@2.0.2:
     resolution: {integrity: sha512-+PbtI3VuDV0l6CleQMsx2gtK0JZbZKbpdu5ynr+lbsuvtmgbNcS3VM0tuY2QjFNOcWxvXeHjDpy42RO+4U2rug==}
 
-  react-remove-scroll-bar@2.3.8:
-    resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  react-remove-scroll@2.7.1:
-    resolution: {integrity: sha512-HpMh8+oahmIdOuS5aFKKY6Pyog+FNaZV/XyJOq7b4YFwsFHe5yYfdbIalI4k3vU2nSDql7YskmUseHsRrJqIPA==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  react-select@5.10.2:
-    resolution: {integrity: sha512-Z33nHdEFWq9tfnfVXaiM12rbJmk+QjFEztWLtmXqQhz6Al4UZZ9xc0wiatmGtUOCCnHN0WizL3tCMYRENX4rVQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
-  react-style-singleton@2.2.3:
-    resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  react-transition-group@4.4.5:
-    resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
-    peerDependencies:
-      react: '>=16.6.0'
-      react-dom: '>=16.6.0'
-
   react-universal-interface@0.6.2:
     resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
     peerDependencies:
@@ -3681,8 +3718,8 @@ packages:
       react: '*'
       react-dom: '*'
 
-  react@19.2.0:
-    resolution: {integrity: sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==}
+  react@19.2.4:
+    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
     engines: {node: '>=0.10.0'}
 
   read-cache@1.0.0:
@@ -4058,9 +4095,6 @@ packages:
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
 
-  tslib@2.4.0:
-    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
-
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
@@ -4134,40 +4168,14 @@ packages:
   unrs-resolver@1.11.1:
     resolution: {integrity: sha512-bSjt9pjaEBnNiGgc9rUiHGKv5l4/TGzDmYw3RhnkJGtLhbnnA/5qJj7x3dNDCRx/PJxu774LlH8lCOlB4hEfKg==}
 
+  uqr@0.1.2:
+    resolution: {integrity: sha512-MJu7ypHq6QasgF5YRTjqscSzQp/W11zoUk6kvmlH+fmWEs63Y0Eib13hYFwAzagRJcVY8WVnlV+eBDUGMJ5IbA==}
+
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  use-callback-ref@1.3.3:
-    resolution: {integrity: sha512-jQL3lRnocaFtu3V00JToYz/4QkNWswxijDaCVNZRiRTO3HQDLsdu1ZtmIUvV4yPp+rvWm5j0y0TG/S61cuijTg==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  use-isomorphic-layout-effect@1.2.1:
-    resolution: {integrity: sha512-tpZZ+EX0gaghDAiFR37hj5MgY6ZN55kLiPkJsKxBMZ6GZdOSPJXiOzPM984oPYZ5AnehYx5WQp1+ME8I/P/pRA==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  use-sidecar@1.1.3:
-    resolution: {integrity: sha512-Fedw0aZvkhynoPYlA5WXrMCAMm+nSWdZt6lzJQ7Ok8S6Q+VsHmHpRWndVRJ8Be0ZbkfPc5LRYH+5XrzXcEeLRQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  uuid@11.1.0:
-    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+  uuid@13.0.0:
+    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
     hasBin: true
 
   vite-plugin-eslint@1.8.1:
@@ -4397,6 +4405,76 @@ snapshots:
 
   '@adobe/css-tools@4.4.4': {}
 
+  '@ark-ui/react@5.34.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@internationalized/date': 3.11.0
+      '@zag-js/accordion': 1.35.3
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/angle-slider': 1.35.3
+      '@zag-js/async-list': 1.35.3
+      '@zag-js/auto-resize': 1.35.3
+      '@zag-js/avatar': 1.35.3
+      '@zag-js/carousel': 1.35.3
+      '@zag-js/cascade-select': 1.35.3
+      '@zag-js/checkbox': 1.35.3
+      '@zag-js/clipboard': 1.35.3
+      '@zag-js/collapsible': 1.35.3
+      '@zag-js/collection': 1.35.3
+      '@zag-js/color-picker': 1.35.3
+      '@zag-js/color-utils': 1.35.3
+      '@zag-js/combobox': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/date-picker': 1.35.3(@internationalized/date@3.11.0)
+      '@zag-js/date-utils': 1.35.3(@internationalized/date@3.11.0)
+      '@zag-js/dialog': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/drawer': 1.35.3
+      '@zag-js/editable': 1.35.3
+      '@zag-js/file-upload': 1.35.3
+      '@zag-js/file-utils': 1.35.3
+      '@zag-js/floating-panel': 1.35.3
+      '@zag-js/focus-trap': 1.35.3
+      '@zag-js/highlight-word': 1.35.3
+      '@zag-js/hover-card': 1.35.3
+      '@zag-js/i18n-utils': 1.35.3
+      '@zag-js/image-cropper': 1.35.3
+      '@zag-js/json-tree-utils': 1.35.3
+      '@zag-js/listbox': 1.35.3
+      '@zag-js/marquee': 1.35.3
+      '@zag-js/menu': 1.35.3
+      '@zag-js/navigation-menu': 1.35.3
+      '@zag-js/number-input': 1.35.3
+      '@zag-js/pagination': 1.35.3
+      '@zag-js/password-input': 1.35.3
+      '@zag-js/pin-input': 1.35.3
+      '@zag-js/popover': 1.35.3
+      '@zag-js/presence': 1.35.3
+      '@zag-js/progress': 1.35.3
+      '@zag-js/qr-code': 1.35.3
+      '@zag-js/radio-group': 1.35.3
+      '@zag-js/rating-group': 1.35.3
+      '@zag-js/react': 1.35.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@zag-js/scroll-area': 1.35.3
+      '@zag-js/select': 1.35.3
+      '@zag-js/signature-pad': 1.35.3
+      '@zag-js/slider': 1.35.3
+      '@zag-js/splitter': 1.35.3
+      '@zag-js/steps': 1.35.3
+      '@zag-js/switch': 1.35.3
+      '@zag-js/tabs': 1.35.3
+      '@zag-js/tags-input': 1.35.3
+      '@zag-js/timer': 1.35.3
+      '@zag-js/toast': 1.35.3
+      '@zag-js/toggle': 1.35.3
+      '@zag-js/toggle-group': 1.35.3
+      '@zag-js/tooltip': 1.35.3
+      '@zag-js/tour': 1.35.3
+      '@zag-js/tree-view': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
   '@asamuzakjp/css-color@4.1.0':
     dependencies:
       '@csstools/css-calc': 2.1.4(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -4471,75 +4549,26 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@chakra-ui/anatomy@2.3.6': {}
-
-  '@chakra-ui/hooks@2.4.5(patch_hash=0425e59e5963f540970162a0320f192637dd4f5e74c54014680d4dd4f2e5c16b)(react@19.2.0)':
+  '@chakra-ui/react@3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
-      '@chakra-ui/utils': 2.2.5(react@19.2.0)
-      '@zag-js/element-size': 0.31.1
-      copy-to-clipboard: 3.3.3
-      framesync: 6.1.2
-      react: 19.2.0
-
-  '@chakra-ui/icons@2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)':
-    dependencies:
-      '@chakra-ui/react': 2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      react: 19.2.0
-
-  '@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
-    dependencies:
-      '@chakra-ui/hooks': 2.4.5(patch_hash=0425e59e5963f540970162a0320f192637dd4f5e74c54014680d4dd4f2e5c16b)(react@19.2.0)
-      '@chakra-ui/styled-system': 2.12.4(react@19.2.0)
-      '@chakra-ui/theme': 3.4.9(@chakra-ui/styled-system@2.12.4(react@19.2.0))(react@19.2.0)
-      '@chakra-ui/utils': 2.2.5(react@19.2.0)
-      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.0)
-      '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0)
-      '@popperjs/core': 2.11.8
-      '@zag-js/focus-visible': 0.31.1
-      aria-hidden: 1.2.6
-      framer-motion: 12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-fast-compare: 3.2.2
-      react-focus-lock: 2.13.6(@types/react@19.2.7)(react@19.2.0)
-      react-remove-scroll: 2.7.1(@types/react@19.2.7)(react@19.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-
-  '@chakra-ui/styled-system@2.12.4(react@19.2.0)':
-    dependencies:
-      '@chakra-ui/utils': 2.2.5(react@19.2.0)
+      '@ark-ui/react': 5.34.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@emotion/is-prop-valid': 1.4.0
+      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.4)
+      '@emotion/serialize': 1.3.3
+      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.2.4)
+      '@emotion/utils': 1.4.2
+      '@pandacss/is-valid-prop': 1.9.0
       csstype: 3.2.3
-    transitivePeerDependencies:
-      - react
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
 
-  '@chakra-ui/theme-tools@2.2.9(@chakra-ui/styled-system@2.12.4(react@19.2.0))(react@19.2.0)':
+  '@conterra/reactivity-core@0.8.1':
     dependencies:
-      '@chakra-ui/anatomy': 2.3.6
-      '@chakra-ui/styled-system': 2.12.4(react@19.2.0)
-      '@chakra-ui/utils': 2.2.5(react@19.2.0)
-      color2k: 2.0.3
-    transitivePeerDependencies:
-      - react
+      '@preact/signals-core': 1.12.1
 
-  '@chakra-ui/theme@3.4.9(@chakra-ui/styled-system@2.12.4(react@19.2.0))(react@19.2.0)':
+  '@conterra/reactivity-events@0.8.1':
     dependencies:
-      '@chakra-ui/anatomy': 2.3.6
-      '@chakra-ui/styled-system': 2.12.4(react@19.2.0)
-      '@chakra-ui/theme-tools': 2.2.9(@chakra-ui/styled-system@2.12.4(react@19.2.0))(react@19.2.0)
-      '@chakra-ui/utils': 2.2.5(react@19.2.0)
-    transitivePeerDependencies:
-      - react
-
-  '@chakra-ui/utils@2.2.5(react@19.2.0)':
-    dependencies:
-      '@types/lodash.mergewith': 4.6.9
-      lodash.mergewith: 4.6.2
-      react: 19.2.0
-
-  '@conterra/reactivity-core@0.5.0':
-    dependencies:
-      '@preact/signals-core': 1.8.0
+      '@conterra/reactivity-core': 0.8.1
 
   '@csstools/color-helpers@5.1.0': {}
 
@@ -4611,17 +4640,17 @@ snapshots:
 
   '@emotion/memoize@0.9.0': {}
 
-  '@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0)':
+  '@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.28.4
       '@emotion/babel-plugin': 11.13.5
       '@emotion/cache': 11.14.0
       '@emotion/serialize': 1.3.3
-      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.2.0)
+      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.2.4)
       '@emotion/utils': 1.4.2
       '@emotion/weak-memoize': 0.4.0
       hoist-non-react-statics: 3.3.2
-      react: 19.2.0
+      react: 19.2.4
     optionalDependencies:
       '@types/react': 19.2.7
     transitivePeerDependencies:
@@ -4637,16 +4666,16 @@ snapshots:
 
   '@emotion/sheet@1.4.0': {}
 
-  '@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0)':
+  '@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.28.4
       '@emotion/babel-plugin': 11.13.5
       '@emotion/is-prop-valid': 1.4.0
-      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.0)
+      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.4)
       '@emotion/serialize': 1.3.3
-      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.2.0)
+      '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@19.2.4)
       '@emotion/utils': 1.4.2
-      react: 19.2.0
+      react: 19.2.4
     optionalDependencies:
       '@types/react': 19.2.7
     transitivePeerDependencies:
@@ -4654,9 +4683,9 @@ snapshots:
 
   '@emotion/unitless@0.10.0': {}
 
-  '@emotion/use-insertion-effect-with-fallbacks@1.2.0(react@19.2.0)':
+  '@emotion/use-insertion-effect-with-fallbacks@1.2.0(react@19.2.4)':
     dependencies:
-      react: 19.2.0
+      react: 19.2.4
 
   '@emotion/utils@1.4.2': {}
 
@@ -4763,50 +4792,46 @@ snapshots:
 
   '@eslint/js@8.57.1': {}
 
-  '@floating-ui/core@1.7.3':
+  '@floating-ui/core@1.7.5':
     dependencies:
-      '@floating-ui/utils': 0.2.10
+      '@floating-ui/utils': 0.2.11
 
-  '@floating-ui/dom@1.7.4':
+  '@floating-ui/dom@1.7.6':
     dependencies:
-      '@floating-ui/core': 1.7.3
-      '@floating-ui/utils': 0.2.10
+      '@floating-ui/core': 1.7.5
+      '@floating-ui/utils': 0.2.11
 
-  '@floating-ui/utils@0.2.10': {}
+  '@floating-ui/utils@0.2.11': {}
 
-  '@formatjs/ecma402-abstract@2.3.6':
+  '@formatjs/bigdecimal@0.2.0': {}
+
+  '@formatjs/ecma402-abstract@3.2.0':
     dependencies:
-      '@formatjs/fast-memoize': 2.2.7
-      '@formatjs/intl-localematcher': 0.6.2
-      decimal.js: 10.6.0
-      tslib: 2.8.1
+      '@formatjs/bigdecimal': 0.2.0
+      '@formatjs/fast-memoize': 3.1.1
+      '@formatjs/intl-localematcher': 0.8.2
 
-  '@formatjs/fast-memoize@2.2.7':
-    dependencies:
-      tslib: 2.8.1
+  '@formatjs/fast-memoize@3.1.1': {}
 
-  '@formatjs/icu-messageformat-parser@2.11.4':
+  '@formatjs/icu-messageformat-parser@3.5.3':
     dependencies:
-      '@formatjs/ecma402-abstract': 2.3.6
-      '@formatjs/icu-skeleton-parser': 1.8.16
-      tslib: 2.8.1
+      '@formatjs/ecma402-abstract': 3.2.0
+      '@formatjs/icu-skeleton-parser': 2.1.3
 
-  '@formatjs/icu-skeleton-parser@1.8.16':
+  '@formatjs/icu-skeleton-parser@2.1.3':
     dependencies:
-      '@formatjs/ecma402-abstract': 2.3.6
-      tslib: 2.8.1
+      '@formatjs/ecma402-abstract': 3.2.0
 
-  '@formatjs/intl-localematcher@0.6.2':
+  '@formatjs/intl-localematcher@0.8.2':
     dependencies:
-      tslib: 2.8.1
+      '@formatjs/fast-memoize': 3.1.1
 
-  '@formatjs/intl@3.1.8(typescript@5.9.3)':
+  '@formatjs/intl@4.1.4(typescript@5.9.3)':
     dependencies:
-      '@formatjs/ecma402-abstract': 2.3.6
-      '@formatjs/fast-memoize': 2.2.7
-      '@formatjs/icu-messageformat-parser': 2.11.4
-      intl-messageformat: 10.7.18
-      tslib: 2.8.1
+      '@formatjs/ecma402-abstract': 3.2.0
+      '@formatjs/fast-memoize': 3.1.1
+      '@formatjs/icu-messageformat-parser': 3.5.3
+      intl-messageformat: 11.2.0
     optionalDependencies:
       typescript: 5.9.3
 
@@ -4829,6 +4854,14 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/object-schema@2.0.3': {}
+
+  '@internationalized/date@3.11.0':
+    dependencies:
+      '@swc/helpers': 0.5.19
+
+  '@internationalized/number@3.6.5':
+    dependencies:
+      '@swc/helpers': 0.5.19
 
   '@isaacs/balanced-match@4.0.1': {}
 
@@ -4869,61 +4902,58 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@open-pioneer/authentication-keycloak@3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)':
+  '@open-pioneer/authentication-keycloak@4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
     dependencies:
-      '@conterra/reactivity-core': 0.5.0
-      '@open-pioneer/authentication': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/notifier': 3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      keycloak-js: 26.2.1
+      '@conterra/reactivity-core': 0.8.1
+      '@open-pioneer/authentication': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/notifier': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      keycloak-js: 26.2.3
     transitivePeerDependencies:
-      - '@chakra-ui/react'
-      - '@emotion/is-prop-valid'
+      - '@emotion/react'
       - '@types/react'
       - react-dom
       - supports-color
       - typescript
 
-  '@open-pioneer/authentication@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)':
+  '@open-pioneer/authentication@4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
     dependencies:
-      '@conterra/reactivity-core': 0.5.0
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      react: 19.2.0
-      react-use: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@conterra/reactivity-core': 0.8.1
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      react: 19.2.4
+      react-use: 17.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
     transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
+      - '@emotion/react'
       - '@types/react'
       - react-dom
       - supports-color
       - typescript
 
-  '@open-pioneer/base-theme@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)':
+  '@open-pioneer/base-theme@4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
     transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
+      - '@emotion/react'
+      - react
+      - react-dom
 
-  '@open-pioneer/basemap-switcher@0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)':
+  '@open-pioneer/basemap-switcher@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
     dependencies:
-      '@conterra/reactivity-core': 0.5.0
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      chakra-react-select: 5.0.5(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@conterra/reactivity-core': 0.8.1
+      '@open-pioneer/chakra-snippets': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       ol: 10.7.0
-      react: 19.2.0
-      react-icons: 5.5.0(react@19.2.0)
+      react: 19.2.4
+      react-icons: 5.5.0(react@19.2.4)
     transitivePeerDependencies:
-      - '@chakra-ui/react'
-      - '@emotion/is-prop-valid'
       - '@emotion/react'
       - '@types/react'
       - react-dom
@@ -4971,19 +5001,20 @@ snapshots:
 
   '@open-pioneer/build-support@3.0.3': {}
 
-  '@open-pioneer/chakra-integration@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)':
+  '@open-pioneer/chakra-snippets@4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
     dependencies:
-      '@chakra-ui/react': 2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@emotion/cache': 11.14.0
-      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.0)
-      '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0)
-      framer-motion: 12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      '@ark-ui/react': 5.34.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      react: 19.2.4
+      react-icons: 5.5.0(react@19.2.4)
     transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
+      - '@emotion/react'
       - '@types/react'
+      - react-dom
       - supports-color
+      - typescript
 
   '@open-pioneer/check-pnpm-duplicates@0.2.4':
     dependencies:
@@ -4996,301 +5027,292 @@ snapshots:
       commander: 14.0.2
       js-yaml: 4.1.1
 
-  '@open-pioneer/coordinate-viewer@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
+  '@open-pioneer/coordinate-viewer@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
     dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       ol: 10.7.0
-      react: 19.2.0
+      react: 19.2.4
     transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/core@3.1.0': {}
-
-  '@open-pioneer/geolocation@0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@conterra/reactivity-core': 0.5.0
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/map-ui-components': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/notifier': 3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      ol: 10.7.0
-      react: 19.2.0
-      react-icons: 5.5.0(react@19.2.0)
-    transitivePeerDependencies:
-      - '@chakra-ui/react'
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/http@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/legend@0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@chakra-ui/icons': 2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      classnames: 2.5.1
-      ol: 10.7.0
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@chakra-ui/react'
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/map-navigation@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@conterra/reactivity-core': 0.5.0
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/map-ui-components': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      classnames: 2.5.1
-      ol: 10.7.0
-      react: 19.2.0
-      react-icons: 5.5.0(react@19.2.0)
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/map-ui-components@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)':
-    dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      classnames: 2.5.1
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-
-  '@open-pioneer/map@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@conterra/reactivity-core': 0.5.0
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/http': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@types/proj4': 2.19.0
-      ol: 10.7.0
-      proj4: 2.20.2
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-use: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      uuid: 11.1.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/measurement@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      classnames: 2.5.1
-      ol: 10.7.0
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/notifier@3.1.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@chakra-ui/icons': 2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@chakra-ui/react'
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/ogc-features@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/http': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      ol: 10.7.0
-      uuid: 11.1.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/overview-map@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      ol: 10.7.0
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/react-utils@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)':
-    dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/core': 3.1.0
-      classnames: 2.5.1
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-
-  '@open-pioneer/reactivity@3.1.0':
-    dependencies:
-      '@conterra/reactivity-core': 0.5.0
-      react: 19.2.0
-
-  '@open-pioneer/runtime-react-support@3.1.0':
-    dependencies:
-      react: 19.2.0
-
-  '@open-pioneer/runtime@3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@formatjs/intl': 3.1.8(typescript@5.9.3)
-      '@open-pioneer/base-theme': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/core': 3.1.0
-      '@open-pioneer/runtime-react-support': 3.1.0
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/scale-bar@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      ol: 10.7.0
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/scale-viewer@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      react: 19.2.0
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/test-utils@3.1.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@formatjs/intl': 3.1.8(typescript@5.9.3)
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/runtime-react-support': 3.1.0
-      '@testing-library/dom': 10.4.1
-      '@testing-library/react': 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - '@types/react-dom'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/theme@0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)':
-    dependencies:
-      '@open-pioneer/base-theme': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - '@types/react'
-      - supports-color
-      - typescript
-
-  '@open-pioneer/toc@0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)':
-    dependencies:
-      '@chakra-ui/icons': 2.2.4(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
-      '@conterra/reactivity-core': 0.5.0
-      '@open-pioneer/basemap-switcher': 0.10.0(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/is-prop-valid@1.4.0)(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(typescript@5.9.3)
-      '@open-pioneer/chakra-integration': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/map': 0.10.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      '@open-pioneer/react-utils': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)
-      '@open-pioneer/reactivity': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
-      classnames: 2.5.1
-      ol: 10.7.0
-      react: 19.2.0
-      react-icons: 5.5.0(react@19.2.0)
-    transitivePeerDependencies:
-      - '@chakra-ui/react'
-      - '@emotion/is-prop-valid'
       - '@emotion/react'
       - '@types/react'
       - react-dom
       - supports-color
       - typescript
 
-  '@open-pioneer/vite-plugin-pioneer@4.0.2(@open-pioneer/runtime@3.1.0(@types/react@19.2.7)(typescript@5.9.3))(sass@1.94.2)(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))':
+  '@open-pioneer/core@4.4.0':
+    dependencies:
+      '@conterra/reactivity-events': 0.8.1
+
+  '@open-pioneer/geolocation@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@conterra/reactivity-core': 0.8.1
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/map-ui-components': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/notifier': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      ol: 10.7.0
+      react: 19.2.4
+      react-icons: 5.5.0(react@19.2.4)
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/http@4.4.0(@types/react@19.2.7)(typescript@5.9.3)':
+    dependencies:
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@types/react'
+      - supports-color
+      - typescript
+
+  '@open-pioneer/legend@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      classnames: 2.5.1
+      ol: 10.7.0
+      react: 19.2.4
+      react-icons: 5.5.0(react@19.2.4)
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/map-navigation@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@conterra/reactivity-core': 0.8.1
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/map-ui-components': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      classnames: 2.5.1
+      ol: 10.7.0
+      react: 19.2.4
+      react-icons: 5.5.0(react@19.2.4)
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/map-ui-components@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/chakra-snippets': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      classnames: 2.5.1
+      react: 19.2.4
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/map@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@conterra/reactivity-core': 0.8.1
+      '@conterra/reactivity-events': 0.8.1
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/http': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      ol: 10.7.0
+      proj4: 2.20.2
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      react-use: 17.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      uuid: 13.0.0
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - supports-color
+      - typescript
+
+  '@open-pioneer/measurement@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/chakra-snippets': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      classnames: 2.5.1
+      ol: 10.7.0
+      react: 19.2.4
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/notifier@4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      react: 19.2.4
+      react-icons: 5.5.0(react@19.2.4)
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/ogc-features@1.2.0(@types/react@19.2.7)(typescript@5.9.3)':
+    dependencies:
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/http': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      ol: 10.7.0
+      uuid: 13.0.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - supports-color
+      - typescript
+
+  '@open-pioneer/overview-map@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      ol: 10.7.0
+      react: 19.2.4
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/react-utils@4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/core': 4.4.0
+      classnames: 2.5.1
+      react: 19.2.4
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - react-dom
+
+  '@open-pioneer/reactivity@4.4.0':
+    dependencies:
+      '@conterra/reactivity-core': 0.8.1
+      react: 19.2.4
+
+  '@open-pioneer/runtime@4.4.0(@types/react@19.2.7)(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@conterra/reactivity-core': 0.8.1
+      '@emotion/cache': 11.14.0
+      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.4)
+      '@formatjs/intl': 4.1.4(typescript@5.9.3)
+      '@open-pioneer/base-theme': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/core': 4.4.0
+      '@open-pioneer/reactivity': 4.4.0
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    transitivePeerDependencies:
+      - '@types/react'
+      - supports-color
+      - typescript
+
+  '@open-pioneer/scale-bar@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      ol: 10.7.0
+      react: 19.2.4
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/scale-viewer@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      react: 19.2.4
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/test-utils@4.4.0(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)':
+    dependencies:
+      '@formatjs/intl': 4.1.4(typescript@5.9.3)
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      '@testing-library/dom': 10.4.1
+      '@testing-library/react': 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - supports-color
+      - typescript
+
+  '@open-pioneer/toc@1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)':
+    dependencies:
+      '@chakra-ui/react': 3.34.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@conterra/reactivity-core': 0.8.1
+      '@open-pioneer/basemap-switcher': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/chakra-snippets': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(typescript@5.9.3)
+      '@open-pioneer/map': 1.2.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/react-utils': 4.4.0(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))
+      '@open-pioneer/reactivity': 4.4.0
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
+      classnames: 2.5.1
+      ol: 10.7.0
+      react: 19.2.4
+      react-icons: 5.5.0(react@19.2.4)
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@types/react'
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@open-pioneer/vite-plugin-pioneer@4.0.2(@open-pioneer/runtime@4.4.0(@types/react@19.2.7)(typescript@5.9.3))(sass@1.94.2)(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))':
     dependencies:
       '@babel/generator': 7.28.5
       '@babel/template': 7.27.2
       '@babel/types': 7.28.5
       '@open-pioneer/build-common': 3.1.0
-      '@open-pioneer/runtime': 3.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@19.2.7)(typescript@5.9.3)
+      '@open-pioneer/runtime': 4.4.0(@types/react@19.2.7)(typescript@5.9.3)
       debug: 4.4.3
       js-yaml: 4.1.1
       sass: 1.94.2
@@ -5300,6 +5322,8 @@ snapshots:
       zod-validation-error: 3.5.4(zod@3.25.76)
     transitivePeerDependencies:
       - supports-color
+
+  '@pandacss/is-valid-prop@1.9.0': {}
 
   '@parcel/watcher-android-arm64@2.5.1':
     optional: true
@@ -5469,9 +5493,7 @@ snapshots:
 
   '@pnpm/util.lex-comparator@3.0.2': {}
 
-  '@popperjs/core@2.11.8': {}
-
-  '@preact/signals-core@1.8.0': {}
+  '@preact/signals-core@1.12.1': {}
 
   '@rolldown/pluginutils@1.0.0-beta.47': {}
 
@@ -5618,7 +5640,7 @@ snapshots:
   '@swc/core-win32-x64-msvc@1.15.3':
     optional: true
 
-  '@swc/core@1.15.3':
+  '@swc/core@1.15.3(@swc/helpers@0.5.19)':
     dependencies:
       '@swc/counter': 0.1.3
       '@swc/types': 0.1.25
@@ -5633,8 +5655,13 @@ snapshots:
       '@swc/core-win32-arm64-msvc': 1.15.3
       '@swc/core-win32-ia32-msvc': 1.15.3
       '@swc/core-win32-x64-msvc': 1.15.3
+      '@swc/helpers': 0.5.19
 
   '@swc/counter@0.1.3': {}
+
+  '@swc/helpers@0.5.19':
+    dependencies:
+      tslib: 2.8.1
 
   '@swc/types@0.1.25':
     dependencies:
@@ -5660,12 +5687,22 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/react@16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@testing-library/react@16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.28.4
       '@testing-library/dom': 10.4.1
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    optionalDependencies:
+      '@types/react': 19.2.7
+      '@types/react-dom': 19.2.3(@types/react@19.2.7)
+
+  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@babel/runtime': 7.28.4
+      '@testing-library/dom': 10.4.1
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
     optionalDependencies:
       '@types/react': 19.2.7
       '@types/react-dom': 19.2.3(@types/react@19.2.7)
@@ -5707,29 +5744,15 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/lodash.mergewith@4.6.9':
-    dependencies:
-      '@types/lodash': 4.17.21
-
-  '@types/lodash@4.17.21': {}
-
   '@types/node@20.19.25':
     dependencies:
       undici-types: 6.21.0
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/proj4@2.19.0':
-    dependencies:
-      proj4: 2.20.2
-
   '@types/rbush@4.0.0': {}
 
   '@types/react-dom@19.2.3(@types/react@19.2.7)':
-    dependencies:
-      '@types/react': 19.2.7
-
-  '@types/react-transition-group@4.4.12(@types/react@19.2.7)':
     dependencies:
       '@types/react': 19.2.7
 
@@ -5896,10 +5919,10 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vitejs/plugin-react-swc@4.2.2(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))':
+  '@vitejs/plugin-react-swc@4.2.2(@swc/helpers@0.5.19)(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.47
-      '@swc/core': 1.15.3
+      '@swc/core': 1.15.3(@swc/helpers@0.5.19)
       vite: 6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1)
     transitivePeerDependencies:
       - '@swc/helpers'
@@ -5945,13 +5968,561 @@ snapshots:
 
   '@xobotyi/scrollbar-width@1.9.5': {}
 
-  '@zag-js/dom-query@0.31.1': {}
-
-  '@zag-js/element-size@0.31.1': {}
-
-  '@zag-js/focus-visible@0.31.1':
+  '@zag-js/accordion@1.35.3':
     dependencies:
-      '@zag-js/dom-query': 0.31.1
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/anatomy@1.35.3': {}
+
+  '@zag-js/angle-slider@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/rect-utils': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/aria-hidden@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+
+  '@zag-js/async-list@1.35.3':
+    dependencies:
+      '@zag-js/core': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/auto-resize@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+
+  '@zag-js/avatar@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/carousel@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/scroll-snap': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/cascade-select@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/collection': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/rect-utils': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/checkbox@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/clipboard@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/collapsible@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/collection@1.35.3':
+    dependencies:
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/color-picker@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/color-utils': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/color-utils@1.35.3':
+    dependencies:
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/combobox@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/aria-hidden': 1.35.3
+      '@zag-js/collection': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/core@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/date-picker@1.35.3(@internationalized/date@3.11.0)':
+    dependencies:
+      '@internationalized/date': 3.11.0
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/date-utils': 1.35.3(@internationalized/date@3.11.0)
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/live-region': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/date-utils@1.35.3(@internationalized/date@3.11.0)':
+    dependencies:
+      '@internationalized/date': 3.11.0
+
+  '@zag-js/dialog@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/aria-hidden': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-trap': 1.35.3
+      '@zag-js/remove-scroll': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/dismissable@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/interact-outside': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/dom-query@1.35.3':
+    dependencies:
+      '@zag-js/types': 1.35.3
+
+  '@zag-js/drawer@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/aria-hidden': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-trap': 1.35.3
+      '@zag-js/remove-scroll': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/editable@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/interact-outside': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/file-upload@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/file-utils': 1.35.3
+      '@zag-js/i18n-utils': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/file-utils@1.35.3':
+    dependencies:
+      '@zag-js/i18n-utils': 1.35.3
+
+  '@zag-js/floating-panel@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/rect-utils': 1.35.3
+      '@zag-js/store': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/focus-trap@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+
+  '@zag-js/focus-visible@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+
+  '@zag-js/highlight-word@1.35.3': {}
+
+  '@zag-js/hover-card@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/i18n-utils@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+
+  '@zag-js/image-cropper@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/interact-outside@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/json-tree-utils@1.35.3': {}
+
+  '@zag-js/listbox@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/collection': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/live-region@1.35.3': {}
+
+  '@zag-js/marquee@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/menu@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/rect-utils': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/navigation-menu@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/number-input@1.35.3':
+    dependencies:
+      '@internationalized/number': 3.6.5
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/pagination@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/password-input@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/pin-input@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/popover@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/aria-hidden': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-trap': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/remove-scroll': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/popper@1.35.3':
+    dependencies:
+      '@floating-ui/dom': 1.7.6
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/presence@1.35.3':
+    dependencies:
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+
+  '@zag-js/progress@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/qr-code@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+      proxy-memoize: 3.0.1
+      uqr: 0.1.2
+
+  '@zag-js/radio-group@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/rating-group@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/react@1.35.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@zag-js/core': 1.35.3
+      '@zag-js/store': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
+  '@zag-js/rect-utils@1.35.3': {}
+
+  '@zag-js/remove-scroll@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+
+  '@zag-js/scroll-area@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/scroll-snap@1.35.3':
+    dependencies:
+      '@zag-js/dom-query': 1.35.3
+
+  '@zag-js/select@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/collection': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/signature-pad@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+      perfect-freehand: 1.2.3
+
+  '@zag-js/slider@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/splitter@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/steps@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/store@1.35.3':
+    dependencies:
+      proxy-compare: 3.0.1
+
+  '@zag-js/switch@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/tabs@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/tags-input@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/auto-resize': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/interact-outside': 1.35.3
+      '@zag-js/live-region': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/timer@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/toast@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/toggle-group@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/toggle@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/tooltip@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-visible': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/tour@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dismissable': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/focus-trap': 1.35.3
+      '@zag-js/interact-outside': 1.35.3
+      '@zag-js/popper': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/tree-view@1.35.3':
+    dependencies:
+      '@zag-js/anatomy': 1.35.3
+      '@zag-js/collection': 1.35.3
+      '@zag-js/core': 1.35.3
+      '@zag-js/dom-query': 1.35.3
+      '@zag-js/types': 1.35.3
+      '@zag-js/utils': 1.35.3
+
+  '@zag-js/types@1.35.3':
+    dependencies:
+      csstype: 3.2.3
+
+  '@zag-js/utils@1.35.3': {}
 
   '@zkochan/js-yaml@0.0.9':
     dependencies:
@@ -5995,10 +6566,6 @@ snapshots:
   ansi-styles@6.2.3: {}
 
   argparse@2.0.1: {}
-
-  aria-hidden@1.2.6:
-    dependencies:
-      tslib: 2.8.1
 
   aria-query@5.3.0:
     dependencies:
@@ -6138,17 +6705,6 @@ snapshots:
 
   chai@6.2.1: {}
 
-  chakra-react-select@5.0.5(@chakra-ui/react@2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-    dependencies:
-      '@chakra-ui/react': 2.10.9(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.0)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-select: 5.10.2(patch_hash=76074e6c05936addacb06b7e4bf08d0f5101ba64a00cae84d8c9ed60c62254de)(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-      - supports-color
-
   chalk@4.1.2:
     dependencies:
       ansi-styles: 4.3.0
@@ -6178,8 +6734,6 @@ snapshots:
       color-name: 1.1.4
 
   color-name@1.1.4: {}
-
-  color2k@2.0.3: {}
 
   colorette@2.0.20: {}
 
@@ -6291,8 +6845,6 @@ snapshots:
   detect-libc@1.0.3:
     optional: true
 
-  detect-node-es@1.1.0: {}
-
   doctrine@2.1.0:
     dependencies:
       esutils: 2.0.3
@@ -6304,11 +6856,6 @@ snapshots:
   dom-accessibility-api@0.5.16: {}
 
   dom-accessibility-api@0.6.3: {}
-
-  dom-helpers@5.2.1:
-    dependencies:
-      '@babel/runtime': 7.28.4
-      csstype: 3.2.3
 
   dom-serializer@2.0.0:
     dependencies:
@@ -6766,27 +7313,9 @@ snapshots:
 
   flatted@3.3.3: {}
 
-  focus-lock@1.3.6:
-    dependencies:
-      tslib: 2.8.1
-
   for-each@0.3.5:
     dependencies:
       is-callable: 1.2.7
-
-  framer-motion@12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-    dependencies:
-      motion-dom: 12.23.23
-      motion-utils: 12.23.6
-      tslib: 2.8.1
-    optionalDependencies:
-      '@emotion/is-prop-valid': 1.4.0
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-
-  framesync@6.1.2:
-    dependencies:
-      tslib: 2.4.0
 
   fs-extra@11.3.2:
     dependencies:
@@ -6839,8 +7368,6 @@ snapshots:
       has-symbols: 1.1.0
       hasown: 2.0.2
       math-intrinsics: 1.1.0
-
-  get-nonce@1.0.1: {}
 
   get-npm-tarball-url@2.1.0: {}
 
@@ -6936,10 +7463,10 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  highcharts-react-official@3.2.3(highcharts@12.4.0)(react@19.2.0):
+  highcharts-react-official@3.2.3(highcharts@12.4.0)(react@19.2.4):
     dependencies:
       highcharts: 12.4.0
-      react: 19.2.0
+      react: 19.2.4
 
   highcharts@12.4.0: {}
 
@@ -6956,11 +7483,11 @@ snapshots:
     dependencies:
       whatwg-encoding: 3.1.1
 
-  html-react-parser@5.2.5(@types/react@19.2.7)(react@19.2.0):
+  html-react-parser@5.2.5(@types/react@19.2.7)(react@19.2.4):
     dependencies:
       domhandler: 5.0.3
       html-dom-parser: 5.1.1
-      react: 19.2.0
+      react: 19.2.4
       react-property: 2.0.2
       style-to-js: 1.1.16
     optionalDependencies:
@@ -7035,12 +7562,11 @@ snapshots:
       hasown: 2.0.2
       side-channel: 1.1.0
 
-  intl-messageformat@10.7.18:
+  intl-messageformat@11.2.0:
     dependencies:
-      '@formatjs/ecma402-abstract': 2.3.6
-      '@formatjs/fast-memoize': 2.2.7
-      '@formatjs/icu-messageformat-parser': 2.11.4
-      tslib: 2.8.1
+      '@formatjs/ecma402-abstract': 3.2.0
+      '@formatjs/fast-memoize': 3.1.1
+      '@formatjs/icu-messageformat-parser': 3.5.3
 
   is-array-buffer@3.0.5:
     dependencies:
@@ -7245,7 +7771,7 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
-  keycloak-js@26.2.1: {}
+  keycloak-js@26.2.3: {}
 
   keyv@4.5.4:
     dependencies:
@@ -7295,8 +7821,6 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
-  lodash.mergewith@4.6.2: {}
-
   log-update@6.1.0:
     dependencies:
       ansi-escapes: 7.2.0
@@ -7335,8 +7859,6 @@ snapshots:
   mdn-data@2.12.2: {}
 
   mdurl@2.0.0: {}
-
-  memoize-one@6.0.0: {}
 
   merge-stream@2.0.0: {}
 
@@ -7378,23 +7900,17 @@ snapshots:
       pkg-types: 1.3.1
       ufo: 1.6.1
 
-  motion-dom@12.23.23:
-    dependencies:
-      motion-utils: 12.23.6
-
-  motion-utils@12.23.6: {}
-
   ms@2.1.3: {}
 
-  nano-css@5.6.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  nano-css@5.6.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
       css-tree: 1.1.3
       csstype: 3.2.3
       fastest-stable-stringify: 2.0.2
       inline-style-prefixer: 7.0.1
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
       rtl-css-js: 1.16.1
       stacktrace-js: 2.0.2
       stylis: 4.3.6
@@ -7553,6 +8069,8 @@ snapshots:
     dependencies:
       resolve-protobuf-schema: 2.1.0
 
+  perfect-freehand@1.2.3: {}
+
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -7609,6 +8127,12 @@ snapshots:
 
   protocol-buffers-schema@3.6.0: {}
 
+  proxy-compare@3.0.1: {}
+
+  proxy-memoize@3.0.1:
+    dependencies:
+      proxy-compare: 3.0.1
+
   punycode.js@2.3.1: {}
 
   punycode@2.3.1: {}
@@ -7623,33 +8147,14 @@ snapshots:
     dependencies:
       quickselect: 3.0.0
 
-  react-clientside-effect@1.2.8(react@19.2.0):
+  react-dom@19.2.4(react@19.2.4):
     dependencies:
-      '@babel/runtime': 7.28.4
-      react: 19.2.0
-
-  react-dom@19.2.0(react@19.2.0):
-    dependencies:
-      react: 19.2.0
+      react: 19.2.4
       scheduler: 0.27.0
 
-  react-fast-compare@3.2.2: {}
-
-  react-focus-lock@2.13.6(@types/react@19.2.7)(react@19.2.0):
+  react-icons@5.5.0(react@19.2.4):
     dependencies:
-      '@babel/runtime': 7.28.4
-      focus-lock: 1.3.6
-      prop-types: 15.8.1
-      react: 19.2.0
-      react-clientside-effect: 1.2.8(react@19.2.0)
-      use-callback-ref: 1.3.3(@types/react@19.2.7)(react@19.2.0)
-      use-sidecar: 1.1.3(@types/react@19.2.7)(react@19.2.0)
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  react-icons@5.5.0(react@19.2.0):
-    dependencies:
-      react: 19.2.0
+      react: 19.2.4
 
   react-is@16.13.1: {}
 
@@ -7657,65 +8162,12 @@ snapshots:
 
   react-property@2.0.2: {}
 
-  react-remove-scroll-bar@2.3.8(@types/react@19.2.7)(react@19.2.0):
+  react-universal-interface@0.6.2(react@19.2.4)(tslib@2.8.1):
     dependencies:
-      react: 19.2.0
-      react-style-singleton: 2.2.3(@types/react@19.2.7)(react@19.2.0)
-      tslib: 2.8.1
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  react-remove-scroll@2.7.1(@types/react@19.2.7)(react@19.2.0):
-    dependencies:
-      react: 19.2.0
-      react-remove-scroll-bar: 2.3.8(@types/react@19.2.7)(react@19.2.0)
-      react-style-singleton: 2.2.3(@types/react@19.2.7)(react@19.2.0)
-      tslib: 2.8.1
-      use-callback-ref: 1.3.3(@types/react@19.2.7)(react@19.2.0)
-      use-sidecar: 1.1.3(@types/react@19.2.7)(react@19.2.0)
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  react-select@5.10.2(patch_hash=76074e6c05936addacb06b7e4bf08d0f5101ba64a00cae84d8c9ed60c62254de)(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-    dependencies:
-      '@babel/runtime': 7.28.4
-      '@emotion/cache': 11.14.0
-      '@emotion/react': 11.14.0(@types/react@19.2.7)(react@19.2.0)
-      '@floating-ui/dom': 1.7.4
-      '@types/react-transition-group': 4.4.12(@types/react@19.2.7)
-      memoize-one: 6.0.0
-      prop-types: 15.8.1
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-transition-group: 4.4.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      use-isomorphic-layout-effect: 1.2.1(@types/react@19.2.7)(react@19.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-      - supports-color
-
-  react-style-singleton@2.2.3(@types/react@19.2.7)(react@19.2.0):
-    dependencies:
-      get-nonce: 1.0.1
-      react: 19.2.0
-      tslib: 2.8.1
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  react-transition-group@4.4.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-    dependencies:
-      '@babel/runtime': 7.28.4
-      dom-helpers: 5.2.1
-      loose-envify: 1.4.0
-      prop-types: 15.8.1
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-
-  react-universal-interface@0.6.2(react@19.2.0)(tslib@2.8.1):
-    dependencies:
-      react: 19.2.0
+      react: 19.2.4
       tslib: 2.8.1
 
-  react-use@17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-use@17.6.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@types/js-cookie': 2.2.7
       '@xobotyi/scrollbar-width': 1.9.5
@@ -7723,10 +8175,10 @@ snapshots:
       fast-deep-equal: 3.1.3
       fast-shallow-equal: 1.0.0
       js-cookie: 2.2.1
-      nano-css: 5.6.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-universal-interface: 0.6.2(react@19.2.0)(tslib@2.8.1)
+      nano-css: 5.6.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      react-universal-interface: 0.6.2(react@19.2.4)(tslib@2.8.1)
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       set-harmonic-interval: 1.0.1
@@ -7734,7 +8186,7 @@ snapshots:
       ts-easing: 0.2.0
       tslib: 2.8.1
 
-  react@19.2.0: {}
+  react@19.2.4: {}
 
   read-cache@1.0.0:
     dependencies:
@@ -8167,8 +8619,6 @@ snapshots:
       minimist: 1.2.8
       strip-bom: 3.0.0
 
-  tslib@2.4.0: {}
-
   tslib@2.8.1: {}
 
   tsx@4.20.6:
@@ -8275,32 +8725,13 @@ snapshots:
       '@unrs/resolver-binding-win32-ia32-msvc': 1.11.1
       '@unrs/resolver-binding-win32-x64-msvc': 1.11.1
 
+  uqr@0.1.2: {}
+
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
 
-  use-callback-ref@1.3.3(@types/react@19.2.7)(react@19.2.0):
-    dependencies:
-      react: 19.2.0
-      tslib: 2.8.1
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  use-isomorphic-layout-effect@1.2.1(@types/react@19.2.7)(react@19.2.0):
-    dependencies:
-      react: 19.2.0
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  use-sidecar@1.1.3(@types/react@19.2.7)(react@19.2.0):
-    dependencies:
-      detect-node-es: 1.1.0
-      react: 19.2.0
-      tslib: 2.8.1
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  uuid@11.1.0: {}
+  uuid@13.0.0: {}
 
   vite-plugin-eslint@1.8.1(eslint@8.57.1)(vite@6.4.1(@types/node@20.19.25)(sass@1.94.2)(tsx@4.20.6)(yaml@2.8.1)):
     dependencies:

@@ -55,35 +55,35 @@ export function IsimipSelector() {
                 <HoverCard.Positioner>
                     <HoverCard.Content>
                         <HoverCard.Arrow />
-                            {intl.formatMessage({id: "map.layer_select.info1"})}
-                            {" "}
-                            <Button
-                                variant="plain"
-                                color="#2e9ecc"
-                                onClick={() => setActiveKeyword("climate model")}
-                            >
-                                {intl.formatMessage({id: "map.layer_select.keyword1"})}
-                            </Button>
-                            {" "}
-                            {intl.formatMessage({id: "map.layer_select.info2"})}
-                            {" "}
-                            <Button
-                                variant="plain"
-                                color="#2e9ecc"
-                                onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
-                            >
-                                {intl.formatMessage({id: "map.layer_select.keyword2"})}
-                            </Button>
-                            {intl.formatMessage({id: "map.layer_select.info3"})}
-                            <Button
-                                variant="plain"
-                                color="#2e9ecc"
-                                onClick={() => setActiveKeyword("Variables")}
-                            >
-                                {intl.formatMessage({id: "map.layer_select.keyword3"})}
-                            </Button>
-                            {" "}
-                            {intl.formatMessage({id: "map.layer_select.info4"})}
+                        {intl.formatMessage({id: "map.layer_select.info1"})}
+                        {" "}
+                        <Button
+                            variant="plain"
+                            color="#2e9ecc"
+                            onClick={() => setActiveKeyword("climate model")}
+                        >
+                            {intl.formatMessage({id: "map.layer_select.keyword1"})}
+                        </Button>
+                        {" "}
+                        {intl.formatMessage({id: "map.layer_select.info2"})}
+                        {" "}
+                        <Button
+                            variant="plain"
+                            color="#2e9ecc"
+                            onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
+                        >
+                            {intl.formatMessage({id: "map.layer_select.keyword2"})}
+                        </Button>
+                        {intl.formatMessage({id: "map.layer_select.info3"})}
+                        <Button
+                            variant="plain"
+                            color="#2e9ecc"
+                            onClick={() => setActiveKeyword("Variables")}
+                        >
+                            {intl.formatMessage({id: "map.layer_select.keyword3"})}
+                        </Button>
+                        {" "}
+                        {intl.formatMessage({id: "map.layer_select.info4"})}
                     </HoverCard.Content>
                 </HoverCard.Positioner>
                 {activeKeyword && (

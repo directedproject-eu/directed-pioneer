@@ -5,7 +5,6 @@ import { MapModel } from "@open-pioneer/map";
 import { fetchFeatureInfo } from "./FeatureService";
 import {
     Popover,
-    PopoverContent,
     Portal,
     Table,
     Text,
