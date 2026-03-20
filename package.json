@@ -66,10 +66,7 @@
         },
         "auditConfig": {
             "ignoreCves": []
-        },
-        "patchedDependencies": {
-        },
-        "peerDependencyRules": {}
+        }
     },
     "devDependencies": {
         "@open-pioneer/build-package-cli": "catalog:",

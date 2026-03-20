@@ -3,6 +3,7 @@
     "private": true,
     "main": "services.ts",
     "dependencies": {
+        "@chakra-ui/react": "catalog:",
         "@emotion/react": "catalog:",
         "@emotion/styled": "catalog:",
         "@open-pioneer/basemap-switcher": "catalog:",
