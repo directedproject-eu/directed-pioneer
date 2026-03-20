@@ -57,8 +57,6 @@ export function fetchFeatureInfo(
             .catch(() => null);
     });
 
-    console.log("Visible GeoTIFF layers: ", visibleGeoTIFFLayers);
-
     // GeoTIFF pixel value Promises
     const geoTIFFFetches = visibleGeoTIFFLayers.map(async (layer) => {
         layer.changed(); //ensure latest data
@@ -68,7 +66,6 @@ export function fetchFeatureInfo(
             // console.log("title:", layer.get("title"));
     
             const valueAtPixel = layer.getData(pixel);
-            console.log("Value at pixel: ", valueAtPixel);
             let valueAsString: number | null = null;
 
             if (
@@ -79,8 +76,6 @@ export function fetchFeatureInfo(
                 valueAsString = valueAtPixel[0]?.toFixed(2);
             }
                 
-            console.log("Value as string: ", valueAsString);
-
             return {
                 layerName: layer.get("title"),
                 data: { value: valueAsString}
