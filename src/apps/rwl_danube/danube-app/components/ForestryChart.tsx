@@ -139,7 +139,7 @@ const ForestryChart: React.FC<ForestryProps> = ({
             inputEnabled: true,
             selected: 2,
             buttons: [
-                { type: "da", count: 1, text: "1d" },
+                { type: "day", count: 1, text: "1d" },
                 { type: "week", count: 1, text: "1w" },
                 { type: "month", count: 1, text: "1m" },
                 { type: "month", count: 3, text: "3m" },
