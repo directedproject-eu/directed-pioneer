@@ -1,0 +1,8 @@
+messages: 
+  localeSwitcher:
+    label: "Sprog:"
+    locale:
+        de: Deutsch
+        en: Engelsk
+        hu: Ungarsk
+        da: Dansk
