@@ -40,7 +40,7 @@ export class ForecastServiceImpl implements ForecastService {
                 style: {
                     color: this.createColorGradient([0, 100], "layer")
                 },
-                properties: { title: "Sea Level Mean Deviation Forecasts", type: "GeoTIFF" }
+                properties: { title: "Sea Level Mean Deviation Forecasts", type: "GeoTIFF", id: "sea level mean deviation forecast" }
             });
             //Harmonie total precip
             this.total_precip = new WebGLTileLayer({
@@ -49,7 +49,7 @@ export class ForecastServiceImpl implements ForecastService {
                 style: {
                     color: this.createColorGradient([0, 100], "total_precip")
                 },
-                properties: { title: "Total Precipitation Forecasts", type: "GeoTIFF" }
+                properties: { title: "Total Precipitation Forecasts", type: "GeoTIFF", id: "total pecipitation forecast" }
             });
             //Harmonie precipitation rate
             this.rate_precip = new WebGLTileLayer({
@@ -58,7 +58,7 @@ export class ForecastServiceImpl implements ForecastService {
                 style: {
                     color: this.createColorGradient([0, 100], "rate_precip")
                 },
-                properties: { title: "Precipitation Rate Forecasts", type: "GeoTIFF" }
+                properties: { title: "Precipitation Rate Forecasts", type: "GeoTIFF", id: "precipitation rate forecast" }
             });
             model?.layers.addLayer(
                 new GroupLayer({

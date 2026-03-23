@@ -29,11 +29,12 @@
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
-        "navbar": "workspace:^",
-        "taxonomy": "workspace:^",
-        "saferplaces": "workspace:^",
-        "mcdm": "workspace:^",
+        "featureinfo": "workspace:^",
         "layerdownload": "workspace:^",
+        "mcdm": "workspace:^",
+        "navbar": "workspace:^",
+        "saferplaces": "workspace:^",
+        "taxonomy": "workspace:^",
         "theme": "workspace:^"
     }
 }

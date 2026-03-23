@@ -110,39 +110,39 @@ const ChartComponentZala = () => {
                 </Stack>
             </Center>
             <Text mt={"2em"} size={"2em"}>
-                {intl.formatMessage({id: "charts.explanation1"})}
+                {intl.formatMessage({id: "charts.zala_crop.explanation1"})}
                 {" "}
                 <Button
                     variant="link"
                     color="#2e9ecc"
                     onClick={() => setActiveKeyword("agriculture")}
                 >
-                    {intl.formatMessage({id: "charts.keyword1"})}
+                    {intl.formatMessage({id: "charts.zala_crop.keyword1"})}
                 </Button>{" "}
-                {intl.formatMessage({id: "charts.explanation2"})}
+                {intl.formatMessage({id: "charts.zala_crop.explanation2"})}
                 {" "}
                 <Button
                     variant="link"
                     color="#2e9ecc"
                     onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
                 >
-                    {intl.formatMessage({id: "charts.keyword2"})}
+                    {intl.formatMessage({id: "charts.zala_crop.keyword2"})}
                 </Button>{" "}
-                {intl.formatMessage({id: "charts.explanation3"})} {" "}
-                {intl.formatMessage({id: "charts.explanation4"})}
+                {intl.formatMessage({id: "charts.zala_crop.explanation3"})} {" "}
+                {intl.formatMessage({id: "charts.zala_crop.explanation4"})}
                 {" "}
                 <Button
                     variant="link"
                     color="#2e9ecc"
                     onClick={() => setActiveKeyword("Agricultural and ecological drought")}
                 >
-                    {intl.formatMessage({id: "charts.keyword3"})}
+                    {intl.formatMessage({id: "charts.zala_crop.keyword3"})}
                 </Button> 
-                {intl.formatMessage({id: "charts.explanation5"})}
+                {intl.formatMessage({id: "charts.zala_crop.explanation5"})}
             </Text>
             <Flex alignItems="center">
                 <Text>
-                    {intl.formatMessage({id: "charts.explanation6"})}
+                    {intl.formatMessage({id: "charts.zala_crop.explanation6"})}
                 </Text>
             </Flex>
             <Box padding="15px" />
