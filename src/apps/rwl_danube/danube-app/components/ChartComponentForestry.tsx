@@ -29,7 +29,7 @@ const locations = [
 ];
 
 const variables = [
-    { id: "none", name: "--- Nichts ausgewählt ---" },
+    { id: "none", name: "--- display nothing --- " },
     { id: "temperature", name: "Temperature" },
     { id: "wind_speed", name: "Wind Speed" },
     { id: "soil_moisture_10cm", name: "Soil Moisture 10cm" },

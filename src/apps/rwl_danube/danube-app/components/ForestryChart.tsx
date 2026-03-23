@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import Highcharts from "highcharts/highstock"; 
+import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { useEffect, useState, useRef } from "react";
 
@@ -18,7 +18,7 @@ type SeriesData = {
     data: number[][];
     type: string;
     color: string;
-    yAxis: number; 
+    yAxis: number;
     marker: { enabled: boolean };
     tooltip: { valueSuffix: string };
     dataGrouping: { enabled: boolean; approximation: string };
@@ -35,10 +35,15 @@ const getUnit = (variable: string) => {
     return "";
 };
 
-const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, selectedLocation, locationName }) => {
+const ForestryChart: React.FC<ForestryProps> = ({
+    leftVariable,
+    rightVariable,
+    selectedLocation,
+    locationName
+}) => {
     const [seriesData, setSeriesData] = useState<SeriesData[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    
+
     const isFirstRender = useRef(true);
 
     useEffect(() => {
@@ -46,44 +51,53 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
 
         setIsLoading(true);
 
-        setSeriesData([]); 
+        setSeriesData([]);
 
-        const fetchVariable = async (variable: string, axisIndex: number, color: string): Promise<SeriesData | null> => {
+        const fetchVariable = async (
+            variable: string,
+            axisIndex: number,
+            color: string
+        ): Promise<SeriesData | null> => {
             if (variable === "none") return null;
 
             const isValidDataPoint = (varName: string, value: number | null) => {
                 if (value === null || isNaN(value)) return false;
-                
+
                 if (varName.includes("soil_moisture")) {
                     return value >= 0 && value <= 100;
                 }
-                
-                return true; 
+
+                return true;
             };
 
             try {
-                const res = await fetch(`https://52n-directed.obs.eu-de.otc.t-systems.com/data/forestry/${selectedLocation}/${variable}.json`);
+                const res = await fetch(
+                    `https://52n-directed.obs.eu-de.otc.t-systems.com/data/forestry/${selectedLocation}/${variable}.json`
+                );
                 if (!res.ok) throw new Error(`Failed to fetch ${variable}`);
-                
+
                 const data = await res.json();
-                
+
                 if (!Array.isArray(data)) throw new Error("Data is not an array");
-                
+
                 const formattedData = data
-                    .map((item: { time: string, val: number }) => [
+                    .map((item: { time: string; val: number }) => [
                         new Date(item.time).getTime(),
                         item.val
                     ])
-                    .filter((point: number[]) => !isNaN(point[0]) && isValidDataPoint(variable, point[1]))
+                    .filter(
+                        (point: number[]) =>
+                            !isNaN(point[0]) && isValidDataPoint(variable, point[1])
+                    )
                     .sort((a: number[], b: number[]) => a[0] - b[0]);
 
                 return {
-                    id: `series-${axisIndex}`, 
+                    id: `series-${axisIndex}`,
                     name: formatLabel(variable),
                     data: formattedData,
                     type: "line",
                     color: color,
-                    yAxis: axisIndex, 
+                    yAxis: axisIndex,
                     marker: { enabled: false },
                     tooltip: { valueSuffix: ` ${getUnit(variable)}` },
                     dataGrouping: {
@@ -100,13 +114,14 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
         Promise.all([
             fetchVariable(leftVariable, 0, "#E6194B"),
             fetchVariable(rightVariable, 1, "#4363D8")
-        ]).then((results) => {
-            const validSeries = results.filter((res) => res !== null) as SeriesData[];
-            setSeriesData(validSeries);
-        }).finally(() => {
-            setIsLoading(false);
-        });
-
+        ])
+            .then((results) => {
+                const validSeries = results.filter((res) => res !== null) as SeriesData[];
+                setSeriesData(validSeries);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, [leftVariable, rightVariable, selectedLocation]);
 
     useEffect(() => {
@@ -121,22 +136,22 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
         },
         rangeSelector: {
             enabled: true,
-            inputEnabled: false,
-            ...(isFirstRender.current ? {
-                selected: 1, 
-                buttons: [
-                    { type: "week", count: 1, text: "1w" },
-                    { type: "month", count: 1, text: "1m" }, 
-                    { type: "month", count: 6, text: "6m" },
-                    { type: "year", count: 1, text: "1y" },
-                    { type: "all", text: "All" }
-                ]
-            } : {})
+            inputEnabled: true,
+            selected: 2,
+            buttons: [
+                { type: "da", count: 1, text: "1d" },
+                { type: "week", count: 1, text: "1w" },
+                { type: "month", count: 1, text: "1m" },
+                { type: "month", count: 3, text: "3m" },
+                { type: "month", count: 6, text: "6m" },
+                { type: "year", count: 1, text: "1y" },
+                { type: "all", text: "All" }
+            ]
         },
         xAxis: {
             type: "datetime",
             title: { text: "Time" },
-            ordinal: false 
+            ordinal: false
         },
         navigator: {
             enabled: false
@@ -146,13 +161,23 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
         },
         yAxis: [
             {
-                title: { text: leftVariable !== "none" ? `${formatLabel(leftVariable)} (${getUnit(leftVariable)})` : "" },
+                title: {
+                    text:
+                        leftVariable !== "none"
+                            ? `${formatLabel(leftVariable)} (${getUnit(leftVariable)})`
+                            : ""
+                },
                 labels: { format: `{value} ${getUnit(leftVariable)}` },
                 opposite: false,
                 visible: leftVariable !== "none"
             },
             {
-                title: { text: rightVariable !== "none" ? `${formatLabel(rightVariable)} (${getUnit(rightVariable)})` : "" },
+                title: {
+                    text:
+                        rightVariable !== "none"
+                            ? `${formatLabel(rightVariable)} (${getUnit(rightVariable)})`
+                            : ""
+                },
                 labels: { format: `{value} ${getUnit(rightVariable)}` },
                 opposite: true,
                 visible: rightVariable !== "none"
@@ -161,7 +186,8 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
         tooltip: {
             crosshairs: true,
             shared: true,
-            xDateFormat: "%Y-%m-%d %H:%M"
+            xDateFormat: "%Y-%m-%d %H:%M",
+            valueDecimals: 2
         },
         legend: {
             enabled: true
@@ -172,10 +198,13 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
     return (
         <div style={{ position: "relative", width: "100%", height: "100%", minHeight: "400px" }}>
             {isLoading && (
-                <div 
+                <div
                     style={{
                         position: "absolute",
-                        top: 0, left: 0, right: 0, bottom: 0,
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
                         backgroundColor: "rgba(255, 255, 255, 0.7)",
                         zIndex: 10,
                         display: "flex",
@@ -183,7 +212,7 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
                         alignItems: "center"
                     }}
                 >
-                    <div 
+                    <div
                         style={{
                             width: "40px",
                             height: "40px",
@@ -201,13 +230,13 @@ const ForestryChart: React.FC<ForestryProps> = ({ leftVariable, rightVariable, s
                     `}</style>
                 </div>
             )}
-            
+
             {seriesData.length > 0 && !isLoading && (
-                <HighchartsReact 
-                    key={selectedLocation}  
-                    highcharts={Highcharts} 
-                    constructorType={"stockChart"} 
-                    options={options} 
+                <HighchartsReact
+                    key={selectedLocation}
+                    highcharts={Highcharts}
+                    constructorType={"stockChart"}
+                    options={options}
                 />
             )}
         </div>
