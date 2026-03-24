@@ -12,7 +12,7 @@ interface SelectorItemProps {
 const SelectorItem: React.FC<SelectorItemProps> = ({ selected, children, onClick }) => {
     return (
         <>
-            <div
+            <button
                 style={{
                     marginLeft: selected ? "0em" : "1em",
                     cursor: "pointer",
@@ -24,7 +24,7 @@ const SelectorItem: React.FC<SelectorItemProps> = ({ selected, children, onClick
             >
                 {selected && <SlArrowRight />}
                 {children}
-            </div>
+            </button>
         </>
     );
 };

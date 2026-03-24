@@ -43,7 +43,7 @@ export function FloodSelector() {
                 </HoverCard.Trigger>
                 <HoverCard.Positioner>
                     <HoverCard.Content>
-                        <HoverCard.Arrow />
+                        {/* <HoverCard.Arrow /> */}
                         {intl.formatMessage({id: "map.flood_layer_selector.description"})}
                         {/* {" "}
                             <Button

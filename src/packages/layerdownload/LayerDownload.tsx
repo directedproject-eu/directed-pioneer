@@ -20,6 +20,7 @@ import {
     Dialog,
     HoverCard,
     IconButton,
+    Portal
 } from "@chakra-ui/react";
 import { FaInfo } from "react-icons/fa";
 
@@ -223,7 +224,8 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 bg="blackAlpha.500"
                 backdropFilter="auto"
                 backdropBlur="4px"
-                zIndex={1400}
+                zIndex={1500}
+                position={"fixed"}
             >
                 <Dialog.Content
                     borderRadius="lg"
@@ -232,13 +234,17 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     w="90%"
                     mx="auto"
                     p={4}
-                    zIndex={1500}
+                    zIndex={1600}
+                    position={"fixed"}
+                    top={"50%"}
+                    left={"50%"}
+                    transform={"translate(-50%, -50%)"}
                 >
                     <Dialog.Header fontWeight="bold" borderBottomWidth="1px" mb={2}>
                         <HoverCard.Root
                             openDelay={250}
                             closeDelay={100}
-                            positioning={{placement: "top"}}
+                            positioning={{ placement: "top" }}
                             open={popoverIsOpen}
                             onOpenChange={() => setPopoverIsOpen(!popoverIsOpen)}
                         >
@@ -289,6 +295,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                                 )
                                         )}
                                     </NativeSelect.Field>
+                                    <NativeSelect.Indicator />
                                 </NativeSelect.Root>
 
                                 <Button
@@ -296,7 +303,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                     disabled={
                                         !selectedLayer ||
                                         selectedLayer.olLayer?.getProperties()?.["type"] ===
-                                            "OSM" ||
+                                        "OSM" ||
                                         loading
                                     }
                                     onClick={() => selectedLayer && handleDownload(selectedLayer)}

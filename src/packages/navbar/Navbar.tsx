@@ -148,6 +148,7 @@ const DesktopNav = () => {
                                 p={4}
                                 rounded={"xl"}
                                 minW={"sm"}
+                                position={"absolute"}
                             >
                                 <Stack>
                                     {navItem.children.map((child) => (
