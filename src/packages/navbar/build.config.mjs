@@ -2,12 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import { defineBuildConfig } from "@open-pioneer/build-support";
 
-export default defineBuildConfig({
-    ui: {
-        references: [
-            "runtime.ApplicationContext"
-        ]
-    },
-    i18n: ["en", "de", "hu", "da"]
-
-});
+// The empty object is the minimal configuration.
+// We're not going to use any custom features from the Open Pioneer Trails framework for now.
+export default defineBuildConfig({});

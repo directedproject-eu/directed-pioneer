@@ -1,8 +1,0 @@
-messages:
-  localeSwitcher:
-    label: "Nyelv:"
-    locale:
-        de: Deutsch
-        en: Angol
-        hu: Magyar
-        da: Dán

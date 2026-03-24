@@ -26,7 +26,7 @@ import { AuthService } from "@open-pioneer/authentication";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import Disclaimer from "./components/Disclaimer";
 import DisclaimerContent from "./components/DisclaimerContent";
-import LocaleSwitcher from "./components/LocaleSwitcher";
+
 console.info("base url: " + BASE_URL);
 console.info("mode: " + import.meta.env.MODE);
 
@@ -85,9 +85,6 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                         <DesktopNav />
                     </Flex>
                 </Flex>
-                <Box width="150px" mx={4}> 
-                    <LocaleSwitcher/>
-                </Box>
                 {authService && authState?.kind === "authenticated" ? (
                     <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
                         <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
