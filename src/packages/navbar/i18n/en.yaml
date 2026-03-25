@@ -1,9 +1,0 @@
-messages:
-  localeSwitcher:
-    label: "Language:"
-    locale:
-        de: German
-        en: English
-        hu: Hungarian
-        da: Danish
-        

@@ -1,8 +1,0 @@
-messages:
-  localeSwitcher:
-    label: "Sprache:"
-    locale:
-        de: Deutsch
-        en: Englisch
-        hu: Ungarisch
-        da: Dänisch

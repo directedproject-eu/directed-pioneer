@@ -3,7 +3,7 @@
 
 import { MapRegistry } from "@open-pioneer/map";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { reactive, Reactive } from "@conterra/reactivity-core"; 
+import { reactive, Reactive } from "@conterra/reactivity-core"; // Richtiges Paket!
 
 interface References {
     mapRegistry: MapRegistry;
