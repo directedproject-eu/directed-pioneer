@@ -19,16 +19,6 @@ export { ForecastServiceImpl } from "./services/ForecastService";
 export { FloodHandlerImpl } from "./services/FloodHandler";
 
 
-const Basemap = new SimpleLayer({
-    id: "osm",
-    title: "OpenStreetMap",
-    olLayer: new TileLayer({
-        source: new OSM(),
-        properties: { title: "OSM", type: "OSM" }
-    }),
-    isBaseLayer: true
-});
-
 const wmsLayersSaferPlacesCoastal = [
     {
         "name": "DMG_COAST094722",
@@ -874,7 +864,15 @@ export class MainMapProvider implements MapConfigProvider {
             },
             projection: "EPSG:3857",
             layers: [
-                Basemap,
+                new SimpleLayer({
+                    id: "osm",
+                    title: "OpenStreetMap",
+                    olLayer: new TileLayer({
+                        source: new OSM(),
+                        properties: { title: "OSM", type: "OSM" }
+                    }),
+                    isBaseLayer: true
+                }),
                 new GroupLayer({
                     title: "Municipalities",
                     id: "municipal_layers",

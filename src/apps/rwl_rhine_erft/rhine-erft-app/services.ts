@@ -11,15 +11,6 @@ export const MAP_ID = "main";
 const description_bkg = `The layer is provided by the Federal Agency for Cartography and Geodesy (BKG) and shows simulation results of potential heavy rainfall scenarios. More information can be found online via https://gdz.bkg.bund.de/index.php/default/wms-hinweiskarte-starkregengefahren-wms-starkregen.html.`;
 const description_geobasis_nrw = `The layer is provided by the District Council Cologne. More information can be found online via https://www.bezreg-koeln.nrw.de/geobasis-nrw/webdienste/geodatendienste.`;
 
-const Basemap = new SimpleLayer({
-    title: "OpenStreetMap",
-    olLayer: new TileLayer({
-        source: new OSM(),
-        properties: { title: "OSM", type: "OSM" }
-    }),
-    isBaseLayer: true
-});
-
 ///////////////////
 /// WMS LAYERS ///
 /////////////////
@@ -325,7 +316,14 @@ export class MainMapProvider implements MapConfigProvider {
             },
             projection: "EPSG:3857",
             layers: [
-                Basemap,
+                new SimpleLayer({
+                    title: "OpenStreetMap",
+                    olLayer: new TileLayer({
+                        source: new OSM(),
+                        properties: { title: "OSM", type: "OSM" }
+                    }),
+                    isBaseLayer: true
+                }),
                 // Fliessgeschwindigkeit_Ausser,
                 // Fliessgeschwindigkeit_Extrem,
                 // Ueberflutungstiefe_Ausser,
