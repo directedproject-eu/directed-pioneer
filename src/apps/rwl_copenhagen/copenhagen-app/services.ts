@@ -893,8 +893,8 @@ export class MainMapProvider implements MapConfigProvider {
                     ]
                 })
                 // coastalFloodingGroup,
-                // pluvialFloodingGroup,
-                // scalgoGroup
+                    // pluvialFloodingGroup,
+                    // scalgoGroup
             ]
         };
     }
