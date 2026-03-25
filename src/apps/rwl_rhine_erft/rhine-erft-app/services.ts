@@ -16,7 +16,6 @@ const description_geobasis_nrw = `The layer is provided by the District Council 
 /// WMS LAYERS ///
 /////////////////
 
-
 // starkregen groups
 // const Fliessgeschwindigkeit_Ausser = new GroupLayer({
 //     title: "Fliessgeschwindigkeit Außergewönlich",
@@ -68,9 +67,6 @@ const description_geobasis_nrw = `The layer is provided by the District Council 
 
 //district gov köln layers
 
-
-
-
 ///////////////
 /// MAP_ID ///
 /////////////
@@ -106,7 +102,7 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-    createStarkregen_nw_geschw_extrem(){
+    createStarkregen_nw_geschw_extrem() {
         return new SimpleLayer({
             title: "Heavy rain - flow velocity (extreme)",
             visible: false,
@@ -134,7 +130,7 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-    createStarkregen_nw_tiefe_extrem(){
+    createStarkregen_nw_tiefe_extrem() {
         return new SimpleLayer({
             title: "Heavy rain - water depth (extreme)",
             visible: true,
@@ -162,8 +158,7 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-
-    createStarkregen_nw_tiefe_agw () {
+    createStarkregen_nw_tiefe_agw() {
         return new SimpleLayer({
             title: "Heavy rain - water depth (extraordinary)",
             visible: false,
@@ -219,7 +214,7 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-    createWms_nw_gelaendeneigung(){
+    createWms_nw_gelaendeneigung() {
         return new SimpleLayer({
             title: "Terrain Slope",
             visible: false,
@@ -247,7 +242,7 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-    createWms_nw_gelaendestufen(){
+    createWms_nw_gelaendestufen() {
         return new SimpleLayer({
             title: "Terrain Steps",
             visible: false,
@@ -275,7 +270,7 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-    createWms_nw_dgm_schummerung (){ 
+    createWms_nw_dgm_schummerung() {
         return new SimpleLayer({
             title: "Terrain Shading",
             visible: false,
@@ -303,7 +298,7 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-    createWms_nw_hoehenschichten (){ 
+    createWms_nw_hoehenschichten() {
         return new SimpleLayer({
             title: "Digital Terrain Model - elevation layers",
             visible: false,
@@ -332,7 +327,6 @@ export class MainMapProvider implements MapConfigProvider {
     }
 
     async getMapConfig(): Promise<MapConfig> {
-
         return {
             initialView: {
                 kind: "position",
