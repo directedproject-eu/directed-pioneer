@@ -247,37 +247,11 @@ export function SaferPlacesFloodMap() {
             const isSync = (model === "safer_rain" && "sync" in requestDataPayload.inputs) 
                 ? requestDataPayload.inputs.sync 
                 : true;
-
-            const response = await apiService.executeProcess(apiUrl, requestDataPayload, isSync);
-
-            // Case 1: Asynchronous Response (201/202)
-            if (response.status === 201 || response.status === 202) {
-                const locationHeader = response.headers.get("Location");
-                if (locationHeader) {
-                    setGenerationStatus("Job accepted. Polling for results...");
-                    
-                    await apiService.pollJobStatus(locationHeader, (statusUpdate: JobStatusResponse) => {
-                        setGenerationStatus(`Status: ${statusUpdate.status}`);
-                        
-                        if (statusUpdate.status === "successful") {
-                            processFinalResult(statusUpdate);
-                        }
-                    });
-                } else {
-                    throw new Error("Process accepted, but no Location header found for polling.");
-                }
-            } 
-            // Case 2: Synchronous Response (200 OK)
-            else if (response.ok) {
-                const responseBody = await response.json();
-                processFinalResult(responseBody);
-            } 
-            // Case 3: Error
-            else {
-                const errorBody = await response.text();
-                setError(`API Error ${response.status}: ${errorBody}`);
-                setGenerationStatus("Failed.");
-            }
+            // Execute the process 
+            const job = await apiService.executeProcess(apiUrl, requestDataPayload, isSync);
+            setGenerationStatus("Job accepted. Waiting for results...");
+            const result = await job.wait(); // Wait for job completion
+            processFinalResult(result); // Process final data 
 
         } catch (err: unknown) {
             const errorMessage = err instanceof Error ? err.message : "An error occurred during process execution.";

@@ -51,7 +51,6 @@ export interface ProcessExecution {
 
 export interface McdmService extends DeclaredService<"app.McdmService"> {
     submitJob(jobDescription: ProcessExecution): Promise<JobResult>;
-    pollJobStatus(job_url: string, delayMs?: number): Promise<FinalProcessOutcome>;
 }
 
 
@@ -73,58 +72,17 @@ export class McdmServiceImpl implements McdmService {
     }
 
     async submitJob(jobDescription: ProcessExecution): Promise<FinalProcessOutcome> {
+        const url = this.getProcessExecutionUrl(jobDescription.processId);
         const body: Record<string, unknown> = {
             inputs: Object.fromEntries(jobDescription.inputs)
         };
-        
-        if (jobDescription.outputs && jobDescription.outputs.size > 0) {
-            const outputs: Record<string, unknown> = {};
-            for (const [key, output] of jobDescription.outputs) {
-                outputs[key] = {
-                    format: { mediaType: output.mediaType },
-                    transmissionMode: output.transmissionMode
-                };
-            }
-            body["outputs"] = outputs;
+        const job = await this.apiService.executeProcess(url, body, jobDescription.synchronous);
+        try {
+            const result = await job.wait(); 
+            return this.mapToFinalOutcome(result);
+        } catch (err: unknown) {
+            return this.mapToFinalOutcome(err as JobStatusResponse); 
         }
-
-        const url = this.getProcessExecutionUrl(jobDescription.processId);
-        const response = await this.apiService.executeProcess(url, body, jobDescription.synchronous);
-
-        if (response.status === 201 || response.status === 202) {
-            const location = response.headers.get("Location");
-            if (!location) throw new Error("Async job accepted but Location header missing.");
-            return this.pollJobStatus(location);
-        }
-
-        if (response.ok) {
-            const data = await response.json() as JobStatusResponse;
-            // If there is no "status" in response but get 200 OK, assume successful sync response
-            if (!data.status) {
-                data.status = "successful"; 
-            }
-            return this.mapToFinalOutcome(data);
-        }
-
-        throw new Error(`API Error: ${response.status}`);
-    }
-
-    async pollJobStatus(job_url: string, delayMs: number = 5000): Promise<FinalProcessOutcome> {
-        return new Promise((resolve, reject) => {
-            this.apiService.pollJobStatus(
-                job_url, 
-                (statusUpdate: JobStatusResponse) => {
-                    if (statusUpdate.status === "successful" || 
-                        statusUpdate.status === "failed" || 
-                        statusUpdate.status === "dismissed") {
-                        resolve(this.mapToFinalOutcome(statusUpdate));
-                    }
-                }, 
-                delayMs
-            ).catch((err: unknown) => {
-                reject(err);
-            });
-        });
     }
 
     private mapToFinalOutcome(data: JobStatusResponse): FinalProcessOutcome {
