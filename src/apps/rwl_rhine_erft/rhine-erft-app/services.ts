@@ -5,7 +5,6 @@ import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 import { WmsLegend } from "./Components/Legends/WMSLegend";
-import { create } from "domain";
 
 export const MAP_ID = "main";
 
