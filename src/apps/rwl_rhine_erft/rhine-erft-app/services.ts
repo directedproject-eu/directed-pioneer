@@ -5,129 +5,17 @@ import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 import { WmsLegend } from "./Components/Legends/WMSLegend";
+import { create } from "domain";
 
 export const MAP_ID = "main";
 
 const description_bkg = `The layer is provided by the Federal Agency for Cartography and Geodesy (BKG) and shows simulation results of potential heavy rainfall scenarios. More information can be found online via https://gdz.bkg.bund.de/index.php/default/wms-hinweiskarte-starkregengefahren-wms-starkregen.html.`;
 const description_geobasis_nrw = `The layer is provided by the District Council Cologne. More information can be found online via https://www.bezreg-koeln.nrw.de/geobasis-nrw/webdienste/geodatendienste.`;
 
-const Basemap = new SimpleLayer({
-    title: "OpenStreetMap",
-    olLayer: new TileLayer({
-        source: new OSM(),
-        properties: { title: "OSM", type: "OSM" }
-    }),
-    isBaseLayer: true
-});
-
 ///////////////////
 /// WMS LAYERS ///
 /////////////////
 
-//starkregen layers
-const starkregen_nw_geschw_agw = new SimpleLayer({
-    title: "Heavy rain - flow velocity (extraordinary)",
-    visible: false,
-    description: description_bkg,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://sgx.geodatenzentrum.de/wms_starkregen",
-            params: {
-                LAYERS: "nw_geschw_agw"
-            }
-        }),
-        properties: {
-            title: "NW Geschwindigkeiten AGW",
-            id: "nw_geschw_agw",
-            type: "WMS_tiles",
-            source_domain: "geodatenzentrum"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const starkregen_nw_geschw_extrem = new SimpleLayer({
-    title: "Heavy rain - flow velocity (extreme)",
-    visible: false,
-    description: description_bkg,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://sgx.geodatenzentrum.de/wms_starkregen",
-            params: {
-                LAYERS: "nw_geschw_extrem"
-            }
-        }),
-        properties: {
-            title: "NW Geschwindigkeiten Extrem",
-            id: "nw_geschw_extrem",
-            type: "WMS_tiles",
-            source_domain: "geodatenzentrum",
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const starkregen_nw_tiefe_agw = new SimpleLayer({
-    title: "Heavy rain - water depth (extraordinary)",
-    visible: false,
-    description: description_bkg,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://sgx.geodatenzentrum.de/wms_starkregen",
-            params: {
-                LAYERS: "nw_tiefe_agw"
-            }
-        }),
-        properties: {
-            title: "NW Tiefe AGW",
-            id: "nw_tiefe_agw",
-            type: "WMS_tiles",
-            source_domain: "geodatenzentrum"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const starkregen_nw_tiefe_extrem = new SimpleLayer({
-    title: "Heavy rain - water depth (extreme)",
-    visible: true,
-    description: description_bkg,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://sgx.geodatenzentrum.de/wms_starkregen",
-            params: {
-                LAYERS: "nw_tiefe_extrem"
-            }
-        }),
-        properties: {
-            title: "NW Tiefe Extrem",
-            id: "nw_tiefe_extrem",
-            type: "WMS_tiles",
-            source_domain: "geodatenzentrum"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
 
 // starkregen groups
 // const Fliessgeschwindigkeit_Ausser = new GroupLayer({
@@ -179,135 +67,9 @@ const starkregen_nw_tiefe_extrem = new SimpleLayer({
 // });
 
 //district gov köln layers
-const wms_nw_dhm_ubersicht = new SimpleLayer({
-    title: "Digital Terrain Model - overview",
-    visible: false,
-    description: description_geobasis_nrw,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis/wms_nw_dhm-uebersicht",
-            params: {
-                LAYERS: "nw_dhm-uebersicht_planung_2024-2028"
-            }
-        }),
-        properties: {
-            title: "DHM Overview",
-            id: "dhm_ubersicht",
-            type: "WMS_tiles",
-            source_domain: "wms.nrw"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
 
-const wms_nw_gelaendeneigung = new SimpleLayer({
-    title: "Terrain Slope",
-    visible: false,
-    description: description_geobasis_nrw,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendeneigung",
-            params: {
-                LAYERS: "nw_gelaendeneigung_10"
-            }
-        }),
-        properties: {
-            title: "Terrain Snice",
-            id: "terrain_snice",
-            type: "WMS_tiles",
-            source_domain: "wms.nrw"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
 
-const wms_nw_gelaendestufen = new SimpleLayer({
-    title: "Terrain Steps",
-    visible: false,
-    description: description_geobasis_nrw,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendestufen",
-            params: {
-                LAYERS: "nw_gelaendestufen"
-            }
-        }),
-        properties: {
-            title: "Terrain Steps",
-            id: "terrain_steps",
-            type: "WMS_tiles",
-            source_domain: "wms.nrw"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
 
-const wms_nw_dgm_schummerung = new SimpleLayer({
-    title: "Terrain Shading",
-    visible: false,
-    description: description_geobasis_nrw,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis/wms_nw_dgm-schummerung",
-            params: {
-                LAYERS: "nw_dgm-schummerung_col_ne"
-            }
-        }),
-        properties: {
-            title: "Terrain Shading",
-            id: "terrain_shading",
-            type: "WMS_tiles",
-            source_domain: "wms.nrw"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
-
-const wms_nw_hoehenschichten = new SimpleLayer({
-    title: "Digital Terrain Model - elevation layers",
-    visible: false,
-    description: description_geobasis_nrw,
-    olLayer: new TileLayer({
-        source: new TileWMS({
-            url: "https://www.wms.nrw.de/geobasis/wms_nw_hoehenschichten",
-            params: {
-                LAYERS: "nw_hoehenschichten_rgb"
-            }
-        }),
-        properties: {
-            title: "Height",
-            id: "height",
-            type: "WMS_tiles",
-            source_domain: "wms.nrw"
-        }
-    }),
-    attributes: {
-        "legend": {
-            Component: WmsLegend
-        }
-    },
-    isBaseLayer: false
-});
 
 ///////////////
 /// MAP_ID ///
@@ -316,7 +78,261 @@ const wms_nw_hoehenschichten = new SimpleLayer({
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
 
+    createStarkregen_nw_geschw_agw() {
+        return new SimpleLayer({
+            title: "Heavy rain - flow velocity (extraordinary)",
+            visible: false,
+            description: description_bkg,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://sgx.geodatenzentrum.de/wms_starkregen",
+                    params: {
+                        LAYERS: "nw_geschw_agw"
+                    }
+                }),
+                properties: {
+                    title: "NW Geschwindigkeiten AGW",
+                    id: "nw_geschw_agw",
+                    type: "WMS_tiles",
+                    source_domain: "geodatenzentrum"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+    createStarkregen_nw_geschw_extrem(){
+        return new SimpleLayer({
+            title: "Heavy rain - flow velocity (extreme)",
+            visible: false,
+            description: description_bkg,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://sgx.geodatenzentrum.de/wms_starkregen",
+                    params: {
+                        LAYERS: "nw_geschw_extrem"
+                    }
+                }),
+                properties: {
+                    title: "NW Geschwindigkeiten Extrem",
+                    id: "nw_geschw_extrem",
+                    type: "WMS_tiles",
+                    source_domain: "geodatenzentrum"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+    createStarkregen_nw_tiefe_extrem(){
+        return new SimpleLayer({
+            title: "Heavy rain - water depth (extreme)",
+            visible: true,
+            description: description_bkg,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://sgx.geodatenzentrum.de/wms_starkregen",
+                    params: {
+                        LAYERS: "nw_tiefe_extrem"
+                    }
+                }),
+                properties: {
+                    title: "NW Tiefe Extrem",
+                    id: "nw_tiefe_extrem",
+                    type: "WMS_tiles",
+                    source_domain: "geodatenzentrum"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+
+    createStarkregen_nw_tiefe_agw () {
+        return new SimpleLayer({
+            title: "Heavy rain - water depth (extraordinary)",
+            visible: false,
+            description: description_bkg,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://sgx.geodatenzentrum.de/wms_starkregen",
+                    params: {
+                        LAYERS: "nw_tiefe_agw"
+                    }
+                }),
+                properties: {
+                    title: "NW Tiefe AGW",
+                    id: "nw_tiefe_agw",
+                    type: "WMS_tiles",
+                    source_domain: "geodatenzentrum"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+    createWms_nw_dhm_ubersicht() {
+        return new SimpleLayer({
+            title: "Digital Terrain Model - overview",
+            visible: false,
+            description: description_geobasis_nrw,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://www.wms.nrw.de/geobasis/wms_nw_dhm-uebersicht",
+                    params: {
+                        LAYERS: "nw_dhm-uebersicht_planung_2024-2028"
+                    }
+                }),
+                properties: {
+                    title: "DHM Overview",
+                    id: "dhm_ubersicht",
+                    type: "WMS_tiles",
+                    source_domain: "wms.nrw"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+    createWms_nw_gelaendeneigung(){
+        return new SimpleLayer({
+            title: "Terrain Slope",
+            visible: false,
+            description: description_geobasis_nrw,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendeneigung",
+                    params: {
+                        LAYERS: "nw_gelaendeneigung_10"
+                    }
+                }),
+                properties: {
+                    title: "Terrain Snice",
+                    id: "terrain_snice",
+                    type: "WMS_tiles",
+                    source_domain: "wms.nrw"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+    createWms_nw_gelaendestufen(){
+        return new SimpleLayer({
+            title: "Terrain Steps",
+            visible: false,
+            description: description_geobasis_nrw,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://www.wms.nrw.de/geobasis/wms_nw_gelaendestufen",
+                    params: {
+                        LAYERS: "nw_gelaendestufen"
+                    }
+                }),
+                properties: {
+                    title: "Terrain Steps",
+                    id: "terrain_steps",
+                    type: "WMS_tiles",
+                    source_domain: "wms.nrw"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+    createWms_nw_dgm_schummerung (){ 
+        return new SimpleLayer({
+            title: "Terrain Shading",
+            visible: false,
+            description: description_geobasis_nrw,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://www.wms.nrw.de/geobasis/wms_nw_dgm-schummerung",
+                    params: {
+                        LAYERS: "nw_dgm-schummerung_col_ne"
+                    }
+                }),
+                properties: {
+                    title: "Terrain Shading",
+                    id: "terrain_shading",
+                    type: "WMS_tiles",
+                    source_domain: "wms.nrw"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
+    createWms_nw_hoehenschichten (){ 
+        return new SimpleLayer({
+            title: "Digital Terrain Model - elevation layers",
+            visible: false,
+            description: description_geobasis_nrw,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://www.wms.nrw.de/geobasis/wms_nw_hoehenschichten",
+                    params: {
+                        LAYERS: "nw_hoehenschichten_rgb"
+                    }
+                }),
+                properties: {
+                    title: "Height",
+                    id: "height",
+                    type: "WMS_tiles",
+                    source_domain: "wms.nrw"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false
+        });
+    }
+
     async getMapConfig(): Promise<MapConfig> {
+
         return {
             initialView: {
                 kind: "position",
@@ -325,20 +341,27 @@ export class MainMapProvider implements MapConfigProvider {
             },
             projection: "EPSG:3857",
             layers: [
-                Basemap,
+                new SimpleLayer({
+                    title: "OpenStreetMap",
+                    olLayer: new TileLayer({
+                        source: new OSM(),
+                        properties: { title: "OSM", type: "OSM" }
+                    }),
+                    isBaseLayer: true
+                }),
                 // Fliessgeschwindigkeit_Ausser,
                 // Fliessgeschwindigkeit_Extrem,
                 // Ueberflutungstiefe_Ausser,
                 // Ueberflutungstiefe_Extrem,
-                starkregen_nw_geschw_agw,
-                starkregen_nw_geschw_extrem,
-                starkregen_nw_tiefe_extrem,
-                starkregen_nw_tiefe_agw,
-                wms_nw_dhm_ubersicht,
-                wms_nw_gelaendeneigung,
-                wms_nw_gelaendestufen,
-                wms_nw_dgm_schummerung,
-                wms_nw_hoehenschichten
+                this.createStarkregen_nw_geschw_agw(),
+                this.createStarkregen_nw_geschw_extrem(),
+                this.createStarkregen_nw_tiefe_extrem(),
+                this.createStarkregen_nw_tiefe_agw(),
+                this.createWms_nw_dhm_ubersicht(),
+                this.createWms_nw_gelaendeneigung(),
+                this.createWms_nw_gelaendestufen(),
+                this.createWms_nw_dgm_schummerung(),
+                this.createWms_nw_hoehenschichten()
             ]
         };
     }
