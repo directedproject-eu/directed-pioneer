@@ -88,7 +88,7 @@ catalog:
   eslint-plugin-react-hooks: ^5.2.0
   eslint-plugin-unused-imports: ^4.3.0
   fast-glob: ^3.3.3
-  handlebars: ^4.7.8
+  handlebars: ^4.7.9
   happy-dom: ^20.0.10
   husky: ^9.1.7
   js-yaml: ^4.1.1
