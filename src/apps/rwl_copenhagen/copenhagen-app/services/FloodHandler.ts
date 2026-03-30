@@ -132,9 +132,11 @@ export class FloodHandlerImpl implements FloodHandler {
                 // So they exist in the map registry
                 allLocations.forEach((locationId) => {
                     const subLayerId = `${modelKey}-${locationId}`;
+                    const capitalizedLocation = locationId.charAt(0).toUpperCase() + locationId.slice(1); // Add caps
+                    const modelTitle = layer_info[modelKey]["title"].replace(" Model", ""); // Trim "model" out of layer title
                     const layer = new TileLayer({
                         properties: { 
-                            title: `${layer_info[modelKey]["title"]} (${locationId})`, 
+                            title: `${capitalizedLocation} ${modelTitle}`,
                             type: "WMS_tiles",
                             // type: "WMS", 
                             id: subLayerId
@@ -149,7 +151,7 @@ export class FloodHandlerImpl implements FloodHandler {
                     simpleLayers.push(
                         new SimpleLayer({
                             id: subLayerId,
-                            title: locationId,
+                            title: `${capitalizedLocation} ${modelTitle}`,
                             isBaseLayer: false,
                             olLayer: layer,
                             visible: true, 
