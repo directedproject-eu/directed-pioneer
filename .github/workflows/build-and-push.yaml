@@ -30,6 +30,8 @@ jobs:
     timeout-minutes: 5
     name: "Open Pioneer Trails app: build, publish, scan container image, trigger redeployment"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
     -
       name: Checkout Repository
