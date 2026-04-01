@@ -395,7 +395,7 @@ export function MapApp() {
                                         role="dialog"
                                         overflow="auto" 
                                         maxHeight="400px"
-                                        dir="rtl"
+                                        // dir="rtl"
                                         aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                         marginBottom="10px"
                                     >
