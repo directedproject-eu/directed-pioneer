@@ -393,6 +393,9 @@ export function MapApp() {
                                         padding={2}
                                         boxShadow="lg"
                                         role="dialog"
+                                        overflow="auto" 
+                                        maxHeight="400px"
+                                        dir="rtl"
                                         aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                         marginBottom="10px"
                                     >
@@ -403,6 +406,7 @@ export function MapApp() {
                                                 collapsibleGroups={true}
                                                 initiallyCollapsed={true}
                                                 showBasemapSwitcher={false}
+                                                
                                             />
                                         </ChakraProvider>
                                         <FormControl>
@@ -457,84 +461,65 @@ export function MapApp() {
                                 </MapAnchor>
 
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
-                                    <Flex direction="column" gap={4}>
+                                    <Flex direction="column" gap={4} alignItems="flex-end">
+                                        
                                         <Box
                                             backgroundColor="white"
-                                            borderWidth="1px"
                                             borderRadius="lg"
-                                            padding={2}
                                             boxShadow="lg"
-                                            role="top-right"
-                                            aria-label={intl.formatMessage({
-                                                id: "ariaLabel.topRight"
-                                            })}
-                                            maxHeight={615}
-                                            maxWidth={430}
-                                            marginBottom={5}
+                                            padding={4}           
+                                            width="430px"        
+                                            maxHeight="615px"
+                                            overflowY="auto"     
+                                            overflowX="hidden"
+                                            role="region"
+                                            aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
                                         >
-                                            <Box>
-                                                <Box maxHeight={300} overflow="auto">
-                                                    <Flex
-                                                        direction="column"
-                                                        justifyContent="center"
-                                                        alignItems="center"
-                                                    ></Flex>
-                                                    <Text fontWeight="bold" mt={4}>
-                                                        Select Layers for Comparison
-                                                    </Text>
-                                                    <Spacer />
-                                                    <Text fontSize={16}>
-                                                        ➡️ Only layers which have been selected in
-                                                        the Operational Layers are viewable for
-                                                        comparison.
-                                                    </Text>
-                                                    <Flex direction="row" gap={4} p={4}>
-                                                        <Select
-                                                            placeholder="Select Left Layer"
-                                                            value={selectedLeftLayer ?? ""}
-                                                            onChange={(e) =>
-                                                                setSelectedLeftLayer(e.target.value)
-                                                            }
-                                                        >
-                                                            {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
-                                                                    {layer.title || layer.id}
-                                                                </option>
-                                                            ))}
-                                                        </Select>
+                                            <Text fontSize="lg" fontWeight="bold" mb={2}>
+                                                Select Layers for Comparison
+                                            </Text>
+                                            
+                                            <Text fontSize="sm" color="gray.600" mb={4}>
+                                                ➡️ Only layers which have been selected in the Operational Layers are viewable for comparison.
+                                            </Text>
+                                            
+                                            <Flex direction="row" gap={4}>
+                                                <Select
+                                                    placeholder="Select Left Layer"
+                                                    value={selectedLeftLayer ?? ""}
+                                                    onChange={(e) => setSelectedLeftLayer(e.target.value)}
+                                                >
+                                                    {visibleAvailableLayers.map((layer) => (
+                                                        <option key={layer.id} value={layer.id}>
+                                                            {layer.title || layer.id}
+                                                        </option>
+                                                    ))}
+                                                </Select>
 
-                                                        <Select
-                                                            placeholder="Select Right Layer"
-                                                            value={selectedRightLayer ?? ""}
-                                                            onChange={(e) =>
-                                                                setSelectedRightLayer(
-                                                                    e.target.value
-                                                                )
-                                                            }
-                                                        >
-                                                            {visibleAvailableLayers.map((layer) => (
-                                                                <option
-                                                                    key={layer.id}
-                                                                    value={layer.id}
-                                                                >
-                                                                    {layer.title || layer.id}
-                                                                </option>
-                                                            ))}
-                                                        </Select>
-                                                    </Flex>
-                                                </Box>
-                                            </Box>
+                                                <Select
+                                                    placeholder="Select Right Layer"
+                                                    value={selectedRightLayer ?? ""}
+                                                    onChange={(e) => setSelectedRightLayer(e.target.value)}
+                                                >
+                                                    {visibleAvailableLayers.map((layer) => (
+                                                        <option key={layer.id} value={layer.id}>
+                                                            {layer.title || layer.id}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            </Flex>
                                         </Box>
+
                                         <Flex
-                                            maxHeight={800}
-                                            minWidth={250}
-                                            overflow="auto"
-                                            borderRadius="md"
+                                            backgroundColor="white"
+                                            borderRadius="lg"     
                                             boxShadow="lg"
-                                            alignSelf="flex-end"
+                                            padding={4}           
+                                            minWidth="250px"
+                                            maxHeight="700px"
+                                            height="fit-content"
+                                            overflowY="auto"
+                                            overflowX="hidden"
                                         >
                                             <PioneerLegend mapId={MAP_ID} />
                                         </Flex>
