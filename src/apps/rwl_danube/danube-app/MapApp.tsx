@@ -395,7 +395,7 @@ export function MapApp() {
                                         role="dialog"
                                         overflow="auto" 
                                         maxHeight="400px"
-                                        dir="rtl"
+                                        // dir="rtl"
                                         aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                         marginBottom="10px"
                                     >
@@ -514,12 +514,13 @@ export function MapApp() {
                                             backgroundColor="white"
                                             borderRadius="lg"     
                                             boxShadow="lg"
-                                            padding={4}           
+                                            padding={0}           
                                             minWidth="250px"
                                             maxHeight="700px"
                                             height="fit-content"
                                             overflowY="auto"
                                             overflowX="hidden"
+                                            _empty={{ display: "none" }}
                                         >
                                             <PioneerLegend mapId={MAP_ID} />
                                         </Flex>

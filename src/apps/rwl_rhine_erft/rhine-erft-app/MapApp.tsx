@@ -223,7 +223,7 @@ export function MapApp() {
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                 overflow="auto" 
                                 maxHeight="400px"
-                                dir="rtl"
+                                // dir="rtl"
                             >
                                 <ChakraProvider theme={theme}>
                                     <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
