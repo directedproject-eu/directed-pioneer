@@ -72,10 +72,15 @@ interface SaferCoastPayload {
     inputs: SaferCoastInputs;
 }
 
+interface SaferPlacesFloodMapProps {
+    isOpen?: boolean;
+    onClose?: () => void;
+}
+
 //union type for all possible payloads
 type ProcessExecutionPayload = SaferRainPayload | SaferCoastPayload;
 
-export function SaferPlacesFloodMap() {
+export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProps) {
     const [selectedLocation, setSelectedLocation] = useState<string>("");
     const [rainIntensity, setRainIntensity] = useState<string>("");
     const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null);
@@ -86,7 +91,6 @@ export function SaferPlacesFloodMap() {
     const [error, setError] = useState<string>("");
     const [jobId, setJobId] = useState<string | null>(null); //to store the job ID
     const [pollingIntervalId, setPollingIntervalId] = useState<number | null>(null); //to store the interval ID for clearing
-    const { open, onOpen, onClose } = useDisclosure(); //for model dialog
     const floodMapService = useService<FloodMapService>("app.FloodMapService"); // FloodMapService to add new layer to TOC
     // states for user and token input
     const [userInput, setUserInput] = useState<string>("");
@@ -585,8 +589,8 @@ export function SaferPlacesFloodMap() {
 
     return (
         <Box>
-            <ToolButton label="Run Flood Models" icon={<FaWater />} onClick={onOpen} />
-            <Dialog.Root closeOnInteractOutside={true} open={open} onOpenChange={onClose}>
+            {/* <ToolButton label="Run Flood Models" icon={<FaWater />} onClick={onOpen} /> */}
+            <Dialog.Root open={isOpen} onOpenChange={onClose} placement={"center"}>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content>
@@ -817,6 +821,9 @@ export function SaferPlacesFloodMap() {
                                     </Button>
                                 </>
                             )}
+                            <Dialog.CloseTrigger
+                                onClick={onClose}
+                            />
                         </Dialog.Footer>
                     </Dialog.Content>
                 </Dialog.Positioner>

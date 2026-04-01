@@ -62,6 +62,11 @@ const SensitivityChart: React.FC<SensitivityChartProps> = ({ chartOptions }) => 
     return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 };
 
+interface ModelClientProps {
+    isOpen?: boolean;
+    onClose?: () => void;
+}
+
 const sensitivityData = {
     "Barrier": {
         "1.0": 0.0,
@@ -131,7 +136,7 @@ const processSensitivityData = (rawData: Record<string, Record<string, number>>)
     return { categories: sortedMeasures, series: series };
 };
 
-export function ModelClient() {
+export function ModelClient({ isOpen, onClose }: ModelClientProps) {
     // Use the `useService` hook to get the MCDM service instance
     const clientService = useService<McdmService>("app.McdmService");
     const [tokenInput, setTokenInput] = useState<string>("");
@@ -139,7 +144,6 @@ export function ModelClient() {
     const [ranksData, setRanksData] = useState<Record<string, number> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { open, onOpen, onClose } = useDisclosure();
     // const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Default mode ranks
 
     const [weights, setWeights] = useState<Weights>({
@@ -153,7 +157,7 @@ export function ModelClient() {
     });
 
     // Handles changes to slider values for each criteria
-    const handleWeightChange = (criteria: keyof Weights, details: {value: number[]}) => {
+    const handleWeightChange = (criteria: keyof Weights, details: { value: number[] }) => {
         const newValue = details.value[0];
         if (newValue === undefined) return;
         setWeights((prevWeights) => ({
@@ -378,17 +382,21 @@ export function ModelClient() {
             </Center>
         );
     }
-
     return (
         <Box>
-            <ToolButton
+            {/* <ToolButton
                 label="Multi-Criteria Decision Making (MCDM)"
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
-            />
-            <Dialog.Root closeOnInteractOutside={false} open={open} onOpenChange={onClose} size="full">
+            /> */}
+            <Dialog.Root open={isOpen} onOpenChange={onClose} placement={"center"}>
                 <Dialog.Backdrop />
-                <Dialog.Content>
+                <Dialog.Content
+                    position={"fixed"}
+                    top={"50%"}
+                    left={"50%"}
+                    transform={"translate(-50%, -50%)"}
+                >
                     <Dialog.Header>CLIMADA Multi-Criteria Decision Making (MCDM)</Dialog.Header>
                     <Dialog.CloseTrigger disabled={loading} />
                     <Dialog.Body>
@@ -513,12 +521,12 @@ export function ModelClient() {
                                                             </Slider.Track>
                                                             <Tooltip
                                                                 showArrow
-                                                                contentProps={{css : {"--tooltip-bg": "white"}}}
-                                                                positioning={{placement: "top"}}
+                                                                contentProps={{ css: { "--tooltip-bg": "white" } }}
+                                                                positioning={{ placement: "top" }}
                                                                 open
                                                                 content={weights[typedCriteria]}
                                                             >
-                                                                <Slider.Thumb index={0}/>
+                                                                <Slider.Thumb index={0} />
                                                             </Tooltip>
                                                         </Slider.Root>
                                                     </Box>
@@ -570,6 +578,11 @@ export function ModelClient() {
                             </>
                         )}
                     </Dialog.Body>
+                    <Dialog.Footer>
+                        <Dialog.CloseTrigger
+                            onClick={onClose}
+                        />
+                    </Dialog.Footer>
                 </Dialog.Content>
             </Dialog.Root>
         </Box>

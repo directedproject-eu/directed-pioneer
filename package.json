@@ -110,7 +110,8 @@
         "typescript": "catalog:",
         "vite": "catalog:",
         "vite-plugin-eslint": "catalog:",
-        "vitest": "catalog:"
+        "vitest": "catalog:",
+        "@open-pioneer-community/window": "catalog:"
     },
     "engines": {
         "node": ">= 20",

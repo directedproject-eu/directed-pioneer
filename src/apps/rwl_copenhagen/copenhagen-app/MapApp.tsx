@@ -49,9 +49,10 @@ import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
 import { FaInfo } from "react-icons/fa";
-
 import { LayerDownload } from "layerdownload";
-
+import { Window } from "@open-pioneer-community/window";
+import { FaWater } from "react-icons/fa";
+import { FaBalanceScale } from "react-icons/fa";
 
 export function MapApp() {
     const intl = useIntl();
@@ -61,6 +62,7 @@ export function MapApp() {
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
     const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider 
+    const [windowClosed, setWindowClosed] = useState<boolean>(false); //for testing window component
 
 
     const overviewMapLayer = useMemo(
@@ -73,12 +75,20 @@ export function MapApp() {
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+    const [floodModelIsActive, setFloodModelIsActive] = useState<boolean>(false);
+    const [modelClientIsActive, setModelClientIsActive] = useState<boolean>(false);
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
     }
     function toggleDownload() {
         setDownloadIsActive(!downloadIsActive);
+    }
+    function toggleFloodModel() {
+        setFloodModelIsActive(!floodModelIsActive);
+    }
+    function toggleModelClient() {
+        setModelClientIsActive(!modelClientIsActive);
     }
 
     //////////////////
@@ -386,13 +396,25 @@ export function MapApp() {
                                 >
                                     {/* SaferPlaces flood model dialog */}
                                     <ModelClient />
-                                    <SaferPlacesFloodMap />
+                                    {/* <SaferPlacesFloodMap /> */}
                                     {/* <ToolButton
                                         label={intl.formatMessage({ id: "measurementTitle" })}
                                         icon={<PiRulerLight />}
                                         active={measurementIsActive}
                                         onClick={toggleMeasurement}
                                     /> */}
+                                    <ToolButton
+                                        label={intl.formatMessage({ id: "model_client" })}
+                                        icon={<FaBalanceScale />}
+                                        active={modelClientIsActive}
+                                        onClick={toggleModelClient}
+                                    />
+                                    <ToolButton
+                                        label={intl.formatMessage({ id: "flood_model" })}
+                                        icon={<FaWater />}
+                                        active={floodModelIsActive}
+                                        onClick={toggleFloodModel}
+                                    />
                                     <ToolButton
                                         label={intl.formatMessage({ id: "map.download.heading" })}
                                         icon={<PiDownload />}
@@ -520,9 +542,16 @@ export function MapApp() {
                                             </Text>.
                                         </Text>
                                     </Box>
+                                    {modelClientIsActive && (
+                                        <ModelClient isOpen={modelClientIsActive} onClose={() => setModelClientIsActive(false)} />
+                                    )
+                                    }
                                     {downloadIsActive && (
                                         <LayerDownload mapID={MAP_ID1} intl={intl} isOpen={downloadIsActive} onClose={() => setDownloadIsActive(false)} />
-                                    )}                                        
+                                    )}
+                                    {floodModelIsActive && (
+                                        <SaferPlacesFloodMap isOpen={floodModelIsActive} onClose={() => setFloodModelIsActive(false)} />
+                                    )}
                                 </Box>
                             </MapAnchor>
                         </MapContainer>

@@ -31,6 +31,7 @@
         "taxonomy": "workspace:^",
         "saferplaces": "workspace:^",
         "mcdm": "workspace:^",
-        "layerdownload": "workspace:^"
+        "layerdownload": "workspace:^",
+        "@open-pioneer-community/window": "catalog:"
     }
 }

@@ -44,6 +44,9 @@ catalog:
   "@open-pioneer/chakra-snippets": *core_packages_version
   "@open-pioneer/reactivity": *core_packages_version
 
+  # Trails Community packages
+  "@open-pioneer-community/window": ^0.1.0
+
 
   # Other dependencies
   "@chakra-ui/react": ^3.34.0

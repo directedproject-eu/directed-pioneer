@@ -11,12 +11,14 @@ import {
 } from "@chakra-ui/react";
 import type { MapBrowserEvent } from "ol";
 import { Box, VStack } from "@chakra-ui/react";
+import Map from "ol/Map";
 
 interface FeatureInfoProps {
     mapModel: MapModel;
     layerId: string;
     projection: string;
 }
+import { CloseButton } from "@chakra-ui/react";
 
 export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
     //store wms feature info for click position
@@ -33,7 +35,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
             setClickPosition({ x: event.clientX, y: event.clientY });
         };
         //get coords and trigger feature info request
-        const handleSingleClick = (event: MapBrowserEvent<UIEvent>) => {
+        const handleSingleClick = (event: MapBrowserEvent<PointerEvent>) => {
             const coordinate = event.coordinate;
             const pixel = mapModel.olMap.getPixelFromCoordinate(coordinate);
             const viewResolution = mapModel.olMap.getView().getResolution();
@@ -43,7 +45,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
             }
         };
 
-        const olMap = mapModel.olMap;
+        const olMap = mapModel.olMap as Map;
         olMap.getViewport().addEventListener("click", handleViewportClick);
         olMap.on("singleclick", handleSingleClick);
 
@@ -155,8 +157,18 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                 padding: "8px 0"
                             }}
                         >
-                            <Popover.Arrow style={{ top: "-20px", left: "20px" }} />
-                            <Popover.CloseTrigger onClick={() => setFeatureInfo({ features: null })} />
+                            {/* <Popover.Arrow
+                                // style={{ top: "-20px", left: "20px" }}
+                            /> */}
+                            <Popover.CloseTrigger onClick={() => setFeatureInfo({ features: null })}>
+                                <CloseButton
+                                    position="absolute"
+                                    top="4px"
+                                    right="4px"
+                                    size="sm"
+                                    aria-label="Close feature info"
+                                />
+                            </Popover.CloseTrigger>
 
                             <Popover.Title
                                 style={{

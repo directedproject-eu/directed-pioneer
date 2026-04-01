@@ -220,13 +220,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
     const btnRef = React.useRef<HTMLButtonElement>(null);
     return (
         <Dialog.Root open={isOpen} onOpenChange={onClose} initialFocusEl={() => btnRef.current} placement={"center"}>
-            <Dialog.Backdrop
-                bg="blackAlpha.500"
-                backdropFilter="auto"
-                backdropBlur="4px"
-                zIndex={1500}
-                position={"fixed"}
-            >
+            <Dialog.Backdrop>
                 <Dialog.Content
                     borderRadius="lg"
                     boxShadow="2xl"
@@ -259,8 +253,10 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                     <FaInfo />
                                 </IconButton>
                             </HoverCard.Trigger>
-                            <HoverCard.Content>
-                                <HoverCard.Arrow />
+                            <HoverCard.Content
+                                position={"absolute"}    
+                            >
+                                {/* <HoverCard.Arrow /> */}
                                 {intl.formatMessage({ id: "map.download.description" })}
                             </HoverCard.Content>
                         </HoverCard.Root>
