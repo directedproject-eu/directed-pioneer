@@ -217,7 +217,6 @@ export class MainMapProvider implements MapConfigProvider {
                     isBaseLayer: true
                 }),
 
-                // 2. Spread the dynamically generated layers into this array
                 ...this.layerConfigs.map(config => this.createWmsLayer(config))
             ]
         };

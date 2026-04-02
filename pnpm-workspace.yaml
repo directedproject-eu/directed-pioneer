@@ -88,8 +88,8 @@ catalog:
   eslint-plugin-react-hooks: ^5.2.0
   eslint-plugin-unused-imports: ^4.3.0
   fast-glob: ^3.3.3
-  handlebars: ^4.7.8
-  happy-dom: ^20.0.10
+  handlebars: ^4.7.9
+  happy-dom: ^20.8.9
   husky: ^9.1.7
   js-yaml: ^4.1.1
   jsdom: ^27.2.0
@@ -131,13 +131,24 @@ overrides:
   "@isaacs/brace-expansion@<=5.0.0": "^5.0.1"
   # https://github.com/advisories/GHSA-38c4-r59v-3vqw
   "markdown-it@>=13.0.0 <14.1.1": "^14.1.1"
+  # https://github.com/advisories/GHSA-3v7f-55p6-f55p
+  # https://github.com/advisories/GHSA-c2c7-rcm5-vvqj
+  "picomatch@<2.3.2": "^2.3.2"
+  "picomatch@>=3.0.0 <3.0.2": "^3.0.2"
+  "picomatch@>=4.0.0 <4.0.4": "^4.0.4"
 
 # Configure a release cooldown
 minimumReleaseAge: 4320 # 3 days in minutes
 minimumReleaseAgeExclude:
   - "@open-pioneer/*"
   - "@conterra/*"
-  - "@isaacs/brace-expansion@5.0.1" # see overrides
+  - "picomatch" # See overrides
+
+peerDependencyRules:
+  allowedVersions:
+    # See overrides
+    "fdir>picomatch": "*"
+    "rollup": "*"
 
 auditConfig:
   ignoreCves:
@@ -155,8 +166,6 @@ patchedDependencies:
   "react-select": "patches/react-select@5.8.0.patch"
   # Outside click detection for menus and other popovers
   "@chakra-ui/hooks": "patches/@chakra-ui__hooks.patch"
-
-peerDependencyRules:
 
 # Only run build scripts for allowed packages.
 dangerouslyAllowAllBuilds: false

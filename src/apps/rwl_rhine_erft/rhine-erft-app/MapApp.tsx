@@ -213,7 +213,6 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                             )}
-                            {/*add Table of Contents (Toc) */}
                             <Box
                                 backgroundColor="white"
                                 borderWidth="1px"
@@ -222,6 +221,9 @@ export function MapApp() {
                                 boxShadow="lg"
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                overflow="auto" 
+                                maxHeight="400px"
+                                // dir="rtl"
                             >
                                 <ChakraProvider theme={theme}>
                                     <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
