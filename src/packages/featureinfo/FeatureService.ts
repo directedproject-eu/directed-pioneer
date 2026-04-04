@@ -4,7 +4,6 @@ import { MapModel } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
 
 //fetch feature info for all visible WMS layers at clicked map coord
 export function fetchFeatureInfo(
@@ -64,7 +63,7 @@ export function fetchFeatureInfo(
             // console.log("Clicked coordinate:", coordinate);
             // console.log("Pixel on canvas:", pixel);
             // console.log("title:", layer.get("title"));
-    
+
             const valueAtPixel = layer.getData(pixel);
             let valueAsString: number | null = null;
 
@@ -75,10 +74,10 @@ export function fetchFeatureInfo(
             ) {
                 valueAsString = valueAtPixel[0]?.toFixed(2);
             }
-                
+
             return {
                 layerName: layer.get("title"),
-                data: { value: valueAsString}
+                data: { value: valueAsString }
             };
         } catch (err) {
             console.error("Error reading GeoTIFF value:", err);
@@ -92,7 +91,6 @@ export function fetchFeatureInfo(
         setFeatureInfo({ features: filtered });
     });
 }
-
 
 //OL click handler for feature info
 export function setupClickHandler(

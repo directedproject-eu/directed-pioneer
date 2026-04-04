@@ -29,8 +29,7 @@ import {
     PopoverContent,
     PopoverArrow,
     PopoverBody,
-    IconButton,
-    Spacer
+    IconButton
 } from "@open-pioneer/chakra-integration";
 import { FaInfo } from "react-icons/fa";
 

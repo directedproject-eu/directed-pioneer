@@ -2,22 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useService } from "open-pioneer:react-hooks";
-import { useState } from "react";
 import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../Components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
 import {
-    IconButton, 
-    Popover, 
-    PopoverBody, 
-    PopoverContent, 
+    IconButton,
+    Popover,
+    PopoverBody,
+    PopoverContent,
     PopoverTrigger,
     PopoverArrow
 } from "@open-pioneer/chakra-integration";
 import { FaInfo } from "react-icons/fa";
 // import { TaxonomyInfo } from "taxonomy";
-
 
 export function FloodSelector() {
     const intl = useIntl();
@@ -37,7 +35,7 @@ export function FloodSelector() {
             <Popover trigger="hover" openDelay={250} closeDelay={100} placement="right">
                 <PopoverTrigger>
                     <IconButton
-                        marginLeft="2px" 
+                        marginLeft="2px"
                         size="s"
                         aria-label="Info"
                         icon={<FaInfo />}
@@ -48,7 +46,7 @@ export function FloodSelector() {
                 <PopoverContent>
                     <PopoverArrow />
                     <PopoverBody overflow="auto">
-                        {intl.formatMessage({id: "map.flood_layer_selector.description"})}
+                        {intl.formatMessage({ id: "map.flood_layer_selector.description" })}
                         {/* {" "}
                         <Button
                             variant="link"

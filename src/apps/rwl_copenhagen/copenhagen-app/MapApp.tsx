@@ -9,11 +9,11 @@ import {
     VStack,
     Text,
     Select,
-    Spacer, 
-    IconButton, 
-    Popover, 
-    PopoverBody, 
-    PopoverContent, 
+    Spacer,
+    IconButton,
+    Popover,
+    PopoverBody,
+    PopoverContent,
     PopoverTrigger,
     PopoverArrow
 } from "@open-pioneer/chakra-integration";
@@ -59,7 +59,6 @@ import { theme } from "theme";
 
 import { LayerDownload } from "layerdownload";
 
-
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
@@ -67,8 +66,7 @@ export function MapApp() {
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-    const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider 
-
+    const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider
 
     const overviewMapLayer = useMemo(
         () =>
@@ -202,11 +200,11 @@ export function MapApp() {
                     >
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <Forecasts />
-                            <FloodSlider/>
+                            <FloodSlider />
                         </MapAnchor>
 
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                            <FloodSelector/>
+                            <FloodSelector />
                             {/* <Flex>
                                 {measurementIsActive && (
                                     <Box
@@ -313,7 +311,14 @@ export function MapApp() {
                                     .
                                 </Text>
                             </Box>
-                            {downloadIsActive && <LayerDownload mapID={MAP_ID1} intl={intl} isOpen={downloadIsActive} onClose={() => setDownloadIsActive(false)}/>}
+                            {downloadIsActive && (
+                                <LayerDownload
+                                    mapID={MAP_ID1}
+                                    intl={intl}
+                                    isOpen={downloadIsActive}
+                                    onClose={() => setDownloadIsActive(false)}
+                                />
+                            )}
                         </MapAnchor>
                         {/* zoom to municipalities */}
                         <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
@@ -395,10 +400,15 @@ export function MapApp() {
                                                 alignItems="center"
                                             ></Flex>
                                             <Flex alignItems="center" mt={1}>
-                                                <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                                <Popover
+                                                    trigger="hover"
+                                                    openDelay={250}
+                                                    closeDelay={100}
+                                                    placement="top"
+                                                >
                                                     <PopoverTrigger>
                                                         <IconButton
-                                                            marginLeft="2px" 
+                                                            marginLeft="2px"
                                                             size="s"
                                                             aria-label="Info"
                                                             icon={<FaInfo />}
@@ -409,12 +419,16 @@ export function MapApp() {
                                                     <PopoverContent>
                                                         <PopoverArrow />
                                                         <PopoverBody overflow="auto">
-                                                            {intl.formatMessage({id: "layer_swipe.description"})}
+                                                            {intl.formatMessage({
+                                                                id: "layer_swipe.description"
+                                                            })}
                                                         </PopoverBody>
                                                     </PopoverContent>
                                                 </Popover>
                                                 <Text fontWeight="bold" mt={4}>
-                                                    {intl.formatMessage({ id: "layer_swipe.title" })}
+                                                    {intl.formatMessage({
+                                                        id: "layer_swipe.title"
+                                                    })}
                                                 </Text>
                                             </Flex>
                                             <Spacer />
@@ -472,13 +486,19 @@ export function MapApp() {
                                     </Flex>
                                 )}
                                 <Flex
-                                    maxHeight={800}
-                                    // maxWidth={250}
+                                    maxHeight={250}
                                     overflow="auto"
                                     borderRadius="md"
                                     boxShadow="lg"
-                                    // marginLeft="auto"
                                     alignSelf="flex-end"
+                                    sx={{
+                                        "& > *": {
+                                            border: "none !important"
+                                        },
+                                        "& *": {
+                                            top: "0 !important"
+                                        }
+                                    }}
                                 >
                                     <Legend mapId={MAP_ID1} />
                                 </Flex>

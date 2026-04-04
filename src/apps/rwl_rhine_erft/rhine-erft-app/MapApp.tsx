@@ -47,7 +47,7 @@ import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
-import { theme } from "theme"; 
+import { theme } from "theme";
 
 export function MapApp() {
     const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -66,7 +66,7 @@ export function MapApp() {
 
     function toggleDownload() {
         setDownloadIsActive(!downloadIsActive);
-    }    
+    }
 
     //////////////////
     /// LayerSwipe ///
@@ -83,7 +83,8 @@ export function MapApp() {
 
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
-                (layer) => layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
+                (layer) =>
+                    layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
             );
             setVisibleAvailableLayers(visibleLayers);
         };
@@ -221,12 +222,16 @@ export function MapApp() {
                                 boxShadow="lg"
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                overflow="auto" 
+                                overflow="auto"
                                 maxHeight="400px"
                                 // dir="rtl"
                             >
                                 <ChakraProvider theme={theme}>
-                                    <Toc mapId={MAP_ID} showBasemapSwitcher={false} showTools={true} />
+                                    <Toc
+                                        mapId={MAP_ID}
+                                        showBasemapSwitcher={false}
+                                        showTools={true}
+                                    />
                                 </ChakraProvider>
                                 <FormControl>
                                     <FormLabel mt={2}>
@@ -314,12 +319,19 @@ export function MapApp() {
                                     </Box>
                                 </Box>
                                 <Flex
-                                    maxHeight={400}
-                                    maxWidth={250}
+                                    maxHeight={250}
                                     overflow="auto"
                                     borderRadius="md"
                                     boxShadow="lg"
                                     alignSelf="flex-end"
+                                    sx={{
+                                        "& > *": {
+                                            border: "none !important"
+                                        },
+                                        "& *": {
+                                            top: "0 !important"
+                                        }
+                                    }}
                                 >
                                     <Legend mapId={MAP_ID} />
                                 </Flex>
