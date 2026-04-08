@@ -31,8 +31,10 @@
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
+        "featureinfo": "workspace:^",
+        "layerdownload": "workspace:^", 
         "navbar": "workspace:^",
         "taxonomy": "workspace:^",
-        "layerdownload": "workspace:^"
+        "theme": "workspace:^"
     }
 }

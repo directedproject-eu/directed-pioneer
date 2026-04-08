@@ -34,7 +34,7 @@ export function fetchFeatureInfo(
 
     // filter for visible GeoTIFF layers
     const visibleGeoTIFFLayers = allLayers.filter(
-        (l) => l.get("visible") && l.get("id") && l.constructor.name === "WebGLTileLayer"
+        (l) => l.get("visible") && l.get("id") && l instanceof WebGLTileLayer
     );
 
     // WMS-FeatureInfo Promises

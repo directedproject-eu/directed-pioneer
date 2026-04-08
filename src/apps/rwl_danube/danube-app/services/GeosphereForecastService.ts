@@ -139,6 +139,9 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     }
 
     private createColorGradient(range: number[]) {
+        if (range[0] === range[1]) {
+            return "#00000000";
+        }
         const tempColors = {
             color1: "#00000000",
             color2: "#af7ab3",

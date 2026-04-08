@@ -2,32 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ServiceOptions, DeclaredService } from "@open-pioneer/runtime";
+import { ApiService, JobStatusResponse } from "processclient"; 
 
-interface JobStatusResponse {
-    jobID?: string;
-    id?: string;
-    status: "accepted" | "running" | "successful" | "failed" | "dismissed";
-    progress?: number;
-    message?: string;
-    outputs?:
-        | {
-              // Object structure (for general processes)
-              [key: string]: {
-                  href: string;
-                  title?: string;
-                  type?: string;
-              };
-          }
-        | Array<{
-              id?: string;
-              href?: string;
-              title?: string;
-              type?: string;
-          }>;
-}
 
 interface FinalProcessOutcome {
-    status: "successful" | "failed" | "dismissed"; //final status
+    status: "successful" | "failed" | "dismissed"; // Final status
     message?: string;
     outputs?:
         | {
@@ -52,6 +31,16 @@ interface OutputOptions {
     transmissionMode: "value" | "reference";
 }
 
+interface Config {
+    apiBaseUrl: string;
+}
+
+interface McdmServiceReferences {
+    apiService: ApiService;
+}
+
+type JobResult = FinalProcessOutcome;
+
 export interface ProcessExecution {
     inputs: Map<string, unknown>; // Updated to allow objects for MCDM
     outputs?: Map<string, OutputOptions>;
@@ -60,243 +49,62 @@ export interface ProcessExecution {
     response?: "document" | "raw";
 }
 
-type JobResult = FinalProcessOutcome;
-
 export interface McdmService extends DeclaredService<"app.McdmService"> {
     submitJob(jobDescription: ProcessExecution): Promise<JobResult>;
-    pollJobStatus(job_url: string, delayMs?: number): Promise<FinalProcessOutcome>;
 }
 
-interface Config {
-    apiBaseUrl: string;
-}
-
-interface ProcessRequestBody {
-    inputs: Record<string, unknown>;
-    outputs?: Record<string, unknown>;
-    response?: "document" | "raw";
-    mode?: "sync" | "async";
-}
 
 export class McdmServiceImpl implements McdmService {
     private readonly API_BASE_URL: string;
+    private readonly apiService: ApiService;
 
-    constructor(options: ServiceOptions) {
+    constructor(options: ServiceOptions<McdmServiceReferences>) {
         const config = options.properties.userConfig as Config;
         if (!config.apiBaseUrl) {
-            throw new Error("ClientServiceImpl requires 'apiBaseUrl' in userConfig");
+            throw new Error("McdmServiceImpl requires 'apiBaseUrl' in userConfig");
         }
         this.API_BASE_URL = config.apiBaseUrl;
+        this.apiService = options.references.apiService as ApiService; // Inject the service
     }
 
     private getProcessExecutionUrl(processID: string): string {
         return `${this.API_BASE_URL}/processes/${processID}/execution`;
     }
 
-    submitJob = (jobDescription: ProcessExecution): Promise<JobResult> => {
-        console.log(jobDescription.inputs);
-        const body: ProcessRequestBody = {
+    async submitJob(jobDescription: ProcessExecution): Promise<FinalProcessOutcome> {
+        const url = this.getProcessExecutionUrl(jobDescription.processId);
+        const body: Record<string, unknown> = {
             inputs: Object.fromEntries(jobDescription.inputs)
         };
-        if (jobDescription.outputs && jobDescription.outputs.size > 0) {
-            body["outputs"] = {};
-            for (const [key, output] of jobDescription.outputs) {
-                body["outputs"][key] = {
-                    format: {
-                        mediaType: output.mediaType
-                    },
-                    transmissionMode: output.transmissionMode
-                };
-            }
+        const job = await this.apiService.executeProcess(url, body, jobDescription.synchronous);
+        try {
+            const result = await job.wait(); 
+            return this.mapToFinalOutcome(result);
+        } catch (err: unknown) {
+            return this.mapToFinalOutcome(err as JobStatusResponse); 
         }
-        if (jobDescription.response) {
-            body["response"] = jobDescription.response;
-        }
-        body["mode"] = jobDescription.synchronous ? "sync" : "async";
+    }
 
-        return new Promise((resolve, reject) => {
-            const myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            if (!jobDescription.synchronous) {
-                myHeaders.append("Prefer", "respond-async");
-            } else {
-                myHeaders.append("Prefer", "respond-sync");
-            }
-            fetch(this.getProcessExecutionUrl(jobDescription.processId), {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(body)
-            })
-                .then(async (response) => {
-                    if (response.status === 201) {
-                        console.log(
-                            `Async job for '${jobDescription.processId}' accepted (HTTP 201)`
-                        );
-                        const locationHeader = response.headers.get("Location");
-                        if (!locationHeader) {
-                            throw new Error(
-                                `Async job accepted (201), but missing "Location" header for job status. Cannot poll.`
-                            );
-                        }
-                        let initialJobBody: unknown;
-                        const contentType = response.headers.get("content-type");
-                        if (contentType && contentType.includes("application/json")) {
-                            try {
-                                const textBody = await response.text();
-                                if (textBody.trim() !== "" && textBody.trim() !== "null") {
-                                    initialJobBody = JSON.parse(textBody);
-                                }
-                            } catch (jsonParseError) {
-                                console.warn(
-                                    `201 response body was not valid JSON for process '${jobDescription.processId}'. Proceeding with Location header`,
-                                    jsonParseError
-                                );
-                            }
-                        }
-                        const jobID =
-                            (initialJobBody as JobStatusResponse)?.id ||
-                            (initialJobBody as JobStatusResponse)?.jobID ||
-                            locationHeader.split("/").pop();
-                        if (!jobID) {
-                            throw new Error(
-                                "Could not determine job ID from 201 response or Location Header"
-                            );
-                        }
-                        console.log(`Polling for async job '${jobID}' at: ${locationHeader}`);
-                        try {
-                            const finalResult = await this.pollJobStatus(locationHeader);
-                            resolve(finalResult);
-                        } catch (pollingError) {
-                            reject(pollingError);
-                        }
-                        return;
-                    } else if (response.ok) {
-                        console.log(
-                            `Process '${jobDescription.processId}' executed synchronously (HTTP ${response.status})`
-                        );
-                        const contentType = response.headers.get("content-type");
-                        if (response.status === 204) {
-                            resolve({
-                                status: "successful",
-                                message: "Process completeted successfully with no direct outputs"
-                            });
-                            return;
-                        }
-                        if (contentType && contentType.includes("application/json")) {
-                            try {
-                                const responseData = await response.json();
-                                resolve({
-                                    status: "successful",
-                                    message: responseData.message,
-                                    outputs: responseData.outputs,
-                                    value: responseData.value // MCDM specific
-                                });
-                            } catch (jsonError) {
-                                console.error(
-                                    `Failed to parse JSON for synchronous OK response for '${jobDescription.processId}' :`,
-                                    jsonError
-                                );
-                                reject(
-                                    new Error(
-                                        `API returned OK status but invalid JSON response for synchronous process`
-                                    )
-                                );
-                            }
-                        } else {
-                            const rawText = await response.text();
-                            console.warn(
-                                `Synchronous OK response for '${jobDescription.processId}' is not JSON. Raw body:`,
-                                rawText.substring(0, 500)
-                            );
-                            reject(
-                                new Error(
-                                    `Synchronous process returned non-JSON response (status ${response.status})`
-                                )
-                            );
-                        }
-                        return;
-                    } else {
-                        let errorData: unknown;
-                        try {
-                            errorData = await response.json();
-                        } catch (e) {
-                            errorData = await response.text();
-                        }
-                        console.error(
-                            `API Error for process '${jobDescription.processId}': ${response.status} - ${response.statusText} `,
-                            errorData
-                        );
-                        reject(errorData);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error while submitting job:", error);
-                    reject(error);
-                });
-        });
-    };
+    private mapToFinalOutcome(data: JobStatusResponse): FinalProcessOutcome {
+        const rawData = data as Record<string, unknown>;
+        const onSuccess = 
+            data.status === "successful" || 
+            (!data.status && (rawData.value || data.outputs));
 
-    pollJobStatus = (job_url: string, delayMs: number = 2000): Promise<FinalProcessOutcome> => {
-        return new Promise((resolve, reject) => {
-            let intervalId = 0;
-            const checkStatus = async () => {
-                console.log(`Polling attempt for job at URL: ${job_url}`);
-                fetch(job_url)
-                    .then(async (response) => {
-                        if (!response.ok) {
-                            console.error(
-                                `Error polling job status: ${response.status} - ${response.statusText}`
-                            );
-                            let errorData: unknown;
-                            try {
-                                errorData = await response.json();
-                            } catch (e) {
-                                errorData = await response.text();
-                            }
-                            window.clearInterval(intervalId);
-                            reject(
-                                new Error(
-                                    `Polling failed: ${response.status} - ${typeof errorData === "object" && errorData && "message" in errorData ? (errorData as Record<string, unknown>).message : "Unknown error"}`
-                                )
-                            );
-                            return;
-                        }
-                        return response.json();
-                    })
-                    .then((statusResponse: unknown) => {
-                        // Changed this to unknown
-                        const typedResponse = statusResponse as JobStatusResponse; // Cast it here
-                        console.log(
-                            `Job ${typedResponse.jobID || typedResponse.id || "unknown"} status: ${typedResponse.status}`
-                        );
-                        if (typedResponse.status === "successful") {
-                            window.clearInterval(intervalId);
-                            // This successful response from the poll will have the final outcome.
-                            // The response from the polling endpoint for a successful job will be a FinalProcessOutcome
-                            resolve(statusResponse as FinalProcessOutcome);
-                        } else if (
-                            typedResponse.status === "failed" ||
-                            typedResponse.status === "dismissed"
-                        ) {
-                            window.clearInterval(intervalId);
-                            reject({
-                                status: typedResponse.status,
-                                jobID: typedResponse.jobID || typedResponse.id,
-                                message: typedResponse.message,
-                                outputs: typedResponse.outputs
-                            });
-                        } else {
-                            setTimeout(checkStatus, delayMs);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("An error occurred during job status polling.", error);
-                        window.clearInterval(intervalId);
-                        reject(error);
-                    });
-            };
-            intervalId = window.setInterval(() => {}, 1);
-            checkStatus();
-        });
-    };
+        const finalStatus: "successful" | "failed" | "dismissed" = onSuccess 
+            ? "successful" 
+            : (data.status === "dismissed" ? "dismissed" : "failed");
+
+        return {
+            status: finalStatus,
+            message: data.message || (onSuccess ? "Success" : "Process failed"),
+            outputs: data.outputs,
+            jobID: data.jobID,
+            value: rawData.value as Record<string, number> | undefined
+        };
+    }
 }
+
+
+    
+

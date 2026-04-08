@@ -5,11 +5,18 @@ import { defineBuildConfig } from "@open-pioneer/build-support";
 export default defineBuildConfig({
     services: {
         McdmServiceImpl: {
-            provides: ["app.McdmService"]
+            provides: ["app.McdmService"], 
+            references: {
+                apiService: "app.ApiService"
+            }
         }
     },
+    i18n: ["en", "de", "da"],
     ui: {
-        references: ["app.McdmService"]
+        references: [
+            "app.McdmService", 
+            "app.ApiService"
+        ]
     },
     properties: {
         userConfig: {

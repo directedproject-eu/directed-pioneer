@@ -11,22 +11,11 @@ import GeoJSON from "ol/format/GeoJSON.js";
 import { Stroke, Style } from "ol/style";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
 
-
 export const MAP_ID1 = "main";
 export { LayerZoomImpl } from "./services/LayerZoom";
 export { ForecastServiceImpl } from "./services/ForecastService";
 export { FloodHandlerImpl } from "./services/FloodHandler";
 
-
-const Basemap = new SimpleLayer({
-    id: "osm",
-    title: "OpenStreetMap",
-    olLayer: new TileLayer({
-        source: new OSM(),
-        properties: { title: "OSM", type: "OSM" }
-    }),
-    isBaseLayer: true
-});
 
 const wmsLayersSaferPlacesCoastal = [
     {
@@ -394,7 +383,6 @@ interface LayerGroupDefinition {
     [key: string]: string[] | LayerGroupDefinition;
 }
 
-
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID1;
     pygeoapiBaseUrl: string;
@@ -479,12 +467,16 @@ export class MainMapProvider implements MapConfigProvider {
         ];
 
         // A function to create a new GroupLayer with default properties
-        const createGroup = (title: string, id: string, layers: (SimpleLayer | GroupLayer)[] = []) => {
+        const createGroup = (
+            title: string,
+            id: string,
+            layers: (SimpleLayer | GroupLayer)[] = []
+        ) => {
             return new GroupLayer({
                 title: title,
                 id: id,
                 visible: false,
-                layers: layers.filter(layer => layer != null), // Filter out null layers
+                layers: layers.filter((layer) => layer != null), // Filter out null layers
                 attributes: {
                     "legend": {
                         Component: WaterLevelLegend
@@ -495,16 +487,23 @@ export class MainMapProvider implements MapConfigProvider {
 
         // Helper function to find a layer by its name
         const getLayer = (name: string) => {
-            const layer = allWmsLayers.find(l => l.name === name);
+            const layer = allWmsLayers.find((l) => l.name === name);
             return layer ? this.createWmsLayer(layer.name, layer.name, layer.name) : null;
         };
 
-        const createNestedGroups = (groupStructure: LayerGroupDefinition, parentId = ""): GroupLayer[] => {
+        const createNestedGroups = (
+            groupStructure: LayerGroupDefinition,
+            parentId = ""
+        ): GroupLayer[] => {
             const groups: GroupLayer[] = [];
             for (const [title, content] of Object.entries(groupStructure)) {
-                const id = parentId ? `${parentId}-${title.toLowerCase().replace(/ /g, "_")}` : title.toLowerCase().replace(/ /g, "_");
+                const id = parentId
+                    ? `${parentId}-${title.toLowerCase().replace(/ /g, "_")}`
+                    : title.toLowerCase().replace(/ /g, "_");
                 if (Array.isArray(content)) {
-                    const layers = content.map(layerName => getLayer(layerName)).filter(Boolean) as SimpleLayer[];
+                    const layers = content
+                        .map((layerName) => getLayer(layerName))
+                        .filter(Boolean) as SimpleLayer[];
                     if (layers.length > 0) {
                         groups.push(createGroup(title, id, layers));
                     }
@@ -517,9 +516,8 @@ export class MainMapProvider implements MapConfigProvider {
             }
             return groups;
         };
-        
 
-        // Define the layer organization as an object 
+        // Define the layer organization as an object
         // Change here for any additional layers/subgroups
         const layerDefinition = {
             "Coastal Flooding": {
@@ -811,7 +809,7 @@ export class MainMapProvider implements MapConfigProvider {
             },
             layers: createNestedGroups(layerDefinition["Coastal Flooding"], "coastal_flooding")
         });
-        
+
         const pluvialFloodingGroup = new GroupLayer({
             title: "Pluvial Flooding",
             id: "pluvial_flooding",
@@ -824,7 +822,7 @@ export class MainMapProvider implements MapConfigProvider {
             layers: createNestedGroups(layerDefinition["Pluvial Flooding"], "pluvial_flooding")
         });
 
-        // Combine all Scalgo layers into a single group, no known groupings yet 
+        // Combine all Scalgo layers into a single group, no known groupings yet
         const scalgoLayers = [
             ...wmsLayersFrederikssundScalgoPluvial,
             ...wmsLayersFrederikssundScalgoStorm,
@@ -852,10 +850,10 @@ export class MainMapProvider implements MapConfigProvider {
         //     visible: true,
         //     olLayer: new TileLayer({
         //         source: new TileWMS({
-        //             url: "https://directed.dev.52north.org/geoserver/directed/wms", 
+        //             url: "https://directed.dev.52north.org/geoserver/directed/wms",
         //             params: {
         //                 LAYERS: "rwl1_saferplaces_pluvial_roskilde_90mm"
-        //             }, 
+        //             },
         //             properties: {
         //                 title: "Layer Title",
         //                 type: "GeoTIFF"
@@ -873,7 +871,15 @@ export class MainMapProvider implements MapConfigProvider {
             },
             projection: "EPSG:3857",
             layers: [
-                Basemap,
+                new SimpleLayer({
+                    id: "osm",
+                    title: "OpenStreetMap",
+                    olLayer: new TileLayer({
+                        source: new OSM(),
+                        properties: { title: "OSM", type: "OSM" }
+                    }),
+                    isBaseLayer: true
+                }),
                 new GroupLayer({
                     title: "Municipalities",
                     id: "municipal_layers",
@@ -884,7 +890,7 @@ export class MainMapProvider implements MapConfigProvider {
                         this.createMunicipalityLayer("lejre"),
                         this.createMunicipalityLayer("roskilde")
                     ]
-                }), 
+                })
                 // coastalFloodingGroup,
                 // pluvialFloodingGroup,
                 // scalgoGroup

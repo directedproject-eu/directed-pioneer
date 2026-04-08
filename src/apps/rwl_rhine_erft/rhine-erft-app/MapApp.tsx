@@ -39,7 +39,6 @@ import Swipe from "ol-ext/control/Swipe";
 import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
-import { Window } from "@open-pioneer-community/window";
 
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -382,6 +381,53 @@ export function MapApp() {
                 </DefaultMapProvider>
             )}
 
+                        <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
+                            <Flex
+                                role="bottom-right"
+                                aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                direction="row"
+                                gap={1}
+                                padding={1}
+                            >
+                                <ToolButton
+                                    label={intl.formatMessage({
+                                        id: "charts.button_title"
+                                    })}
+                                    icon={<PiChartLineDownLight />}
+                                    onClick={onOpenChart}
+                                />
+                                <ToolButton
+                                    label={intl.formatMessage({ id: "measurementTitle" })}
+                                    icon={<PiRulerLight />}
+                                    isActive={measurementIsActive}
+                                    onClick={toggleMeasurement}
+                                />
+                                <ToolButton
+                                    label={intl.formatMessage({ id: "map.download.button" })}
+                                    icon={<PiDownload />}
+                                    isActive={downloadIsActive}
+                                    onClick={toggleDownload}
+                                />
+                                <Geolocation mapId={MAP_ID} />
+                                <InitialExtent mapId={MAP_ID} />
+                                <ZoomIn mapId={MAP_ID} />
+                                <ZoomOut mapId={MAP_ID} />
+                            </Flex>
+                        </MapAnchor>
+                    </MapContainer>
+                </Flex>
+                <Flex
+                    role="region"
+                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
+                    gap={3}
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <CoordinateViewer mapId={MAP_ID} precision={2} />
+                    <ScaleBar mapId={MAP_ID} />
+                    <ScaleViewer mapId={MAP_ID} />
+                </Flex>
+            </TitledSection>
 
             <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} size={"full"}>
                 <Dialog.Backdrop />

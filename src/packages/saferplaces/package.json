@@ -4,7 +4,8 @@
     "dependencies": {
         "@open-pioneer/runtime": "catalog:",
         "taxonomy": "workspace:^",
-        "chroma-js": "catalog:"
+        "chroma-js": "catalog:", 
+        "processclient": "workspace:^"
     },
     "devDependencies": {
         "@open-pioneer/test-utils": "catalog:"

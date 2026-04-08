@@ -39,20 +39,21 @@ interface JobStatusResponse {
     presigned_url?: string;
 }
 
-//define interfaces for the inputs
+// --- Interfaces ---
+
 interface SaferRainInputs {
     dem: string;
     rain: string;
     water: string;
     presigned_url_out: boolean;
-    mode: string; // lambda for async default batch for sync
+    mode: string; // Lambda for async default batch for sync
     sync: boolean;
     user: string;
     token: string;
     debug: boolean;
 }
 
-interface SaferRainPayload {
+type SaferRainPayload = {
     inputs: SaferRainInputs;
 }
 
@@ -68,7 +69,7 @@ interface SaferCoastInputs {
     debug: boolean;
 }
 
-interface SaferCoastPayload {
+type SaferCoastPayload = {
     inputs: SaferCoastInputs;
 }
 
@@ -84,7 +85,7 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
     const [selectedLocation, setSelectedLocation] = useState<string>("");
     const [rainIntensity, setRainIntensity] = useState<string>("");
     const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null);
-    // const [barrierFile, setBarrierFile] = useState<File | null>(null); //file object or null
+    // const [barrierFile, setBarrierFile] = useState<File | null>(null); // File object or null
     const [model, setModel] = useState<string>("");
     const [generationStatus, setGenerationStatus] = useState<string>("");
     const [downloadLink, setDownloadLink] = useState<string>("");
@@ -110,34 +111,12 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
         }
     };
 
-    const locationCollection = createListCollection({
-        items: Object.keys(locationDemFiles).map((locationName) => ({
-            value: locationName,
-            label: locationName
-        })),
-    });
-
-    const modelCollection = createListCollection({
-        items: [
-            { value: "safer_rain", label: "Safer Rain" },
-            { value: "safer_coast", label: "Safer Coast" }
-        ]
-    });
-
     const API_BASE_URL = "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"; //saferplaces pygeoapi
     const API_PROCESS_RAIN_URL = `${API_BASE_URL}/processes/safer-rain-process/execution`;
     const API_PROCESS_COAST_URL = `${API_BASE_URL}/processes/safer-coast-process/execution`;
 
-    const handleLocationChange = (details: { value: string[] }) => {
-        if (typeof details.value[0] === "string") {
-            setSelectedLocation(details.value[0]);
-        }
-    };
-
-    const handleModelChange = (details: { value: string[] }) => {
-        if (typeof details.value[0] === "string") {
-            setModel(details.value[0]);
-        }
+    const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setSelectedLocation(event.target.value);
     };
 
     const handleRainIntensityChange = (event: ChangeEvent<HTMLInputElement>) => {

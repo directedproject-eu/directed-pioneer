@@ -13,6 +13,9 @@ export default defineBuildConfig({
     },
     i18n: ["en", "de", "da"],
     ui: {
-        references: ["app.FloodMapService"]
+        references: [
+            "app.FloodMapService", 
+            "app.ApiService"
+        ]
     }
 });

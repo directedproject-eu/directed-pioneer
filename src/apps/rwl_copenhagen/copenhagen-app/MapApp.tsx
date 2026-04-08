@@ -49,6 +49,7 @@ import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
 import { FaInfo } from "react-icons/fa";
+
 import { LayerDownload } from "layerdownload";
 import { Window } from "@open-pioneer-community/window";
 import { FaWater } from "react-icons/fa";
@@ -182,6 +183,31 @@ export function MapApp() {
             <Navbar />
             <Notifier />
             {/* <ModelClient /> */}
+            <TitledSection
+                title={
+                    <Box
+                        role="region"
+                        aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
+                        textAlign="left"
+                        py={1}
+                    >
+                        <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
+                            {intl.formatMessage({ id: "heading" })}
+                        </SectionHeading>
+                    </Box>
+                }
+            >
+                <Flex flex="1" direction="column" position="relative">
+                    {/*MAP_ID1*/}
+                    <MapContainer
+                        mapId={MAP_ID1}
+                        role="main"
+                        aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
+                    >
+                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                            <Forecasts />
+                            <FloodSlider/>
+                        </MapAnchor>
 
             {mapModel.map && (<DefaultMapProvider map={mapModel.map}>
                 <TitledSection

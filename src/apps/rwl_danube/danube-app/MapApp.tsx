@@ -50,6 +50,7 @@ import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
+import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";

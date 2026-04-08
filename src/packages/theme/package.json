@@ -1,0 +1,13 @@
+{
+    "name": "theme",
+    "private": true,
+    "dependencies": {
+        "@open-pioneer/runtime": "catalog:", 
+        "@chakra-ui/react": "catalog:",
+        "@emotion/react": "catalog:", 
+        "framer-motion": "catalog:"
+    },
+    "devDependencies": {
+        "@open-pioneer/test-utils": "catalog:"
+    }
+}

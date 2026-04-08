@@ -187,7 +187,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
         // Construct the process execution payload
         const jobDescription: ProcessExecution = {
             inputs: inputs,
-            synchronous: true,
+            synchronous: true, // Not working for async currently
             processId: processId,
             response: "document"
         };
@@ -382,6 +382,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
             </Center>
         );
     }
+
     return (
         <Box>
             {/* <ToolButton
