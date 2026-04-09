@@ -25,7 +25,6 @@ import {
     ModalBody,
     ModalCloseButton,
     Select,
-    Spacer,
     Text,
     useDisclosure,
     VStack
@@ -58,7 +57,6 @@ import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
 import ChartComponentForestry from "./components/ChartComponentForestry";
-import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
@@ -393,7 +391,7 @@ export function MapApp() {
                                         padding={2}
                                         boxShadow="lg"
                                         role="dialog"
-                                        overflow="auto" 
+                                        overflow="auto"
                                         maxHeight="400px"
                                         // dir="rtl"
                                         aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
@@ -406,7 +404,6 @@ export function MapApp() {
                                                 collapsibleGroups={true}
                                                 initiallyCollapsed={true}
                                                 showBasemapSwitcher={false}
-                                                
                                             />
                                         </ChakraProvider>
                                         <FormControl>
@@ -462,32 +459,36 @@ export function MapApp() {
 
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
                                     <Flex direction="column" gap={4} alignItems="flex-end">
-                                        
                                         <Box
                                             backgroundColor="white"
                                             borderRadius="lg"
                                             boxShadow="lg"
-                                            padding={4}           
-                                            width="430px"        
+                                            padding={4}
+                                            width="430px"
                                             maxHeight="615px"
-                                            overflowY="auto"     
+                                            overflowY="auto"
                                             overflowX="hidden"
                                             role="region"
-                                            aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
+                                            aria-label={intl.formatMessage({
+                                                id: "ariaLabel.topRight"
+                                            })}
                                         >
                                             <Text fontSize="lg" fontWeight="bold" mb={2}>
                                                 Select Layers for Comparison
                                             </Text>
-                                            
+
                                             <Text fontSize="sm" color="gray.600" mb={4}>
-                                                ➡️ Only layers which have been selected in the Operational Layers are viewable for comparison.
+                                                ➡️ Only layers which have been selected in the
+                                                Operational Layers are viewable for comparison.
                                             </Text>
-                                            
+
                                             <Flex direction="row" gap={4}>
                                                 <Select
                                                     placeholder="Select Left Layer"
                                                     value={selectedLeftLayer ?? ""}
-                                                    onChange={(e) => setSelectedLeftLayer(e.target.value)}
+                                                    onChange={(e) =>
+                                                        setSelectedLeftLayer(e.target.value)
+                                                    }
                                                 >
                                                     {visibleAvailableLayers.map((layer) => (
                                                         <option key={layer.id} value={layer.id}>
@@ -499,7 +500,9 @@ export function MapApp() {
                                                 <Select
                                                     placeholder="Select Right Layer"
                                                     value={selectedRightLayer ?? ""}
-                                                    onChange={(e) => setSelectedRightLayer(e.target.value)}
+                                                    onChange={(e) =>
+                                                        setSelectedRightLayer(e.target.value)
+                                                    }
                                                 >
                                                     {visibleAvailableLayers.map((layer) => (
                                                         <option key={layer.id} value={layer.id}>
@@ -509,18 +512,23 @@ export function MapApp() {
                                                 </Select>
                                             </Flex>
                                         </Box>
-
                                         <Flex
-                                            backgroundColor="white"
-                                            borderRadius="lg"     
+                                            direction="column"
+                                            borderRadius="lg"
                                             boxShadow="lg"
-                                            padding={0}           
                                             minWidth="250px"
-                                            maxHeight="700px"
-                                            height="fit-content"
+                                            backgroundColor="white"
+                                            overflow="hidden"
+                                            maxHeight="300px"
                                             overflowY="auto"
-                                            overflowX="hidden"
-                                            _empty={{ display: "none" }}
+                                            sx={{
+                                                "& > *": {
+                                                    border: "none !important"
+                                                },
+                                                "& *": {
+                                                    top: "0 !important"
+                                                }
+                                            }}
                                         >
                                             <PioneerLegend mapId={MAP_ID} />
                                         </Flex>

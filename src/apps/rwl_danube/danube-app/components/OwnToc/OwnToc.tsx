@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { Box, Button, Checkbox, IconButton, Stack, Text } from "@open-pioneer/chakra-integration";
+import { Box, Checkbox, Stack, Text } from "@open-pioneer/chakra-integration";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import { useService } from "open-pioneer:react-hooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TocService } from "../../services/TocService";
-import { HamburgerIcon } from "@chakra-ui/icons";
 import PopoverToc from "./PopoverToc";
 
 interface TocMetaData {

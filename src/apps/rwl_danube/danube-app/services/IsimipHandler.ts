@@ -10,7 +10,6 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import Legend from "../components/legends/Legend";
 
 import chroma from "chroma-js";
-import { info } from "console";
 
 const layer_info = {
     "hurs": {
@@ -288,14 +287,9 @@ export class IsimipHandlerImpl implements IsimipHandler {
         const info = layer_info[this.#selectedVariable.value];
 
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            model?.layers
-                .getLayerById("isimip")
-                ?.setTitle(info.title);
-            model?.layers
-                .getLayerById("isimip")
-                ?.setDescription(info.description);
+            model?.layers.getLayerById("isimip")?.setTitle(info.title);
+            model?.layers.getLayerById("isimip")?.setDescription(info.description);
         });
-    
 
         if (this.layer) {
             this.layer.setProperties({
