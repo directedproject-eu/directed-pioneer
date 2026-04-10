@@ -1,171 +1,169 @@
 overrides:
   "@open-pioneer/authentication":
-    auth-error: "hun:An error occurred during authentication."
+    auth-error: "Hiba történt a hitelesítés során."
   "@open-pioneer/authentication-keycloak":
     loginFailed:
-      title: "hun:Login failed"
-      message: "hun:An error occured during authentication."
+      title: "A bejelentkezés sikertelen"
+      message: "Hiba történt a hitelesítés során."
   "@open-pioneer/basemap-switcher":
-    emptyBasemapLabel: "hun:Without basemap"
-    layerNotAvailable: "hun:Layer not available"
-    selected: "hun:Selected"
+    emptyBasemapLabel: "Alap térkép nélkül"
+    layerNotAvailable: "A réteg nem elérhető"
+    selected: "Kiválasztva"
   "@open-pioneer/geolocation":
-    locateNotSupported: hun:Geolocation is not supported.
-    locateMeStart: hun:Start geolocation
-    locateMeEnd: hun:Stop geolocation
-    error: hun:Error
-    permissionDenied: hun:Geolocation was canceled.
-    positionUnavailable: hun:Geolocation position cannot be determined.
-    timeout: hun:Geolocation was canceled due to timeout.
-    unknownError: hun:An unexpected error occurred during geolocation.
+    locateNotSupported: "A földrajzi helymeghatározás nem támogatott."
+    locateMeStart: "Földrajzi helymeghatározás indítása"
+    locateMeEnd: "Földrajzi helymeghatározás leállítása"
+    error: "Hiba"
+    permissionDenied: "A földrajzi helymeghatározás törölve."
+    positionUnavailable: "A földrajzi hely nem határozható meg."
+    timeout: "A helymeghatározás időtúllépés miatt megszakadt."
+    unknownError: "Váratlan hiba történt a helymeghatározás során."
   "@open-pioneer/map-navigation":
     initial-extent:
-      title: "hun: Zoom to initial extent"
+      title: "Nagyítás a kezdeti kiterjedésre"
     zoom-in:
-      title: "hun: Zoom in map"
+      title: "Térkép nagyítása"
     zoom-out:
-      title: "hun: Zoom out map"
+      title: "Térkép kicsinyítése"
     view-backward:
-      title: "hun: One map view backward"
+      title: "Egy térképnézet vissza"
     view-forward:
-      title: "hun: One map view forward"
+      title: "Egy térképnézet előre"
   "@open-pioneer/legend":
-    altLabel: hun:legend image for layer {layerName}
-    fallbackLabel: hun:legend not available
-    basemapLabel: hun:Basemap
+    altLabel: "A {layerName} réteghez tartozó jelmagyarázat"
+    fallbackLabel: "Jelölés nem elérhető"
+    basemapLabel: "Alap térkép"
   "@open-pioneer/measurement":
-    measurementLabel: "hun:Mode"
-    distance: "hun:Distance"
-    area: "hun:Area"
-    deleteMeasurementLabel: "hun:Delete measurements"
-    measurementInfoText: "hun:Click in the map to start a measurement."
+    measurementLabel: "Mód"
+    distance: "Távolság"
+    area: "Terület"
+    deleteMeasurementLabel: "Mérések törlése"
+    measurementInfoText: "Kattintson a térképre a mérés elindításához."
     tooltips:
-      help: "hun:Click to start measuring."
-      continue: "hun:Double click to end the measurement."
+      help: "Kattintson a mérés elindításához."
+      continue: "Kattintson duplán a mérés befejezéséhez."
   "@open-pioneer/toc":
-    basemapsLabel: "hun:Basemaps"
-    descriptionLabel: "hun:Layer description"
-    operationalLayerLabel: "hun:Operational layers"
-    childgroupLabel: "hun:Layer group {title}"
-    missingLayers: "hun:There are no layers to display."
+    basemapsLabel: "Alap térképek"
+    descriptionLabel: "Réteg leírása"
+    operationalLayerLabel: "Működési rétegek"
+    childgroupLabel: "Rétegcsoport {cím}"
+    missingLayers: "Nincs megjeleníthető réteg."
     group:
-      expand: "hun:Expand group {title}"
-      collapse: "hun:Collapse group {title}"
-    error: "hun:Error while creating map content."
-    layerNotAvailable: "hun:Layer not available"
-    toolsLabel: "hun:Map tools"
+      expand: "Csoport kibontása {cím}"
+      collapse: "Csoport összecsukása {cím}"
+    error: "Hiba a térkép tartalmának létrehozása közben."
+    layerNotAvailable: "A réteg nem érhető el"
+    toolsLabel: "Térképszerszámok"
     tools:
-      hideAllLayers: "hun:Hide all layers"
-      collapseAllGroups: "hun:Collapse all groups"
-
+      hideAllLayers: "Minden réteg elrejtése"
+      collapseAllGroups: "Összes csoport összecsukása"
+      
 messages:
-  basemapLabel: "hun:Select basemap:"
-  auth-error: "hun:An error occured during authentication."
+  basemapLabel: "Alap térkép kiválasztása"
+  auth-error: "Hiba történt a hitelesítés során."
   global:
-    year: "hun:Year"
-    month: "hun:Month"
-    day: "hun:Day"
+    year: "Év"
+    month: "Hónap"
+    day: "Nap"
     months:
-      jan: "hun:January"
-      feb: "hun:February"
-      mar: "hun:March"
-      apr: "hun:April"
-      may: "hun:May"
-      jun: "hun:June"
-      jul: "hun:July"
-      aug: "hun:August"
-      sep: "hun:September"
-      oct: "hun:October"
-      nov: "hun:November"
-      dec: "hun:December"
+      jan: "Január"
+      feb: "Február"
+      mar: "Március"
+      apr: "Április"
+      may: "Május"
+      jun: "Június"
+      jul: "Július"
+      aug: "Augusztus"
+      sep: "Szeptember"
+      oct: "Október"
+      nov: "November"
+      dec: "December"
   navbar:
-    home: "hun:Home"
-    rwl: "hun:Real World Labs"
-    directed_website: "hun:Directed Project Website"
-    github: "hun:GitHub Organization"
-    model: "hun:Model Documentation"
-    login: "hun:Login"
-    logout: "hun:Logout"
-    sign_up: "hun:Sign Up"
-  heading: "hun:RWL The Danube Region"
+    home: "Főoldal"
+    rwl: "Real World Labs"
+    directed_website: "DIRECTED projekt weboldala"
+    github: "GitHub szervezet"
+    model: "Modell dokumentáció"
+    login: "Bejelentkezés"
+    logout: "Kijelentkezés"
+    sign_up: "Regisztráció"
+  heading: "RWL Duna régió"
   map:
     layer_select:
-      heading: "hun:Climate projections from ISIMIP"
-      info1: "This component enables the viewing of different"
-      keyword1: "climate model"
-      info2: "projections within three"
-      keyword2: "Shared Socioeconomic Pathway (SSP)"
-      info3: "climate change emission scenarios."
-      keyword3: "Variables"
-      info4: "can be selected at the bottom of this 
-        component and then toggled within the Operational Layers."
-      model: "hun:Model"
-      scenario: "hun:Scenario"
-      variable: "hun:Variable"
+      heading: "Az ISIMIP éghajlati előrejelzései"
+      info1: "Ez a komponens lehetővé teszi különböző"
+      keyword1: "klímamodell"
+      info2: "előrejelzések megtekintését három"
+      keyword2: "közös társadalmi-gazdasági pálya (SSP)"
+      info3: "klímaváltozási kibocsátási forgatókönyv keretében."
+      keyword3: "A változók"
+      info4: "ezen komponens alján választhatók ki, majd az Operatív rétegekben kapcsolhatók be."
+      model: "Modell"
+      scenario: "Forgatókönyv"
+      variable: "Változó"
     station_information:
-      heading: "hun:Event Information"
-      description: "hun:Select an event on the map to see more information."
+      heading: "Eseményinformáció"
+      description: "Válasszon ki egy eseményt a térképen a további információk megtekintéséhez."
       attributes:
-        address: "hun:Address:"
-        settlement: "hun:Settlement"
-        type_of_intervention: "hun:Type of intervention"
-        event_type: "hun:Type of event"
-        location_type: "hun:Type of location"
-        date_reported: "hun:Date reported"
-        damage_type: "hun:Type of damage"
-        county: "hun:County (abbr.)"
+        address: "Cím:"
+        settlement: "Település"
+        type_of_intervention: "A beavatkozás típusa"
+        event_type: "Az esemény típusa"
+        location_type: "Helyszín típusa"
+        date_reported: "Bejelentés dátuma"
+        damage_type: "A kár típusa"
+        county: "Megye (rövidítés)"
     measurement:
-      heading: "hun:Measurement"
+      heading: "Mérés"
     download:
-      heading: "hun:Download Layer"
-      no_layers: "hun:No layers available for download"
-      button: "hun:Donwload Layer"
-      loading: "hun:Preparing download..."
-      select_layer: "hun:Select a layer to download"
-      description: "hun:Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."
-    operational_layers: "hun:Operational Layers"
-    select_basemap: "hun:Select basemap"
+      heading: "Réteg letöltése"
+      no_layers: "Nincs letölthető réteg"
+      button: "Réteg letöltése"
+      loading: "Letöltés előkészítése..."
+      select_layer: "Válasszon ki egy letöltendő réteget"
+      description: "hA legördülő listában csak azok a rétegek érhetők el letöltésre, amelyek az „Operatív rétegek” között aktiválva vannak."
+    operational_layers: "Operatív rétegek"
+    select_basemap: "Alap térkép kiválasztása"
     legend:
       event_variables:
-        tree_clearing: "hun:Tree Clearing"
-        forest_and_vegetation_fire: "hun:Forest and vegetation fire"
-        water_damage: "hun:Water Damage"
-        storm_damage: "hun:Storm Damage"
+        tree_clearing: "Kidőlt fák miatti viharkár"
+        forest_and_vegetation_fire: "Erdő- és aljnövényzet tűz"
+        water_damage: "Vízkárok"
+        storm_damage: "Viharok okozta károk"
     slider:
       geosphere_historical:
-        precipitation: 👆hun:Drag the Slider to Select a Date for Daily Precipitation Sums
-        start_date: "hun:Start Date:"
-        end_date: "hun:End Date:"
-        selected_date: "hun:Selected Date:"
+        precipitation: "👆Húzza a csúszkát a napi csapadékösszeg dátumának kiválasztásához"
+        start_date: "Kezdő dátum:"
+        end_date: "Befejezés:"
+        selected_date: "Kiválasztott dátum:"
       geosphere_forecast:
-        precipitation: "👆hun:Drag the Slider to Select a Date and Time for Total Rainfall Amount Forecasts"
-        start_date: "hun:Forecast Start Date:"
-        end_date: "hun:Forecast End Date:"
-        selected_date: "hun:Selected Date:"
+        precipitation: "👆Húzza a csúszkát a teljes csapadékmennyiség előrejelzésének dátumának és időpontjának kiválasztásához"
+        start_date: "Előrejelzés kezdő dátuma:"
+        end_date: "Előrejelzés vége:"
+        selected_date: "Kiválasztott dátum:"
   charts:
-    button_title: "hun:Crop chart"
-    title_chart1: "hun:Crops in Zala region for "
-    explanation1: "hun:This graph displays the average value, as well as the 20th to 80th percentile, of
-                predicted crop yields across all models in the Danube region."
-    explanation2: "hun:There was insufficient yield data for summer barley and lucerne in Western
-                    Danubia for local simulations. Therefore, data from a neighboring region in
-                    Austria was utilized."
+    button_title: "Terménytáblázat"
+    title_chart1: "Növénykultúrák Zala megyében "
+    explanation1: "Ez a grafikon a Duna-régióban az összes modellben előre jelzett terméshozamok átlagértékét, 
+                    valamint a 20. és 80. percentilisét mutatja."
+    explanation2: "Nyugat-Duna régióban a nyári árpa és a lucerna esetében nem állt rendelkezésre elegendő 
+                    hozamadat a helyi szimulációkhoz. Ezért az osztrák szomszédos régió adatait használtuk fel."
   welcome_window:
-    header: "hun:Welcome to the Danube app of the DIRECTED Data Fabric!"
+    header: "Üdvözöljük a DIRECTED Data Fabric Duna-alkalmazásában!"
     body:
-      "hun:The Danube app is part of the Data Fabric which is developed within the EU-funded DIRECTED project.
-      Goal of the app is to support stakeholders in disaster risk reduction and climate change adaptation.
-      The app contains public data which is made available to everyone. Additional access-restricted data will 
-      appear after login (use the login button in the right top corner).
-      Please note that the app is still work in progress."
+      "A Duna alkalmazás az EU által finanszírozott DIRECTED projekt keretében fejlesztett Data Fabric része. 
+      Az alkalmazás célja, hogy támogassa a a különböző érdekcsoportokat a katasztrófakockázat-csökkentés és az 
+      éghajlatváltozáshoz való alkalmazkodás terén. Az alkalmazás mindenki számára elérhető nyilvános adatokat tartalmaz. 
+      További, hozzáféréssel korlátozott adatok a bejelentkezés után jelennek meg (használja a jobb felső sarokban található bejelentkezés gombot). 
+      Felhívjuk figyelmét, hogy az alkalmazás még fejlesztés alatt áll."
   zoom_buttons:
-    vienna: "hun:Zoom to Vienna"
-    zala: "hun:Zoom to Zala"
+    vienna: "Nagyítás Bécsre"
+    zala: "Nagyítás Zala vármegyére"
   ariaLabel:
-    header: "hun:Header bar"
-    footer: "hun:Base bar with scale information, spatial reference system and coordinate display"
-    map: "hun:Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."
-    topLeft: "hun:Measurement"
-    topRight: "hun:Overview map and basemap switcher"
-    bottomRight: "hun:Maptools"
-  measurementTitle: "hun:Measurement"
+    header: "Fejléc"
+    footer: "Alapsáv méretarány-információval, térbeli referenciarendszerrel és koordinátakijelzéssel"
+    map: "Térkép. A nyilakkal mozgathatja a térképet. A plusz gombbal nagyíthat, a mínusz gombbal kicsinyíthet."
+    topLeft: "Mérés"
+    topRight: "Áttekintő térkép és alap térkép váltó"
+    bottomRight: "Térképezési eszközök"
+  measurementTitle: "Mérés"
