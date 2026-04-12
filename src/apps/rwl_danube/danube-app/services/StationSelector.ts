@@ -39,26 +39,45 @@ export class StationSelectorImpl implements StationSelector {
             map.on("click", (event) => {
                 const result = map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
                     if (layer !== model.layers.getLayerById("isimip")) {
-                        return [feature, layer.style_["circle-fill-color"]];
+                        return [feature, layer.getProperties().title];
                     }
                 });
 
                 if (result) {
-                    const [feature, color] = result;
-                    this.setStationData(feature.getProperties());
+                    const [feature, layerTitle] = result;
                     if (this.selectedFeature) {
                         this.selectedFeature.setStyle(null);
                     }
-                    feature.setStyle(
-                        new Style({
-                            image: new Circle({
-                                radius: 10,
-                                fill: new Fill({ color: color }),
-                                stroke: new Stroke({ color: "lightblue", width: 2 })
-                            })
-                        })
-                    );
+                    this.setStationData(feature.getProperties());
                     this.selectedFeature = feature;
+
+                    if(layerTitle == "Nuts_regions") {
+
+                        feature.setStyle(
+                            new Style({
+                                fill: new Fill({
+                                    color: "rgba(255, 51, 0, 0.5)"
+                                }),
+                                stroke: new Stroke({
+                                    color: "black",
+                                    width: 3
+                                })
+                            }),
+                        );
+                    }
+
+                    else  {
+
+                        feature.setStyle(
+                            new Style({
+                                image: new Circle({
+                                    radius: 10,
+                                    fill: new Fill({ color: "lightblue" }),
+                                    stroke: new Stroke({ color: "lightblue", width: 2 })
+                                })
+                            })
+                        );
+                    }
                 } else {
                     this.#stationData.value = {};
                     if (this.selectedFeature) {

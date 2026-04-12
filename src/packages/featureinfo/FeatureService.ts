@@ -108,9 +108,6 @@ export function setupClickHandler(
             const coordinate = event.coordinate;
             const viewResolution = mapModel.olMap.getView().getResolution();
 
-            console.log("Map clicked at:", coordinate);
-            console.log("View Resolution:", viewResolution);
-
             if (coordinate && viewResolution) {
                 fetchFeatureInfo(mapModel, coordinate, viewResolution, projection, setFeatureInfo);
             }

@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useEffect, useId, useState } from "react";
-import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
+import { GiCircleForest, GiWheat } from "react-icons/gi";
+import { PiDownload, PiRulerLight } from "react-icons/pi";
 import { EventsKey } from "ol/events";
 import { Group, Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
@@ -63,8 +64,9 @@ import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
 import { theme } from "theme";
 import { ForestrySelector } from "./services/ForestrySelector";
+import { NutsSelector } from "./services/NutsSelector";
 
-type ActiveChartType = "zala_crop" | "forestry" | null;
+type ActiveChartType = "crop" | "forestry" | null;
 
 export function MapApp() {
     const mapModel = useMapModel(MAP_ID);
@@ -84,6 +86,7 @@ export function MapApp() {
 
     const [activeChart, setActiveChart] = useState<ActiveChartType>(null);
     const [forestryLocation, setForestryLocation] = useState<string>("keszthelyi_erdeszet_vallus");
+    const [nuts, setNuts] = useState<string>("AT11");
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
@@ -103,6 +106,7 @@ export function MapApp() {
     );
 
     const forestrySelector = useService<ForestrySelector>("app.ForestrySelector");
+    const nutsSelector = useService<NutsSelector>("app.NutsSelector");
 
     const { clickedForestryLocation } = useReactiveSnapshot(
         () => ({
@@ -110,6 +114,14 @@ export function MapApp() {
         }),
         [forestrySelector]
     );
+
+    const { clickedNuts } = useReactiveSnapshot(
+        () => ({
+            clickedNuts: nutsSelector.selectedNutsId
+        }),
+        [nutsSelector]
+    );
+
 
     useEffect(() => {
         if (clickedForestryLocation) {
@@ -121,7 +133,16 @@ export function MapApp() {
     const closeChartModal = () => {
         setActiveChart(null);
         forestrySelector.clearSelection();
+        nutsSelector.clearSelection();
     };
+
+    useEffect(() => {
+        if (clickedNuts) {
+            setNuts(clickedNuts);
+            setActiveChart("crop");
+        }
+    }, [clickedNuts]);
+
 
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
@@ -394,7 +415,7 @@ export function MapApp() {
                                         overflow="auto"
                                         maxHeight="400px"
                                         // dir="rtl"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                        aria-label={"kleiner Test, ob dieser Text wirklich existert. bitte ändern wenn er gefunden wird - Felix"}
                                         marginBottom="10px"
                                     >
                                         <ChakraProvider theme={theme}>
@@ -562,15 +583,15 @@ export function MapApp() {
                                             label={intl.formatMessage({
                                                 id: "charts.zala_crop.button_title"
                                             })}
-                                            icon={<PiChartLineDownLight />}
-                                            onClick={() => setActiveChart("zala_crop")}
+                                            icon={<GiWheat />}
+                                            onClick={() => setActiveChart("crop")}
                                         />
 
                                         <ToolButton
                                             label={intl.formatMessage({
                                                 id: "charts.forestry.button_title"
                                             })}
-                                            icon={<PiChartLineDownLight />}
+                                            icon={<GiCircleForest />}
                                             onClick={() => setActiveChart("forestry")}
                                         />
 
@@ -607,12 +628,12 @@ export function MapApp() {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
-                        {activeChart === "zala_crop" && "Zala Chart"}
+                        {activeChart === "crop" && "Zala Chart"}
                         {activeChart === "forestry" && "Forestry Data Chart"}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {activeChart === "zala_crop" && <ChartComponentZala />}
+                        {activeChart === "crop" && <ChartComponentZala nutsId={nuts} />}
                         {activeChart === "forestry" && (
                             <ChartComponentForestry initialLocation={forestryLocation} />
                         )}
