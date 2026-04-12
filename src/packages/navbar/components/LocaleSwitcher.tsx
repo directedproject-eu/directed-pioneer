@@ -11,7 +11,6 @@ import {
 const LocaleSwitcher: React.FC = () => {
     const intl = useIntl();
     const appCtx = useService<ApplicationContext>("runtime.ApplicationContext");
-    console.log("appCtx.getLocale()", appCtx.getLocale());
     const currentLocale = parseLocale(appCtx.getLocale());
     const locales = appCtx.getSupportedLocales();
     const changeLocale = (locale: string) => {

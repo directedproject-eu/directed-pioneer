@@ -69,7 +69,6 @@ const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }
                                     alignItems="center"
                                     mb={1}
                                     onClick={() => {
-                                        console.log("test for item:", item.label);
                                     }}
                                     // Add these styles to ensure it's clickable
                                     cursor="pointer"

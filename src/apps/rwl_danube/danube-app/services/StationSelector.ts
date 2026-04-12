@@ -39,25 +39,41 @@ export class StationSelectorImpl implements StationSelector {
             map.on("click", (event) => {
                 const result = map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
                     if (layer !== model.layers.getLayerById("isimip")) {
-                        return [feature, layer.style_["circle-fill-color"]];
+                        return [feature, layer.style_["circle-fill-color"], layer.getProperties().title];
                     }
                 });
 
                 if (result) {
-                    const [feature, color] = result;
+                    const [feature, color, title] = result;
                     this.setStationData(feature.getProperties());
                     if (this.selectedFeature) {
                         this.selectedFeature.setStyle(null);
                     }
-                    feature.setStyle(
-                        new Style({
-                            image: new Circle({
-                                radius: 10,
-                                fill: new Fill({ color: color }),
-                                stroke: new Stroke({ color: "lightblue", width: 2 })
+                    if(title == "Nuts_regions") {
+
+                        feature.setStyle(
+                            new Style({
+                                fill: new Fill({
+                                    color: "rgba(255, 51, 0, 0.5)"
+                                }),
+                                stroke: new Stroke({
+                                    color: "black",
+                                    width: 3
+                                })
+                            }),
+                        );
+                    }                    
+                    else {
+                        feature.setStyle(
+                            new Style({
+                                image: new Circle({
+                                    radius: 10,
+                                    fill: new Fill({ color: color }),
+                                    stroke: new Stroke({ color: "lightblue", width: 2 })
+                                })
                             })
-                        })
-                    );
+                        );
+                    }
                     this.selectedFeature = feature;
                 } else {
                     this.#stationData.value = {};

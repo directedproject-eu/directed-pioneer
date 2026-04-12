@@ -259,6 +259,32 @@ export class MainMapProvider implements MapConfigProvider {
         return regionLayer;
     }
 
+    // createNutsLayer() {
+    //     const nutsLayer = new SimpleLayer({
+    //         id: `nuts_layer`,
+    //         title: `Nuts regions`,
+    //         description: `test description`,
+    //         visible: true,
+    //         olLayer: new VectorLayer({
+    //             source: new VectorSource({
+    //                 url: `http://localhost:5000/api/data/Nuts2/filtered_nuts2.geojson`,
+
+    //                 format: new GeoJSON()
+    //             }),
+    //             style: new Style({
+    //                 stroke: new Stroke({
+    //                     color: "#2e9ecc",
+    //                     width: 3
+    //                 })
+    //             }),
+    //             properties: { title: "GeoJSON Layer", type: "GeoJSON" }
+    //         }),
+    //         isBaseLayer: false
+    //     });
+    //     return nutsLayer;
+    // }
+
+
     createWmsLayer(
         layerName: string,
         layerTitle: string,
@@ -356,24 +382,46 @@ export class MainMapProvider implements MapConfigProvider {
                     isBaseLayer: true
                 }),
 
-                // Administrative boundaries
                 new GroupLayer({
                     title: "Administrative boundaries",
                     visible: true,
                     id: "administrative_boundaries",
                     layers: [this.createRegionLayer("vienna"), this.createRegionLayer("zala")]
                 }),
+                                
+                new SimpleLayer({
+                    id: `nuts_layer`,
+                    title: `Nuts regions`,
+                    description: `test description`,
+                    visible: true,
+                    olLayer: new VectorLayer({
+                        source: new VectorSource({
+                            url: `http://localhost:5000/api/data/Nuts2/filtered_nuts.geojson`,
+                        
+                            format: new GeoJSON()
+                        }),
+                        style: new Style({
+                            fill: new Fill({
+                                color: "rgba(46, 158, 204, 0.5)" 
+                            }),
+                            stroke: new Stroke({
+                                color: "black",
+                                width: 3
+                            })
+                        }),
+                        properties: { title: "Nuts_regions", type: "GeoJSON" }
+                    }),
+                    isBaseLayer: false
+                }),
 
-                // Aufruf der neuen Ebene (Layer) hier einfügen!
+
                 this.createForestryLayer(),
 
-                // Vienna model results
                 new GroupLayer({
                     title: "Vienna",
                     visible: false,
                     id: "vienna",
                     layers: [
-                        // Pluvial flood layers
                         new GroupLayer({
                             title: "Pluvial Flooding",
                             visible: false,

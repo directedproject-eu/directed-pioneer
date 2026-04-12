@@ -62,12 +62,10 @@ export class TocServiceImpl implements TocService {
         if (layer?.olLayer instanceof VectorLayer) {
             this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
                 model?.olView.fit(layer?.olLayer.getSource().getExtent());
-                console.log(layer.olLayer.getZIndex());
                 layer.olLayer.setZIndex(10);
             });
         } else {
             this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-                console.log(layer?.olLayer.getZIndex());
                 model?.olView.fit(layer?.olLayer.getExtent());
             });
         }
