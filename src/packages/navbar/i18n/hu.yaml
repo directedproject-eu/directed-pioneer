@@ -7,7 +7,7 @@ messages:
         hu: Magyar
         da: Dán
   disclaimerContent: 
-   brief: 
+    brief: 
       "A felhasználóknak javasoljuk, hogy az információkat függetlenül ellenőrizzék, 
       és a szolgáltatást saját felelősségükre vegyék igénybe."
     text: 
