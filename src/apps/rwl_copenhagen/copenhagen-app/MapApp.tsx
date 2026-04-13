@@ -434,7 +434,9 @@ export function MapApp() {
                                             <Spacer />
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
-                                                    placeholder="Select Left Layer"
+                                                    placeholder={intl.formatMessage({
+                                                        id: "layer_swipe.left"
+                                                    })}
                                                     value={selectedLeftLayer ?? ""}
                                                     onChange={(e) =>
                                                         setSelectedLeftLayer(e.target.value)
@@ -448,7 +450,9 @@ export function MapApp() {
                                                 </Select>
 
                                                 <Select
-                                                    placeholder="Select Right Layer"
+                                                    placeholder={intl.formatMessage({
+                                                        id: "layer_swipe.left"
+                                                    })}
                                                     value={selectedRightLayer ?? ""}
                                                     onChange={(e) =>
                                                         setSelectedRightLayer(e.target.value)

@@ -20,6 +20,8 @@ import {
 } from "@open-pioneer/chakra-integration";
 import type { MapBrowserEvent } from "ol";
 import { Box, VStack } from "@open-pioneer/chakra-integration";
+import { useIntl } from "open-pioneer:react-hooks";
+
 
 interface FeatureInfoProps {
     mapModel: MapModel;
@@ -28,6 +30,7 @@ interface FeatureInfoProps {
 }
 
 export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
+    const intl = useIntl();
     //store wms feature info for click position
     const [featureInfo, setFeatureInfo] = useState<{
         features: Array<{ layerName: string; data: Record<string, unknown> }> | null;
@@ -177,7 +180,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                 {/* Selected layers */}
                                 <Box>
                                     <Text fontWeight="600" fontSize="14px" color="gray.700">
-                                        Selected Layers:
+                                        {intl.formatMessage({ id: "info.selectedLayers" })}
                                     </Text>
                                     <Text fontSize="14px" color="gray.600">
                                         {featureInfo.features.map((f) => f.layerName).join(", ")}
@@ -187,7 +190,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                 {/* Clicked point */}
                                 <Box>
                                     <Text fontWeight="600" fontSize="14px" color="gray.700">
-                                        Clicked Point:
+                                        {intl.formatMessage({ id: "info.clickedPoint" })}
                                     </Text>
                                     <Text fontSize="14px" color="gray.600">
                                         X: {clickPosition.x}, Y: {clickPosition.y}

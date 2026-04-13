@@ -70,6 +70,8 @@ messages:
   layer_swipe:
     title: "da:Select Layers for Comparison"
     description: "da:Only layers which have been selected in the Operational Layers are viewable for comparison."
+    left: "da: Select Left Layer"
+    right: "da: Select Right Layer"
   forecast:
     sea_level: "da:👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation Forecasts"
     total_precip: "da:👆Drag the Slider to Select a Date and Time for Total Precipitation Forecasts"

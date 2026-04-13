@@ -27,7 +27,14 @@ import {
     Select,
     Text,
     useDisclosure,
-    VStack
+    VStack, 
+    IconButton,
+    Popover,
+    PopoverBody,
+    PopoverContent,
+    PopoverTrigger,
+    PopoverArrow, 
+    Spacer
 } from "@open-pioneer/chakra-integration";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
@@ -63,6 +70,8 @@ import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
 import { theme } from "theme";
 import { ForestrySelector } from "./services/ForestrySelector";
+import { FaInfo } from "react-icons/fa";
+
 
 type ActiveChartType = "zala_crop" | "forestry" | null;
 
@@ -473,44 +482,81 @@ export function MapApp() {
                                                 id: "ariaLabel.topRight"
                                             })}
                                         >
-                                            <Text fontSize="lg" fontWeight="bold" mb={2}>
-                                                Select Layers for Comparison
-                                            </Text>
+                                            <Box>
+                                                <Box maxHeight={300} overflow="auto">
+                                                    <Flex
+                                                        direction="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                    ></Flex>
+                                                    <Flex alignItems="center" mt={1}>
+                                                        <Popover
+                                                            trigger="hover"
+                                                            openDelay={250}
+                                                            closeDelay={100}
+                                                            placement="top"
+                                                        >
+                                                            <PopoverTrigger>
+                                                                <IconButton
+                                                                    marginLeft="2px"
+                                                                    size="s"
+                                                                    aria-label="Info"
+                                                                    icon={<FaInfo />}
+                                                                    variant="ghost"
+                                                                    color="black"
+                                                                />
+                                                            </PopoverTrigger>
+                                                            <PopoverContent>
+                                                                <PopoverArrow />
+                                                                <PopoverBody overflow="auto">
+                                                                    {intl.formatMessage({
+                                                                        id: "layer_swipe.description"
+                                                                    })}
+                                                                </PopoverBody>
+                                                            </PopoverContent>
+                                                        </Popover>
+                                                        <Text fontWeight="bold" mt={4}>
+                                                            {intl.formatMessage({
+                                                                id: "layer_swipe.title"
+                                                            })}
+                                                        </Text>
+                                                    </Flex>
+                                                    <Spacer />
+                                                    <Flex direction="row" gap={4} p={4}>
+                                                        <Select
+                                                            placeholder={intl.formatMessage({
+                                                                id: "layer_swipe.left"
+                                                            })}
+                                                            value={selectedLeftLayer ?? ""}
+                                                            onChange={(e) =>
+                                                                setSelectedLeftLayer(e.target.value)
+                                                            }
+                                                        >
+                                                            {visibleAvailableLayers.map((layer) => (
+                                                                <option key={layer.id} value={layer.id}>
+                                                                    {layer.title || layer.id}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
 
-                                            <Text fontSize="sm" color="gray.600" mb={4}>
-                                                ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison.
-                                            </Text>
-
-                                            <Flex direction="row" gap={4}>
-                                                <Select
-                                                    placeholder="Select Left Layer"
-                                                    value={selectedLeftLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedLeftLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-
-                                                <Select
-                                                    placeholder="Select Right Layer"
-                                                    value={selectedRightLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedRightLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-                                            </Flex>
+                                                        <Select
+                                                            placeholder={intl.formatMessage({
+                                                                id: "layer_swipe.right"
+                                                            })}
+                                                            value={selectedRightLayer ?? ""}
+                                                            onChange={(e) =>
+                                                                setSelectedRightLayer(e.target.value)
+                                                            }
+                                                        >
+                                                            {visibleAvailableLayers.map((layer) => (
+                                                                <option key={layer.id} value={layer.id}>
+                                                                    {layer.title || layer.id}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    </Flex>
+                                                </Box>
+                                            </Box>
                                         </Box>
                                         <Flex
                                             direction="column"

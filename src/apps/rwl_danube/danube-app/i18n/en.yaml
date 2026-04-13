@@ -122,3 +122,8 @@ messages:
     topRight: "Overview map and basemap switcher"
     bottomRight: "Maptools"
   measurementTitle: "Measurement"
+  layer_swipe:
+    title: "Select Layers for Comparison"
+    description: "Only layers which have been selected in the Operational Layers are viewable for comparison."
+    left: "Select Left Layer"
+    right: "Select Right Layer"

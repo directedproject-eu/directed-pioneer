@@ -16,6 +16,8 @@ messages:
   layer_swipe:
     title: "Layer zum Vergleichen auswählen"
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
+    left: "de: Select Left Layer"
+    right: "de: Select Right Layer"
   forecast:
     sea_level: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der mittleren Meeresspiegelschwankungen auszuwählen"
     total_precip: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der Gesamtniederschläge auszuwählen"

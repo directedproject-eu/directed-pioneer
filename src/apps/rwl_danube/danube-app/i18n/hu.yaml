@@ -167,3 +167,8 @@ messages:
     topRight: "Áttekintő térkép és alap térkép váltó"
     bottomRight: "Térképezési eszközök"
   measurementTitle: "Mérés"
+  layer_swipe:
+    title: "Válassza ki az összehasonlítandó rétegeket"
+    description: "Csak azok a rétegek láthatók az összehasonlításhoz, amelyeket az Operatív rétegek között kijelöltek."
+    left: "Válassza ki a bal oldali réteget"
+    right: "Válassza ki a megfelelő réteget"
