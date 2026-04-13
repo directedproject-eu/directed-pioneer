@@ -1,0 +1,21 @@
+messages:
+  description_saferplaces:
+    text1: "Ez a felület mind a SaferPlaces modell,"
+    text2: "mind"
+    text3: "a part menti esőzések"
+    keyword1: "okozta"
+    keyword2: "árvizeket támogatja"
+  info_icon_safercoast:
+    description: 
+      "Felhívjuk figyelmét, hogy ez a szimuláció a valóságot tükrözi, 
+      de nem tekinthető annak. Bár a szimuláció eredménye egy lehetséges 
+      kimenetelt mutat be, az árvízmodellezésben a bizonytalanság elkerülhetetlen; 
+      döntéshozatali célokra ezt az információt külső szakértőkkel együttműködve kell 
+      felhasználni a külső kockázati tényezők figyelembevétele érdekében."
+  info_icon_saferrain:
+    description: 
+      "Felhívjuk figyelmét, hogy ez a szimuláció a valóságot tükrözi, 
+      de nem tekinthető annak. Bár a szimuláció eredménye egy lehetséges 
+      kimenetelt mutat be, az árvízmodellezésben a bizonytalanság elkerülhetetlen; 
+      döntéshozatali célokra ezt az információt külső szakértőkkel együttműködve kell 
+      felhasználni a külső kockázati tényezők figyelembevétele érdekében."
