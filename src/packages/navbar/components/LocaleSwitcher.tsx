@@ -33,7 +33,7 @@ const LocaleSwitcher: React.FC = () => {
 
     return (
         <FormControl>
-            <FormLabel textAlign="center">{intl.formatMessage({ id: "localeSwitcher.label" })}</FormLabel>
+            {/* <FormLabel textAlign="center">{intl.formatMessage({ id: "localeSwitcher.label" })}</FormLabel> */}
             <Select
                 value={currentLocale}
                 onChange={(e) => changeLocale(e.target.value)}

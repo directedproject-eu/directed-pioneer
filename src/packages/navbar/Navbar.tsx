@@ -18,17 +18,16 @@ import {
 } from "@open-pioneer/chakra-integration";
 import { HamburgerIcon, CloseIcon, ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import React from "react";
-export const BASE_URL = import.meta.env.DEV
-    ? import.meta.env.VITE_DEV_URL
-    : import.meta.env.VITE_PROD_URL;
-
 import { AuthService } from "@open-pioneer/authentication";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import Disclaimer from "./components/Disclaimer";
 import DisclaimerContent from "./components/DisclaimerContent";
 import LocaleSwitcher from "./components/LocaleSwitcher";
-console.info("base url: " + BASE_URL);
-console.info("mode: " + import.meta.env.MODE);
+import { useIntl } from "open-pioneer:react-hooks";
+
+export const BASE_URL = import.meta.env.DEV
+    ? import.meta.env.VITE_DEV_URL
+    : import.meta.env.VITE_PROD_URL;
 
 if (!BASE_URL) {
     if (import.meta.env.DEV) {
@@ -37,18 +36,80 @@ if (!BASE_URL) {
         throw new Error("variable import.meta.env.VITE_PROD_URL is not set");
     }
 }
+
+interface NavItem {
+    label: string;
+    subLabel?: string;
+    children?: Array<NavItem>;
+    href?: string;
+}
+
 type NavbarProps = {
     children?: React.ReactNode;
     authService?: AuthService;
 };
 
-const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
+const Navbar: React.FC<NavbarProps> = ({ authService }) => {
+    const intl = useIntl();
     const { isOpen, onToggle } = useDisclosure();
 
     const authState = useReactiveSnapshot(
         () => (authService ? authService.getAuthState() : undefined),
         [authService]
     );
+
+    // Define navbar items inside the component to use i18n
+    const navItems: Array<NavItem> = [
+        { 
+            label: intl.formatMessage({ id: "navbar.home" }), 
+            href: `${BASE_URL}` 
+        },
+        {
+            label: intl.formatMessage({ id: "navbar.rwls" }),
+            children: [
+                {
+                    label: intl.formatMessage({ id: "navbar.rwl1" }),
+                    href: `${BASE_URL}apps/rwl_copenhagen/index.html`
+                },
+                {
+                    label: intl.formatMessage({ id: "navbar.rwl2" }),
+                    href: "https://directed-rwl2.saferplaces.co/"
+                },
+                {
+                    label: intl.formatMessage({ id: "navbar.rwl3" }),
+                    href: `${BASE_URL}apps/rwl_danube/index.html`
+                },
+                {
+                    label: intl.formatMessage({ id: "navbar.rwl4" }),
+                    href: `${BASE_URL}apps/rwl_rhine_erft/index.html`
+                }
+            ]
+        },
+        {
+            label: intl.formatMessage({ id: "navbar.website" }),
+            href: "https://directedproject.eu/"
+        },
+        {
+            label: "Github",
+            href: "https://github.com/directedproject-eu"
+        },
+        {
+            label: intl.formatMessage({ id: "navbar.documentation" }),
+            children: [
+                { label: "SaferPlaces", href: "https://saferplaces.co/" },
+                { label: "CLIMADA", href: "https://climada-python.readthedocs.io/en/stable/tutorial/1_main_climada.html" },
+                { label: "RIM2D", href: "https://www.rim2d.eu/was-ist-rim2d" },
+                { label: "Danube Model", href: "https://www.sciencedirect.com/science/article/pii/S2405880717301383" },
+                { label: "DTU Damage-Cost Model", href: "https://github.com/Skadesokonomi" }
+            ]
+        },
+        {
+            label: intl.formatMessage({ id: "navbar.gettingStarted" }),
+            children: [
+                { label: intl.formatMessage({ id: "navbar.userManual" }), href: "https://directed-eu.gitbook.io/data-fabric-manual/" }
+            ]
+        }
+    ];
 
     return (
         <Box>
@@ -82,46 +143,52 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                         height="60px"
                     />
                     <Flex display={{ base: "none", md: "flex" }} ml={10}>
-                        <DesktopNav />
+                        <DesktopNav items={navItems} />
                     </Flex>
                 </Flex>
+                
                 <Box width="150px" mx={4}> 
                     <LocaleSwitcher/>
                 </Box>
+
                 {authService && authState?.kind === "authenticated" ? (
                     <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
-                        <Text>Logged in as: {authState.sessionInfo?.userName ?? "unknown"}</Text>
-                        <Button onClick={() => authService.logout()}>Logout</Button>
+                        <Text>
+                            {intl.formatMessage({ id: "navbar.loggedInAs" }, { name: authState.sessionInfo?.userName ?? "unknown" })}
+                        </Text>
+                        <Button onClick={() => authService.logout()}>
+                            {intl.formatMessage({ id: "navbar.logout" })}
+                        </Button>
                     </Flex>
                 ) : authService ? (
                     <Flex flexDirection="row" align="center" ml="auto" gap="2em">
                         <Button onClick={() => authService.getLoginBehavior().login()}>
-                            Login
+                            {intl.formatMessage({ id: "navbar.login" })}
                         </Button>
                     </Flex>
                 ) : null}
+
                 <div style={{ width: "350px", display: "flex", padding: "0px 20px" }}>
                     <Text>
-                        Users are advised to verify the information independently and use the
-                        service at their own risk.
+                        {intl.formatMessage({ id: "disclaimerContent.brief" })}
                     </Text>
                     <Disclaimer>
-                        <DisclaimerContent></DisclaimerContent>
+                        <DisclaimerContent />
                     </Disclaimer>
                 </div>
             </Flex>
 
             <Collapse in={isOpen} animateOpacity>
-                <MobileNav />
+                <MobileNav items={navItems} />
             </Collapse>
         </Box>
     );
 };
 
-const DesktopNav = () => {
+const DesktopNav = ({ items }: { items: Array<NavItem> }) => {
     return (
         <Stack direction={"row"} spacing={4}>
-            {NAV_ITEMS.map((navItem) => (
+            {items.map((navItem) => (
                 <Box key={navItem.label}>
                     <Popover trigger={"hover"} placement={"bottom-start"}>
                         <PopoverTrigger>
@@ -171,7 +238,7 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
             <Stack direction={"row"} align={"center"}>
                 <Box>
                     <Flex fontWeight={500}>{label}</Flex>
-                    <Flex fontSize={"md"}>{subLabel}</Flex>
+                    {subLabel && <Flex fontSize={"md"}>{subLabel}</Flex>}
                 </Box>
                 <Flex justify={"flex-end"} align={"center"} flex={1}>
                     <Icon color={"#2e9ecc"} w={5} h={5} as={ChevronRightIcon} />
@@ -181,10 +248,10 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
     );
 };
 
-const MobileNav = () => {
+const MobileNav = ({ items }: { items: Array<NavItem> }) => {
     return (
         <Stack p={4} display={{ md: "none" }}>
-            {NAV_ITEMS.map((navItem) => (
+            {items.map((navItem) => (
                 <MobileNavItem key={navItem.label} {...navItem} />
             ))}
         </Stack>
@@ -219,79 +286,5 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
         </Stack>
     );
 };
-
-interface NavItem {
-    label: string;
-    subLabel?: string;
-    children?: Array<NavItem>;
-    href?: string;
-}
-
-const NAV_ITEMS: Array<NavItem> = [
-    { label: "Home", href: `${BASE_URL}` },
-    {
-        label: "Real World Labs",
-        children: [
-            {
-                label: "The Capital Region of Denmark",
-                href: `${BASE_URL}apps/rwl_copenhagen/index.html`
-            },
-            {
-                label: "Emilia Romagna Region",
-                href: "https://directed-rwl2.saferplaces.co/"
-            },
-            {
-                label: "Danube Region",
-                href: `${BASE_URL}apps/rwl_danube/index.html`
-            },
-            {
-                label: "Rhine Erft Region",
-                href: `${BASE_URL}apps/rwl_rhine_erft/index.html`
-            }
-        ]
-    },
-    {
-        label: "Directed Project Website",
-        href: "https://directedproject.eu/"
-    },
-    {
-        label: "Github Organization",
-        href: "https://github.com/directedproject-eu"
-    },
-    {
-        label: "Model Documentation",
-        children: [
-            {
-                label: "SaferPlaces",
-                href: "https://saferplaces.co/"
-            },
-            {
-                label: "CLIMADA",
-                href: "https://climada-python.readthedocs.io/en/stable/tutorial/1_main_climada.html"
-            },
-            {
-                label: "RIM2D",
-                href: "https://www.rim2d.eu/was-ist-rim2d"
-            },
-            {
-                label: "Danube Model",
-                href: "https://www.sciencedirect.com/science/article/pii/S2405880717301383"
-            },
-            {
-                label: "DTU Damage-Cost Model",
-                href: "https://github.com/Skadesokonomi"
-            }
-        ]
-    }, 
-    {
-        label: "Getting Started",
-        children: [
-            {
-                label: "User Manual",
-                href: "https://directed-eu.gitbook.io/data-fabric-manual/"
-            }
-        ]
-    }
-];
 
 export default Navbar;
