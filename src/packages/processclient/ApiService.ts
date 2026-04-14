@@ -33,36 +33,36 @@ export class OgcJob {
         private service: ApiService
     ) {
         this.currentStatus = initialStatus;
-        
-        // Auto-trigger, start polling immediately and store the promise
         this._resultPromise = this.startInternalPolling();
     }
 
     private async startInternalPolling(): Promise<JobStatusResponse> {
-        // If already finished (sync), return the status
         const finalStates = ["successful", "failed", "dismissed"];
+        
+        // If sync (already successful), don't poll the server
         if (this.currentStatus.status && finalStates.includes(this.currentStatus.status)) {
             return this.currentStatus;
         }
 
-        // Otherwise, use the service to poll
+        // If async, poll until done
         const finalStatus = await this.service.pollJobStatus(this.url);
-        this.currentStatus = finalStatus;
+        this.currentStatus = finalStatus; 
         return finalStatus;
     }
 
-    // UI awaits job completion
     async wait(): Promise<JobStatusResponse> {
         return this._resultPromise;
     }
 }
+
 
 export class ApiServiceImpl implements ApiService {
     // Executes a process and returns either result (sync) or a job URL (async)
     async executeProcess(url: string, payload: Record<string, unknown>, sync: boolean = true): Promise<OgcJob> {
         const headers: HeadersInit = { 
             "Content-Type": "application/json", 
-            "Prefer": sync ? "respond-sync" : "respond-async"
+            "Prefer": sync ? "respond-sync" : "respond-async", 
+            "Accept": "application/json"
         };
 
         const response = await fetch(url, {
@@ -72,10 +72,8 @@ export class ApiServiceImpl implements ApiService {
         });
         // Handle Async Execution (201 Created or 202 Accepted)
         if (response.status === 201 || response.status === 202) {
-            // const location = response.headers.get("Location");
-            // debug 
             let location = response.headers.get("Location");
-
+            // If Location header blocked by CORS or missing, reconstruct from response body
             if (!location) {
                 const body = await response.json();
                 const jobId = body.id || body.jobID || body.jobId;
@@ -89,11 +87,9 @@ export class ApiServiceImpl implements ApiService {
                     location = `${executionUrl.origin}${baseParts.join("/")}/jobs/${jobId}`;
                 }
             }
-            // end debug 
             if (!location) {
                 throw new Error("Async job accepted, but 'Location' header is blocked by CORS and no ID found in body.");
             }
-            // return this.pollJobStatus(location);
             return new OgcJob(location, { status: "accepted" }, this);
         }
 
@@ -105,29 +101,40 @@ export class ApiServiceImpl implements ApiService {
                 data.status = "successful";
             }
             return new OgcJob(url, data, this);
-            // return data;
         }
 
         // Handle Errors
         const errorText = await response.text();
         throw new Error(`Process execution failed (HTTP ${response.status}): ${errorText}`);
     }
-
-    async pollJobStatus(
-        jobStatusUrl: string, 
-        intervalMs = 5000
-    ): Promise<JobStatusResponse> {
+    async pollJobStatus(jobStatusUrl: string, intervalMs = 5000): Promise<JobStatusResponse> {
         return new Promise((resolve, reject) => {
             const interval = setInterval(async () => {
                 try {
                     const response = await fetch(jobStatusUrl);
-                    const status: JobStatusResponse = await response.json();
-                    if (status.status === "successful") {
+                    if (!response.ok) throw new Error(`Status check failed: ${response.status}`);
+                    const jobStatus: JobStatusResponse = await response.json();
+    
+                    if (jobStatus.status === "successful") {
                         clearInterval(interval);
-                        resolve(status);
-                    } else if (status.status === "failed" || status.status === "dismissed") {
+                        try {
+                            // Fetch the actual result data (Async only)
+                            const resultsUrl = `${jobStatusUrl}/results`;
+                            const resultsRes = await fetch(resultsUrl, { headers: { "Accept": "application/json" } });
+                            const contentType = resultsRes.headers.get("content-type") || "";
+    
+                            if (resultsRes.ok && resultsRes.status !== 204 && contentType.includes("json")) {
+                                const resultsData = await resultsRes.json() as Record<string, unknown>;
+                                resolve({ ...jobStatus, ...resultsData });
+                            } else {
+                                resolve(jobStatus);
+                            }
+                        } catch (e) {
+                            resolve(jobStatus);
+                        }
+                    } else if (jobStatus.status === "failed" || jobStatus.status === "dismissed") {
                         clearInterval(interval);
-                        reject(new Error(status.message || "Job failed"));
+                        reject(new Error(jobStatus.message || "Job failed"));
                     }
                 } catch (err) {
                     clearInterval(interval);

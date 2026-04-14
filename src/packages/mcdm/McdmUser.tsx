@@ -198,7 +198,7 @@ export function ModelClient() {
         // Construct the process execution payload
         const jobDescription: ProcessExecution = {
             inputs: inputs,
-            synchronous: true, // Not working for async currently
+            synchronous: false, 
             processId: processId,
             response: "document"
         };

@@ -140,40 +140,48 @@ export function SaferPlacesFloodMap() {
     // const handleBarrierFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     const files = event.target.files;
 
+   
     const processFinalResult = (data: JobStatusResponse) => {
+        const rawData = data as Record<string, unknown>;
         let finalDownloadUrl = "";
-        const generatedMapTitle = `${selectedLocation} Flood Map (${model} - ${new Date().toLocaleTimeString()})`;
     
-        // Logic specific to SaferPlaces process(s)
-        if (data.presigned_url) {
-            finalDownloadUrl = data.presigned_url;
-        } else if (data.outputs?.water_depth_file) {
-            const s3Url = data.outputs.water_depth_file.href;
-            finalDownloadUrl = s3Url.startsWith("s3://") 
-                ? s3Url.replace("s3://", "https://s3.amazonaws.com/") 
-                : s3Url;
+        // Check for presigned_url
+        if (typeof rawData.presigned_url === "string") {
+            finalDownloadUrl = rawData.presigned_url;
+        } 
+        // Check for water_depth_file'
+        else if (typeof rawData.water_depth_file === "string") {
+            finalDownloadUrl = rawData.water_depth_file;
+        }
+        // Fallback to standard OGC outputs structure
+        else if (data.outputs) {
+            const output = (data.outputs.water_depth_file || data.outputs.result) as Record<string, unknown> | undefined;
+            if (output && typeof output.href === "string") {
+                finalDownloadUrl = output.href;
+            }
         }
     
-        if (finalDownloadUrl) {
-            setDownloadLink(finalDownloadUrl); // Update the state for the download button
-
-            if (!floodMapService) {
-                console.error(
-                    "ERROR: app.FloodMapService is not available. Check build config or json."
-                );
-                setGenerationStatus(
-                    "Success, but failed to add to map (service missing)."
-                );
+        // Transform S3 to HTTPS
+        let urlString: string = finalDownloadUrl;
+        if (urlString.startsWith("s3://")) {
+            urlString = urlString.replace("s3://", "https://s3.amazonaws.com/");
+        }
+    
+        // UI Logic
+        if (urlString && urlString.startsWith("http")) {
+            setDownloadLink(urlString);
+            const generatedMapTitle = `${selectedLocation} Flood Map (${model})`;
+    
+            if (floodMapService) {
+                floodMapService.addFloodMapLayer(urlString, generatedMapTitle);
+                setGenerationStatus("Flood map generated successfully!");
             } else {
-                // Call the floodmapservice to add the layer to the TOC and map
-                floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
-                setGenerationStatus(
-                    `Flood map generated successfully, added to Operational Layers`
-                );
+                setGenerationStatus("Success, but map service missing.");
             }
         } else {
+            console.error("Link Detection Failed. Data received:", data);
             setError("Download URL not found in the API response.");
-            setGenerationStatus("Successful, but no URL found.");
+            setGenerationStatus("Failed to locate result link.");
         }
     };
 
@@ -206,9 +214,9 @@ export function SaferPlacesFloodMap() {
                     dem: selectedDemFile,
                     rain: rainIntensity, // Parse string to return integer, even with leading zeros
                     water: `s3://${s3Bucket}/api_data/${outputRain}`, // Construct S3 output
-                    mode: "batch",
+                    mode: "lambda", // Async lambda, sync batch
                     presigned_url_out: true,
-                    sync: true,
+                    sync: false,
                     debug: true,
                     user: user,
                     token: token
