@@ -179,10 +179,14 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                             <VStack align="start" spacing={2}>
                                 {/* Selected layers */}
                                 <Box>
-                                    <Text fontWeight="600" fontSize="14px" color="gray.700">
+                                    <Text 
+                                        fontWeight="600" 
+                                        fontSize="14px" 
+                                        color="gray.700"
+                                    >
                                         {intl.formatMessage({ id: "info.selectedLayers" })}
                                     </Text>
-                                    <Text fontSize="14px" color="gray.600">
+                                    <Text fontSize="14px" color="gray.600"> 
                                         {featureInfo.features.map((f) => f.layerName).join(", ")}
                                     </Text>
                                 </Box>
