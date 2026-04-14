@@ -16,7 +16,13 @@ import {
     ModalContent,
     ModalBody,
     ModalCloseButton,
-    ModalFooter
+    ModalFooter, 
+    IconButton,
+    Popover,
+    PopoverBody,
+    PopoverContent,
+    PopoverTrigger,
+    PopoverArrow, 
 } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
@@ -48,6 +54,8 @@ import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
 import { theme } from "theme";
+import { FaInfo } from "react-icons/fa";
+
 
 export function MapApp() {
     const { isOpen: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -278,17 +286,44 @@ export function MapApp() {
                                                 justifyContent="center"
                                                 alignItems="center"
                                             ></Flex>
-                                            <Text fontWeight="bold" mt={4}>
-                                                Select Layers for Comparison
-                                            </Text>
+                                            <Flex alignItems="center" mt={1}>
+                                                <Popover
+                                                    trigger="hover"
+                                                    openDelay={250}
+                                                    closeDelay={100}
+                                                    placement="top"
+                                                >
+                                                    <PopoverTrigger>
+                                                        <IconButton
+                                                            marginLeft="2px"
+                                                            size="s"
+                                                            aria-label="Info"
+                                                            icon={<FaInfo />}
+                                                            variant="ghost"
+                                                            color="black"
+                                                        />
+                                                    </PopoverTrigger>
+                                                    <PopoverContent>
+                                                        <PopoverArrow />
+                                                        <PopoverBody overflow="auto">
+                                                            {intl.formatMessage({
+                                                                id: "layer_swipe.description"
+                                                            })}
+                                                        </PopoverBody>
+                                                    </PopoverContent>
+                                                </Popover>
+                                                <Text fontWeight="bold" mt={4}>
+                                                    {intl.formatMessage({
+                                                        id: "layer_swipe.title"
+                                                    })}
+                                                </Text>
+                                            </Flex>
                                             <Spacer />
-                                            <Text fontSize={16}>
-                                                ➡️ Only layers which have been selected in the
-                                                Operational Layers are viewable for comparison
-                                            </Text>
                                             <Flex direction="row" gap={4} p={4}>
                                                 <Select
-                                                    placeholder="Select Left Layer"
+                                                    placeholder={intl.formatMessage({
+                                                        id: "layer_swipe.left"
+                                                    })}
                                                     value={selectedLeftLayer ?? ""}
                                                     onChange={(e) =>
                                                         setSelectedLeftLayer(e.target.value)
@@ -302,7 +337,9 @@ export function MapApp() {
                                                 </Select>
 
                                                 <Select
-                                                    placeholder="Select Right Layer"
+                                                    placeholder={intl.formatMessage({
+                                                        id: "layer_swipe.right"
+                                                    })}
                                                     value={selectedRightLayer ?? ""}
                                                     onChange={(e) =>
                                                         setSelectedRightLayer(e.target.value)
