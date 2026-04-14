@@ -6,6 +6,35 @@ messages:
     keyword1: "regn"
     keyword2: "kystnære oversvømmelser"
   info_icon_safercoast:
-    description: "DA: Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
+    description: 
+      "da: Please note that this simulation is a reflection of reality, but should not be 
+      taken as such. While the result of this simulation presents one possible outcome, 
+      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
+      should be used in tandem with outside expertise to consider external risk factors."
   info_icon_saferrain:
-    description: "DA: Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
+    description: 
+      "da: Please note that this simulation is a reflection of reality, but should not be 
+      taken as such. While the result of this simulation presents one possible outcome, 
+      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
+      should be used in tandem with outside expertise to consider external risk factors."
+  modal: 
+    header: "da: SaferPlaces Flood Modeling"
+    credentials: "da: Please enter valid credentials to access the model dialog"
+    userName: "da: Username"
+    token: "da: Token"
+    enter: "da: Enter"
+    configuration: "da: Model Configuration"
+    credentialChangeButton: "da: Change Credentials"
+    location: "da: Location"
+    selectLocation: "da: Select a Location"
+    model: "da: Model"
+    selectModel: "da: Select a Model"
+    inputRain: "da: Rain Intensity (mm)"
+    inputSea: "da: Extreme Sea Level (m)"
+    downloadMap: "da: Download Flood Map"
+    runModel: "da: Run Model"
+  placeholders: 
+    info1: "da: Enter username"
+    info2: "da: Enter token"
+    info3: "da: Input Value, e.g. 10"
+    info4: "da: Input Value, e.g. 1"

@@ -19,3 +19,26 @@ messages:
       kimenetelt mutat be, az árvízmodellezésben a bizonytalanság elkerülhetetlen; 
       döntéshozatali célokra ezt az információt külső szakértőkkel együttműködve kell 
       felhasználni a külső kockázati tényezők figyelembevétele érdekében."
+  modal: 
+    header: "hu: SaferPlaces Flood Modeling"
+    credentials: "hu: Please enter valid credentials to access the model dialog"
+    userName: "hu: Username"
+    token: "hu: Token"
+    enter: "hu: Enter"
+    configuration: "hu: Model Configuration"
+    credentialChangeButton: "hu: Change Credentials"
+    location: "hu: Location"
+    selectLocation: "hu: Select a Location"
+    model: "hu: Model"
+    selectModel: "hu: Select a Model"
+    inputRain: "hu: Rain Intensity (mm)"
+    inputSea: "hu: Extreme Sea Level (m)"
+    downloadMap: "hu: Download Flood Map"
+    runModel: "hu: Run Model"
+  placeholders: 
+    info1: "hu: Enter username"
+    info2: "hu: Enter token"
+    info3: "hu: Input Value, e.g. 10"
+    info4: "hu: Input Value, e.g. 1"
+
+  

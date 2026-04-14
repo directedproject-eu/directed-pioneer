@@ -33,6 +33,10 @@ messages:
   legend:
     title: "Legend"
     units: "Units"
+  slider: 
+    rainfallLevel: "Rainfall Level (mm)"
+    stormSurgeLevel: "Storm Surge Level (cm)"
+    selectedLevel: "Selected Level:"
   map:
     download:
       heading: "Download Layer"

@@ -21,3 +21,8 @@ messages:
       loading: "Bereite Download vor..."
       select_layer: "Wähle einen Layer zum Herunterladen aus"
       description: "Nur die sichtbaren Layer in den Operational Layers sind über das Dropdown-Menü zum Herunterladen verfügbar."
+  layer_swipe:
+    title: "de: Select Layers for Comparison"
+    description: "de: Only layers which have been selected in the Operational Layers are viewable for comparison."
+    left: "de: Select Left Layer"
+    right: "de: Select Right Layer"

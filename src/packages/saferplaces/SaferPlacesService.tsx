@@ -274,7 +274,9 @@ export function SaferPlacesFloodMap() {
             <Modal closeOnOverlayClick={true} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>SaferPlaces Flood Modeling</ModalHeader>
+                    <ModalHeader>
+                        {intl.formatMessage({id: "modal.header"})}
+                    </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {!tokenSubmitted ? (
@@ -282,28 +284,32 @@ export function SaferPlacesFloodMap() {
                             <VStack spacing={4} align="stretch">
                                 <Flex align="center">
                                     <Text fontWeight="semibold">
-                                        Please enter valid credentials to access the model dialog
+                                        {intl.formatMessage({id: "modal.credentials"})}
                                     </Text>
                                 </Flex>
                                 <FormControl isRequired>
-                                    <FormLabel htmlFor="user">Username</FormLabel>
+                                    <FormLabel htmlFor="user">
+                                        {intl.formatMessage({id: "modal.userName"})}
+                                    </FormLabel>
                                     <Input
                                         type="text"
                                         id="user"
                                         value={userInput}
                                         onChange={handleUserInputChange}
-                                        placeholder="Enter username"
+                                        placeholder={intl.formatMessage({id: "placeholders.info1"})}
                                         variant="outline"
                                     />
                                 </FormControl>
                                 <FormControl isRequired>
-                                    <FormLabel htmlFor="token">Token</FormLabel>
+                                    <FormLabel htmlFor="token">
+                                        {intl.formatMessage({id: "modal.token"})}
+                                    </FormLabel>
                                     <Input
                                         type="password"
                                         id="token"
                                         value={tokenInput}
                                         onChange={handleTokenInputChange}
-                                        placeholder="Enter token"
+                                        placeholder={intl.formatMessage({id: "placeholders.info2"})}
                                         variant="outline"
                                     />
                                 </FormControl>
@@ -315,7 +321,7 @@ export function SaferPlacesFloodMap() {
                                     // Disable if either field is empty
                                     isDisabled={!tokenInput.trim() || !userInput.trim()}
                                 >
-                                    Enter
+                                    {intl.formatMessage({id: "modal.enter"})}
                                 </Button>
                                 {error && <p style={{ color: "red" }}>Error: {error}</p>}
                             </VStack>
@@ -323,14 +329,16 @@ export function SaferPlacesFloodMap() {
                             // --- MODEL CONFIGURATION VIEW (Page 2) ---
                             <VStack spacing={4} align="stretch">
                                 <Flex justify="space-between" align="center" mb={2}>
-                                    <Text fontWeight="semibold">🌊 Model Configuration </Text>
+                                    <Text fontWeight="semibold">
+                                        🌊 {intl.formatMessage({id: "modal.configuration"})}
+                                    </Text>
                                     <Button
                                         justifyContent="flex-end"
                                         size="sm"
                                         variant="ghost"
                                         onClick={() => setTokenSubmitted(false)}
                                     >
-                                        ← Change Credentials
+                                        ← {intl.formatMessage({id: "modal.credentialChangeButton"})}
                                     </Button>
                                 </Flex>
                                 <Flex justify="flex-start" align="center" mb={1} width="100%">
@@ -375,13 +383,17 @@ export function SaferPlacesFloodMap() {
                                     </Flex>
                                 )}
                                 <FormControl isRequired>
-                                    <FormLabel padding={0}> Location </FormLabel>
+                                    <FormLabel padding={0}> 
+                                        {intl.formatMessage({id: "modal.location"})}
+                                    </FormLabel>
                                     <Select
                                         id="location"
                                         value={selectedLocation}
                                         onChange={handleLocationChange}
                                     >
-                                        <option value="">Select a Location</option>
+                                        <option value="">
+                                            {intl.formatMessage({id: "modal.selectLocation"})}
+                                        </option>
                                         {Object.keys(locationDemFiles).map((locationName) => (
                                             <option key={locationName} value={locationName}>
                                                 {locationName}
@@ -391,11 +403,13 @@ export function SaferPlacesFloodMap() {
                                 </FormControl>
 
                                 <FormControl isRequired>
-                                    <FormLabel padding={0}> Model </FormLabel>
+                                    <FormLabel padding={0}> 
+                                        {intl.formatMessage({id: "modal.model"})} 
+                                    </FormLabel>
                                     <Select
                                         id="model"
                                         value={model}
-                                        placeholder="Select a Model"
+                                        placeholder={intl.formatMessage({id: "modal.selectModel"})} 
                                         onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                                             setModel(e.target.value)
                                         }
@@ -424,14 +438,14 @@ export function SaferPlacesFloodMap() {
                                         </PopoverContent>
                                     </Popover><FormControl isRequired>
                                         <FormLabel padding={0} htmlFor="rain">
-                                                    Rain Intensity (mm){" "}
+                                            {intl.formatMessage({id: "modal.inputRain"})}{" "}
                                         </FormLabel>
                                         <Input
                                             type="text"
                                             id="rain"
                                             value={rainIntensity}
                                             onChange={handleRainIntensityChange}
-                                            placeholder="Input Value, e.g. 10"
+                                            placeholder={intl.formatMessage({id: "placeholders.info3"})}
                                             variant="outline" />
                                     </FormControl></>
                                 )}
@@ -455,14 +469,14 @@ export function SaferPlacesFloodMap() {
                                         </PopoverContent>
                                     </Popover><FormControl isRequired>
                                         <FormLabel padding={0} htmlFor="esl">
-                                                    Extreme Sea Level (m)
+                                            {intl.formatMessage({id: "modal.inputSea"})}
                                         </FormLabel>
                                         <Input
                                             type="number"
                                             id="esl"
                                             value={extremeSeaLevel === null ? "" : extremeSeaLevel}
                                             onChange={handleESLChange}
-                                            placeholder="Input Value, e.g. 1"
+                                            placeholder={intl.formatMessage({id: "placeholders.info4"})}
                                             variant="outline" />
                                     </FormControl></>
                                 )}
@@ -476,7 +490,7 @@ export function SaferPlacesFloodMap() {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            Download Flood Map
+                                            {intl.formatMessage({id: "modal.downloadMap"})}
                                         </a>
                                     </Button>
                                 )}
@@ -497,7 +511,7 @@ export function SaferPlacesFloodMap() {
                                         !!jobId
                                     }
                                 >
-                                    Run Model
+                                    {intl.formatMessage({id: "modal.runModel"})}
                                 </Button>
                             </>
                         )}
