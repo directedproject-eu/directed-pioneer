@@ -60,7 +60,7 @@ const UserWeightChart: React.FC<UserWeightChartProps> = ({ chartOptions }) => {
     if (!chartOptions) {
         return (
             <Center height="300px">
-                <Text>Please submit criteria weights to view the chart.</Text>
+                <Text>{intl.formatMessage({ id: "modalMain.criteriaInfo" })}</Text>
             </Center>
         );
     }
@@ -71,7 +71,7 @@ const SensitivityChart: React.FC<SensitivityChartProps> = ({ chartOptions }) => 
     if (!chartOptions) {
         return (
             <Center height="300px">
-                <Text>Please submit criteria weights to view the chart.</Text>
+                <Text>{intl.formatMessage({ id: "modalMain.criteriaInfo" })}</Text>
             </Center>
         );
     }
@@ -321,13 +321,13 @@ export function ModelClient() {
                 height: 400
             },
             title: {
-                text: "Measure Ranking Result: Sensitivity Analysis",
+                text: intl.formatMessage({ id: "modalMain.sensitivityAnalysisGraph" }),
                 align: "left"
             },
             xAxis: {
                 categories: processedData.categories,
                 title: {
-                    text: "Measure"
+                    text: intl.formatMessage({ id: "modalMain.sensitivityMeasure" })
                 },
                 labels: {
                     rotation: 0,
@@ -397,27 +397,27 @@ export function ModelClient() {
     return (
         <Box>
             <ToolButton
-                label="Multi-Criteria Decision Making (MCDM)"
+                label={intl.formatMessage({ id: "modalMain.header" })}
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
             />
             <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="full">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>CLIMADA Multi-Criteria Decision Making (MCDM)</ModalHeader>
+                    <ModalHeader>{intl.formatMessage({ id: "modalStart.header" })}</ModalHeader>
                     <ModalCloseButton isDisabled={loading} />
                     <ModalBody>
                         {!tokenSubmitted ? (
                             <FormControl>
                                 <FormLabel padding={2} htmlFor="token">
-                                    Please enter a token to access the MCDM Dialog{" "}
+                                    {intl.formatMessage({ id: "modalStart.token" })}{" "}
                                 </FormLabel>
                                 <Input
                                     type="text"
                                     id="token"
                                     value={tokenInput}
                                     onChange={handleTokenInputChange}
-                                    placeholder="Enter your token here and press 'continue'"
+                                    placeholder={intl.formatMessage({ id: "modalStart.tokenEnter" })}
                                     variant="outline"
                                 />
                                 <Button
@@ -429,7 +429,7 @@ export function ModelClient() {
                                     }}
                                     isDisabled={!tokenInput.trim()}
                                 >
-                                    Continue
+                                    {intl.formatMessage({ id: "modalStart.continue" })}
                                 </Button>
                             </FormControl>
                         ) : (
@@ -437,14 +437,13 @@ export function ModelClient() {
                                 {loading ? (
                                     <Center flexDirection="column" py={10}>
                                         <Spinner size="md" />
-                                        <Text mt={4}>Calculating MCDM analysis...</Text>
+                                        <Text mt={4}>{intl.formatMessage({ id: "modalMain.calculate" })}</Text>
                                     </Center>
                                 ) : (
                                     <>
                                         <Flex justify="space-between" align="center" mb={4}>
                                             <Text fontWeight="semibold">
-                                                ⚖️ Please weight each criteria and press submit to
-                                                view results.
+                                                ⚖️ {intl.formatMessage({ id: "modalMain.weight" })}
                                             </Text>
                                             <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
                                                 <PopoverTrigger>
@@ -459,7 +458,7 @@ export function ModelClient() {
                                                 <PopoverContent>
                                                     <PopoverArrow />
                                                     <PopoverBody overflow="auto">
-                                                        {intl.formatMessage({ id: "info_mcdm.text1" })}
+                                                        {intl.formatMessage({ id: "popUp.text1" })}
                                                     </PopoverBody>
                                                 </PopoverContent>
                                             </Popover>
@@ -471,7 +470,7 @@ export function ModelClient() {
                                                     // setTokenInput(""); // Optional to clear token on going back
                                                 }}
                                             >
-                                                ← Back
+                                                ← {intl.formatMessage({ id: "modalMain.back" })}
                                             </Button>
                                         </Flex>
                                         {/* optionally uncomment this and the mode state to have input for modes */}
@@ -519,12 +518,12 @@ export function ModelClient() {
                                                     </FormLabel>
                                                     <Box padding={2}>
                                                         <Flex justify="space-between" mb={1}>
-                                                            <Text fontSize="sm">Not important</Text>
+                                                            <Text fontSize="sm">{intl.formatMessage({ id: "modalMain.likertNot" })}</Text>
                                                             <Text fontSize="sm">
-                                                                Somewhat important
+                                                                {intl.formatMessage({ id: "modalMain.likertSomewhat" })}
                                                             </Text>
                                                             <Text fontSize="sm">
-                                                                Highly important
+                                                                {intl.formatMessage({ id: "modalMain.likertHighly" })}
                                                             </Text>
                                                         </Flex>
                                                         <Slider
@@ -564,13 +563,13 @@ export function ModelClient() {
                                             onClick={handleSubmit}
                                             isDisabled={loading}
                                         >
-                                            Submit Criteria Weights
+                                            {intl.formatMessage({ id: "modalMain.submitCriteria" })}
                                         </Button>
 
                                         <Flex paddingY={4} />
                                         <Flex justifyContent="space-between" alignItems="center">
                                             <Tooltip
-                                                label="This chart shows the ranking of measures in all possible combinations of criteria weightings; it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 50% of the time."
+                                                label={intl.formatMessage({ id: "popUp.sensitivityAnalysis" })}
                                                 aria-label="A tooltip"
                                             >
                                                 <FaInfoCircle color="gray" cursor="pointer" />
@@ -585,7 +584,7 @@ export function ModelClient() {
                                                 alignItems="center"
                                             >
                                                 <Tooltip
-                                                    label="This chart shows the ranking of measures based on the criteria weightings which were submitted. For example, if cost was weighted as highly important to you, this chart shows which measures align best with this, with 1 being the best possible rank."
+                                                    label={intl.formatMessage({ id: "modalMain.rankingResult" })}
                                                     aria-label="A tooltip"
                                                 >
                                                     <FaInfoCircle color="gray" cursor="pointer" />
