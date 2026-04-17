@@ -340,7 +340,7 @@ export function ModelClient() {
                 min: 0,
                 max: 100,
                 title: {
-                    text: "Percentage of Total Samples"
+                    text: intl.formatMessage({ id: "modalMain.sensitivityPercent" })
                 },
                 stackLabels: {
                     enabled: true,
