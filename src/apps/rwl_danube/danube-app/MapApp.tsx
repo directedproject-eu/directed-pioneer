@@ -56,7 +56,7 @@ import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
-import ChartComponentZala from "./components/ChartComponentZala";
+import ChartComponentCropyield from "./components/ChartComponentCropyield";
 import ChartComponentForestry from "./components/ChartComponentForestry";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
@@ -633,7 +633,7 @@ export function MapApp() {
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {activeChart === "crop" && <ChartComponentZala nutsId={nuts} />}
+                        {activeChart === "crop" && <ChartComponentCropyield nutsId={nuts} />}
                         {activeChart === "forestry" && (
                             <ChartComponentForestry initialLocation={forestryLocation} />
                         )}

@@ -57,10 +57,10 @@ interface Props {
     nutsId?: string; // <-- Changed from initialLocation to nutsId
 }
 
-const ChartComponentZala: React.FC<Props> = ({ nutsId }) => {
+const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
     const intl = useIntl();
 
-    console.log("ChartComponentZala rendered with nutsId:", nutsId); // Debugging line to check the received nutsId 
+    console.log("ChartComponentCropyield rendered with nutsId:", nutsId); // Debugging line to check the received nutsId 
     const [selectedLocation, setSelectedLocation] = useState<string>(
         nutsId || "RO11"
     );
@@ -288,4 +288,4 @@ const ChartComponentZala: React.FC<Props> = ({ nutsId }) => {
     );
 };
 
-export default ChartComponentZala;
+export default ChartComponentCropyield;
