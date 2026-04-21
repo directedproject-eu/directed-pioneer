@@ -14,7 +14,7 @@ import {
     Spinner
 } from "@open-pioneer/chakra-integration";
 import { useIntl } from "open-pioneer:react-hooks";
-import EnsembleCrops from "./EnsembleCrops";
+import CropyieldChart from "./CropyielChart";
 import { TaxonomyInfo } from "taxonomy";
 
 // Location list provided
@@ -195,7 +195,7 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                 </Flex>
             </Flex>
 
-            <EnsembleCrops
+            <CropyieldChart
                 files={files}
                 regionName={selectedLocation}
                 regionCode={selectedLocation}

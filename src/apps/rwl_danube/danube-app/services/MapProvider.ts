@@ -259,32 +259,6 @@ export class MainMapProvider implements MapConfigProvider {
         return regionLayer;
     }
 
-    // createNutsLayer() {
-    //     const nutsLayer = new SimpleLayer({
-    //         id: `nuts_layer`,
-    //         title: `Nuts regions`,
-    //         description: `test description`,
-    //         visible: true,
-    //         olLayer: new VectorLayer({
-    //             source: new VectorSource({
-    //                 url: `http://localhost:5000/api/data/Nuts2/filtered_nuts2.geojson`,
-
-    //                 format: new GeoJSON()
-    //             }),
-    //             style: new Style({
-    //                 stroke: new Stroke({
-    //                     color: "#2e9ecc",
-    //                     width: 3
-    //                 })
-    //             }),
-    //             properties: { title: "GeoJSON Layer", type: "GeoJSON" }
-    //         }),
-    //         isBaseLayer: false
-    //     });
-    //     return nutsLayer;
-    // }
-
-
     createWmsLayer(
         layerName: string,
         layerTitle: string,
@@ -396,7 +370,7 @@ export class MainMapProvider implements MapConfigProvider {
                     visible: true,
                     olLayer: new VectorLayer({
                         source: new VectorSource({
-                            url: `http://localhost:5000/api/data/Nuts2/filtered_nuts.geojson`,
+                            url: `http://localhost:5000/api/data/Nuts2/danube_basin_territorial_units.geojson`,
                         
                             format: new GeoJSON()
                         }),
