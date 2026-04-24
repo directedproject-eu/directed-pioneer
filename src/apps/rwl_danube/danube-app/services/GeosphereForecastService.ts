@@ -127,7 +127,6 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     private updateStyle(url: string) {
         getRangeFromGeoTiff(url)
             .then((range) => {
-                console.log(range);
                 this.#legendMetadata.value = {
                     range: range
                 };

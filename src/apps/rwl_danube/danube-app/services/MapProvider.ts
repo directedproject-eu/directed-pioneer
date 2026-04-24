@@ -383,7 +383,7 @@ export class MainMapProvider implements MapConfigProvider {
                                 width: 3
                             })
                         }),
-                        properties: { title: "Nuts_regions", type: "GeoJSON" }
+                        properties: { title: "Nuts regions", type: "GeoJSON" }
                     }),
                     isBaseLayer: false
                 }),

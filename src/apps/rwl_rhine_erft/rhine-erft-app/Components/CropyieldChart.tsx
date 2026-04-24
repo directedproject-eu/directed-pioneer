@@ -7,7 +7,7 @@ import "highcharts/highcharts-more"; // Note: no "highchartsMore from"
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
 
-type EnsembleProps = {
+type ChartProps = {
     regionName: string;
     files: string[];
     regionCode: string;
@@ -15,7 +15,7 @@ type EnsembleProps = {
     selectedScenario: string;
 };
 
-const LineChart: React.FC<EnsembleProps> = ({
+const LineChart: React.FC<ChartProps> = ({
     regionName,
     files,
     regionCode,

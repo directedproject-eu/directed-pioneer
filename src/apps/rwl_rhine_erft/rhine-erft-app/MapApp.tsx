@@ -393,9 +393,9 @@ export function MapApp() {
                 </Flex>
             </TitledSection>
 
-            <Modal isOpen={isOpenChart} onClose={onCloseChart} size={"full"}>
+            <Modal isOpen={isOpenChart} onClose={onCloseChart} isCentered>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent w="80vw" maxW="80vw">
                     <ModalHeader>Rhine-Erft Chart</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

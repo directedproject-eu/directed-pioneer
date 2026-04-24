@@ -56,7 +56,7 @@ import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
-import ChartComponentCropyield from "./components/ChartComponentCropyield";
+import ChartComponentCropyield from "./components/ChartComponentCropyield/ChartComponentCropyield";
 import ChartComponentForestry from "./components/ChartComponentForestry";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
@@ -624,9 +624,9 @@ export function MapApp() {
                 </TitledSection>
             </Flex>
 
-            <Modal isOpen={activeChart !== null} onClose={closeChartModal} size={"full"}>
+            <Modal isOpen={activeChart !== null} onClose={closeChartModal} isCentered>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent w="80vw" maxW="80vw">
                     <ModalHeader>
                         {activeChart === "crop" && "Zala Chart"}
                         {activeChart === "forestry" && "Forestry Data Chart"}

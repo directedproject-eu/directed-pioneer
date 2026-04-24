@@ -49,7 +49,7 @@ export class StationSelectorImpl implements StationSelector {
                     if (this.selectedFeature) {
                         this.selectedFeature.setStyle(null);
                     }
-                    if(title == "Nuts_regions") {
+                    if(title == "Nuts regions") {
 
                         feature.setStyle(
                             new Style({
