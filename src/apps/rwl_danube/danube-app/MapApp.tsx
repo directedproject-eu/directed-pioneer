@@ -628,7 +628,7 @@ export function MapApp() {
                 <ModalOverlay />
                 <ModalContent w="80vw" maxW="80vw">
                     <ModalHeader>
-                        {activeChart === "crop" && "Zala Chart"}
+                        {activeChart === "crop" && "Crop Yield Chart"}
                         {activeChart === "forestry" && "Forestry Data Chart"}
                     </ModalHeader>
                     <ModalCloseButton />
