@@ -364,14 +364,13 @@ export class MainMapProvider implements MapConfigProvider {
                 }),
                                 
                 new SimpleLayer({
-                    id: `nuts_layer`,
-                    title: `Nuts regions`,
-                    description: `test description`,
-                    visible: true,
+                    id: "danube_basin_territorial_units",
+                    title: "Danube basin territorial units",
+                    description: "Danube basin territorial units. Click on a region to open the crop chart.",
+                    visible: false,
                     olLayer: new VectorLayer({
                         source: new VectorSource({
-                            url: `http://localhost:5000/api/data/Nuts2/danube_basin_territorial_units.geojson`,
-                        
+                            url: "https://directed.dev.52north.org/api/collections/danube_basin_territorial_units/items?f=json&limit=65",
                             format: new GeoJSON()
                         }),
                         style: new Style({

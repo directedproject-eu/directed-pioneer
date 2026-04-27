@@ -45,7 +45,7 @@ export const distinctColors = [
 
 export const checkCropAvailability = async (location: string): Promise<string[]> => {
     const checkScenario = "SSP585";
-    const baseUrl = `http://localhost:5000/api/data/crop_yield/restructured_data/${location}/${checkScenario}`;
+    const baseUrl = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/crop_yield/${location}/${checkScenario}`;
 
     const availabilityChecks = ALL_CROP_CODES.map(async (cropCode) => {
         try {
@@ -66,7 +66,7 @@ export const fetchAndProcessCropData = async (
     cropCode: string, 
     color: string
 ): Promise<SeriesData[] | null> => {
-    const url = `http://localhost:5000/api/data/crop_yield/restructured_data/${location}/${scenario}/${cropCode}.csv`;
+    const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/crop_yield/${location}/${scenario}/${cropCode}.csv`;
 
     try {
         const res = await fetch(url);
