@@ -3,10 +3,9 @@
 import { ApplicationContext } from "@open-pioneer/runtime";
 import { useIntl, useService } from "open-pioneer:react-hooks";
 import {
-    Select,
-    FormLabel,
-    FormControl
-} from "@open-pioneer/chakra-integration";
+    Field,
+    NativeSelect
+} from "@chakra-ui/react";
 
 const LocaleSwitcher: React.FC = () => {
     const intl = useIntl();
@@ -32,19 +31,21 @@ const LocaleSwitcher: React.FC = () => {
     };
 
     return (
-        <FormControl>
-            <FormLabel textAlign="center">{intl.formatMessage({ id: "localeSwitcher.label" })}</FormLabel>
-            <Select
-                value={currentLocale}
-                onChange={(e) => changeLocale(e.target.value)}
-            >
-                {locales.map((locale) => (
-                    <option key={`locale-${locale}`} value={locale}>
-                        {intl.formatMessage({ id: `localeSwitcher.locale.${locale}` })}
-                    </option>
-                ))}
-            </Select>
-        </FormControl>
+        <Field.Root>
+            <Field.Label textAlign="center">{intl.formatMessage({ id: "localeSwitcher.label" })}</Field.Label>
+            <NativeSelect.Root>
+                <NativeSelect.Field
+                    value={currentLocale}
+                    onChange={(e) => changeLocale(e.target.value)}
+                >
+                    {locales.map((locale) => (
+                        <option key={`locale-${locale}`} value={locale}>
+                            {intl.formatMessage({ id: `localeSwitcher.locale.${locale}` })}
+                        </option>
+                    ))}
+                </NativeSelect.Field>
+            </NativeSelect.Root>
+        </Field.Root>
     );
 };
 

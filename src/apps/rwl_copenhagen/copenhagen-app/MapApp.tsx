@@ -183,7 +183,7 @@ export function MapApp() {
             <Navbar />
             <Notifier />
             {/* <ModelClient /> */}
-            <TitledSection
+            {/* <TitledSection
                 title={
                     <Box
                         role="region"
@@ -199,7 +199,7 @@ export function MapApp() {
             >
                 <Flex flex="1" direction="column" position="relative">
                     {/*MAP_ID1*/}
-                    <MapContainer
+                    {/* <MapContainer
                         mapId={MAP_ID1}
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
@@ -207,7 +207,7 @@ export function MapApp() {
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <Forecasts />
                             <FloodSlider/>
-                        </MapAnchor>
+                        </MapAnchor> */}
 
             {mapModel.map && (<DefaultMapProvider map={mapModel.map}>
                 <TitledSection

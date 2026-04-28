@@ -15,7 +15,7 @@ export function YearSlider() {
     const [sliderValue, setSliderValue] = useState(0);
     const [displayDate, setDisplayDate] = useState(1991);
 
-    function onChange(details: { value: number[]}): void {
+    function onChange(details: { value: number[] }): void {
         const val = details.value[0];
         if (val === undefined) return;
         setSliderValue(val);
@@ -33,10 +33,12 @@ export function YearSlider() {
                     min={0}
                     max={109}
                 >
-                    <Slider.Track>
-                        <Slider.Range />
-                    </Slider.Track>
-                    <Slider.Thumb index={0}/>
+                    <Slider.Control>
+                        <Slider.Track>
+                            <Slider.Range />
+                        </Slider.Track>
+                        <Slider.Thumb index={0} />
+                    </Slider.Control>
                 </Slider.Root>
             </span>
             <span> {displayDate} </span>

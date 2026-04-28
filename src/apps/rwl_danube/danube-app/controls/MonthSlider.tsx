@@ -32,7 +32,7 @@ export function MonthSlider() {
         intl.formatMessage({ id: "global.months.dec" })
     ];
 
-    function onChange(details: {value: number[]}): void {
+    function onChange(details: { value: number[] }): void {
         const val = details.value[0];
         if (val === undefined || months[val] === undefined) return;
         setSliderValue(val);
@@ -50,10 +50,12 @@ export function MonthSlider() {
                     min={0}
                     max={11}
                 >
-                    <Slider.Track>
-                        <Slider.Range />
-                    </Slider.Track>
-                    <Slider.Thumb index={0} />
+                    <Slider.Control>
+                        <Slider.Track>
+                            <Slider.Range />
+                        </Slider.Track>
+                        <Slider.Thumb index={0} />
+                    </Slider.Control>
                 </Slider.Root>
             </span>
             <span> {displayDate} </span>

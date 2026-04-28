@@ -134,13 +134,19 @@ export const FloodSlider = () => {
                             step={config.step}
                             colorScheme="blue"
                         >
-                            <Slider.Track bg="blue.100">
-                                <Slider.Range bg="blue.500" />
-                            </Slider.Track>
-                            <Slider.Thumb
-                                index = {0} 
-                                boxSize={6} 
-                            />
+                            <Slider.Control>
+                                <Slider.Track 
+                                    bg="blue.100"
+                                >
+                                    <Slider.Range
+                                        bg="blue.500" 
+                                    />
+                                </Slider.Track>
+                                <Slider.Thumb
+                                    index = {0} 
+                                    boxSize={6} 
+                                />
+                            </Slider.Control>
                         </Slider.Root>
                         <Text mt={2} fontSize="md">
                             Selected Level: 
