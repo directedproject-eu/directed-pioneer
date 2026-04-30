@@ -98,7 +98,7 @@ export function SaferPlacesFloodMap() {
     const apiService = useService<ApiService>("app.ApiService"); // API service for OGC processes 
 
     // --- API Process URLs ---
-    const API_BASE_URL = "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"; // SaferPlaces pygeoapi
+    const API_BASE_URL = "https://api.saferplaces.co"; // SaferPlaces pygeoapi
     const API_PROCESS_RAIN_URL = `${API_BASE_URL}/processes/safer-rain-process/execution`;
     const API_PROCESS_COAST_URL = `${API_BASE_URL}/processes/safer-coast-process/execution`;
 
