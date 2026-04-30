@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useState } from "react";
-import { Button, Checkbox, Stack , Text} from "@open-pioneer/chakra-integration";
+import { Button, Checkbox, Stack, Text } from "@open-pioneer/chakra-integration";
 import { useIntl } from "open-pioneer:react-hooks";
-import EnsembleCrops from "./EnsembleCrops";
+import CropyieldChart from "./CropyieldChart";
 
 const ChartComponentRhineErft = () => {
     const intl = useIntl();
@@ -74,7 +74,7 @@ const ChartComponentRhineErft = () => {
                 </Button>
             </div>
 
-            <EnsembleCrops
+            <CropyieldChart
                 files={files}
                 regionName={"Rhine - Erft"}
                 regionCode="RWL4:Rhine-Erft"

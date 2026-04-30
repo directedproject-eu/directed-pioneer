@@ -31,6 +31,12 @@ export default defineBuildConfig({
                 mapRegistry: "map.MapRegistry"
             }
         },
+        NutsSelectorImpl: {
+            provides: ["app.NutsSelector"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
+        },
         TokenInterceptor: {
             provides: ["http.Interceptor"],
             references: {
@@ -71,6 +77,7 @@ export default defineBuildConfig({
             "app.LayerZoom",
             "app.StationSelector",
             "app.ForestrySelector",
+            "app.NutsSelector",
             "ogc-features.VectorSourceFactory",
             "ogc-features.SearchSourceFactory"
         ]

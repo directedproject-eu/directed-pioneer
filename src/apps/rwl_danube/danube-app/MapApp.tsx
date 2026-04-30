@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useEffect, useId, useState } from "react";
-import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
+import { GiCircleForest, GiWheat } from "react-icons/gi";
+import { PiDownload, PiRulerLight } from "react-icons/pi";
 import { EventsKey } from "ol/events";
 import { Group, Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
@@ -27,13 +28,13 @@ import {
     Select,
     Text,
     useDisclosure,
-    VStack, 
+    VStack,
     IconButton,
     Popover,
     PopoverBody,
     PopoverContent,
     PopoverTrigger,
-    PopoverArrow, 
+    PopoverArrow,
     Spacer
 } from "@open-pioneer/chakra-integration";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
@@ -62,7 +63,7 @@ import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
-import ChartComponentZala from "./components/ChartComponentZala";
+import ChartComponentCropyield from "./components/ChartComponentCropyield/ChartComponentCropyield";
 import ChartComponentForestry from "./components/ChartComponentForestry";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
@@ -70,10 +71,11 @@ import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
 import { theme } from "theme";
 import { ForestrySelector } from "./services/ForestrySelector";
+import { NutsSelector } from "./services/NutsSelector";
 import { FaInfo } from "react-icons/fa";
 
 
-type ActiveChartType = "zala_crop" | "forestry" | null;
+type ActiveChartType = "crop" | "forestry" | null;
 
 export function MapApp() {
     const mapModel = useMapModel(MAP_ID);
@@ -93,6 +95,7 @@ export function MapApp() {
 
     const [activeChart, setActiveChart] = useState<ActiveChartType>(null);
     const [forestryLocation, setForestryLocation] = useState<string>("keszthelyi_erdeszet_vallus");
+    const [nuts, setNuts] = useState<string>("AT11");
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
@@ -112,6 +115,7 @@ export function MapApp() {
     );
 
     const forestrySelector = useService<ForestrySelector>("app.ForestrySelector");
+    const nutsSelector = useService<NutsSelector>("app.NutsSelector");
 
     const { clickedForestryLocation } = useReactiveSnapshot(
         () => ({
@@ -119,6 +123,14 @@ export function MapApp() {
         }),
         [forestrySelector]
     );
+
+    const { clickedNuts } = useReactiveSnapshot(
+        () => ({
+            clickedNuts: nutsSelector.selectedNutsId
+        }),
+        [nutsSelector]
+    );
+
 
     useEffect(() => {
         if (clickedForestryLocation) {
@@ -130,7 +142,16 @@ export function MapApp() {
     const closeChartModal = () => {
         setActiveChart(null);
         forestrySelector.clearSelection();
+        nutsSelector.clearSelection();
     };
+
+    useEffect(() => {
+        if (clickedNuts) {
+            setNuts(clickedNuts);
+            setActiveChart("crop");
+        }
+    }, [clickedNuts]);
+
 
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
@@ -403,7 +424,7 @@ export function MapApp() {
                                         overflow="auto"
                                         maxHeight="400px"
                                         // dir="rtl"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                        // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                         marginBottom="10px"
                                     >
                                         <ChakraProvider theme={theme}>
@@ -608,15 +629,15 @@ export function MapApp() {
                                             label={intl.formatMessage({
                                                 id: "charts.zala_crop.button_title"
                                             })}
-                                            icon={<PiChartLineDownLight />}
-                                            onClick={() => setActiveChart("zala_crop")}
+                                            icon={<GiWheat />}
+                                            onClick={() => setActiveChart("crop")}
                                         />
 
                                         <ToolButton
                                             label={intl.formatMessage({
                                                 id: "charts.forestry.button_title"
                                             })}
-                                            icon={<PiChartLineDownLight />}
+                                            icon={<GiCircleForest />}
                                             onClick={() => setActiveChart("forestry")}
                                         />
 
@@ -649,16 +670,16 @@ export function MapApp() {
                 </TitledSection>
             </Flex>
 
-            <Modal isOpen={activeChart !== null} onClose={closeChartModal} size={"full"}>
+            <Modal isOpen={activeChart !== null} onClose={closeChartModal} isCentered>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent w="80vw" maxW="80vw">
                     <ModalHeader>
-                        {activeChart === "zala_crop" && "Zala Chart"}
+                        {activeChart === "crop" && "Crop Yield Chart"}
                         {activeChart === "forestry" && "Forestry Data Chart"}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {activeChart === "zala_crop" && <ChartComponentZala />}
+                        {activeChart === "crop" && <ChartComponentCropyield nutsId={nuts} />}
                         {activeChart === "forestry" && (
                             <ChartComponentForestry initialLocation={forestryLocation} />
                         )}

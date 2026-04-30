@@ -356,24 +356,45 @@ export class MainMapProvider implements MapConfigProvider {
                     isBaseLayer: true
                 }),
 
-                // Administrative boundaries
                 new GroupLayer({
                     title: "Administrative boundaries",
                     visible: true,
                     id: "administrative_boundaries",
                     layers: [this.createRegionLayer("vienna"), this.createRegionLayer("zala")]
                 }),
+                                
+                new SimpleLayer({
+                    id: "danube_basin_territorial_units",
+                    title: "Danube basin territorial units",
+                    description: "Danube basin territorial units. Click on a region to open the crop chart.",
+                    visible: false,
+                    olLayer: new VectorLayer({
+                        source: new VectorSource({
+                            url: "https://directed.dev.52north.org/api/collections/danube_basin_territorial_units/items?f=json&limit=65",
+                            format: new GeoJSON()
+                        }),
+                        style: new Style({
+                            fill: new Fill({
+                                color: "rgba(46, 158, 204, 0.5)" 
+                            }),
+                            stroke: new Stroke({
+                                color: "black",
+                                width: 3
+                            })
+                        }),
+                        properties: { title: "Nuts regions", type: "GeoJSON" }
+                    }),
+                    isBaseLayer: false
+                }),
 
-                // Aufruf der neuen Ebene (Layer) hier einfügen!
+
                 this.createForestryLayer(),
 
-                // Vienna model results
                 new GroupLayer({
                     title: "Vienna",
                     visible: false,
                     id: "vienna",
                     layers: [
-                        // Pluvial flood layers
                         new GroupLayer({
                             title: "Pluvial Flooding",
                             visible: false,

@@ -22,12 +22,10 @@ export class LayerHighlighterImpl implements LayerHighlighter {
     #layers: Reactive<SimpleLayer[]> = reactive([]);
 
     constructor(options: ServiceOptions<References>) {
-        console.log("test");
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.#layers.value = model?.layers.getAllLayers();
-            console.log(this.#layers.value);
         });
     }
 

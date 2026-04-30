@@ -11,3 +11,4 @@ export { LayerHighlighterImpl } from "./services/LayerHighlighter";
 export { LayerZoomImpl } from "./services/LayerZoom";
 export { StationSelectorImpl } from "./services/StationSelector";
 export { ForestrySelectorImpl } from "./services/ForestrySelector";
+export { NutsSelectorImpl } from "./services/NutsSelector";
