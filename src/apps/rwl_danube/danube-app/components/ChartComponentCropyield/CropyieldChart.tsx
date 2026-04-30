@@ -1,9 +1,11 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-
-import Highcharts from "highcharts/highstock";
-import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
+import "highcharts/modules/stock"; 
 import "highcharts/highcharts-more";
+import HighchartsReact from "highcharts-react-official";
+
+
 export type SeriesData = {
     name: string;
     data: number[][];
