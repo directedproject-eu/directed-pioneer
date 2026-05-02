@@ -121,7 +121,7 @@ messages:
       button: "Réteg letöltése"
       loading: "Letöltés előkészítése..."
       select_layer: "Válasszon ki egy letöltendő réteget"
-      description: "hA legördülő listában csak azok a rétegek érhetők el letöltésre, amelyek az „Operatív rétegek” között aktiválva vannak."
+      description: "A legördülő listában csak azok a rétegek érhetők el letöltésre, amelyek az „Operatív rétegek” között aktiválva vannak."
     operational_layers: "Operatív rétegek"
     select_basemap: "Alap térkép kiválasztása"
     legend:
@@ -142,12 +142,23 @@ messages:
         end_date: "Előrejelzés vége:"
         selected_date: "Kiválasztott dátum:"
   charts:
-    button_title: "Terménytáblázat"
-    title_chart1: "Növénykultúrák Zala megyében "
-    explanation1: "Ez a grafikon a Duna-régióban az összes modellben előre jelzett terméshozamok átlagértékét, 
-                    valamint a 20. és 80. percentilisét mutatja."
-    explanation2: "Nyugat-Duna régióban a nyári árpa és a lucerna esetében nem állt rendelkezésre elegendő 
-                    hozamadat a helyi szimulációkhoz. Ezért az osztrák szomszédos régió adatait használtuk fel."
+    zala_crop:
+      button_title: "Terménytáblázat"
+      title_chart1: "Növénykultúrák Zala megyében "
+      explanation1: "Ez a grafikon az előre jelzett"
+      keyword1: "mezőgazdasági"
+      explanation2: "terméshozamok átlagértékét, valamint a 20. és 80. percentilisét mutatja a Duna-régió összes modelljében, három különböző"
+      keyword2: "Közös Társadalmi-gazdasági Pálya (SSP)"
+      explanation3: "klímaváltozási kibocsátási forgatókönyv alapján."
+      explanation4: "Az eredmények utalhatnak"
+      keyword3: "mezőgazdasági és ökológiai aszályra"
+      explanation5: ", azonban a felhasználóknak javasolt óvatosan kezelniük ezeket az információkat, mivel a modellezett eredményeket függetlenül ellenőrizni kell."
+      explanation6: "Nyugat-Duna régióban a nyári árpa és a lucerna esetében nem állt rendelkezésre elegendő hozamadat a helyi szimulációkhoz. Ezért egy szomszédos osztrák régió adatait használtuk fel."
+    forestry:
+      button_title: "Erdészeti adatok"
+      modal_header: "Erdészeti adatok diagramja"
+      title_chart1: "Erdészeti adatok Zala megyében"
+      explanation1: "Ez a grafikon az erdészeti adatokat és a releváns mutatókat jeleníti meg a kiválasztott régióban."
   welcome_window:
     header: "Üdvözöljük a DIRECTED Data Fabric Duna-alkalmazásában!"
     body:
