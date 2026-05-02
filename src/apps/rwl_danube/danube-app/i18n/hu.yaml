@@ -121,7 +121,7 @@ messages:
       button: "Réteg letöltése"
       loading: "Letöltés előkészítése..."
       select_layer: "Válasszon ki egy letöltendő réteget"
-      description: "hA legördülő listában csak azok a rétegek érhetők el letöltésre, amelyek az „Operatív rétegek” között aktiválva vannak."
+      description: "A legördülő listában csak azok a rétegek érhetők el letöltésre, amelyek az „Operatív rétegek” között aktiválva vannak."
     operational_layers: "Operatív rétegek"
     select_basemap: "Alap térkép kiválasztása"
     legend:

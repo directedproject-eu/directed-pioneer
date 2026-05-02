@@ -1,3 +1,63 @@
+overrides:
+  "@open-pioneer/authentication":
+    auth-error: "Ein Fehler ist bei der Authentifizierung aufgetreten."
+  "@open-pioneer/authentication-keycloak":
+    loginFailed:
+      title: "Anmeldung fehlgeschlagen"
+      message: "Ein Fehler ist bei der Authentifizierung aufgetreten."
+  "@open-pioneer/basemap-switcher":
+    emptyBasemapLabel: "Ohne Hintergrundkarte"
+    layerNotAvailable: "Layer nicht verfügbar"
+    selected: "Ausgewählt"
+  "@open-pioneer/geolocation":
+    locateNotSupported: "Geolokalisierung wird nicht unterstützt."
+    locateMeStart: "Geolokalisierung starten"
+    locateMeEnd: "Geolokalisierung stoppen"
+    error: "Fehler"
+    permissionDenied: "Geolokalisierung wurde abgebrochen."
+    positionUnavailable: "Position der Geolokalisierung kann nicht ermittelt werden."
+    timeout: "Geolokalisierung wurde wegen Zeitüberschreitung abgebrochen."
+    unknownError: "Ein unerwarteter Fehler ist während der Geolokalisierung aufgetreten."
+  "@open-pioneer/map-navigation":
+    initial-extent:
+      title: "Auf Startausdehnung zoomen"
+    zoom-in:
+      title: "In Karte hineinzoomen"
+    zoom-out:
+      title: "Aus Karte herauszoomen"
+    view-backward:
+      title: "Eine Kartenansicht zurück"
+    view-forward:
+      title: "Eine Kartenansicht vor"
+  "@open-pioneer/legend":
+    altLabel: "Legendenbild für Layer {layerName}"
+    fallbackLabel: "Legende nicht verfügbar"
+    basemapLabel: "Hintergrundkarte"
+  "@open-pioneer/measurement":
+    measurementLabel: "Modus"
+    distance: "Entfernung"
+    area: "Fläche"
+    deleteMeasurementLabel: "Messungen löschen"
+    measurementInfoText: "Klicken Sie in die Karte, um eine Messung zu starten."
+    tooltips:
+      help: "Klicken Sie, um die Messung zu starten."
+      continue: "Doppelklicken Sie, um die Messung zu beenden."
+  "@open-pioneer/toc":
+    basemapsLabel: "Hintergrundkarten"
+    descriptionLabel: "Layerbeschreibung"
+    operationalLayerLabel: "Operationelle Layer"
+    childgroupLabel: "Layergruppe {title}"
+    missingLayers: "Es gibt keine Layer zum Anzeigen."
+    group:
+      expand: "Gruppe {title} ausklappen"
+      collapse: "Gruppe {title} einklappen"
+    error: "Fehler beim Erstellen des Karteninhalts."
+    layerNotAvailable: "Layer nicht verfügbar"
+    toolsLabel: "Kartenwerkzeuge"
+    tools:
+      hideAllLayers: "Alle Layer ausblenden"
+      collapseAllGroups: "Alle Gruppen einklappen"
+
 messages:
   basemapLabel: "Hintergrundkarte auswählen:"
   global:
@@ -30,14 +90,13 @@ messages:
   map:
     layer_select:
       heading: "Layer auswählen"
-      info1: "This component enables the viewing of different"
-      keyword1: "climate model"
-      info2: "projections within three"
+      info1: "Diese Komponente ermöglicht die Anzeige verschiedener"
+      keyword1: "Klimamodell"
+      info2: "-Projektionen innerhalb von drei verschiedenen"
       keyword2: "Shared Socioeconomic Pathway (SSP)"
-      info3: "climate change emission scenarios."
-      keyword3: "Variables"
-      info4: "can be selected at the bottom of this 
-        component and then toggled within the Operational Layers."
+      info3: "-Emissionsszenarien des Klimawandels."
+      keyword3: "Variablen"
+      info4: "können am unteren Rand dieser Komponente ausgewählt und dann in den Operational Layers umgeschaltet werden."
       model: "Modell"
       scenario: "Szenario"
       variable: "Variable"
@@ -72,7 +131,7 @@ messages:
         storm_damage: "Sturmschaden"
     slider:
       geosphere_historical:
-        precipitation: 👆Ziehen Sie den Schieberegler, um ein Datum für die täglichen Niederschlagssummen auszuwählen.
+        precipitation: "👆Ziehen Sie den Schieberegler, um ein Datum für die täglichen Niederschlagssummen auszuwählen."
         start_date: "Startdatum:"
         end_date: "Enddatum:"
         selected_date: "Ausgewähltes Datum:"
@@ -84,19 +143,15 @@ messages:
   charts:
     button_title: "Erntediagramm"
     title_chart1: "Anbauflächen in der Region Zala für "
-    explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of 
-      predicted"
-    keyword1: "agricultural"
-    explanation2: "crop yields across all models in the Danube region under three different"
+    explanation1: "Dieser Graph zeigt den Durchschnittswert sowie das 20. bis 80. Perzentil der vorhergesagten"
+    keyword1: "landwirtschaftlichen"
+    explanation2: "Ernteerträge über alle Modelle in der Donauregion unter drei verschiedenen"
     keyword2: "Shared Socio-economic Pathway (SSP)"
-    explanation3: "climate change emmission scenarios."
-    explanation4: "Results may be indicative of"
-    keyword3: "agricultural and ecological drought"
-    explanation5: ", however users are advised to exercise caution when applying this information,
-      as modeled reults should be verified independently."
-    explanation6: "There was insufficient yield data for summer barley and lucerne in Western
-      Danubia for local simulations. Therefore, data from a neighboring region in
-      Austria was utilized."
+    explanation3: "Emissionsszenarien des Klimawandels."
+    explanation4: "Die Ergebnisse können ein Indikator für"
+    keyword3: "landwirtschaftliche und ökologische Dürren"
+    explanation5: "sein, jedoch wird den Nutzern geraten, bei der Anwendung dieser Informationen Vorsicht walten zu lassen, da modellierte Ergebnisse unabhängig überprüft werden sollten."
+    explanation6: "Für die lokalen Simulationen gab es in Westtransdanubien unzureichende Ertragsdaten für Sommergerste und Luzerne. Daher wurden Daten aus einer benachbarten Region in Österreich verwendet."
   welcome_window:
     header: "Willkommen in der Danube App des DIRECTED Data Fabric!"
     body:
@@ -115,7 +170,7 @@ messages:
     bottomRight: "Werkzeuge"
   measurementTitle: "Messung"
   layer_swipe:
-    title: "de: Select Layers for Comparison"
-    description: "de: Only layers which have been selected in the Operational Layers are viewable for comparison."
-    left: "de: Select Left Layer"
-    right: "de: Select Right Layer"
+    title: "Layer zum Vergleichen auswählen"
+    description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
+    left: "Linken Layer auswählen"
+    right: "Rechten Layer auswählen"

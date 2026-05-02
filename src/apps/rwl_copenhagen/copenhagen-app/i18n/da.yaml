@@ -1,111 +1,109 @@
 overrides:
   "@open-pioneer/basemap-switcher":
-    emptyBasemapLabel: "da:Without basemap"
-    layerNotAvailable: "da:Layer not available"
-    selected: "da:Selected"
+    emptyBasemapLabel: "Uden baggrundskort"
+    layerNotAvailable: "Lag ikke tilgængeligt"
+    selected: "Valgt"
   "@open-pioneer/geolocation":
-    locateNotSupported: da:Geolocation is not supported.
-    locateMeStart: da:Start geolocation
-    locateMeEnd: da:Stop geolocation
-    error: da:Error
-    permissionDenied: da:Geolocation was canceled.
-    positionUnavailable: da:Geolocation position cannot be determined.
-    timeout: da:Geolocation was canceled due to timeout.
-    unknownError: da:An unexpected error occurred during geolocation.
+    locateNotSupported: "Geolokation understøttes ikke."
+    locateMeStart: "Start geolokation"
+    locateMeEnd: "Stop geolokation"
+    error: "Fejl"
+    permissionDenied: "Geolokation blev annulleret."
+    positionUnavailable: "Geolokationens position kan ikke bestemmes."
+    timeout: "Geolokation blev annulleret på grund af timeout."
+    unknownError: "Der opstod en uventet fejl under geolokationen."
   "@open-pioneer/map-navigation":
     initial-extent:
-      title: "da: Zoom to initial extent"
+      title: "Zoom til startudstrækning"
     zoom-in:
-      title: "da: Zoom in map"
+      title: "Zoom ind på kort"
     zoom-out:
-      title: "da: Zoom out map"
+      title: "Zoom ud på kort"
     view-backward:
-      title: "da: One map view backward"
+      title: "En kortvisning tilbage"
     view-forward:
-      title: "da: One map view forward"
+      title: "En kortvisning frem"
   "@open-pioneer/measurement":
-    measurementLabel: "da:Mode"
-    distance: "da:Distance"
-    area: "da:Area"
-    deleteMeasurementLabel: "da:Delete measurements"
-    measurementInfoText: "da:Click in the map to start a measurement."
+    measurementLabel: "Tilstand"
+    distance: "Afstand"
+    area: "Areal"
+    deleteMeasurementLabel: "Slet målinger"
+    measurementInfoText: "Klik på kortet for at starte en måling."
     tooltips:
-      help: "da:Click to start measuring."
-      continue: "da:Double click to end the measurement."
+      help: "Klik for at starte måling."
+      continue: "Dobbeltklik for at afslutte målingen."
   "@open-pioneer/legend":
-    altLabel: da:legend image for layer {layerName}
-    fallbackLabel: da:legend not available
-    basemapLabel: da:Basemap
+    altLabel: "tegnforklaring for lag {layerName}"
+    fallbackLabel: "tegnforklaring ikke tilgængelig"
+    basemapLabel: "Baggrundskort"
   "@open-pioneer/toc":
-    basemapsLabel: "da:Basemaps"
-    descriptionLabel: "da:Layer description"
-    operationalLayerLabel: "da:Operational layers"
-    childgroupLabel: "da:Layer group {title}"
-    missingLayers: "da:There are no layers to display."
+    basemapsLabel: "Baggrundskort"
+    descriptionLabel: "Lagbeskrivelse"
+    operationalLayerLabel: "Operationelle lag"
+    childgroupLabel: "Laggruppe {title}"
+    missingLayers: "Der er ingen lag at vise."
     group:
-      expand: "da:Expand group {title}"
-      collapse: "da:Collapse group {title}"
-    error: "da:Error while creating map content."
-    layerNotAvailable: "da:Layer not available"
-    toolsLabel: "da:Map tools"
+      expand: "Udvid gruppe {title}"
+      collapse: "Skjul gruppe {title}"
+    error: "Fejl under oprettelse af kortindhold."
+    layerNotAvailable: "Lag ikke tilgængeligt"
+    toolsLabel: "Kortværktøjer"
     tools:
-      hideAllLayers: "da:Hide all layers"
-      collapseAllGroups: "da:Collapse all groups"
+      hideAllLayers: "Skjul alle lag"
+      collapseAllGroups: "Skjul alle grupper"
 
 messages:
-  heading: "da:RWL The Capital Region of Denmark"
-  basemapLabel: "da:Select basemap:"
+  heading: "RWL Region Hovedstaden"
+  basemapLabel: "Vælg baggrundskort:"
   description:
-    title: "da:Description"
-    text1: "da:This platform serves as a way to learn about"
-    text2: "da:in the lens of"
-    keyword1: "da:disaster risk"
-    keyword2: "da:climate change"
+    title: "Beskrivelse"
+    text1: "Denne platform tjener som en måde at lære om"
+    text2: "set i lyset af"
+    keyword1: "katastroferisiko"
+    keyword2: "klimaforandringer"
   zoom_buttons:
-    egedal: "da:Zoom to Egedal"
-    frederikssund: "da:Zoom to Frederikssund"
-    halsnaes: "da:Zoom to Halsnaes"
-    lejre: "da:Zoom to Lejre"
-    roskilde: "da:Zoom to Roskilde"
+    egedal: "Zoom til Egedal"
+    frederikssund: "Zoom til Frederikssund"
+    halsnaes: "Zoom til Halsnæs"
+    lejre: "Zoom til Lejre"
+    roskilde: "Zoom til Roskilde"
   layer_swipe:
-    title: "da:Select Layers for Comparison"
-    description: "da:Only layers which have been selected in the Operational Layers are viewable for comparison."
-    left: "da: Select Left Layer"
-    right: "da: Select Right Layer"
+    title: "Vælg lag til sammenligning"
+    description: "Kun lag, der er valgt under Operationelle lag, kan ses til sammenligning."
+    left: "Vælg venstre lag"
+    right: "Vælg højre lag"
   forecast:
-    sea_level: "da:👆Drag the Slider to Select a Date and Time for Sea Level Mean Deviation Forecasts"
-    total_precip: "da:👆Drag the Slider to Select a Date and Time for Total Precipitation Forecasts"
-    precip_rate: "da:👆Drag the Slider to Select a Date and Time for Precipitation Rate Forecasts"
-    start_date: "da:Forecast Start Date:"
-    end_date: "da:Forecast End Date:"
-    selected_date: "da:Selected Date:"
+    sea_level: "👆Træk i skyderen for at vælge dato og tidspunkt for prognoser for gennemsnitlig vandstandsafvigelse"
+    total_precip: "👆Træk i skyderen for at vælge dato og tidspunkt for prognoser for samlet nedbør"
+    precip_rate: "👆Træk i skyderen for at vælge dato og tidspunkt for prognoser for nedbørsintensitet"
+    start_date: "Prognosens startdato:"
+    end_date: "Prognosens slutdato:"
+    selected_date: "Valgt dato:"
   legend:
-    title: "da:Legend"
-    units: "da:Units"
+    title: "Tegnforklaring"
+    units: "Enheder"
   slider: 
-    rainfallLevel: "da: Rainfall Level (mm)"
-    stormSurgeLevel: "da: Storm Surge Level (cm)"
-    selectedLevel: "da: Selected Level:"
+    rainfallLevel: "Nedbørsniveau (mm)"
+    stormSurgeLevel: "Stormflodsniveau (cm)"
+    selectedLevel: "Valgt niveau:"
   map:
     download:
-      heading: "da:Download Layer"
-      no_layers: "da:No layers available for download"
-      button: "da:Donwload Layer"
-      loading: "da:Preparing download..."
-      select_layer: "da:Select a layer to download"
-      description: "da:Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."
+      heading: "Download lag"
+      no_layers: "Ingen lag tilgængelige til download"
+      button: "Download lag"
+      loading: "Forbereder download..."
+      select_layer: "Vælg et lag til download"
+      description: "Kun de lag, der er aktiveret under 'Operationelle lag', er tilgængelige for download i rullelisten."
     flood_layer_selector: 
-      title: "da: Flood Category Selector"
-      description: "da: The flood category selection populates the Operational Layers and Slider with the selected flood's 
-        model outputs. To view these layers in the map, make sure the checkmark next to the desired model is visible
-        in the Operational Layers."
-      floodtype: "da: To view model outputs, please choose a flooding category"
+      title: "Valg af oversvømmelseskategori"
+      description: "Valget af oversvømmelseskategori udfylder 'Operationelle lag' og skyderen med den valgte oversvømmelses modeldata. For at se disse lag på kortet skal du sørge for, at fluebenet ud for den ønskede model er synligt under 'Operationelle lag'."
+      floodtype: "Vælg venligst en oversvømmelseskategori for at se modeldata"
 
   ariaLabel:
-    header: "da:Header bar"
-    footer: "da:Base bar with scale information, spatial reference system and coordinate display"
-    map: "da:Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."
-    topLeft: "da:Measurement"
-    topRight: "da:Overview map and basemap switcher"
-    bottomRight: "da:Maptools"
-  measurementTitle: "da:Measurement"
+    header: "Sidehoved"
+    footer: "Bundlinje med målestoksinformation, rumligt referencesystem og koordinatvisning"
+    map: "Kort. Brug piletasterne til at flytte kortet. Zoom ind med plusknappen og zoom ud med minusknappen."
+    topLeft: "Måling"
+    topRight: "Oversigtskort og baggrundskortvælger"
+    bottomRight: "Kortværktøjer"
+  measurementTitle: "Måling"
