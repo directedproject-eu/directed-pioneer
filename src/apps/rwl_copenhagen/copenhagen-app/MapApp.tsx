@@ -451,7 +451,7 @@ export function MapApp() {
 
                                                 <Select
                                                     placeholder={intl.formatMessage({
-                                                        id: "layer_swipe.left"
+                                                        id: "layer_swipe.right"
                                                     })}
                                                     value={selectedRightLayer ?? ""}
                                                     onChange={(e) =>
