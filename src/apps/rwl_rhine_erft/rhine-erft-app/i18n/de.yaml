@@ -1,4 +1,5 @@
 messages:
+  title: "RWL Die Rhein-Erft Region"
   ariaLabel:
     header: "Kopfleiste"
     footer: "Fussleiste mit Maßstabsangabe, Raumbezugssystem und Koordinatenanzeige"
@@ -6,9 +7,12 @@ messages:
     topLeft: "Messen"
     topRight: "Übersichtskarte und Auswahl der Hintergrundkarte"
     bottomRight: "Kartenwerkzeuge"
-  basemapLabel: "Hintergrundkarte auswählen:"
+  basemapLabel: "Basemap auswählen:"
   measurementTitle: "Messen"
   charts:
+    chart_title: "Rhein-Erft Erntediagramm"
+    chart_heading1: "Ernteerträge in"
+    chart_heading2: "für"
     button_title: "Erntediagramm"
     title_chart1: "Anbauflächen in der Rhein-Erft Region für "
     explanation: "Dieser Graph zeigt den Durchschnittswert sowie das 20. bis 80. Perzentil der vorhergesagten Ernteerträge über alle Modelle in der Rhein-Erft-Region."
@@ -25,3 +29,34 @@ messages:
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
     left: "Linken Layer auswählen"
     right: "Rechten Layer auswählen"
+  legends:
+    water_depth:
+      extraordinary: "Starkregen - Wassertiefe (außergewöhnlich)"
+      extreme: "Starkregen - Wassertiefe (extrem)"
+    flow_velocity:
+      extraordinary: "Starkregen - Fließgeschwindigkeit (außergewöhnlich)"
+      extreme: "Starkregen - Fließgeschwindigkeit (extrem)"
+    descriptions: 
+      bkg: "Die Ebene wird vom Bundesamt für Kartografie und Geodäsie (BKG) bereitgestellt und zeigt Simulationsergebnisse für potenzielle Starkregenszenarien an. Weitere Informationen finden Sie online unter https://gdz.bkg.bund.de/index.php/default/wms-hinweiskarte-starkregengefahren-wms-starkregen.html."
+      geobasis_nrw: "Die Ebene wird vom Bezirksrat Köln bereitgestellt. Weitere Informationen finden Sie online unter https://www.bezreg-koeln.nrw.de/geobasis-nrw/webdienste/geodatendienste."
+    terrain: 
+      slope: "Geländeneigung"
+      steps: "Geländestufen"
+      shading: "Geländeschattierung"
+      model_overview: "Digitales Geländemodell – Überblick"
+      model_elevation: "Digitales Geländemodell – Höhenebenen"
+  crops: 
+    ALFA: "Luzerne"
+    CORN: "Körnermais"
+    GMAI: "Grünmais"
+    POTA: "Kartoffeln"
+    SBAR: "Sommergerste"
+    SOYB: "Sojabohnen"
+    SUNF: "Sonnenblumen"
+    TRIT: "Triticale"  
+    WBAR: "Wintergerste"  
+    WRAP: "Winterraps"  
+    WRYE: "Roggen und Menggetreide" 
+    WWHT: "Winterweizen"
+    OATS: "Hafer"         
+    SUGB: "Zuckerrüben"   

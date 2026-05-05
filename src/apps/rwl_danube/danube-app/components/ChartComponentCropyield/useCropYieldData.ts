@@ -8,6 +8,7 @@ import {
     fetchAndProcessCropData, 
     distinctColors 
 } from "./utils";
+import { useIntl } from "open-pioneer:react-hooks";
 
 export function useCropYieldData(initialNutsId?: string) {
     const [selectedLocation, setSelectedLocation] = useState<string>(initialNutsId || "RO11");
@@ -21,7 +22,7 @@ export function useCropYieldData(initialNutsId?: string) {
     const [isChartLoading, setIsChartLoading] = useState<boolean>(true);
 
     const prevLocation = useRef<string | null>(null);
-
+    const intl = useIntl();
     // Sync initial NUTS ID
     useEffect(() => {
         if (initialNutsId && initialNutsId !== selectedLocation) {
@@ -72,7 +73,8 @@ export function useCropYieldData(initialNutsId?: string) {
                     selectedLocation, 
                     scenarioUpper, 
                     crop, 
-                    distinctColors[index % distinctColors.length]
+                    distinctColors[index % distinctColors.length],
+                    intl
                 )
             )
         )

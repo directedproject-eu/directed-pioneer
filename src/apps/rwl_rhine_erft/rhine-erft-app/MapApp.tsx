@@ -183,7 +183,7 @@ export function MapApp() {
                         py={1}
                     >
                         <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            RWL The Rhine Erft Region
+                            {intl.formatMessage({ id: "title" })}
                         </SectionHeading>
                     </Box>
                 }
@@ -244,8 +244,7 @@ export function MapApp() {
                                 <FormControl>
                                     <FormLabel mt={2}>
                                         <Text as="b">
-                                            {/* {intl.formatMessage({ id: "basemapLabel" })} */}
-                                            Basemap
+                                            {intl.formatMessage({ id: "basemapLabel" })}
                                         </Text>
                                     </FormLabel>
                                     <BasemapSwitcher
@@ -433,7 +432,7 @@ export function MapApp() {
             <Modal isOpen={isOpenChart} onClose={onCloseChart} isCentered>
                 <ModalOverlay />
                 <ModalContent w="80vw" maxW="80vw">
-                    <ModalHeader>Rhine-Erft Chart</ModalHeader>
+                    <ModalHeader>{intl.formatMessage({ id: "charts.chart_title" })}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <ChartComponentRhineErft></ChartComponentRhineErft>

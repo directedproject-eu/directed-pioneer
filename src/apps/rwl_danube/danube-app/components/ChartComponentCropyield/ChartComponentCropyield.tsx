@@ -17,7 +17,7 @@ import { useIntl } from "open-pioneer:react-hooks";
 import CropyieldChart from "./CropyieldChart";
 import { TaxonomyInfo } from "taxonomy";
 import { useCropYieldData } from "./useCropYieldData";
-import { locations, CODE_TO_DISPLAY_NAME, NUTS_REGIONS } from "./utils";
+import { locations, NUTS_REGIONS } from "./utils";
 interface Props {
     nutsId?: string;
 }
@@ -97,7 +97,7 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                                         mr={4}
                                         mb={2}
                                     >
-                                        {CODE_TO_DISPLAY_NAME[cropCode]} 
+                                        {intl.formatMessage({ id: `crops.${cropCode}` })}
                                     </Checkbox>
                                 ))
                             )}

@@ -21,22 +21,26 @@ export const NUTS_REGIONS: Record<string, string> = {
 export const locations = Object.keys(NUTS_REGIONS);
 
 
-export const CODE_TO_DISPLAY_NAME: Record<string, string> = {
-    "ALFA": "Lucerne",
-    "CORN": "Corn maize",
-    "GMAI": "Green maize",
-    "POTA": "Potatoes",
-    "SBAR": "Spring barley",
-    "SOYB": "Soya beans",
-    "SUNF": "Sunflowers",
-    "TRIT": "Triticale",
-    "WBAR": "Winter barley",
-    "WRAP": "Winter rape",
-    "WRYE": "Rye and maslin",
-    "WWHT": "Winter wheat"
-};
+// export const CODE_TO_DISPLAY_NAME: Record<string, string> = {
+//     "ALFA": "Lucerne",
+//     "CORN": "Corn maize",
+//     "GMAI": "Green maize",
+//     "POTA": "Potatoes",
+//     "SBAR": "Spring barley",
+//     "SOYB": "Soya beans",
+//     "SUNF": "Sunflowers",
+//     "TRIT": "Triticale",
+//     "WBAR": "Winter barley",
+//     "WRAP": "Winter rape",
+//     "WRYE": "Rye and maslin",
+//     "WWHT": "Winter wheat"
+// };
 
-export const ALL_CROP_CODES = Object.keys(CODE_TO_DISPLAY_NAME);
+// export const ALL_CROP_CODES = Object.keys(CODE_TO_DISPLAY_NAME);
+export const ALL_CROP_CODES = [
+    "ALFA", "CORN", "GMAI", "POTA", "SBAR", "SOYB", 
+    "SUNF", "TRIT", "WBAR", "WRAP", "WRYE", "WWHT"
+];
 
 export const distinctColors = [
     "#E6194B", "#3CB44B", "#FFE119", "#4363D8", "#F58231",
@@ -52,7 +56,7 @@ export const checkCropAvailability = async (location: string): Promise<string[]>
             const response = await fetch(`${baseUrl}/${cropCode}.csv`, { method: "HEAD" });
             return response.ok ? cropCode : null;
         } catch (error) {
-            return null; 
+            return null;    
         }
     });
 
@@ -64,7 +68,8 @@ export const fetchAndProcessCropData = async (
     location: string, 
     scenario: string, 
     cropCode: string, 
-    color: string
+    color: string,
+    intl: PackageIntl 
 ): Promise<SeriesData[] | null> => {
     const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/crop_yield/${location}/${scenario}/${cropCode}.csv`;
 
@@ -81,6 +86,7 @@ export const fetchAndProcessCropData = async (
                 complete: (results) => {
                     const yearlyGroups: Record<number, number[]> = {};
 
+                    // ... keep your math and sorting logic exactly the same ...
                     results.data.forEach((row: Record<string, string>) => {
                         const year = Number(row.Year);
                         const yieldPredn = parseFloat(row["Yield.Predn"]);
@@ -124,9 +130,15 @@ export const fetchAndProcessCropData = async (
                         return;
                     }
 
+                    // GET TRANSLATIONS HERE
+                    const cropName = intl.formatMessage({ id: `crops.${cropCode}` });
+                    // Provide fallback strings just in case the YAML is missing these keys
+                    const percentileText = intl.formatMessage({ id: "charts.percentile" });
+                    const medianText = intl.formatMessage({ id: "charts.median" });
+
                     resolve([
                         {
-                            name: `${CODE_TO_DISPLAY_NAME[cropCode]} (20-80 Percentile)`,
+                            name: `${cropName} (${percentileText})`,
                             data: rangeData,
                             type: "arearange",
                             color: color,
@@ -138,7 +150,7 @@ export const fetchAndProcessCropData = async (
                             showInLegend: true,
                         },
                         {
-                            name: `${CODE_TO_DISPLAY_NAME[cropCode]} (Median)`,
+                            name: `${cropName} (${medianText})`,
                             data: medianData,
                             type: "line",
                             color: color,
