@@ -5,15 +5,6 @@ import { useState, ChangeEvent } from "react";
 import {
     Box,
     Button,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    FormLabel,
-    FormControl,
     Input,
     Select,
     useDisclosure,
@@ -25,8 +16,12 @@ import {
     PopoverContent, 
     PopoverTrigger,
     PopoverArrow, 
-    IconButton
-} from "@open-pioneer/chakra-integration";
+    IconButton,
+    Dialog,
+    Field,
+    NativeSelect,
+    HoverCard
+} from "@chakra-ui/react";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater, FaInfo } from "react-icons/fa";
 import { useService } from "open-pioneer:react-hooks";
@@ -279,253 +274,263 @@ export function SaferPlacesFloodMap() {
     return (
         <Box>
             <ToolButton label="Run Flood Models" icon={<FaWater />} onClick={onOpen} />
-            <Modal closeOnOverlayClick={true} isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>
-                        {intl.formatMessage({id: "modal.header"})}
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        {!tokenSubmitted ? (
-                            // --- TOKEN INPUT VIEW (Page 1) ---
-                            <VStack spacing={4} align="stretch">
-                                <Flex align="center">
-                                    <Text fontWeight="semibold">
-                                        {intl.formatMessage({id: "modal.credentials"})}
-                                    </Text>
-                                </Flex>
-                                <FormControl isRequired>
-                                    <FormLabel htmlFor="user">
-                                        {intl.formatMessage({id: "modal.userName"})}
-                                    </FormLabel>
-                                    <Input
-                                        type="text"
-                                        id="user"
-                                        value={userInput}
-                                        onChange={handleUserInputChange}
-                                        placeholder={intl.formatMessage({id: "placeholders.info1"})}
-                                        variant="outline"
-                                    />
-                                </FormControl>
-                                <FormControl isRequired>
-                                    <FormLabel htmlFor="token">
-                                        {intl.formatMessage({id: "modal.token"})}
-                                    </FormLabel>
-                                    <Input
-                                        type="password"
-                                        id="token"
-                                        value={tokenInput}
-                                        onChange={handleTokenInputChange}
-                                        placeholder={intl.formatMessage({id: "placeholders.info2"})}
-                                        variant="outline"
-                                    />
-                                </FormControl>
-                                <Button
-                                    mt={4}
-                                    color={"white"}
-                                    bg={"#2e9ecc"}
-                                    onClick={handleCredentialsSubmit}
-                                    // Disable if either field is empty
-                                    isDisabled={!tokenInput.trim() || !userInput.trim()}
-                                >
-                                    {intl.formatMessage({id: "modal.enter"})}
-                                </Button>
-                                {error && <p style={{ color: "red" }}>Error: {error}</p>}
-                            </VStack>
-                        ) : (
-                            // --- MODEL CONFIGURATION VIEW (Page 2) ---
-                            <VStack spacing={4} align="stretch">
-                                <Flex justify="space-between" align="center" mb={2}>
-                                    <Text fontWeight="semibold">
-                                        🌊 {intl.formatMessage({id: "modal.configuration"})}
-                                    </Text>
-                                    <Button
-                                        justifyContent="flex-end"
-                                        size="sm"
-                                        variant="ghost"
-                                        onClick={() => setTokenSubmitted(false)}
-                                    >
-                                        ← {intl.formatMessage({id: "modal.credentialChangeButton"})}
-                                    </Button>
-                                </Flex>
-                                <Flex justify="flex-start" align="center" mb={1} width="100%">
-                                    <Text width="100%">
-                                        {" "}
-                                        {intl.formatMessage({
-                                            id: "description_saferplaces.text1"
-                                        })}{" "}
-                                        <Button
-                                            variant="link"
-                                            color="#2e9ecc"
-                                            onClick={() => setActiveKeyword("pluvial flood")}
-                                        >
-                                            {intl.formatMessage({
-                                                id: "description_saferplaces.keyword1"
-                                            })}
-                                        </Button>{" "}
-                                        {intl.formatMessage({
-                                            id: "description_saferplaces.text2"
-                                        })}{" "}
-                                        <Button
-                                            variant="link"
-                                            color="#2e9ecc"
-                                            onClick={() => setActiveKeyword("coastal flood")}
-                                        >
-                                            {intl.formatMessage({
-                                                id: "description_saferplaces.keyword2"
-                                            })}
-                                        </Button>{" "}
-                                        {intl.formatMessage({
-                                            id: "description_saferplaces.text3"
-                                        })}
-                                        .
-                                    </Text>
-                                </Flex>
-                                {activeKeyword && (
-                                    <Flex>
-                                        <TaxonomyInfo
-                                            keyword={activeKeyword}
-                                            onClose={() => setActiveKeyword(null)}
-                                        />
+            <Dialog.Root closeOnInteractOutside={true} open={isOpen} onOpenChange={onClose}>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                    <Dialog.Content>
+                        <Dialog.Header>
+                            {intl.formatMessage({id: "modal.header"})}
+                        </Dialog.Header>
+                        <Dialog.CloseTrigger />
+                        <Dialog.Body>
+                            {!tokenSubmitted ? (
+                                // --- TOKEN INPUT VIEW (Page 1) ---
+                                <VStack gap={4} align="stretch">
+                                    <Flex align="center">
+                                        <Text fontWeight="semibold">
+                                            {intl.formatMessage({id: "modal.credentials"})}
+                                        </Text>
                                     </Flex>
-                                )}
-                                <FormControl isRequired>
-                                    <FormLabel padding={0}> 
-                                        {intl.formatMessage({id: "modal.location"})}
-                                    </FormLabel>
-                                    <Select
-                                        id="location"
-                                        value={selectedLocation}
-                                        onChange={handleLocationChange}
-                                    >
-                                        <option value="">
-                                            {intl.formatMessage({id: "modal.selectLocation"})}
-                                        </option>
-                                        {Object.keys(locationDemFiles).map((locationName) => (
-                                            <option key={locationName} value={locationName}>
-                                                {locationName}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <FormControl isRequired>
-                                    <FormLabel padding={0}> 
-                                        {intl.formatMessage({id: "modal.model"})} 
-                                    </FormLabel>
-                                    <Select
-                                        id="model"
-                                        value={model}
-                                        placeholder={intl.formatMessage({id: "modal.selectModel"})} 
-                                        onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                                            setModel(e.target.value)
-                                        }
-                                    >
-                                        <option value="safer_rain">Safer Rain</option>
-                                        <option value="safer_coast">Safer Coast</option>
-                                    </Select>
-                                </FormControl>
-
-                                {model === "safer_rain" && (
-                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
-                                        <PopoverTrigger>
-                                            <IconButton
-                                                marginLeft="2px"
-                                                size="s"
-                                                aria-label="Info"
-                                                icon={<FaInfo />}
-                                                variant="ghost"
-                                                color="black" />
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <PopoverArrow />
-                                            <PopoverBody overflow="auto">
-                                                {intl.formatMessage({ id: "info_icon_saferrain.description" })}
-                                            </PopoverBody>
-                                        </PopoverContent>
-                                    </Popover><FormControl isRequired>
-                                        <FormLabel padding={0} htmlFor="rain">
-                                            {intl.formatMessage({id: "modal.inputRain"})}{" "}
-                                        </FormLabel>
+                                    <Field.Root required>
+                                        <Field.Label htmlFor="user">
+                                            {intl.formatMessage({id: "modal.userName"})}
+                                        </Field.Label>
                                         <Input
                                             type="text"
-                                            id="rain"
-                                            value={rainIntensity}
-                                            onChange={handleRainIntensityChange}
-                                            placeholder={intl.formatMessage({id: "placeholders.info3"})}
-                                            variant="outline" />
-                                    </FormControl></>
-                                )}
-
-                                {model === "safer_coast" && (
-                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
-                                        <PopoverTrigger>
-                                            <IconButton
-                                                marginLeft="2px"
-                                                size="s"
-                                                aria-label="Info"
-                                                icon={<FaInfo />}
-                                                variant="ghost"
-                                                color="black" />
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <PopoverArrow />
-                                            <PopoverBody overflow="auto">
-                                                {intl.formatMessage({ id: "info_icon_safercoast.description" })}
-                                            </PopoverBody>
-                                        </PopoverContent>
-                                    </Popover><FormControl isRequired>
-                                        <FormLabel padding={0} htmlFor="esl">
-                                            {intl.formatMessage({id: "modal.inputSea"})}
-                                        </FormLabel>
+                                            id="user"
+                                            value={userInput}
+                                            onChange={handleUserInputChange}
+                                            placeholder={intl.formatMessage({id: "placeholders.info1"})}
+                                            variant="outline"
+                                        />
+                                    </Field.Root>
+                                    <Field.Root required>
+                                        <Field.Label htmlFor="token">
+                                            {intl.formatMessage({id: "modal.token"})}
+                                        </Field.Label>
                                         <Input
-                                            type="number"
-                                            id="esl"
-                                            value={extremeSeaLevel === null ? "" : extremeSeaLevel}
-                                            onChange={handleESLChange}
-                                            placeholder={intl.formatMessage({id: "placeholders.info4"})}
-                                            variant="outline" />
-                                    </FormControl></>
-                                )}
-                                {generationStatus && <p>Status: {generationStatus}</p>}
-                                {error && <p style={{ color: "red" }}>Error: {error}</p>}
-                                {downloadLink && (
-                                    <Button color={"white"} bg={"#2e9ecc"}>
-                                        {" "}
-                                        <a
-                                            href={downloadLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {intl.formatMessage({id: "modal.downloadMap"})}
-                                        </a>
+                                            type="password"
+                                            id="token"
+                                            value={tokenInput}
+                                            onChange={handleTokenInputChange}
+                                            placeholder={intl.formatMessage({id: "placeholders.info2"})}
+                                            variant="outline"
+                                        />
+                                    </Field.Root>
+                                    <Button
+                                        mt={4}
+                                        color={"white"}
+                                        bg={"#2e9ecc"}
+                                        onClick={handleCredentialsSubmit}
+                                        // Disable if either field is empty
+                                        disabled={!tokenInput.trim() || !userInput.trim()}
+                                    >
+                                        {intl.formatMessage({id: "modal.enter"})}
                                     </Button>
-                                )}
-                            </VStack>
-                        )}
-                    </ModalBody>
-                    <ModalFooter display="flex" justifyContent="space-between">
-                        {tokenSubmitted && (
-                            <>
-                                <Button
-                                    color={"white"}
-                                    bg={"#2e9ecc"}
-                                    onClick={handleGenerateMap}
-                                    disabled={
-                                        !selectedLocation ||
-                                        (model === "safer_rain" && !rainIntensity) || // Only rainIntensity for safer_rain
-                                        (model === "safer_coast" && extremeSeaLevel === 0) || // Only ESL for safer_coast
-                                        !!jobId
-                                    }
-                                >
-                                    {intl.formatMessage({id: "modal.runModel"})}
-                                </Button>
-                            </>
-                        )}
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+                                    {error && <p style={{ color: "red" }}>Error: {error}</p>}
+                                </VStack>
+                            ) : (
+                                // --- MODEL CONFIGURATION VIEW (Page 2) ---
+                                <VStack gap={4} align="stretch">
+                                    <Flex justify="space-between" align="center" mb={2}>
+                                        <Text fontWeight="semibold">
+                                            🌊 {intl.formatMessage({id: "modal.configuration"})}
+                                        </Text>
+                                        <Button
+                                            justifyContent="flex-end"
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setTokenSubmitted(false)}
+                                        >
+                                            ← {intl.formatMessage({id: "modal.credentialChangeButton"})}
+                                        </Button>
+                                    </Flex>
+                                    <Flex justify="flex-start" align="center" mb={1} width="100%">
+                                        <Text width="100%">
+                                            {" "}
+                                            {intl.formatMessage({
+                                                id: "description_saferplaces.text1"
+                                            })}{" "}
+                                            <Button
+                                                variant="plain"
+                                                color="#2e9ecc"
+                                                onClick={() => setActiveKeyword("pluvial flood")}
+                                            >
+                                                {intl.formatMessage({
+                                                    id: "description_saferplaces.keyword1"
+                                                })}
+                                            </Button>{" "}
+                                            {intl.formatMessage({
+                                                id: "description_saferplaces.text2"
+                                            })}{" "}
+                                            <Button
+                                                variant="plain"
+                                                color="#2e9ecc"
+                                                onClick={() => setActiveKeyword("coastal flood")}
+                                            >
+                                                {intl.formatMessage({
+                                                    id: "description_saferplaces.keyword2"
+                                                })}
+                                            </Button>{" "}
+                                            {intl.formatMessage({
+                                                id: "description_saferplaces.text3"
+                                            })}
+                                            .
+                                        </Text>
+                                    </Flex>
+                                    {activeKeyword && (
+                                        <Flex>
+                                            <TaxonomyInfo
+                                                keyword={activeKeyword}
+                                                onClose={() => setActiveKeyword(null)}
+                                            />
+                                        </Flex>
+                                    )}
+                                    <Field.Root required>
+                                        <Field.Label padding={0}> 
+                                            {intl.formatMessage({id: "modal.location"})}
+                                        </Field.Label>
+                                        <NativeSelect.Root
+                                            id="location"
+                                        >
+                                            <NativeSelect.Field 
+                                                placeholder={intl.formatMessage({id: "modal.selectLocation"})}
+                                                onChange={handleLocationChange}
+                                                value={selectedLocation}
+                                            >
+                                                {Object.keys(locationDemFiles).map((locationName) => (
+                                                    <option key={locationName} value={locationName}>
+                                                        {locationName}
+                                                    </option>
+                                                ))}
+                                            </NativeSelect.Field>
+                                        </NativeSelect.Root>
+                                    </Field.Root>
+
+                                    <Field.Root required>
+                                        <Field.Label padding={0}> 
+                                            {intl.formatMessage({id: "modal.model"})} 
+                                        </Field.Label>
+                                        <NativeSelect.Root
+                                            id="model"
+                                        >
+                                            <NativeSelect.Field
+                                                value={model}
+                                                placeholder={intl.formatMessage({id: "modal.selectModel"})}
+                                                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                                                    setModel(e.target.value)
+                                                }
+                                            >
+                                                <option value="safer_rain">Safer Rain</option>
+                                                <option value="safer_coast">Safer Coast</option>
+                                            </NativeSelect.Field>
+                                        </NativeSelect.Root>
+                                    </Field.Root>
+
+                                    {model === "safer_rain" && (
+                                        <><HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement: "top"}}>
+                                            <HoverCard.Trigger asChild>
+                                                <IconButton
+                                                    marginLeft="2px"
+                                                    size="sm"
+                                                    aria-label="Info"
+                                                    variant="ghost"
+                                                    color="black">
+                                                    <FaInfo />
+                                                </IconButton>
+                                            </HoverCard.Trigger>
+                                            <HoverCard.Positioner>
+                                                <HoverCard.Content>
+                                                    <HoverCard.Arrow />
+                                                    {intl.formatMessage({ id: "info_icon_saferrain.description" })}
+                                                </HoverCard.Content>
+                                            </HoverCard.Positioner>
+                                        </HoverCard.Root>
+                                        <Field.Root required>
+                                            <Field.Label padding={0} htmlFor="rain">
+                                                {intl.formatMessage({id: "modal.inputRain"})}{" "}
+                                            </Field.Label>
+                                            <Input
+                                                type="text"
+                                                id="rain"
+                                                value={rainIntensity}
+                                                onChange={handleRainIntensityChange}
+                                                placeholder={intl.formatMessage({id: "placeholders.info3"})}
+                                                variant="outline" />
+                                        </Field.Root></>
+                                    )}
+
+                                    {model === "safer_coast" && (
+                                        <><HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement:"top"}}>
+                                            <HoverCard.Trigger asChild>
+                                                <IconButton
+                                                    marginLeft="2px"
+                                                    size="sm"
+                                                    aria-label="Info"
+                                                    variant="ghost"
+                                                    color="black">
+                                                    <FaInfo />
+                                                </IconButton>
+                                            </HoverCard.Trigger>
+                                            <HoverCard.Positioner>
+                                                <HoverCard.Content>
+                                                    <HoverCard.Arrow />
+                                                    {intl.formatMessage({ id: "info_icon_safercoast.description" })}
+                                                </HoverCard.Content>
+                                            </HoverCard.Positioner>
+                                        </HoverCard.Root>
+                                        <Field.Root required>
+                                            <Field.Label padding={0} htmlFor="esl">
+                                                {intl.formatMessage({id: "modal.inputSea"})}
+                                            </Field.Label>
+                                            <Input
+                                                type="number"
+                                                id="esl"
+                                                value={extremeSeaLevel === null ? "" : extremeSeaLevel}
+                                                onChange={handleESLChange}
+                                                placeholder={intl.formatMessage({id: "placeholders.info4"})}
+                                                variant="outline" />
+                                        </Field.Root></>
+                                    )}
+                                    {generationStatus && <p>Status: {generationStatus}</p>}
+                                    {error && <p style={{ color: "red" }}>Error: {error}</p>}
+                                    {downloadLink && (
+                                        <Button color={"white"} bg={"#2e9ecc"}>
+                                            {" "}
+                                            <a
+                                                href={downloadLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                {intl.formatMessage({id: "modal.downloadMap"})}
+                                            </a>
+                                        </Button>
+                                    )}
+                                </VStack>
+                            )}
+                        </Dialog.Body>
+                        <Dialog.Footer display="flex" justifyContent="space-between">
+                            {tokenSubmitted && (
+                                <>
+                                    <Button
+                                        color={"white"}
+                                        bg={"#2e9ecc"}
+                                        onClick={handleGenerateMap}
+                                        disabled={
+                                            !selectedLocation ||
+                                            (model === "safer_rain" && !rainIntensity) || // Only rainIntensity for safer_rain
+                                            (model === "safer_coast" && extremeSeaLevel === 0) || // Only ESL for safer_coast
+                                            !!jobId
+                                        }
+                                    >
+                                        {intl.formatMessage({id: "modal.runModel"})}
+                                    </Button>
+                                </>
+                            )}
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog.Positioner>
+            </Dialog.Root>
         </Box>
     );
 }

@@ -11,7 +11,8 @@ import {
     Input,
     Dialog,
     Field,
-    HoverCard
+    HoverCard,
+    IconButton
 } from "@chakra-ui/react";
 import { Tooltip } from "@open-pioneer/chakra-snippets/tooltip";
 import { ToolButton } from "@open-pioneer/map-ui-components";
@@ -191,7 +192,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
         // Construct the process execution payload
         const jobDescription: ProcessExecution = {
             inputs: inputs,
-            synchronous: false, 
+            synchronous: false,
             processId: processId,
             response: "document"
         };
@@ -393,7 +394,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                 label="Multi-Criteria Decision Making (MCDM)"
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
-            /> */}
+            />
             <Dialog.Root open={isOpen} onOpenChange={onClose} placement={"center"}>
                 <Dialog.Backdrop />
                 <Dialog.Content
@@ -409,7 +410,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                             <Field.Root>
                                 <Field.Label padding={2} htmlFor="token">
                                     {intl.formatMessage({ id: "modalStart.token" })}{" "}
-                                </FormLabel>
+                                </Field.Label>
                                 <Input
                                     type="text"
                                     id="token"
@@ -443,23 +444,24 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                                             <Text fontWeight="semibold">
                                                 ⚖️ {intl.formatMessage({ id: "modalMain.weight" })}
                                             </Text>
-                                            <HoverCard.Root openDelay={250} closeDelay={100} placement="top">
+                                            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement:"top"}}>
                                                 <HoverCard.Trigger asChild>
                                                     <IconButton
                                                         marginLeft="2px"
-                                                        size="s"
+                                                        size="sm"
                                                         aria-label="Info"
-                                                        icon={<FaInfo />}
                                                         variant="ghost"
-                                                        color="black" />
+                                                        color="black">
+                                                        <FaInfoCircle />
+                                                    </IconButton>
                                                 </HoverCard.Trigger>
-						<HoverCard.Positioner>
-                                                <HoverCard.Content>
-                                                    <HoverCard.Arrow />
+                                                <HoverCard.Positioner>
+                                                    <HoverCard.Content>
+                                                        <HoverCard.Arrow />
                                                         {intl.formatMessage({ id: "info_mcdm.text1" })}
-                                                </HoverCard.Content>
-						</HoverCard.Positioner>
-                                            </Popover>
+                                                    </HoverCard.Content>
+                                                </HoverCard.Positioner>
+                                            </HoverCard.Root>
                                             <Button
                                                 size="sm"
                                                 variant="ghost"

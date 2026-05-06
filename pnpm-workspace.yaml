@@ -6,7 +6,7 @@ packages:
 # Shared version expressions (yaml anchors).
 # This is a yaml feature and is not interpreted by pnpm directly.
 __versions:
-  - &react_version ^19.2.4
+  - &react_version ^19.2.5
   - &core_packages_version ^4.5.0
   - &ol_base_packages_version ^1.2.0
 
@@ -51,7 +51,7 @@ catalog:
 
 
   # Other dependencies
-  "@chakra-ui/react": ^3.34.0
+  "@chakra-ui/react": ^3.35.0
   "@conterra/reactivity-core": ^0.8.0
   "@emotion/cache": ^11.14.0
   "@emotion/react": ^11.14.0
@@ -163,7 +163,7 @@ patchedDependencies:
   "react-select": "patches/react-select.patch"
 
   # Ensure all portals are mounted under `.pioneer-root` div
-  "@ark-ui/react@*": "patches/@ark-ui__react.patch"
+  # "@ark-ui/react@*": "patches/@ark-ui__react.patch"
 
   # Fix display of toasts that are created before the Notifier UI is mounted
   # See https://github.com/chakra-ui/zag/issues/2922

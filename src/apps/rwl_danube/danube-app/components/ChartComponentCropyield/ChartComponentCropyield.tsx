@@ -12,7 +12,7 @@ import {
     Flex,
     Select,
     Spinner
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
 import CropyieldChart from "./CropyieldChart";
 import { TaxonomyInfo } from "taxonomy";

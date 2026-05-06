@@ -8,20 +8,17 @@ import {
     Image,
     useDisclosure,
     Button,
-    useColorModeValue,
     Collapsible,
     Icon,
     Text,
     HoverCard,
     Link
 } from "@chakra-ui/react";
+// import { useColorMode } from "@/components/ui/color-mode"
 import { RxHamburgerMenu } from "react-icons/rx";
 import { CgClose } from "react-icons/cg";
 import { SlArrowRight, SlArrowDown  } from "react-icons/sl";
 import React from "react";
-export const BASE_URL = import.meta.env.DEV
-    ? import.meta.env.VITE_DEV_URL
-    : import.meta.env.VITE_PROD_URL;
 
 import { AuthService } from "@open-pioneer/authentication";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
@@ -193,7 +190,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
 const DesktopNav = ({ items }: { items: Array<NavItem> }) => {
     return (
         <Stack direction={"row"} gap={4}>
-            {NAV_ITEMS.map((navItem) => (
+            {items.map((navItem) => (
                 <Box key={navItem.label}>
                     <HoverCard.Root positioning={{placement:"bottom-start"}}>
                         <HoverCard.Trigger>
@@ -239,7 +236,7 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
             href={href}
             p={2}
             rounded={"md"}
-            _hover={{ bg: useColorModeValue("gray.200", "gray.900") }}
+            // _hover={{ bg: useColorModeValue("gray.200", "gray.900") }}
             _dark={{ _hover: { bg: "gray.900" } }}
         >
             <Stack direction={"row"} align={"center"}>

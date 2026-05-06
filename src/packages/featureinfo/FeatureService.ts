@@ -36,11 +36,6 @@ export function fetchFeatureInfo(
             l.getSource() instanceof TileWMS
     ) as TileLayer<TileWMS>[];
 
-    // filter for visible GeoTIFF layers
-    const visibleGeoTIFFLayers = allLayers.filter(
-        (l) => l.get("visible") && l.get("id") && l instanceof WebGLTileLayer
-    );
-
     // WMS-FeatureInfo Promises
     const wmsFetches = visibleWMSTileLayers.map((layer) => {
         const source = layer.getSource();

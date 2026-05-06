@@ -3,6 +3,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
+import { GiCircleForest, GiWheat } from "react-icons/gi";
 import { EventsKey } from "ol/events";
 import { Group, Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
@@ -21,7 +22,8 @@ import {
     Text,
     useDisclosure,
     VStack,
-    NativeSelect
+    NativeSelect,
+    defaultSystem
 } from "@chakra-ui/react";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
@@ -49,16 +51,17 @@ import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
-import ChartComponentZala from "./components/ChartComponentZala";
-import ChartComponentForestry from "./components/ChartComponentForestry";
 import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
-import { ChakraProvider } from "@open-pioneer/chakra-integration";
+import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "theme";
 import { ForestrySelector } from "./services/ForestrySelector";
 import { NutsSelector } from "./services/NutsSelector";
+
+import ChartComponentCropyield from "./components/ChartComponentCropyield/ChartComponentCropyield";
+import ChartComponentForestry from "./components/ChartComponentForestry";
 
 
 
@@ -140,9 +143,6 @@ export function MapApp() {
             setActiveChart("crop");
         }
     }, [clickedNuts]);
-
-
-    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
     function createPastEventLayer(
         collectionId: string,
@@ -432,8 +432,8 @@ export function MapApp() {
                                                             <NativeSelect.Root>
                                                                 <NativeSelect.Field
                                                                     placeholder={intl.formatMessage({
-			                                                id: "layer_swipe.left"
-			                                            })}
+                                                                        id: "layer_swipe.left"
+                                                                    })}
                                                                     value={selectedLeftLayer ?? ""}
                                                                     onChange={(e) =>
                                                                         setSelectedLeftLayer(e.target.value)
@@ -452,8 +452,8 @@ export function MapApp() {
                                                             <NativeSelect.Root>
                                                                 <NativeSelect.Field
                                                                     placeholder={intl.formatMessage({
-		                                                        id: "layer_swipe.right"
-		                                                    })}
+                                                                        id: "layer_swipe.right"
+                                                                    })}
                                                                     value={selectedRightLayer ?? ""}
                                                                     onChange={(e) =>
                                                                         setSelectedRightLayer(
@@ -512,21 +512,21 @@ export function MapApp() {
                                                 active={downloadIsActive}
                                                 onClick={toggleDownload}
                                             />
-					<ToolButton
-	                                    label={intl.formatMessage({
-	                                        id: "charts.zala_crop.button_title"
-	                                    })}
-	                                    icon={<GiWheat />}
-	                                    onClick={() => setActiveChart("crop")}
-	                                />
+                                            <ToolButton
+                                                label={intl.formatMessage({
+                                                    id: "charts.zala_crop.button_title"
+                                                })}
+                                                icon={<GiWheat />}
+                                                onClick={() => setActiveChart("crop")}
+                                            />
 
-	                                <ToolButton
-	                                    label={intl.formatMessage({
-	                                        id: "charts.forestry.button_title"
-	                                    })}
-	                                    icon={<GiCircleForest />}
-	                                    onClick={() => setActiveChart("forestry")}
-	                                />
+                                            <ToolButton
+                                                label={intl.formatMessage({
+                                                    id: "charts.forestry.button_title"
+                                                })}
+                                                icon={<GiCircleForest />}
+                                                onClick={() => setActiveChart("forestry")}
+                                            />
                                             <ToolButton
                                                 label={intl.formatMessage({ id: "measurementTitle" })}
                                                 icon={<PiRulerLight />}
@@ -583,37 +583,37 @@ export function MapApp() {
                                                 </Box>
                                             </Box>
                                         )}
-                                    )}
-                                    <Box
-                                        backgroundColor="white"
-                                        borderWidth="1px"
-                                        borderRadius="lg"
-                                        padding={2}
-                                        boxShadow="lg"
-                                        role="dialog"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                        marginBottom="10px"
-                                    >
-                                        <ChakraProvider theme={theme}>
-                                            <Toc
-                                                map={mapModel.map}
-                                                showTools={true}
-                                                collapsibleGroups={true}
-                                                initiallyCollapsed={true}
-                                                showBasemapSwitcher={false}
-                                            />
-                                            <Field.Root>
-                                                <Field.Label mt={2}>
-                                                    <Text as="b">
-                                                        {intl.formatMessage({ id: "basemapLabel" })}
-                                                    </Text>
-                                                </Field.Label>
-                                                <BasemapSwitcher
+                                        <Box
+                                            backgroundColor="white"
+                                            borderWidth="1px"
+                                            borderRadius="lg"
+                                            padding={2}
+                                            boxShadow="lg"
+                                            role="dialog"
+                                            aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                            marginBottom="10px"
+                                        >
+                                            <ChakraProvider value={defaultSystem}>
+                                                <Toc
                                                     map={mapModel.map}
-                                                    allowSelectingEmptyBasemap={true}
-                                                    className="custom-basemap-switcher"
+                                                    showTools={true}
+                                                    collapsibleGroups={true}
+                                                    initiallyCollapsed={true}
+                                                    showBasemapSwitcher={false}
                                                 />
-                                            </Field.Root>
+                                                <Field.Root>
+                                                    <Field.Label mt={2}>
+                                                        <Text as="b">
+                                                            {intl.formatMessage({ id: "basemapLabel" })}
+                                                        </Text>
+                                                    </Field.Label>
+                                                    <BasemapSwitcher
+                                                        map={mapModel.map}
+                                                        allowSelectingEmptyBasemap={true}
+                                                        className="custom-basemap-switcher"
+                                                    />
+                                                </Field.Root>
+                                            </ChakraProvider>
                                         </Box>
                                         {downloadIsActive && <LayerDownload mapID={MAP_ID} intl={intl} isOpen={downloadIsActive} onClose={() => setDownloadIsActive(false)} />}
                                     </MapAnchor>
@@ -635,24 +635,24 @@ export function MapApp() {
                 </DefaultMapProvider>)}
             </Flex>
 
-            <Dialog.Root open={activeChart !== null} onOpenChange={onCloseChartModal} size={"full"}>
+            <Dialog.Root open={activeChart !== null} onOpenChange={closeChartModal} size={"full"}>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content>
                         <Dialog.Header>
-				{activeChart === "crop" && "Crop Yield Chart"}
-                        	{activeChart === "forestry" && "Forestry Data Chart"}	
-			</Dialog.Header>
+                            {activeChart === "crop" && "Crop Yield Chart"}
+                            {activeChart === "forestry" && "Forestry Data Chart"}
+                        </Dialog.Header>
                         <Dialog.CloseTrigger />
                         <Dialog.Body>
-                            	{activeChart === "crop" && <ChartComponentCropyield nutsId={nuts} />}
-		                {activeChart === "forestry" && (
-		                    <ChartComponentForestry initialLocation={forestryLocation} />
-		                )}
+                            {activeChart === "crop" && <ChartComponentCropyield nutsId={nuts} />}
+                            {activeChart === "forestry" && (
+                                <ChartComponentForestry initialLocation={forestryLocation} />
+                            )}
                         </Dialog.Body>
 
                         <Dialog.Footer>
-                            <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
+                            <Button colorScheme="blue" mr={3} onClick={closeChartModal}>
                                 Close
                             </Button>
                         </Dialog.Footer>
