@@ -6,6 +6,36 @@ messages:
     keyword1: "pluvial"
     keyword2: "coastal flooding"
   info_icon_safercoast:
-    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
+    description: 
+      "Please note that this simulation is a reflection of reality, but should not be 
+      taken as such. While the result of this simulation presents one possible outcome, 
+      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
+      should be used in tandem with outside expertise to consider external risk factors."
   info_icon_saferrain:
-    description: "Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
+    description: 
+      "Please note that this simulation is a reflection of reality, but should not be 
+      taken as such. While the result of this simulation presents one possible outcome, 
+      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
+      should be used in tandem with outside expertise to consider external risk factors."
+  modal: 
+    header: "SaferPlaces Flood Modeling"
+    credentials: "Please enter valid credentials to access the model dialog"
+    userName: "Username"
+    token: "Token"
+    enter: "Enter"
+    configuration: "Model Configuration"
+    credentialChangeButton: "Change Credentials"
+    location: "Location"
+    selectLocation: "Select a Location"
+    model: "Model"
+    selectModel: "Select a Model"
+    inputRain: "Rain Intensity (mm)"
+    inputSea: "Extreme Sea Level (m)"
+    downloadMap: "Download Flood Map"
+    runModel: "Run Model"
+  placeholders: 
+    info1: "Enter username"
+    info2: "Enter token"
+    info3: "Input Value, e.g. 10"
+    info4: "Input Value, e.g. 1"
+

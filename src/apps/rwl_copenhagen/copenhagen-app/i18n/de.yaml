@@ -1,3 +1,57 @@
+overrides:
+  "@open-pioneer/basemap-switcher":
+    emptyBasemapLabel: "Ohne Hintergrundkarte"
+    layerNotAvailable: "Layer nicht verfügbar"
+    selected: "Ausgewählt"
+  "@open-pioneer/geolocation":
+    locateNotSupported: "Geolokalisierung wird nicht unterstützt."
+    locateMeStart: "Geolokalisierung starten"
+    locateMeEnd: "Geolokalisierung stoppen"
+    error: "Fehler"
+    permissionDenied: "Geolokalisierung wurde abgebrochen."
+    positionUnavailable: "Position der Geolokalisierung kann nicht ermittelt werden."
+    timeout: "Geolokalisierung wurde wegen Zeitüberschreitung abgebrochen."
+    unknownError: "Ein unerwarteter Fehler ist während der Geolokalisierung aufgetreten."
+  "@open-pioneer/map-navigation":
+    initial-extent:
+      title: "Auf Startausdehnung zoomen"
+    zoom-in:
+      title: "In Karte hineinzoomen"
+    zoom-out:
+      title: "Aus Karte herauszoomen"
+    view-backward:
+      title: "Eine Kartenansicht zurück"
+    view-forward:
+      title: "Eine Kartenansicht vor"
+  "@open-pioneer/measurement":
+    measurementLabel: "Modus"
+    distance: "Entfernung"
+    area: "Fläche"
+    deleteMeasurementLabel: "Messungen löschen"
+    measurementInfoText: "Klicken Sie in die Karte, um eine Messung zu starten."
+    tooltips:
+      help: "Klicken Sie, um die Messung zu starten."
+      continue: "Doppelklicken Sie, um die Messung zu beenden."
+  "@open-pioneer/legend":
+    altLabel: "Legendenbild für Layer {layerName}"
+    fallbackLabel: "Legende nicht verfügbar"
+    basemapLabel: "Hintergrundkarte"
+  "@open-pioneer/toc":
+    basemapsLabel: "Hintergrundkarten"
+    descriptionLabel: "Layerbeschreibung"
+    operationalLayerLabel: "Operationelle Layer"
+    childgroupLabel: "Layergruppe {title}"
+    missingLayers: "Es gibt keine Layer zum Anzeigen."
+    group:
+      expand: "Gruppe {title} ausklappen"
+      collapse: "Gruppe {title} einklappen"
+    error: "Fehler beim Erstellen des Karteninhalts."
+    layerNotAvailable: "Layer nicht verfügbar"
+    toolsLabel: "Kartenwerkzeuge"
+    tools:
+      hideAllLayers: "Alle Layer ausblenden"
+      collapseAllGroups: "Alle Gruppen einklappen"
+
 messages:
   heading: "RWL Die Hauptstadtregion Dänemarks"
   basemapLabel: "Basemap auswählen:"
@@ -16,6 +70,8 @@ messages:
   layer_swipe:
     title: "Layer zum Vergleichen auswählen"
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
+    left: "Linken Layer auswählen"
+    right: "Rechten Layer auswählen"
   forecast:
     sea_level: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der mittleren Meeresspiegelschwankungen auszuwählen"
     total_precip: "👆Verschieben Sie den Slider, um Datum und Uhrzeit für Vorhersagen der Gesamtniederschläge auszuwählen"
@@ -26,6 +82,10 @@ messages:
   legend:
     title: "Legende"
     units: "Einheit"
+  slider: 
+    rainfallLevel: "Niederschlagsmenge (mm)"
+    stormSurgeLevel: "Sturmfluthöhe (cm)"
+    selectedLevel: "Ausgewähltes Level:"
   map:
     download:
       heading: "Layer herunterladen"
@@ -35,12 +95,9 @@ messages:
       select_layer: "Wähle einen Layer zum Herunterladen aus"
       description: "Nur die sichtbaren Layer in den Operational Layers sind über das Dropdown-Menü zum Herunterladen verfügbar."
     flood_layer_selector: 
-      title: "Flood Category Selector"
-      description: "The flood category selection populates the Operational Layers and Slider with the selected flood's 
-        model outputs. To view these layers in the map, make sure the checkmark next to the desired model is visible
-        in the Operational Layers."
-      floodtype: "To view model outputs, please choose a flooding category"
-    
+      title: "Auswahl der Überschwemmungskategorie"
+      description: "Die Auswahl der Überschwemmungskategorie füllt die Operational Layers und den Slider mit den Modellausgaben der ausgewählten Überschwemmung. Um diese Layer auf der Karte anzuzeigen, stellen Sie sicher, dass das Häkchen neben dem gewünschten Modell in den Operational Layers sichtbar ist."
+      floodtype: "Um Modellausgaben anzuzeigen, wählen Sie bitte eine Überschwemmungskategorie aus"
   ariaLabel:
     header: "Kopfzeile"
     footer: "Fußleiste mit Maßstabsinformationen, räumlichem Bezugssystem und Koordinatenanzeige"

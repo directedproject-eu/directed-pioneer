@@ -6,6 +6,7 @@ import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import { useService } from "open-pioneer:react-hooks";
 import { useState } from "react";
 import { TocService } from "../../services/TocService";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import PopoverToc from "./PopoverToc";
 
 interface TocMetaData {

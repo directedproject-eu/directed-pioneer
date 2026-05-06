@@ -6,3 +6,28 @@ messages:
         en: Angol
         hu: Magyar
         da: Dán
+  disclaimerContent: 
+    brief: 
+      "A felhasználóknak javasoljuk, hogy az információkat függetlenül ellenőrizzék, 
+      és a szolgáltatást saját felelősségükre vegyék igénybe."
+    text: 
+      "Ez a webszolgáltatás különböző nyilvánosan elérhető adatforrásokat integrál és egyesít, beleértve a Copernicus Éghajlatváltozási Szolgálat (C3S) és más Copernicus-komponensek adatait és információit. A szolgáltatást a DIRECTED európai innovációs projekt keretében fejlesztették ki, és az itt nyújtott információs termékeket gondosan, legjobb tudásunk szerint állítottuk össze.
+      A szolgáltatás feldolgozhatja, integrálhatja vagy átalakíthatja a Copernicus-adatokat. Bár arra törekszünk, hogy magas színvonalú és hasznos információkat nyújtsunk, a kimeneti adatok nem minősülnek hivatalos Copernicus-termékeknek. Az Európai Unió és a Copernicus-program nem vállal felelősséget a szolgáltatáson keresztül bemutatott adatok vagy információk felhasználásáért.
+      Továbbá a szolgáltatáson keresztül nyújtott információkat „adott állapotban” kínáljuk, bármiféle kifejezett vagy vélelmezett garancia nélkül, ideértve többek között az adott célra való alkalmasságot, a pontosságot, a teljességet, az időszerűséget vagy a megbízhatóságot.
+      Nem vállalunk felelősséget semmilyen veszteségért, kárért vagy kellemetlenségért, amely a szolgáltatás használatából vagy az eredményekre való támaszkodásból származhat. A felhasználóknak erősen ajánlott, hogy függetlenül ellenőrizzék az információkat, és a szolgáltatást saját felelősségükre használják.
+      A webes szolgáltatás használatával Ön tudomásul veszi és elfogadja ezeket a feltételeket."
+  navbar: 
+    home: "Főoldal"
+    rwls: "Gyakorlati Laboratóriumok"
+    rwl1: "Dánia Fővárosi Régiója"
+    rwl2: "Emília-Romagna Régió"
+    rwl3: "Duna Régió"
+    rwl4: "Rajna-Erft Régió"
+    website: "DIRECTED a Projekt Weboldala"
+    documentation: "Dokumentáció"
+    gettingStarted: "Első Lépések"
+    userManual: "Használati útmutató"
+    login: "Bejelentkezés"
+    logout: "Kijelentkezés"
+   
+    

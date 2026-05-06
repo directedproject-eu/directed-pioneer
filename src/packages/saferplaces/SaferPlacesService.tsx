@@ -5,39 +5,36 @@ import { useState, ChangeEvent } from "react";
 import {
     Box,
     Button,
-    Dialog,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    FormLabel,
+    FormControl,
     Input,
     Select,
     useDisclosure,
     VStack,
     Flex,
-    Text,
-    Field,
-    createListCollection,
-    Portal
-} from "@chakra-ui/react";
+    Text, 
+    Popover, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverTrigger,
+    PopoverArrow, 
+    IconButton
+} from "@open-pioneer/chakra-integration";
 import { ToolButton } from "@open-pioneer/map-ui-components";
-import { FaWater } from "react-icons/fa";
+import { FaWater, FaInfo } from "react-icons/fa";
 import { useService } from "open-pioneer:react-hooks";
 import { FloodMapService } from "./FloodMapService";
+import { ApiService, JobStatusResponse } from "processclient";
 import { TaxonomyInfo } from "taxonomy";
 import { useIntl } from "open-pioneer:react-hooks";
 
-//interface for the job status response
-interface JobStatusResponse {
-    jobID?: string; //jobID option, might not be present for synchronous responses ?
-    status?: "accepted" | "running" | "successful" | "failed" | "dismissed"; //status is optional for synchronous responses
-    message?: string;
-    progress?: number; //optional
-    outputs?: {
-        [key: string]: {
-            href: string; //the URL to the output s3:// etc
-            title?: string;
-            type?: string;
-        };
-    };
-    presigned_url?: string;
-}
 
 // --- Interfaces ---
 
@@ -73,15 +70,11 @@ type SaferCoastPayload = {
     inputs: SaferCoastInputs;
 }
 
-interface SaferPlacesFloodMapProps {
-    isOpen?: boolean;
-    onClose?: () => void;
-}
-
-//union type for all possible payloads
+// Union type for all possible payloads
 type ProcessExecutionPayload = SaferRainPayload | SaferCoastPayload;
 
-export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProps) {
+export function SaferPlacesFloodMap() {
+    // --- UI States ---
     const [selectedLocation, setSelectedLocation] = useState<string>("");
     const [rainIntensity, setRainIntensity] = useState<string>("");
     const [extremeSeaLevel, setExtremeSeaLevel] = useState<number | null>(null);
@@ -90,16 +83,26 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
     const [generationStatus, setGenerationStatus] = useState<string>("");
     const [downloadLink, setDownloadLink] = useState<string>("");
     const [error, setError] = useState<string>("");
-    const [jobId, setJobId] = useState<string | null>(null); //to store the job ID
-    const [pollingIntervalId, setPollingIntervalId] = useState<number | null>(null); //to store the interval ID for clearing
-    const floodMapService = useService<FloodMapService>("app.FloodMapService"); // FloodMapService to add new layer to TOC
-    // states for user and token input
+    const [jobId, setJobId] = useState<string | null>(null); 
+    // States for user and token input
     const [userInput, setUserInput] = useState<string>("");
     const [tokenInput, setTokenInput] = useState<string>("");
     const [tokenSubmitted, setTokenSubmitted] = useState(false);
-    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-    const intl = useIntl();
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
 
+    const intl = useIntl();
+    const { isOpen, onOpen, onClose } = useDisclosure(); // For model dialog
+
+    // --- Services ---
+    const floodMapService = useService<FloodMapService>("app.FloodMapService"); // FloodMapService to add new layer to TOC
+    const apiService = useService<ApiService>("app.ApiService"); // API service for OGC processes 
+
+    // --- API Process URLs ---
+    const API_BASE_URL = "https://api.saferplaces.co"; // SaferPlaces pygeoapi
+    const API_PROCESS_RAIN_URL = `${API_BASE_URL}/processes/safer-rain-process/execution`;
+    const API_PROCESS_COAST_URL = `${API_BASE_URL}/processes/safer-coast-process/execution`;
+
+    // Pre-determined location DEM files
     const locationDemFiles: Record<string, { dem: string; seamask: string }> = {
         Vienna: {
             dem: "s3://s3-directed/api_data/c5298b37096499d3c8bcfc49e449b393/dem_building.tif",
@@ -111,10 +114,7 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
         }
     };
 
-    const API_BASE_URL = "http://pygeoapi-saferplaces-lb-409838694.us-east-1.elb.amazonaws.com"; //saferplaces pygeoapi
-    const API_PROCESS_RAIN_URL = `${API_BASE_URL}/processes/safer-rain-process/execution`;
-    const API_PROCESS_COAST_URL = `${API_BASE_URL}/processes/safer-coast-process/execution`;
-
+    // --- Input Handlers ---
     const handleLocationChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedLocation(event.target.value);
     };
@@ -124,7 +124,7 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
     };
 
     const handleESLChange = (event: ChangeEvent<HTMLInputElement>) => {
-        //if input is empty, set state to null, otherwise parse to float
+        // If input is empty, set state to null, otherwise parse to float
         const value = event.target.value;
         setExtremeSeaLevel(value === "" ? null : parseFloat(value));
     };
@@ -140,135 +140,49 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
     // const handleBarrierFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     const files = event.target.files;
 
-    //     if (files && files.length > 0) {
-    //         const selectedFile = files[0];
-    //         if (selectedFile) {
-    //             setBarrierFile(selectedFile);
-    //         } else {
-    //             setBarrierFile(null); //if files[0] is undefined
-    //         }
-    //     } else {
-    //         setBarrierFile(null); //if no file is selected
-    //     }
-    // };
-
-    const pollJobStatus = async (jobStatusUrl: string) => {
-        const maxAttempts = 60; //poll for up to 5 minutes (60 * 5 seconds)
-        let attempts = 0;
-
-        //clear any existing interval to prevent multiple polling loops
-        if (pollingIntervalId) {
-            clearInterval(pollingIntervalId);
-            setPollingIntervalId(null);
+   
+    const processFinalResult = (data: JobStatusResponse) => {
+        const rawData = data as Record<string, unknown>;
+        let finalDownloadUrl = "";
+    
+        // Check for presigned_url
+        if (typeof rawData.presigned_url === "string") {
+            finalDownloadUrl = rawData.presigned_url;
+        } 
+        // Check for water_depth_file'
+        else if (typeof rawData.water_depth_file === "string") {
+            finalDownloadUrl = rawData.water_depth_file;
         }
-
-        const intervalId = window.setInterval(async () => {
-            if (attempts >= maxAttempts) {
-                clearInterval(intervalId);
-                setGenerationStatus("Job polling timed out.");
-                setError("Flood map generation took too long or timed out.");
-                setJobId(null);
-                setPollingIntervalId(null);
-                return;
+        // Fallback to standard OGC outputs structure
+        else if (data.outputs) {
+            const output = (data.outputs.water_depth_file || data.outputs.result) as Record<string, unknown> | undefined;
+            if (output && typeof output.href === "string") {
+                finalDownloadUrl = output.href;
             }
-
-            try {
-                const response = await fetch(jobStatusUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const jobStatus: JobStatusResponse = await response.json();
-                console.log(`Job Status (${jobStatus.jobID}):`, jobStatus.status, jobStatus);
-
-                setGenerationStatus(`Status: ${jobStatus.status}`);
-
-                if (jobStatus.status === "successful") {
-                    clearInterval(intervalId);
-                    setGenerationStatus("Flood map generated successfully!");
-                    setJobId(null);
-                    setPollingIntervalId(null);
-
-                    // --- NEW TOC LOGIC START ---
-                    let finalDownloadUrl = "";
-                    const generatedMapTitle = `${selectedLocation} Flood Map (${model} - ${new Date().toLocaleTimeString()})`;
-
-                    // Prioritize presigned_url
-                    if (jobStatus.presigned_url) {
-                        finalDownloadUrl = jobStatus.presigned_url;
-                    } else if (jobStatus.outputs && jobStatus.outputs.water_depth_file) {
-                        // Fallback to water_depth_file if presigned_url isn't directly present
-                        const s3OutputUrl = jobStatus.outputs.water_depth_file.href;
-                        // S3 URLs need conversion if directly from S3 paths
-                        finalDownloadUrl = s3OutputUrl.startsWith("s3://")
-                            ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                            : s3OutputUrl; // use as-is if already a direct URL
-                    }
-
-                    if (finalDownloadUrl) {
-                        setDownloadLink(finalDownloadUrl); // Update the state for the download button
-
-                        if (!floodMapService) {
-                            console.error(
-                                "ERROR: app.FloodMapService is not available. Check build config or json."
-                            );
-                            setGenerationStatus(
-                                "Success, but failed to add to map (service missing)."
-                            );
-                        } else {
-                            // CALL THE NEW SERVICE TO ADD THE LAYER to the map and TOC
-                            floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
-                            setGenerationStatus(
-                                `Flood map generated successfully, added to Operational Layers`
-                            );
-                        }
-                    } else {
-                        setError("Download URL not found in the API response.");
-                        setGenerationStatus("Successful, but no URL found.");
-                    }
-                    // --- NEW TOC LOGIC END ---
-
-                    //// OLD WITHOUT ADDING LAYER TO TOC ////
-                    // //prioritize presigned_url
-                    // if (jobStatus.presigned_url) {
-                    //     setDownloadLink(jobStatus.presigned_url);
-                    // } else if (jobStatus.outputs && jobStatus.outputs.water_depth_file) {
-                    //     //fallback to water_depth_file if presigned_url isn't directly present
-                    //     const s3OutputUrl = jobStatus.outputs.water_depth_file.href;
-                    //     //S3 URLs need conversion if directly from S3 paths
-                    //     const downloadUrl = s3OutputUrl.startsWith("s3://")
-                    //         ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                    //         : s3OutputUrl; //use as-is if already a direct URL
-                    //     setDownloadLink(downloadUrl);
-                    // } else {
-                    //     setError("Download URL not found in the API response.");
-                    // }
-                    //// END OLD NO TOC ////
-                } else if (jobStatus.status === "failed" || jobStatus.status === "dismissed") {
-                    clearInterval(intervalId);
-                    setError(
-                        `Flood map generation failed: ${jobStatus.message || "Unknown error"}`
-                    );
-                    setGenerationStatus("Failed.");
-                    setJobId(null);
-                    setPollingIntervalId(null);
-                    console.log(`DEBUG FAILURE: Job failed with status: ${jobStatus.status}`);
-                }
-            } catch (err: unknown) {
-                clearInterval(intervalId);
-                if (err instanceof Error) {
-                    setError(`An error occurred while polling the job status: ${err.message}`);
-                } else {
-                    setError(`An unknown error occurred while polling the job status.`);
-                }
-                setGenerationStatus("Failed.");
-                setJobId(null);
-                setPollingIntervalId(null);
-                console.log("DEBUG POLLING ERROR: Fetching job status failed.");
+        }
+    
+        // Transform S3 to HTTPS
+        let urlString: string = finalDownloadUrl;
+        if (urlString.startsWith("s3://")) {
+            urlString = urlString.replace("s3://", "https://s3.amazonaws.com/");
+        }
+    
+        // UI Logic
+        if (urlString && urlString.startsWith("http")) {
+            setDownloadLink(urlString);
+            const generatedMapTitle = `${selectedLocation} Flood Map (${model})`;
+    
+            if (floodMapService) {
+                floodMapService.addFloodMapLayer(urlString, generatedMapTitle);
+                setGenerationStatus("Flood map generated successfully!");
+            } else {
+                setGenerationStatus("Success, but map service missing.");
             }
-            attempts++;
-        }, 5000); //poll every 5 seconds
-
-        setPollingIntervalId(intervalId);
+        } else {
+            console.error("Link Detection Failed. Data received:", data);
+            setError("Download URL not found in the API response.");
+            setGenerationStatus("Failed to locate result link.");
+        }
     };
 
     const handleGenerateMap = async () => {
@@ -276,12 +190,7 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
         setError("");
         setDownloadLink("");
         setJobId(null);
-        if (pollingIntervalId) {
-            clearInterval(pollingIntervalId); //clear any existing polling
-            setPollingIntervalId(null);
-        }
 
-        // let requestDataPayload = {};
         let requestDataPayload: ProcessExecutionPayload | null = null;
         let apiUrl = "";
         const outputRain = `watermap_rain_${Date.now()}.tif`;
@@ -303,11 +212,11 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
             requestDataPayload = {
                 inputs: {
                     dem: selectedDemFile,
-                    rain: rainIntensity, //parse string to return integer, even with leading zeros
-                    water: `s3://${s3Bucket}/api_data/${outputRain}`, //construct S3 output
-                    mode: "batch",
+                    rain: rainIntensity, // Parse string to return integer, even with leading zeros
+                    water: `s3://${s3Bucket}/api_data/${outputRain}`, // Construct S3 output
+                    mode: "lambda", // Async lambda, sync batch
                     presigned_url_out: true,
-                    sync: true,
+                    sync: false,
                     debug: true,
                     user: user,
                     token: token
@@ -317,7 +226,7 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
             if (extremeSeaLevel === null || extremeSeaLevel <= 0) {
                 setError("For the Safer Coast Model, ESL must be a positive number");
                 setGenerationStatus("Failed");
-                return; //exit if validation fails
+                return; // Exit if validation fails
             }
             apiUrl = API_PROCESS_COAST_URL;
             requestDataPayload = {
@@ -325,7 +234,7 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
                     file_dem: selectedDemFile,
                     file_seamask: selectedSeamaskFile!,
                     barrier:
-                        // "s3://s3-disasterbrain/api_data/09d06de7c80ba18d0a099a05b3cedc8f/barrier.shp", //from jupyter
+                        // "s3://s3-disasterbrain/api_data/09d06de7c80ba18d0a099a05b3cedc8f/barrier.shp", // From jupyter
                         null,
                     esl: extremeSeaLevel,
                     presigned_url_out: true,
@@ -342,471 +251,281 @@ export function SaferPlacesFloodMap({ isOpen, onClose }: SaferPlacesFloodMapProp
         }
 
         try {
-            const headers: HeadersInit = {
-                "Content-Type": "application/json"
-            };
+            // Find if sync/async from payload, otherwise default true
+            const isSync = (model === "safer_rain" && "sync" in requestDataPayload.inputs) 
+                ? requestDataPayload.inputs.sync 
+                : true;
+            // Execute the process 
+            const job = await apiService.executeProcess(apiUrl, requestDataPayload, isSync);
+            setGenerationStatus("Job accepted. Waiting for results...");
+            const result = await job.wait(); // Wait for job completion
+            processFinalResult(result); // Process final data 
 
-            if (model === "safer_rain" && "sync" in requestDataPayload.inputs) {
-                if (requestDataPayload.inputs.sync === false) {
-                    headers["Prefer"] = "respond-async";
-                } else {
-                    headers["Prefer"] = "respond-sync";
-                }
-            } else {
-                //for safer_coast or if 'sync' property is not present (or add another model)
-                headers["Prefer"] = "respond-sync";
-            }
-
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify(requestDataPayload)
-            });
-
-            if (response.status === 202 || response.status === 201) {
-                //asynchronous response (job created / accepted)
-                const locationHeader = response.headers.get("Location");
-                console.log("debug: Location header received by JS:", locationHeader); //for async process debug
-                console.log("debug: All response headers (JS):", [...response.headers.entries()]);
-
-                let responseData: JobStatusResponse | null = null; //initialize as null
-
-                //attempt to parse response body if it's JSON and not empty,
-                //in case 201/202 also provides initial job details.
-                const contentType = response.headers.get("content-type");
-                if (contentType && contentType.includes("application/json")) {
-                    try {
-                        const textBody = await response.text();
-                        if (textBody.trim() !== "" && textBody.trim() !== "null") {
-                            responseData = JSON.parse(textBody);
-                        }
-                    } catch (jsonParseError) {
-                        console.warn(
-                            "201/202 response body was not valid JSON, proceeding with Location header.",
-                            jsonParseError
-                        );
-                        //warning, as Location header is primary for async jobs.
-                    }
-                }
-
-                if (locationHeader) {
-                    //prioritize jobID from responseData if available, else parse from Location header
-                    const receivedJobId = responseData?.jobID || locationHeader.split("/").pop();
-                    setJobId(receivedJobId || null);
-                    setGenerationStatus(
-                        `Job accepted, ID: ${receivedJobId}. Status: ${responseData?.status || "unknown"}. Polling for results...`
-                    );
-                    console.log("Job status URL:", locationHeader);
-                    pollJobStatus(locationHeader); //start polling
-                } else {
-                    setError(
-                        "Process accepted (201/202), but no Location header for job status found. Cannot poll."
-                    );
-                    setGenerationStatus("Failed to start polling.");
-                }
-            } else if (response.ok) {
-                //this block is for synchronous 200 OK responses with a full body
-                const contentType = response.headers.get("content-type");
-                let responseBody: JobStatusResponse | null = null;
-
-                if (contentType && contentType.includes("application/json")) {
-                    try {
-                        responseBody = await response.json();
-                    } catch (jsonError: unknown) {
-                        console.error(
-                            "Failed to parse JSON for synchronous OK response:",
-                            jsonError
-                        );
-                        setError(`API returned OK status but invalid JSON response.`);
-                        setGenerationStatus("Failed.");
-                        return;
-                    }
-                } else {
-                    const rawText = await response.text();
-                    console.warn("Synchronous OK response is not JSON:", rawText);
-                    setError(
-                        `API returned OK status but non-JSON response: ${rawText.substring(0, 100)}...`
-                    );
-                    setGenerationStatus("Failed.");
-                    return;
-                }
-
-                if (!responseBody) {
-                    setError("API returned a successful status but no valid response data.");
-                    setGenerationStatus("Failed.");
-                    return;
-                }
-
-                setGenerationStatus("Flood map generated successfully!");
-                console.log("Synchronous API Response Data:", responseBody);
-
-                // --- NEW TOC LOGIC START ---
-                let finalDownloadUrl = "";
-                const generatedMapTitle = `${selectedLocation} Flood Map (${model} - ${new Date().toLocaleTimeString()})`;
-
-                // Prioritize presigned_url
-                if (responseBody.presigned_url) {
-                    finalDownloadUrl = responseBody.presigned_url;
-                } else if (responseBody.outputs && responseBody.outputs.water_depth_file) {
-                    const s3OutputUrl = responseBody.outputs.water_depth_file.href;
-                    finalDownloadUrl = s3OutputUrl.startsWith("s3://")
-                        ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                        : s3OutputUrl; // use as-is if already a direct URL
-                }
-
-                if (finalDownloadUrl) {
-                    setDownloadLink(finalDownloadUrl); // Update the state for the download button
-
-                    if (!floodMapService) {
-                        console.error(
-                            "ERROR: app.FloodMapService is not available. Check build config or json."
-                        );
-                        setGenerationStatus("Success, but failed to add to map (service missing).");
-                    } else {
-                        // CALL THE NEW SERVICE TO ADD THE LAYER to the map and TOC
-                        floodMapService.addFloodMapLayer(finalDownloadUrl, generatedMapTitle);
-                        setGenerationStatus(
-                            `Flood map generation successful, added to Operational Layers.`
-                        );
-                    }
-                } else {
-                    setError("Download URL not found in the API response.");
-                    setGenerationStatus("Successful, but no URL found.");
-                }
-                // --- NEW TOC LOGIC END ---
-
-                // if (responseBody.presigned_url) {
-                //     setDownloadLink(responseBody.presigned_url);
-                // } else if (responseBody.outputs?.water_depth_file) {
-                //     const s3OutputUrl = responseBody.outputs.water_depth_file.href;
-                //     const downloadUrl = s3OutputUrl.startsWith("s3://")
-                //         ? s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/")
-                //         : s3OutputUrl;
-                //     setDownloadLink(downloadUrl);
-                // } else {
-                //     setError("Download URL not found in the synchronous API response.");
-                // }
-            } else {
-                //handles non-2xx failures (e.g., 4xx, 5xx)
-                const responseBody = await response.text();
-                let errorData;
-                try {
-                    errorData = JSON.parse(responseBody);
-                    setError(
-                        `API Error: ${response.status}: ${errorData.message || response.statusText}`
-                    );
-                } catch (_jsonError) {
-                    setError(
-                        `API response was not valid JSON: ${responseBody || response.statusText}`
-                    );
-                }
-                setGenerationStatus("Failed.");
-            }
         } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(`An error occurred during the fetch: ${err.message}`);
-            } else {
-                setError(`An unknown error occurred during the fetch.`);
-            }
+            const errorMessage = err instanceof Error ? err.message : "An error occurred during process execution.";
+            setError(errorMessage);
             setGenerationStatus("Failed.");
         }
     };
 
     const handleCredentialsSubmit = () => {
         if (tokenInput.trim() && userInput.trim()) {
-            // check for valid inputs
-            setTokenSubmitted(true); // open model config page
-            setError(""); // clean-up, clear previous errors when moving to next screen
+            // Check for valid inputs
+            setTokenSubmitted(true); // Open model config page
+            setError(""); // Clean-up, clear previous errors when moving to next screen
         }
     };
 
-    //         //old response, only sychronous no polling
-    //         const responseBody = await response.text();
-    //         console.log("Response status:", response.status);
-    //         console.log("Raw Response Body:", responseBody);
-
-    //         //parse the response body as JSON
-    //         let responseData;
-    //         try {
-    //             responseData = JSON.parse(responseBody);
-    //         } catch (jsonError) {
-    //             //ff not a valid JSON, handle it as a plain text error
-    //             setError(`API response was not valid JSON: ${responseBody || response.statusText}`);
-    //             setGenerationStatus("Failed.");
-    //             return;
-    //         }
-
-    //         if (!response.ok) {
-    //             setError(
-    //                 `Flood map generation failed: ${responseData.message || response.statusText}`
-    //             );
-    //             setGenerationStatus("Failed.");
-    //             return;
-    //         }
-
-    //         //if response.ok is true and parsing was successful
-    //         setGenerationStatus("Flood map generated successfully!");
-    //         console.log("Parsed API Response Data:", responseData);
-
-    //         if (model === "safer_coast") {
-    //             if (responseData && responseData.files && responseData.files.file_water) {
-    //                 const s3OutputUrl = responseData.files.file_water;
-    //                 const downloadUrl = s3OutputUrl.replace("s3://", "https://s3.amazonaws.com/");
-    //                 setDownloadLink(downloadUrl);
-    //             } else {
-    //                 setError("Download URL not found in the API response for coastal model.");
-    //             }
-    //         } else if (model === "safer_rain") {
-    //             //download link for safer_rain already set above
-    //         }
-    //     } catch (err) {
-    //         setError(`An error occurred during the fetch: ${err.message}`);
-    //         setGenerationStatus("Failed.");
-    //     }
-    // };
-    // //end old response
-
     return (
         <Box>
-            {/* <ToolButton label="Run Flood Models" icon={<FaWater />} onClick={onOpen} /> */}
-            <Dialog.Root open={isOpen} onOpenChange={onClose} placement={"center"}>
-                <Dialog.Backdrop />
-                <Dialog.Positioner>
-                    <Dialog.Content>
-                        <Dialog.Header>SaferPlaces Flood Modeling</Dialog.Header>
-                        <Dialog.CloseTrigger />
-                        <Dialog.Body>
-                            {!tokenSubmitted ? (
-                                // --- TOKEN INPUT VIEW (Page 1) ---
-                                <VStack gap={4} align="stretch">
-                                    <Flex align="center">
-                                        <Text fontWeight="semibold">
-                                            Please enter valid credentials to access the model dialog
-                                        </Text>
-                                    </Flex>
-                                    <Field.Root required>
-                                        <Field.Label htmlFor="user">Username</Field.Label>
-                                        <Input
-                                            type="text"
-                                            id="user"
-                                            value={userInput}
-                                            onChange={handleUserInputChange}
-                                            placeholder="Enter username"
-                                            variant="outline"
-                                        />
-                                    </Field.Root>
-                                    <Field.Root required>
-                                        <Field.Label htmlFor="token">Token</Field.Label>
-                                        <Input
-                                            type="password"
-                                            id="token"
-                                            value={tokenInput}
-                                            onChange={handleTokenInputChange}
-                                            placeholder="Enter token"
-                                            variant="outline"
-                                        />
-                                    </Field.Root>
+            <ToolButton label="Run Flood Models" icon={<FaWater />} onClick={onOpen} />
+            <Modal closeOnOverlayClick={true} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>
+                        {intl.formatMessage({id: "modal.header"})}
+                    </ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        {!tokenSubmitted ? (
+                            // --- TOKEN INPUT VIEW (Page 1) ---
+                            <VStack spacing={4} align="stretch">
+                                <Flex align="center">
+                                    <Text fontWeight="semibold">
+                                        {intl.formatMessage({id: "modal.credentials"})}
+                                    </Text>
+                                </Flex>
+                                <FormControl isRequired>
+                                    <FormLabel htmlFor="user">
+                                        {intl.formatMessage({id: "modal.userName"})}
+                                    </FormLabel>
+                                    <Input
+                                        type="text"
+                                        id="user"
+                                        value={userInput}
+                                        onChange={handleUserInputChange}
+                                        placeholder={intl.formatMessage({id: "placeholders.info1"})}
+                                        variant="outline"
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel htmlFor="token">
+                                        {intl.formatMessage({id: "modal.token"})}
+                                    </FormLabel>
+                                    <Input
+                                        type="password"
+                                        id="token"
+                                        value={tokenInput}
+                                        onChange={handleTokenInputChange}
+                                        placeholder={intl.formatMessage({id: "placeholders.info2"})}
+                                        variant="outline"
+                                    />
+                                </FormControl>
+                                <Button
+                                    mt={4}
+                                    color={"white"}
+                                    bg={"#2e9ecc"}
+                                    onClick={handleCredentialsSubmit}
+                                    // Disable if either field is empty
+                                    isDisabled={!tokenInput.trim() || !userInput.trim()}
+                                >
+                                    {intl.formatMessage({id: "modal.enter"})}
+                                </Button>
+                                {error && <p style={{ color: "red" }}>Error: {error}</p>}
+                            </VStack>
+                        ) : (
+                            // --- MODEL CONFIGURATION VIEW (Page 2) ---
+                            <VStack spacing={4} align="stretch">
+                                <Flex justify="space-between" align="center" mb={2}>
+                                    <Text fontWeight="semibold">
+                                        🌊 {intl.formatMessage({id: "modal.configuration"})}
+                                    </Text>
                                     <Button
-                                        mt={4}
-                                        color={"white"}
-                                        bg={"#2e9ecc"}
-                                        onClick={handleCredentialsSubmit}
-                                        // Disable if either field is empty
-                                        disabled={!tokenInput.trim() || !userInput.trim()}
+                                        justifyContent="flex-end"
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => setTokenSubmitted(false)}
                                     >
-                                        Enter
+                                        ← {intl.formatMessage({id: "modal.credentialChangeButton"})}
                                     </Button>
-                                    {error && <p style={{ color: "red" }}>Error: {error}</p>}
-                                </VStack>
-                            ) : (
-                                // --- MODEL CONFIGURATION VIEW (Page 2) ---
-                                <VStack gap={4} align="stretch">
-                                    <Flex justify="space-between" align="center" mb={2}>
-                                        <Text fontWeight="semibold">🌊 Model Configuration </Text>
+                                </Flex>
+                                <Flex justify="flex-start" align="center" mb={1} width="100%">
+                                    <Text width="100%">
+                                        {" "}
+                                        {intl.formatMessage({
+                                            id: "description_saferplaces.text1"
+                                        })}{" "}
                                         <Button
-                                            justifyContent="flex-end"
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => setTokenSubmitted(false)}
+                                            variant="link"
+                                            color="#2e9ecc"
+                                            onClick={() => setActiveKeyword("pluvial flood")}
                                         >
-                                            ← Change Credentials
-                                        </Button>
-                                    </Flex>
-                                    <Flex justify="flex-start" align="center" mb={1} width="100%">
-                                        <Text width="100%">
-                                            {" "}
                                             {intl.formatMessage({
-                                                id: "description_saferplaces.text1"
-                                            })}{" "}
-                                            <Button
-                                                variant="plain"
-                                                color="#2e9ecc"
-                                                onClick={() => setActiveKeyword("pluvial flood")}
-                                            >
-                                                {intl.formatMessage({
-                                                    id: "description_saferplaces.keyword1"
-                                                })}
-                                            </Button>{" "}
-                                            {intl.formatMessage({
-                                                id: "description_saferplaces.text2"
-                                            })}{" "}
-                                            <Button
-                                                variant="plain"
-                                                color="#2e9ecc"
-                                                onClick={() => setActiveKeyword("coastal flood")}
-                                            >
-                                                {intl.formatMessage({
-                                                    id: "description_saferplaces.keyword2"
-                                                })}
-                                            </Button>{" "}
-                                            {intl.formatMessage({
-                                                id: "description_saferplaces.text3"
+                                                id: "description_saferplaces.keyword1"
                                             })}
-                                            .
-                                        </Text>
+                                        </Button>{" "}
+                                        {intl.formatMessage({
+                                            id: "description_saferplaces.text2"
+                                        })}{" "}
+                                        <Button
+                                            variant="link"
+                                            color="#2e9ecc"
+                                            onClick={() => setActiveKeyword("coastal flood")}
+                                        >
+                                            {intl.formatMessage({
+                                                id: "description_saferplaces.keyword2"
+                                            })}
+                                        </Button>{" "}
+                                        {intl.formatMessage({
+                                            id: "description_saferplaces.text3"
+                                        })}
+                                        .
+                                    </Text>
+                                </Flex>
+                                {activeKeyword && (
+                                    <Flex>
+                                        <TaxonomyInfo
+                                            keyword={activeKeyword}
+                                            onClose={() => setActiveKeyword(null)}
+                                        />
                                     </Flex>
-                                    {activeKeyword && (
-                                        <Flex>
-                                            <TaxonomyInfo
-                                                keyword={activeKeyword}
-                                                onClose={() => setActiveKeyword(null)}
-                                            />
-                                        </Flex>
-                                    )}
-                                    <Field.Root required>
-                                        <Field.Label padding={0}> Location </Field.Label>
-                                        <Select.Root
-                                            collection={locationCollection}
-                                            value={[selectedLocation]}
-                                            onValueChange={handleLocationChange}
-                                        >
-                                            <Select.HiddenSelect />
-                                            <Select.Label> Select a Location </Select.Label>
-                                            <Select.Control>
-                                                <Select.Trigger>
-                                                    <Select.ValueText placeholder="Select a Location" />
+                                )}
+                                <FormControl isRequired>
+                                    <FormLabel padding={0}> 
+                                        {intl.formatMessage({id: "modal.location"})}
+                                    </FormLabel>
+                                    <Select
+                                        id="location"
+                                        value={selectedLocation}
+                                        onChange={handleLocationChange}
+                                    >
+                                        <option value="">
+                                            {intl.formatMessage({id: "modal.selectLocation"})}
+                                        </option>
+                                        {Object.keys(locationDemFiles).map((locationName) => (
+                                            <option key={locationName} value={locationName}>
+                                                {locationName}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormControl>
 
-                                                </Select.Trigger>
-                                            </Select.Control>
-                                            <Portal>
-                                                <Select.Positioner>
-                                                    <Select.Content>
-                                                        {locationCollection.items.map((loc) => (
-                                                            <Select.Item item={loc} key={loc.value}>
-                                                                {loc.label}
-                                                                <Select.ItemIndicator />
-                                                            </Select.Item>
-                                                        ))}
-                                                    </Select.Content>
-                                                </Select.Positioner>
-                                            </Portal>
-                                        </Select.Root>
-                                    </Field.Root>
-
-                                    <Field.Root required>
-                                        <Field.Label padding={0}> Model </Field.Label>
-                                        <Select.Root
-                                            id="model"
-                                            collection={modelCollection}
-                                            value={[model]}
-                                            onValueChange={handleModelChange}
-                                        >
-                                            <Select.HiddenSelect />
-                                            <Select.Label> Select a Model </Select.Label>
-                                            <Select.Control>
-                                                <Select.Trigger>
-                                                    <Select.ValueText placeholder="Select a Model" />
-
-                                                </Select.Trigger>
-                                            </Select.Control>
-                                            <Portal>
-                                                <Select.Positioner>
-                                                    <Select.Content>
-                                                        {modelCollection.items.map((mod) => (
-                                                            <Select.Item item={mod} key={mod.value}>
-                                                                {mod.label}
-                                                                <Select.ItemIndicator />
-                                                            </Select.Item>
-                                                        ))}
-                                                    </Select.Content>
-                                                </Select.Positioner>
-                                            </Portal>
-                                        </Select.Root>
-                                    </Field.Root>
-
-                                    {model === "safer_rain" && (
-                                        <Field.Root required>
-                                            <Field.Label padding={0} htmlFor="rain">
-                                                Rain Intensity (mm){" "}
-                                            </Field.Label>
-                                            <Input
-                                                type="text"
-                                                id="rain"
-                                                value={rainIntensity}
-                                                onChange={handleRainIntensityChange}
-                                                placeholder="Input Value, e.g. 10"
-                                                variant="outline"
-                                            />
-                                        </Field.Root>
-                                    )}
-
-                                    {model === "safer_coast" && (
-                                        <Field.Root required>
-                                            <Field.Label padding={0} htmlFor="esl">
-                                                Extreme Sea Level (m)
-                                            </Field.Label>
-                                            <Input
-                                                type="number"
-                                                id="esl"
-                                                value={extremeSeaLevel === null ? "" : extremeSeaLevel}
-                                                onChange={handleESLChange}
-                                                placeholder="Input Value, e.g. 1"
-                                                variant="outline"
-                                            />
-                                        </Field.Root>
-                                    )}
-                                    {generationStatus && <p>Status: {generationStatus}</p>}
-                                    {error && <p style={{ color: "red" }}>Error: {error}</p>}
-                                    {downloadLink && (
-                                        <Button color={"white"} bg={"#2e9ecc"}>
-                                            {" "}
-                                            <a
-                                                href={downloadLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                Download Flood Map
-                                            </a>
-                                        </Button>
-                                    )}
-                                </VStack>
-                            )}
-                        </Dialog.Body>
-                        <Dialog.Footer display="flex" justifyContent="space-between">
-                            {tokenSubmitted && (
-                                <>
-                                    <Button
-                                        color={"white"}
-                                        bg={"#2e9ecc"}
-                                        onClick={handleGenerateMap}
-                                        disabled={
-                                            !selectedLocation ||
-                                            (model === "safer_rain" && !rainIntensity) || //only rainIntensity for safer_rain
-                                            (model === "safer_coast" && extremeSeaLevel === 0) || //only ESL for safer_coast
-                                            !!jobId
+                                <FormControl isRequired>
+                                    <FormLabel padding={0}> 
+                                        {intl.formatMessage({id: "modal.model"})} 
+                                    </FormLabel>
+                                    <Select
+                                        id="model"
+                                        value={model}
+                                        placeholder={intl.formatMessage({id: "modal.selectModel"})} 
+                                        onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                                            setModel(e.target.value)
                                         }
                                     >
-                                        Run Model
+                                        <option value="safer_rain">Safer Rain</option>
+                                        <option value="safer_coast">Safer Coast</option>
+                                    </Select>
+                                </FormControl>
+
+                                {model === "safer_rain" && (
+                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                        <PopoverTrigger>
+                                            <IconButton
+                                                marginLeft="2px"
+                                                size="s"
+                                                aria-label="Info"
+                                                icon={<FaInfo />}
+                                                variant="ghost"
+                                                color="black" />
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverBody overflow="auto">
+                                                {intl.formatMessage({ id: "info_icon_saferrain.description" })}
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    </Popover><FormControl isRequired>
+                                        <FormLabel padding={0} htmlFor="rain">
+                                            {intl.formatMessage({id: "modal.inputRain"})}{" "}
+                                        </FormLabel>
+                                        <Input
+                                            type="text"
+                                            id="rain"
+                                            value={rainIntensity}
+                                            onChange={handleRainIntensityChange}
+                                            placeholder={intl.formatMessage({id: "placeholders.info3"})}
+                                            variant="outline" />
+                                    </FormControl></>
+                                )}
+
+                                {model === "safer_coast" && (
+                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                        <PopoverTrigger>
+                                            <IconButton
+                                                marginLeft="2px"
+                                                size="s"
+                                                aria-label="Info"
+                                                icon={<FaInfo />}
+                                                variant="ghost"
+                                                color="black" />
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverBody overflow="auto">
+                                                {intl.formatMessage({ id: "info_icon_safercoast.description" })}
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    </Popover><FormControl isRequired>
+                                        <FormLabel padding={0} htmlFor="esl">
+                                            {intl.formatMessage({id: "modal.inputSea"})}
+                                        </FormLabel>
+                                        <Input
+                                            type="number"
+                                            id="esl"
+                                            value={extremeSeaLevel === null ? "" : extremeSeaLevel}
+                                            onChange={handleESLChange}
+                                            placeholder={intl.formatMessage({id: "placeholders.info4"})}
+                                            variant="outline" />
+                                    </FormControl></>
+                                )}
+                                {generationStatus && <p>Status: {generationStatus}</p>}
+                                {error && <p style={{ color: "red" }}>Error: {error}</p>}
+                                {downloadLink && (
+                                    <Button color={"white"} bg={"#2e9ecc"}>
+                                        {" "}
+                                        <a
+                                            href={downloadLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {intl.formatMessage({id: "modal.downloadMap"})}
+                                        </a>
                                     </Button>
-                                </>
-                            )}
-                            <Dialog.CloseTrigger
-                                onClick={onClose}
-                            />
-                        </Dialog.Footer>
-                    </Dialog.Content>
-                </Dialog.Positioner>
-            </Dialog.Root>
+                                )}
+                            </VStack>
+                        )}
+                    </ModalBody>
+                    <ModalFooter display="flex" justifyContent="space-between">
+                        {tokenSubmitted && (
+                            <>
+                                <Button
+                                    color={"white"}
+                                    bg={"#2e9ecc"}
+                                    onClick={handleGenerateMap}
+                                    disabled={
+                                        !selectedLocation ||
+                                        (model === "safer_rain" && !rainIntensity) || // Only rainIntensity for safer_rain
+                                        (model === "safer_coast" && extremeSeaLevel === 0) || // Only ESL for safer_coast
+                                        !!jobId
+                                    }
+                                >
+                                    {intl.formatMessage({id: "modal.runModel"})}
+                                </Button>
+                            </>
+                        )}
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Box>
     );
 }

@@ -1,0 +1,4 @@
+messages:
+  info:
+    clickedPoint: "Kattintott Pont"
+    selectedLayers: "Kiválasztott Rétegek"

@@ -6,6 +6,35 @@ messages:
     keyword1: "Starkregenereignissen"
     keyword2: "Küstenüberflutungen"
   info_icon_safercoast:
-    description: "DE: Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
+    description: 
+      "de: Please note that this simulation is a reflection of reality, but should not be 
+        taken as such. While the result of this simulation presents one possible outcome, 
+        uncertainty is inherent in flood modeling; for decision-making purposes, this information 
+        should be used in tandem with outside expertise to consider external risk factors."
   info_icon_saferrain:
-    description: "DE: Please note that this simulation is a reflection of reality, but should not be taken as such. While the result of this simulation presents one possible outcome, uncertainty is inherent in flood modeling; for decision-making purposes, this information should be used in tandem with outside expertise to consider external risk factors."
+    description: 
+      "de: Please note that this simulation is a reflection of reality, but should not be 
+      taken as such. While the result of this simulation presents one possible outcome, 
+      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
+      should be used in tandem with outside expertise to consider external risk factors."
+  modal: 
+    header: "de: SaferPlaces Flood Modeling"
+    credentials: "de: Please enter valid credentials to access the model dialog"
+    userName: "de: Username"
+    token: "dde: Token"
+    enter: "de: Enter"
+    configuration: "de: Model Configuration"
+    credentialChangeButton: "de: Change Credentials"
+    location: "de: Location"
+    selectLocation: "de: Select a Location"
+    model: "de: Model"
+    selectModel: "de: Select a Model"
+    inputRain: "de: Rain Intensity (mm)"
+    inputSea: "de: Extreme Sea Level (m)"
+    downloadMap: "de: Download Flood Map"
+    runModel: "de: Run Model"
+  placeholders: 
+    info1: "de: Enter username"
+    info2: "de: Enter token"
+    info3: "de: Input Value, e.g. 10"
+    info4: "de: Input Value, e.g. 1"

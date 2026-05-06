@@ -1,5 +1,5 @@
-/* eslint-disable header/header */
-
+// SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
+// SPDX-License-Identifier: Apache-2.0
 declare module "ol-ext/control/Swipe" {
     import { Control } from "ol/control";
     import Layer from "ol/layer/Layer";

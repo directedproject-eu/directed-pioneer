@@ -94,8 +94,8 @@ export const FloodSlider = () => {
 
     const levelUnit = config.unit;
     const levelTitle = floodType === "pluvial" 
-        ? intl.formatMessage({ id: "slider.rainfall_level", defaultMessage: "Rainfall Level (mm)"}) 
-        : intl.formatMessage({ id: "slider.storm_surge_level", defaultMessage: "Storm Surge Level (cm)"});
+        ? intl.formatMessage({ id: "slider.rainfallLevel", defaultMessage: "Rainfall Level (mm)"}) 
+        : intl.formatMessage({ id: "slider.stormSurgeLevel", defaultMessage: "Storm Surge Level (cm)"});
 
     if (!floodType || !currentModel) {
         return null;
@@ -149,7 +149,7 @@ export const FloodSlider = () => {
                             </Slider.Control>
                         </Slider.Root>
                         <Text mt={2} fontSize="md">
-                            Selected Level: 
+                            {intl.formatMessage({ id: "slider.selectedLevel", defaultMessage: "Selected Level:"})}
                             <Text as="span" fontWeight="bold" color="blue.600" ml={1}>
                                 {sliderValue} {levelUnit}
                             </Text>

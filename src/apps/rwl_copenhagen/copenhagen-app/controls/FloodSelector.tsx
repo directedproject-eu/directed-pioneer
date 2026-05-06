@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useService } from "open-pioneer:react-hooks";
+import { useState } from "react";
 import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../Components/ExpandableBox";
@@ -35,6 +36,7 @@ export function FloodSelector() {
                         marginLeft="2px" 
                         size="sm"
                         aria-label="Info"
+                        icon={<FaInfo />}
                         variant="ghost"
                         color="black"
                     >

@@ -21,3 +21,8 @@ messages:
       loading: "Preparing download..."
       select_layer: "Select a layer to download"
       description: "Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."
+  layer_swipe:
+    title: "Select Layers for Comparison"
+    description: "Only layers which have been selected in the Operational Layers are viewable for comparison."
+    left: "Select Left Layer"
+    right: "Select Right Layer"

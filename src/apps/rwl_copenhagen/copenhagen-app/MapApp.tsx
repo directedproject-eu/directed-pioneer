@@ -50,6 +50,7 @@ import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
 import { FaInfo } from "react-icons/fa";
 
+
 import { LayerDownload } from "layerdownload";
 import { Window } from "@open-pioneer-community/window";
 import { FaWater } from "react-icons/fa";
@@ -421,7 +422,7 @@ export function MapApp() {
                                     padding={1}
                                 >
                                     {/* SaferPlaces flood model dialog */}
-                                    <ModelClient />
+                                    {/* <ModelClient /> */}
                                     {/* <SaferPlacesFloodMap /> */}
                                     {/* <ToolButton
                                         label={intl.formatMessage({ id: "measurementTitle" })}

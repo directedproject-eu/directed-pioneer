@@ -247,6 +247,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                     marginLeft="2px"
                                     size="sm"
                                     aria-label="Info"
+                                    icon={<FaInfo />}
                                     variant="ghost"
                                     color="black"
                                 >

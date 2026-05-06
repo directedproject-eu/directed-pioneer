@@ -11,8 +11,7 @@ messages:
   charts:
     button_title: "Erntediagramm"
     title_chart1: "Anbauflächen in der Rhein-Erft Region für "
-    explanation: "This graph displays the average value, as well as the 20th to 80th percentile, of
-                predicted crop yields across all models in the Rhine-Erft region."
+    explanation: "Dieser Graph zeigt den Durchschnittswert sowie das 20. bis 80. Perzentil der vorhergesagten Ernteerträge über alle Modelle in der Rhein-Erft-Region."
   map:
     download:
       heading: "Layer herunterladen"
@@ -21,3 +20,8 @@ messages:
       loading: "Bereite Download vor..."
       select_layer: "Wähle einen Layer zum Herunterladen aus"
       description: "Nur die sichtbaren Layer in den Operational Layers sind über das Dropdown-Menü zum Herunterladen verfügbar."
+  layer_swipe:
+    title: "Layer zum Vergleichen auswählen"
+    description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
+    left: "Linken Layer auswählen"
+    right: "Rechten Layer auswählen"

@@ -1,3 +1,40 @@
 messages:
-  info_mcdm:
-    text1: "DA: As defined by the IPCC (2022), vulnerability encompasses a variety of concepts and elements, including sensitivity and susceptibility to harm and lack of capacity to cope and adapt. The criteria presented in this MCDM provide an example of some external factors that could be considered when implementing an adaptation measure, however, do not encompass all vulnerabilities. The MCDM is thus a tool which can aid in decision-making, however, can never fully realize an entire socioeconomic system. Please take this into consideration when using the tool."
+  popUp:
+    text1: 
+      "da: As defined by the IPCC (2022), vulnerability encompasses a variety of 
+      concepts and elements, including sensitivity and susceptibility to harm and lack of 
+      capacity to cope and adapt. The criteria presented in this MCDM provide an example of 
+      some external factors that could be considered when implementing an adaptation measure, 
+      however, do not encompass all vulnerabilities. The MCDM is thus a tool which can 
+      aid in decision-making, however, can never fully realize an entire socioeconomic system. 
+      Please take this into consideration when using the tool."
+    sensitivityAnalysis:
+      "da: This chart shows the ranking of measures in all possible combinations of criteria weightings; 
+      it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 
+      50% of the time."
+    rankingResult:
+      "da: This chart shows the ranking of measures based on the criteria weightings which were submitted. 
+      For example, if cost was weighted as highly important to you, this chart shows which measures 
+      align best with this, with 1 being the best possible rank."
+    
+  modalStart:
+    header: "da: CLIMADA Multi-Criteria Decision Making (MCDM)"
+    token: "da: Please enter a token to access the MCDM Dialog."
+    tokenEnter: "da: Enter your token here and press 'continue'"
+    continue: "da: Continue"
+  modalMain: 
+    header: "da: Multi-Criteria Decision Making (MCDM)"
+    criteriaInfo: "da: Please submit criteria weights to view the chart."
+    calculate: "da: Calculating MCDM analysis..."
+    weight: "da: Please weight each criteria and press submit to view results."
+    back: "da: Back"
+    likertNot: "da: Not Important"
+    likertSomewhat: "da: Somewhat Important"
+    likertHighly: "da: Highly Important"
+    submitCriteria: "da: Submit Criteria Weights"
+    sensitivityAnalysisGraph: "da: Measure Ranking Result: Sensitivity Analysis"
+    sensitivityMeasure: "da: Measure"
+    sensitivityPercent: "da: Percentage of Total Samples"
+
+  
+  

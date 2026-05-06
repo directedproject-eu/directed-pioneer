@@ -57,7 +57,7 @@ export function MapApp() {
 
     function toggleDownload() {
         setDownloadIsActive(!downloadIsActive);
-    }
+    }    
 
     //////////////////
     /// LayerSwipe ///

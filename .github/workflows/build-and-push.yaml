@@ -25,6 +25,9 @@ on:
     tags:
     - "v*"
 
+permissions:
+  contents: read
+
 jobs:
   build_and_push_app_to_docker_hub:
     timeout-minutes: 5
@@ -128,7 +131,7 @@ jobs:
         curl -X POST -H 'Content-Type: application/json' "$WEBHOOK_URL" -d "$JSON_PAYLOAD"
     -
      name: Trigger redeployment
-     uses: actions/github-script@v8
+     uses: actions/github-script@v9
      with:
        github-token: ${{ secrets.GHA_WORKFLOW_TRIGGER }}
        script: |

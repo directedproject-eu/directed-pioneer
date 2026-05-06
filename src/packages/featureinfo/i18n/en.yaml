@@ -1,0 +1,5 @@
+messages: 
+  info:
+    clickedPoint: "Clicked Point"
+    selectedLayers: "Selected Layers"
+  

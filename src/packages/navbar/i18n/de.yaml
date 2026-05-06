@@ -6,3 +6,27 @@ messages:
         en: Englisch
         hu: Ungarisch
         da: Dänisch
+  disclaimerContent:
+    brief: 
+      "Den Nutzern wird empfohlen, die Informationen selbstständig zu überprüfen 
+      und den Dienst auf eigenes Risiko zu nutzen."
+    text: 
+      "Dieser Webdienst integriert und kombiniert verschiedene öffentlich zugängliche Datenquellen, darunter Daten und Informationen des Copernicus-Klimadienstes (C3S) und anderer Copernicus-Komponenten. Der Dienst wurde im Rahmen des europäischen Innovationsprojekts DIRECTED entwickelt, und die hier bereitgestellten Informationsprodukte wurden mit Sorgfalt und nach bestem Wissen erstellt.
+      Der Dienst kann Copernicus-Daten verarbeiten, integrieren oder umwandeln. Obwohl wir bestrebt sind, qualitativ hochwertige und nützliche Informationen bereitzustellen, handelt es sich bei den Ergebnissen nicht um offizielle Copernicus-Produkte. Die Europäische Union und das Copernicus-Programm übernehmen keine Verantwortung für die Nutzung der über diesen Dienst bereitgestellten Daten oder Informationen.
+      Darüber hinaus werden die über diesen Dienst bereitgestellten Informationen „wie besehen“ angeboten, ohne jegliche ausdrückliche oder stillschweigende Gewährleistung, einschließlich, aber nicht beschränkt auf die Eignung für einen bestimmten Zweck, Genauigkeit, Vollständigkeit, Aktualität oder Zuverlässigkeit.
+      Wir lehnen jegliche Haftung für Verluste, Schäden oder Unannehmlichkeiten ab, die sich aus der Nutzung des Dienstes oder dem Vertrauen auf dessen Ergebnisse ergeben können. Den Nutzern wird dringend empfohlen, die Informationen unabhängig zu überprüfen und diesen Dienst auf eigenes Risiko zu nutzen.
+      Durch die Nutzung dieses Webdienstes erkennen Sie diese Bedingungen an und erklären sich damit einverstanden."
+  navbar: 
+    home: "Startseite"
+    rwls: "Praxislabore"
+    rwl1: "Die Hauptstadtregion Dänemarks"
+    rwl2: "Region Emilia-Romagna"
+    rwl3: "Donauregion"
+    rwl4: "Region Rhein-Erft"
+    website: "DIRECTED Projekt-Website"
+    documentation: "Dokumentation"
+    gettingStarted: "Erste Schritte"
+    userManual: "Bedienungsanleitung"
+    login: "Anmelden"
+    logout: "Abmelden"
+    

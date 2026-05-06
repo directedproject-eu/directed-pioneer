@@ -3,6 +3,9 @@
 import { MapModel } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
+import WebGLTileLayer from "ol/layer/WebGLTile";
+import { GeoTIFF } from "ol/source";
+import VectorLayer from "ol/layer/Vector"; // Added import for Vector Layers
 
 //fetch feature info for all visible WMS layers at clicked map coord
 export function fetchFeatureInfo(
@@ -19,10 +22,11 @@ export function fetchFeatureInfo(
 ) {
     if (!mapModel?.olMap) return;
 
-    // all layers in the map model
+    // Ensure we have the pixel, calculating it if it wasn't passed directly
+    const currentPixel = pixel || mapModel.olMap.getPixelFromCoordinate(coordinate);
     const allLayers = mapModel.olMap.getAllLayers();
 
-    // filter for visible WMS tile layers
+    // 1. WMS-FeatureInfo Promises
     const visibleWMSTileLayers = allLayers.filter(
         (l) =>
             l.get("visible") &&
@@ -49,22 +53,22 @@ export function fetchFeatureInfo(
         return fetch(url)
             .then((res) => res.json())
             .then((data) => ({
-                layerName: layer.get("title"),
+                layerName: layer.get("title") || layer.get("id"),
                 data
             }))
             .catch(() => null);
     });
 
-    // GeoTIFF pixel value Promises
+    // 2. GeoTIFF pixel value Promises
+    const visibleGeoTIFFLayers = allLayers.filter(
+        (l) => l.get("visible") && l.get("id") && l instanceof WebGLTileLayer
+    );
+
     const geoTIFFFetches = visibleGeoTIFFLayers.map(async (layer) => {
         layer.changed(); //ensure latest data
         try {
-            // console.log("Clicked coordinate:", coordinate);
-            // console.log("Pixel on canvas:", pixel);
-            // console.log("title:", layer.get("title"));
-    
-            const valueAtPixel = layer.getData(pixel);
-            let valueAsString: number | null = null;
+            const valueAtPixel = currentPixel ? layer.getData(currentPixel) : null;
+            let valueAsString: number | string | null = null;
 
             if (
                 valueAtPixel instanceof Float32Array ||
@@ -73,10 +77,10 @@ export function fetchFeatureInfo(
             ) {
                 valueAsString = valueAtPixel[0]?.toFixed(2);
             }
-                
+
             return {
-                layerName: layer.get("title"),
-                data: { value: valueAsString}
+                layerName: layer.get("title") || layer.get("id"),
+                data: { value: valueAsString }
             };
         } catch (err) {
             console.error("Error reading GeoTIFF value:", err);
@@ -84,15 +88,45 @@ export function fetchFeatureInfo(
         }
     });
 
-    // WMS + GeoTIFF Promises combined
-    Promise.all([...wmsFetches, ...geoTIFFFetches]).then((results) => {
+    // 3. Vector/GeoJSON Feature Promises
+    const vectorFetches: Promise<{ layerName: string; data: Record<string, unknown> } | null>[] = [];
+
+    if (currentPixel) {
+        mapModel.olMap.forEachFeatureAtPixel(
+            currentPixel,
+            (feature, layer) => {
+                // Ensure the clicked feature belongs to a VectorLayer that is visible
+                if (layer && layer instanceof VectorLayer && layer.get("visible")) {
+                    const properties = feature.getProperties();
+                    
+                    // Identify the geometry column name so we can filter it out
+                    const geometryName = typeof feature.getGeometryName === "function" ? feature.getGeometryName() : "geometry";
+                    
+                    // Exclude the bulky geometry object from the data payload so the UI table stays clean
+                    const { [geometryName]: _, ...cleanProperties } = properties;
+
+                    vectorFetches.push(
+                        Promise.resolve({
+                            layerName: layer.get("title") || layer.get("id") || "Vector Data",
+                            data: cleanProperties
+                        })
+                    );
+                }
+            },
+            {
+                hitTolerance: 5 // Gives a 5px buffer, making it much easier for users to click small points/lines
+            }
+        );
+    }
+
+    // 4. Combine WMS, GeoTIFF, and Vector Promises
+    Promise.all([...wmsFetches, ...geoTIFFFetches, ...vectorFetches]).then((results) => {
         const filtered = results.filter((r): r is NonNullable<typeof r> => !!r);
         setFeatureInfo({ features: filtered });
     });
 }
 
-
-//OL click handler for feature info
+// OL click handler for feature info
 export function setupClickHandler(
     mapModel: MapModel,
     projection: string,
@@ -104,15 +138,13 @@ export function setupClickHandler(
 ) {
     if (mapModel?.olMap) {
         mapModel.olMap.on("singleclick", (event) => {
-            setFeatureInfo({ features: null }); //clear current feature info
+            setFeatureInfo({ features: null }); // clear current feature info
             const coordinate = event.coordinate;
             const viewResolution = mapModel.olMap.getView().getResolution();
-
-            console.log("Map clicked at:", coordinate);
-            console.log("View Resolution:", viewResolution);
+            const pixel = mapModel.olMap.getPixelFromCoordinate(coordinate); // Make sure pixel is calculated
 
             if (coordinate && viewResolution) {
-                fetchFeatureInfo(mapModel, coordinate, viewResolution, projection, setFeatureInfo);
+                fetchFeatureInfo(mapModel, coordinate, viewResolution, projection, setFeatureInfo, pixel);
             }
         });
 

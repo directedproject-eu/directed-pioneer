@@ -7,7 +7,7 @@ import "highcharts/highcharts-more"; // Note: no "highchartsMore from"
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
 
-type EnsembleProps = {
+type ChartProps = {
     regionName: string;
     files: string[];
     regionCode: string;
@@ -15,7 +15,7 @@ type EnsembleProps = {
     selectedScenario: string;
 };
 
-const LineChart: React.FC<EnsembleProps> = ({
+const LineChart: React.FC<ChartProps> = ({
     regionName,
     files,
     regionCode,
@@ -74,8 +74,6 @@ const LineChart: React.FC<EnsembleProps> = ({
                             })
                     )
             )
-
-            // Changed region codes for lucerne and spring barley from AT11/AT22 to HU22.
         ).then((allCsvData) => {
             const dataGroups = {};
             const crops: string[] = [];
@@ -100,19 +98,44 @@ const LineChart: React.FC<EnsembleProps> = ({
     if (Object.keys(data).length === 0) {
         return "loading...";
     }
-    const numbers = [...Array(10).keys()];
-
     const allCropsData = selectedCrops.map((crop) => {
-        const numbers = [...Array(10).keys()];
-
-        // For each crop, create an array of its data points
-        const cropData = numbers.map((number) => {
-            return data[
-                `${crop} | Real ${number + scenarioRealization[selectedScenario]} | CMIP6:${selectedScenario.toUpperCase()} | ${regionCode}`
+        if (selectedScenario == "RCP8dot5") {
+            const models = [
+                "Cc",
+                "Cd1",
+                "Ck",
+                "Cs",
+                "Ec",
+                "Ed1",
+                "Ed2",
+                "Ed3",
+                "Ek1",
+                "Ek2",
+                "Ek3",
+                "Es",
+                "Hc",
+                "Hd",
+                "Hk",
+                "Hs",
+                "Is",
+                "Mc",
+                "Ms",
+                "Nd",
+                "Ns"
             ];
-        });
-
-        return cropData;
+            const cropData = models.map((model) => {
+                return data[`${crop} | Real ${model} | CMIP5:RCP8.5 | ${regionCode}`];
+            });
+            return cropData;
+        } else {
+            const numbers = [...Array(10).keys()];
+            const cropData = numbers.map((number) => {
+                return data[
+                    `${crop} | Real ${number + scenarioRealization[selectedScenario]} | CMIP6:${selectedScenario.toUpperCase()} | ${regionCode}`
+                ];
+            });
+            return cropData;
+        }
     });
     const series = allCropsData.flatMap((cropData, index) => {
         if (!cropData || !Array.isArray(cropData)) return [];
@@ -186,10 +209,13 @@ const LineChart: React.FC<EnsembleProps> = ({
             }
         ];
     });
-
+    const title =
+        selectedScenario == "RCP8dot5"
+            ? `Crop Yields in ${regionName} for CMIP5:RCP8.5`
+            : `Crop Yields in ${regionName} for CMIP6:${selectedScenario.toUpperCase()}`;
     const options = {
         title: {
-            text: `Crop Yields in ${regionName} for CMIP6:${selectedScenario.toUpperCase()}`
+            text: title
         },
         xAxis: {
             type: "datetime",

@@ -50,10 +50,19 @@ import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
 import ChartComponentZala from "./components/ChartComponentZala";
+import ChartComponentForestry from "./components/ChartComponentForestry";
 import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
+import { ChakraProvider } from "@open-pioneer/chakra-integration";
+import { theme } from "theme";
+import { ForestrySelector } from "./services/ForestrySelector";
+import { NutsSelector } from "./services/NutsSelector";
+
+
+
+type ActiveChartType = "crop" | "forestry" | null;
 
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,6 +81,10 @@ export function MapApp() {
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
 
+    const [activeChart, setActiveChart] = useState<ActiveChartType>(null);
+    const [forestryLocation, setForestryLocation] = useState<string>("keszthelyi_erdeszet_vallus");
+    const [nuts, setNuts] = useState<string>("AT11");
+
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
     }
@@ -88,12 +101,49 @@ export function MapApp() {
         }),
         [prepSrvc]
     );
-    const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
     const { open, onClose } = useDisclosure({ defaultOpen: true });
 
-    /////////////////////////
-    /// Past event layers ///
-    ////////////////////////
+    const forestrySelector = useService<ForestrySelector>("app.ForestrySelector");
+    const nutsSelector = useService<NutsSelector>("app.NutsSelector");
+
+    const { clickedForestryLocation } = useReactiveSnapshot(
+        () => ({
+            clickedForestryLocation: forestrySelector.selectedLocationId
+        }),
+        [forestrySelector]
+    );
+
+    const { clickedNuts } = useReactiveSnapshot(
+        () => ({
+            clickedNuts: nutsSelector.selectedNutsId
+        }),
+        [nutsSelector]
+    );
+
+
+    useEffect(() => {
+        if (clickedForestryLocation) {
+            setForestryLocation(clickedForestryLocation);
+            setActiveChart("forestry");
+        }
+    }, [clickedForestryLocation]);
+
+    const closeChartModal = () => {
+        setActiveChart(null);
+        forestrySelector.clearSelection();
+        nutsSelector.clearSelection();
+    };
+
+    useEffect(() => {
+        if (clickedNuts) {
+            setNuts(clickedNuts);
+            setActiveChart("crop");
+        }
+    }, [clickedNuts]);
+
+
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
+
     function createPastEventLayer(
         collectionId: string,
         id: string,
@@ -101,7 +151,7 @@ export function MapApp() {
         description: string,
         color: string
     ) {
-        const pastEventLayer = new SimpleLayer({
+        return new SimpleLayer({
             id: `${id}`,
             title: intl.formatMessage({ id: `map.legend.event_variables.${title}` }),
             description: `${description}`,
@@ -124,7 +174,6 @@ export function MapApp() {
             }),
             isBaseLayer: false
         });
-        return pastEventLayer;
     }
 
     useEffect(() => {
@@ -169,7 +218,7 @@ export function MapApp() {
                 "green"
             )
         );
-    }, [authState.kind]);
+    }, [authState.kind, mapModel]);
 
     //////////////////
     /// LayerSwipe ///
@@ -369,18 +418,22 @@ export function MapApp() {
                                                             alignItems="center"
                                                         ></Flex>
                                                         <Text fontWeight="bold" mt={4}>
-                                                            Select Layers for Comparison
+                                                            {intl.formatMessage({
+                                                                id: "layer_swipe.title"
+                                                            })}
                                                         </Text>
                                                         <Spacer />
                                                         <Text fontSize={16}>
-                                                            ➡️ Only layers which have been selected in
-                                                            the Operational Layers are viewable for
-                                                            comparison.
+                                                            {intl.formatMessage({
+                                                                id: "layer_swipe.description"
+                                                            })}
                                                         </Text>
                                                         <Flex direction="row" gap={4} p={4}>
                                                             <NativeSelect.Root>
                                                                 <NativeSelect.Field
-                                                                    placeholder="Select Left Layer"
+                                                                    placeholder={intl.formatMessage({
+			                                                id: "layer_swipe.left"
+			                                            })}
                                                                     value={selectedLeftLayer ?? ""}
                                                                     onChange={(e) =>
                                                                         setSelectedLeftLayer(e.target.value)
@@ -398,7 +451,9 @@ export function MapApp() {
                                                             </NativeSelect.Root>
                                                             <NativeSelect.Root>
                                                                 <NativeSelect.Field
-                                                                    placeholder="Select Right Layer"
+                                                                    placeholder={intl.formatMessage({
+		                                                        id: "layer_swipe.right"
+		                                                    })}
                                                                     value={selectedRightLayer ?? ""}
                                                                     onChange={(e) =>
                                                                         setSelectedRightLayer(
@@ -457,13 +512,21 @@ export function MapApp() {
                                                 active={downloadIsActive}
                                                 onClick={toggleDownload}
                                             />
-                                            <ToolButton
-                                                label={intl.formatMessage({
-                                                    id: "charts.button_title"
-                                                })}
-                                                icon={<PiChartLineDownLight />}
-                                                onClick={onOpenChart}
-                                            />
+					<ToolButton
+	                                    label={intl.formatMessage({
+	                                        id: "charts.zala_crop.button_title"
+	                                    })}
+	                                    icon={<GiWheat />}
+	                                    onClick={() => setActiveChart("crop")}
+	                                />
+
+	                                <ToolButton
+	                                    label={intl.formatMessage({
+	                                        id: "charts.forestry.button_title"
+	                                    })}
+	                                    icon={<GiCircleForest />}
+	                                    onClick={() => setActiveChart("forestry")}
+	                                />
                                             <ToolButton
                                                 label={intl.formatMessage({ id: "measurementTitle" })}
                                                 icon={<PiRulerLight />}
@@ -520,16 +583,18 @@ export function MapApp() {
                                                 </Box>
                                             </Box>
                                         )}
-                                        <Box
-                                            backgroundColor="white"
-                                            borderWidth="1px"
-                                            borderRadius="lg"
-                                            padding={2}
-                                            boxShadow="lg"
-                                            role="dialog"
-                                            aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                            marginBottom="10px"
-                                        >
+                                    )}
+                                    <Box
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        role="dialog"
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                        marginBottom="10px"
+                                    >
+                                        <ChakraProvider theme={theme}>
                                             <Toc
                                                 map={mapModel.map}
                                                 showTools={true}
@@ -570,14 +635,20 @@ export function MapApp() {
                 </DefaultMapProvider>)}
             </Flex>
 
-            <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} size={"full"}>
+            <Dialog.Root open={activeChart !== null} onOpenChange={onCloseChartModal} size={"full"}>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content>
-                        <Dialog.Header>Zala Chart</Dialog.Header>
+                        <Dialog.Header>
+				{activeChart === "crop" && "Crop Yield Chart"}
+                        	{activeChart === "forestry" && "Forestry Data Chart"}	
+			</Dialog.Header>
                         <Dialog.CloseTrigger />
                         <Dialog.Body>
-                            <ChartComponentZala></ChartComponentZala>
+                            	{activeChart === "crop" && <ChartComponentCropyield nutsId={nuts} />}
+		                {activeChart === "forestry" && (
+		                    <ChartComponentForestry initialLocation={forestryLocation} />
+		                )}
                         </Dialog.Body>
 
                         <Dialog.Footer>

@@ -222,7 +222,6 @@ export class IsimipHandlerImpl implements IsimipHandler {
         const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`;
         getRangeFromGeoTiff(url)
             .then((range) => {
-                console.log(range);
                 this.#legendMetadata.value = {
                     range: range,
                     variable: this.#selectedVariable.value
@@ -287,14 +286,9 @@ export class IsimipHandlerImpl implements IsimipHandler {
         const info = layer_info[this.#selectedVariable.value];
 
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            model?.layers
-                .getLayerById("isimip")
-                ?.setTitle(info.title);
-            model?.layers
-                .getLayerById("isimip")
-                ?.setDescription(info.description);
+            model?.layers.getLayerById("isimip")?.setTitle(info.title);
+            model?.layers.getLayerById("isimip")?.setDescription(info.description);
         });
-    
 
         if (this.layer) {
             this.layer.setProperties({

@@ -6,3 +6,27 @@ messages:
         en: Engelsk
         hu: Ungarsk
         da: Dansk
+  disclaimerContent: 
+    brief: 
+      "Brugere opfordres til selv at kontrollere oplysningerne 
+      og benytter tjenesten på eget ansvar."
+    text: 
+      "Denne webtjeneste integrerer og kombinerer forskellige offentligt tilgængelige datakilder, herunder data og oplysninger fra Copernicus Climate Change Service (C3S) og andre Copernicus-komponenter. Tjenesten er udviklet som en del af det europæiske innovationsprojekt DIRECTED, og de informationsprodukter, der stilles til rådighed heri, er udarbejdet med omhu og efter vores bedste overbevisning.
+      Tjenesten kan behandle, integrere eller omforme Copernicus-data. Selvom vi bestræber os på at levere nyttige oplysninger af høj kvalitet, er resultaterne ikke officielle Copernicus-produkter. Den Europæiske Union og Copernicus-programmet påtager sig intet ansvar for brugen af de data eller oplysninger, der præsenteres via denne tjeneste.
+      Desuden tilbydes de oplysninger, der leveres via denne tjeneste, »som de er«, uden nogen form for garanti, hverken udtrykkelig eller underforstået, herunder men ikke begrænset til egnethed til et bestemt formål, nøjagtighed, fuldstændighed, aktualitet eller pålidelighed.
+      Vi fraskriver os ethvert ansvar for tab, skader eller ulemper, der måtte opstå som følge af brugen af tjenesten eller tillid til dens resultater. Brugere opfordres kraftigt til selv at verificere oplysningerne og til at benytte denne tjeneste på egen risiko.
+      Ved at benytte denne webtjeneste anerkender og accepterer du disse vilkår."
+  navbar: 
+    home: "Hjem"
+    rwls: "Laboratorier i den Virkelige Verden"
+    rwl1: "Hovedstadsområdet"
+    rwl2: "Regionen Emilia-Romagna"
+    rwl3: "Donau-Regionen"
+    rwl4: "Rhein-Erft-regionen"
+    website: "DIRECTED Projektets Hjemmeside"
+    documentation: "Dokumentation"
+    gettingStarted: "Kom godt i gang"
+    userManual: "Brugervejledning"
+    login: "Login"
+    logout: "Log ud"
+    

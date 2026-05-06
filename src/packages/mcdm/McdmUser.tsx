@@ -10,7 +10,8 @@ import {
     Flex,
     Input,
     Dialog,
-    Field
+    Field,
+    HoverCard
 } from "@chakra-ui/react";
 import { Tooltip } from "@open-pioneer/chakra-snippets/tooltip";
 import { ToolButton } from "@open-pioneer/map-ui-components";
@@ -18,6 +19,7 @@ import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
 import { Spinner, Center, Text } from "@chakra-ui/react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { useIntl } from "open-pioneer:react-hooks";
 import { useService } from "open-pioneer:react-hooks";
 import { McdmService } from "./McdmService";
 import type { ProcessExecution } from "./McdmService";
@@ -44,7 +46,7 @@ const UserWeightChart: React.FC<UserWeightChartProps> = ({ chartOptions }) => {
     if (!chartOptions) {
         return (
             <Center height="300px">
-                <Text>Please submit criteria weights to view the chart.</Text>
+                <Text>{intl.formatMessage({ id: "modalMain.criteriaInfo" })}</Text>
             </Center>
         );
     }
@@ -55,7 +57,7 @@ const SensitivityChart: React.FC<SensitivityChartProps> = ({ chartOptions }) => 
     if (!chartOptions) {
         return (
             <Center height="300px">
-                <Text>Please submit criteria weights to view the chart.</Text>
+                <Text>{intl.formatMessage({ id: "modalMain.criteriaInfo" })}</Text>
             </Center>
         );
     }
@@ -144,6 +146,8 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
     const [ranksData, setRanksData] = useState<Record<string, number> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    // const { isOpen, onOpen, onClose } = useDisclosure();
+    const intl = useIntl(); // i18n
     // const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Default mode ranks
 
     const [weights, setWeights] = useState<Weights>({
@@ -187,7 +191,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
         // Construct the process execution payload
         const jobDescription: ProcessExecution = {
             inputs: inputs,
-            synchronous: true, // Not working for async currently
+            synchronous: false, 
             processId: processId,
             response: "document"
         };
@@ -310,13 +314,13 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                 height: 400
             },
             title: {
-                text: "Measure Ranking Result: Sensitivity Analysis",
+                text: intl.formatMessage({ id: "modalMain.sensitivityAnalysisGraph" }),
                 align: "left"
             },
             xAxis: {
                 categories: processedData.categories,
                 title: {
-                    text: "Measure"
+                    text: intl.formatMessage({ id: "modalMain.sensitivityMeasure" })
                 },
                 labels: {
                     rotation: 0,
@@ -329,7 +333,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                 min: 0,
                 max: 100,
                 title: {
-                    text: "Percentage of Total Samples"
+                    text: intl.formatMessage({ id: "modalMain.sensitivityPercent" })
                 },
                 stackLabels: {
                     enabled: true,
@@ -385,7 +389,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
 
     return (
         <Box>
-            {/* <ToolButton
+            <ToolButton
                 label="Multi-Criteria Decision Making (MCDM)"
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
@@ -404,14 +408,14 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                         {!tokenSubmitted ? (
                             <Field.Root>
                                 <Field.Label padding={2} htmlFor="token">
-                                    Please enter a token to access the MCDM Dialog{" "}
-                                </Field.Label>
+                                    {intl.formatMessage({ id: "modalStart.token" })}{" "}
+                                </FormLabel>
                                 <Input
                                     type="text"
                                     id="token"
                                     value={tokenInput}
                                     onChange={handleTokenInputChange}
-                                    placeholder="Enter your token here and press 'continue'"
+                                    placeholder={intl.formatMessage({ id: "modalStart.tokenEnter" })}
                                     variant="outline"
                                 />
                                 <Button
@@ -423,7 +427,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                                     }}
                                     disabled={!tokenInput.trim()}
                                 >
-                                    Continue
+                                    {intl.formatMessage({ id: "modalStart.continue" })}
                                 </Button>
                             </Field.Root>
                         ) : (
@@ -431,15 +435,31 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                                 {loading ? (
                                     <Center flexDirection="column" py={10}>
                                         <Spinner size="md" />
-                                        <Text mt={4}>Calculating MCDM analysis...</Text>
+                                        <Text mt={4}>{intl.formatMessage({ id: "modalMain.calculate" })}</Text>
                                     </Center>
                                 ) : (
                                     <>
                                         <Flex justify="space-between" align="center" mb={4}>
                                             <Text fontWeight="semibold">
-                                                ⚖️ Please weight each criteria and press submit to
-                                                view results.
+                                                ⚖️ {intl.formatMessage({ id: "modalMain.weight" })}
                                             </Text>
+                                            <HoverCard.Root openDelay={250} closeDelay={100} placement="top">
+                                                <HoverCard.Trigger asChild>
+                                                    <IconButton
+                                                        marginLeft="2px"
+                                                        size="s"
+                                                        aria-label="Info"
+                                                        icon={<FaInfo />}
+                                                        variant="ghost"
+                                                        color="black" />
+                                                </HoverCard.Trigger>
+						<HoverCard.Positioner>
+                                                <HoverCard.Content>
+                                                    <HoverCard.Arrow />
+                                                        {intl.formatMessage({ id: "info_mcdm.text1" })}
+                                                </HoverCard.Content>
+						</HoverCard.Positioner>
+                                            </Popover>
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
@@ -448,7 +468,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                                                     // setTokenInput(""); // Optional to clear token on going back
                                                 }}
                                             >
-                                                ← Back
+                                                ← {intl.formatMessage({ id: "modalMain.back" })}
                                             </Button>
                                         </Flex>
                                         {/* optionally uncomment this and the mode state to have input for modes */}
@@ -547,7 +567,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                                         <Flex paddingY={4} />
                                         <Flex justifyContent="space-between" alignItems="center">
                                             <Tooltip
-                                                content="This chart shows the ranking of measures in all possible combinations of criteria weightings; it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 50% of the time."
+                                                content={intl.formatMessage({ id: "popUp.sensitivityAnalysis" })}
                                                 aria-label="A tooltip"
                                             >
                                                 <FaInfoCircle color="gray" cursor="pointer" />
@@ -562,7 +582,7 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                                                 alignItems="center"
                                             >
                                                 <Tooltip
-                                                    content="This chart shows the ranking of measures based on the criteria weightings which were submitted. For example, if cost was weighted as highly important to you, this chart shows which measures align best with this, with 1 being the best possible rank."
+                                                    content={intl.formatMessage({ id: "modalMain.rankingResult" })}
                                                     aria-label="A tooltip"
                                                 >
                                                     <FaInfoCircle color="gray" cursor="pointer" />
