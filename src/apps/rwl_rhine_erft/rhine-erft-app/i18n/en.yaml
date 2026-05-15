@@ -1,4 +1,5 @@
 messages:
+  title: "RWL The Rhine-Erft Region"
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"
@@ -6,9 +7,12 @@ messages:
     topLeft: "Measurement"
     topRight: "Overview map and basemap switcher"
     bottomRight: "Maptools"
-  basemapLabel: "Select basemap:"
+  basemapLabel: "Select Basemap:"
   measurementTitle: "Measurement"
   charts:
+    chart_title: "Rhine-Erft Crop Chart"
+    chart_heading1: "Crop Yields in"
+    chart_heading2: "for"
     button_title: "Crop chart"
     title_chart1: "Crops in Rhine-Erft region for "
     explanation: "This graph displays the average value, as well as the 20th to 80th percentile, of
@@ -26,3 +30,34 @@ messages:
     description: "Only layers which have been selected in the Operational Layers are viewable for comparison."
     left: "Select Left Layer"
     right: "Select Right Layer"
+  legends:
+    water_depth:
+      extraordinary: "Heavy rain - water depth (extraordinary)"
+      extreme: "Heavy rain - water depth (extreme)"
+    flow_velocity:
+      extraordinary: "Heavy rain - flow velocity (extraordinary)"
+      extreme: "Heavy rain - flow velocity (extreme)"
+    descriptions: 
+      bkg: "The layer is provided by the Federal Agency for Cartography and Geodesy (BKG) and shows simulation results of potential heavy rainfall scenarios. More information can be found online via https://gdz.bkg.bund.de/index.php/default/wms-hinweiskarte-starkregengefahren-wms-starkregen.html."
+      geobasis_nrw: "The layer is provided by the District Council Cologne. More information can be found online via https://www.bezreg-koeln.nrw.de/geobasis-nrw/webdienste/geodatendienste."
+    terrain: 
+      slope: "Terrain Slope"
+      steps: "Terrain Steps"
+      shading: "Terrain Shading"
+      model_overview: "Digital Terrain Model - overview"
+      model_elevation: "Digital Terrain Model - elevation layers"
+  crops: 
+    ALFA: "Lucerne"
+    CORN: "Corn maize"
+    GMAI: "Green maize"
+    POTA: "Potatoes"
+    SBAR: "Spring barley"
+    SOYB: "Soya beans"
+    SUNF: "Sunflowers"
+    TRIT: "Triticale"  
+    WBAR: "Winter barley"  
+    WRAP: "Winter rape"  
+    WRYE: "Rye and maslin" 
+    WWHT: "Winter wheat"
+    OATS: "Oats"
+    SUGB: "Sugar beet"

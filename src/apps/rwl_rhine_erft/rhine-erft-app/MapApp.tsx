@@ -155,13 +155,9 @@ export function MapApp() {
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
-            <Notifier
-            // position = "bottom"
-            />
+            <Notifier position="bottom" />
             {mapModel.map && (
-                <DefaultMapProvider
-                    map={mapModel.map}
-                >
+                <DefaultMapProvider map={mapModel.map}>
                     <TitledSection
                         title={
                             <Box
@@ -171,7 +167,7 @@ export function MapApp() {
                                 py={1}
                             >
                                 <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                                    RWL The Rhine Erft Region
+                                    {intl.formatMessage({ id: "title" })}
                                 </SectionHeading>
                             </Box>
                         }
@@ -182,7 +178,6 @@ export function MapApp() {
                                 role="main"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                             >
-
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
                                     <Flex direction="column" gap={4}>
                                         <Box
@@ -191,7 +186,6 @@ export function MapApp() {
                                             borderRadius="lg"
                                             padding={2}
                                             boxShadow="lg"
-                                            // role="top-right"
                                             aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
                                             maxHeight={615}
                                             maxWidth={430}
@@ -270,7 +264,6 @@ export function MapApp() {
 
                                 <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
                                     <Flex
-                                        // role="bottom-right"
                                         aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
                                         direction="row"
                                         gap={1}
@@ -301,6 +294,7 @@ export function MapApp() {
                                         <ZoomOut map={mapModel.map} />
                                     </Flex>
                                 </MapAnchor>
+
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                     {measurementIsActive && (
                                         <Box
@@ -310,7 +304,6 @@ export function MapApp() {
                                             borderRadius="lg"
                                             padding={2}
                                             boxShadow="lg"
-                                            // role="top-left"
                                             aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
                                         >
                                             <Box role="dialog" aria-labelledby={measurementTitleId}>
@@ -330,7 +323,6 @@ export function MapApp() {
                                             </Box>
                                         </Box>
                                     )}
-                                    {/*add Table of Contents (Toc) */}
                                     <Box
                                         backgroundColor="white"
                                         borderWidth="1px"
@@ -344,8 +336,7 @@ export function MapApp() {
                                         <Field.Root>
                                             <Field.Label mt={2}>
                                                 <Text as="b">
-                                                    {/* {intl.formatMessage({ id: "basemapLabel" })} */}
-                                                    Basemap
+                                                    {intl.formatMessage({ id: "basemapLabel" })}
                                                 </Text>
                                             </Field.Label>
                                             <BasemapSwitcher
@@ -381,64 +372,15 @@ export function MapApp() {
                 </DefaultMapProvider>
             )}
 
-                        <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
-                            <Flex
-                                role="bottom-right"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
-                                direction="row"
-                                gap={1}
-                                padding={1}
-                            >
-                                <ToolButton
-                                    label={intl.formatMessage({
-                                        id: "charts.button_title"
-                                    })}
-                                    icon={<PiChartLineDownLight />}
-                                    onClick={onOpenChart}
-                                />
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "measurementTitle" })}
-                                    icon={<PiRulerLight />}
-                                    isActive={measurementIsActive}
-                                    onClick={toggleMeasurement}
-                                />
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "map.download.button" })}
-                                    icon={<PiDownload />}
-                                    isActive={downloadIsActive}
-                                    onClick={toggleDownload}
-                                />
-                                <Geolocation mapId={MAP_ID} />
-                                <InitialExtent mapId={MAP_ID} />
-                                <ZoomIn mapId={MAP_ID} />
-                                <ZoomOut mapId={MAP_ID} />
-                            </Flex>
-                        </MapAnchor>
-                    </MapContainer>
-                </Flex>
-                <Flex
-                    role="region"
-                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
-                    gap={3}
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <CoordinateViewer mapId={MAP_ID} precision={2} />
-                    <ScaleBar mapId={MAP_ID} />
-                    <ScaleViewer mapId={MAP_ID} />
-                </Flex>
-            </TitledSection>
-
             <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} size={"full"}>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content>
-                        <Dialog.Header>Rhine-Erft Chart</Dialog.Header>
+                        <Dialog.Header>{intl.formatMessage({ id: "charts.chart_title" })}</Dialog.Header>
                         <Dialog.CloseTrigger />
                         <Dialog.Body>
                             <ChartComponentRhineErft></ChartComponentRhineErft>
                         </Dialog.Body>
-
                         <Dialog.Footer>
                             <Button colorScheme="blue" mr={3} onClick={onCloseChart}>
                                 Close
