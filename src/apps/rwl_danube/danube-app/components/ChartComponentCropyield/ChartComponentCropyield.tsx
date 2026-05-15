@@ -6,11 +6,11 @@ import {
     Box,
     Button,
     Center,
-    Checkbox,
+    NativeSelect,
     Stack,
     Text,
     Flex,
-    Select,
+    Checkbox,
     Spinner
 } from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -44,20 +44,24 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
         <>
             <Flex justifyContent="center" mb={6} direction="column" alignItems="center" gap={4}>
                 <Box width="300px">
-                    <Select
-                        value={selectedLocation}
-                        onChange={(e) => setSelectedLocation(e.target.value)}
-                    >
-                        {Object.entries(NUTS_REGIONS).map(([id, name]) => (
-                            <option key={id} value={id}>
-                                {id} ({name})
-                            </option>
-                        ))}
-                    </Select>
+                    <Box width="300px">
+                        <NativeSelect.Root>
+                            <NativeSelect.Field
+                                value={selectedLocation}
+                                onChange={(e) => setSelectedLocation(e.target.value)}
+                            >
+                                {Object.entries(NUTS_REGIONS).map(([id, name]) => (
+                                    <option key={id} value={id}>
+                                        {id} ({name})
+                                    </option>
+                                ))}
+                            </NativeSelect.Field>
+                        </NativeSelect.Root>
+                    </Box>
                 </Box>
-                
+
                 <Flex gap={4}>
-                    {["ssp126", "ssp370", "ssp585"].map(scenario => (
+                    {["ssp126", "ssp370", "ssp585"].map((scenario) => (
                         <Button
                             key={scenario}
                             className={`choice-button ${selectedScenario === scenario ? "" : "inactive"}`}
@@ -78,27 +82,46 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
             />
 
             <Center>
-                <Box minHeight="60px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                <Box
+                    minHeight="60px"
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                >
                     {isAvailabilityLoading ? (
                         <Flex alignItems="center" gap={3}>
                             <Spinner size="md" color="blue.500" />
                             <Text>Verifying available crops...</Text>
                         </Flex>
                     ) : (
-                        <Stack direction="row" wrap="wrap" mt={6} mb={4} justifyContent="center" maxWidth="800px">
+                        <Stack
+                            direction="row"
+                            wrap="wrap"
+                            mt={6}
+                            mb={4}
+                            justifyContent="center"
+                            maxWidth="800px"
+                        >
                             {availableCrops.length === 0 ? (
                                 <Text color="gray.500">No crop data found for this region.</Text>
                             ) : (
                                 availableCrops.map((cropCode) => (
-                                    <Checkbox
+                                    <Checkbox.Root
                                         key={cropCode}
-                                        isChecked={selectedCrops.includes(cropCode)}
-                                        onChange={() => toggleCropSelection(cropCode)}
+                                        checked={selectedCrops.includes(cropCode)} // Updated prop
+                                        onCheckedChange={() => toggleCropSelection(cropCode)} // Updated prop
                                         mr={4}
                                         mb={2}
                                     >
-                                        {intl.formatMessage({ id: `crops.${cropCode}` })}
-                                    </Checkbox>
+                                        <Checkbox.HiddenInput />
+                                        <Checkbox.Control>
+                                            <Checkbox.Indicator />
+                                        </Checkbox.Control>
+                                        <Checkbox.Label>
+                                            {intl.formatMessage({ id: `crops.${cropCode}` })}
+                                        </Checkbox.Label>
+                                    </Checkbox.Root>
                                 ))
                             )}
                         </Stack>
@@ -107,37 +130,43 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
             </Center>
 
             <Text mt={"2em"} size={"2em"}>
-                {intl.formatMessage({id: "charts.zala_crop.explanation1"})}
-                {" "}
-                <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("agriculture")}>
-                    {intl.formatMessage({id: "charts.zala_crop.keyword1"})}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation1" })}{" "}
+                <Button
+                    variant="link"
+                    color="#2e9ecc"
+                    onClick={() => setActiveKeyword("agriculture")}
+                >
+                    {intl.formatMessage({ id: "charts.zala_crop.keyword1" })}
                 </Button>{" "}
-                {intl.formatMessage({id: "charts.zala_crop.explanation2"})}
-                {" "}
-                <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}>
-                    {intl.formatMessage({id: "charts.zala_crop.keyword2"})}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation2" })}{" "}
+                <Button
+                    variant="link"
+                    color="#2e9ecc"
+                    onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
+                >
+                    {intl.formatMessage({ id: "charts.zala_crop.keyword2" })}
                 </Button>{" "}
-                {intl.formatMessage({id: "charts.zala_crop.explanation3"})} {" "}
-                {intl.formatMessage({id: "charts.zala_crop.explanation4"})}
-                {" "}
-                <Button variant="link" color="#2e9ecc" onClick={() => setActiveKeyword("Agricultural and ecological drought")}>
-                    {intl.formatMessage({id: "charts.zala_crop.keyword3"})}
-                </Button> 
-                {intl.formatMessage({id: "charts.zala_crop.explanation5"})}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation3" })}{" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation4" })}{" "}
+                <Button
+                    variant="link"
+                    color="#2e9ecc"
+                    onClick={() => setActiveKeyword("Agricultural and ecological drought")}
+                >
+                    {intl.formatMessage({ id: "charts.zala_crop.keyword3" })}
+                </Button>
+                {intl.formatMessage({ id: "charts.zala_crop.explanation5" })}
             </Text>
-            
+
             <Flex alignItems="center" mt={4}>
-                <Text>{intl.formatMessage({id: "charts.zala_crop.explanation6"})}</Text>
+                <Text>{intl.formatMessage({ id: "charts.zala_crop.explanation6" })}</Text>
             </Flex>
-            
+
             <Box padding="15px" />
-            
+
             {activeKeyword && (
                 <Flex>
-                    <TaxonomyInfo
-                        keyword={activeKeyword}
-                        onClose={() => setActiveKeyword(null)}
-                    />
+                    <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
                 </Flex>
             )}
         </>

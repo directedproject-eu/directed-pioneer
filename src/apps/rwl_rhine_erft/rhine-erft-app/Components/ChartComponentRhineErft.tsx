@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useState } from "react";
-import { Button, Checkbox, Stack , Text} from "@chakra-ui/react";
+import { Button, Checkbox, Stack, Text } from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
 import CropyieldChart from "./CropyieldChart";
 
 const ChartComponentRhineErft = () => {
     const intl = useIntl();
     const [selectedScenario, setSelectedScenario] = useState("ssp585");
-    
+
     // Default to the code "POTA" instead of the English word "Potatoes"
     const [selectedCrops, setSelectedCrops] = useState<string[]>(["POTA"]);
-    
+
     // Replace English names with their respective codes
     const cropCodes = [
         "GMAI", // Green maize
@@ -24,7 +24,7 @@ const ChartComponentRhineErft = () => {
         "WRYE", // Rye and maslin
         "WWHT", // Winter wheat
         "OATS", // Oats
-        "SUGB"  // Sugar beet
+        "SUGB" // Sugar beet
     ];
 
     const files = [
@@ -75,23 +75,29 @@ const ChartComponentRhineErft = () => {
                 regionName={"Rhine - Erft"}
                 regionCode="RWL4:Rhine-Erft"
                 selectedScenario={selectedScenario}
-                selectedCrops={selectedCrops} 
+                selectedCrops={selectedCrops}
             />
 
             <Stack direction="row" wrap="wrap" mt={4}>
                 {cropCodes.map((cropCode) => (
-                    <Checkbox
+                    <Checkbox.Root
                         key={cropCode}
-                        isChecked={selectedCrops.includes(cropCode)}
-                        onChange={() => handleCheckboxChange(cropCode)}
-                        mr={4} 
+                        checked={selectedCrops.includes(cropCode)} // isChecked -> checked
+                        onCheckedChange={() => handleCheckboxChange(cropCode)} // onChange -> onCheckedChange
+                        mr={4}
                         mb={2}
                     >
-                        {intl.formatMessage({ id: `crops.${cropCode}` })}
-                    </Checkbox>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                            <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label>
+                            {intl.formatMessage({ id: `crops.${cropCode}` })}
+                        </Checkbox.Label>
+                    </Checkbox.Root>
                 ))}
             </Stack>
-            
+
             <Text mt={"2em"} size={"2em"}>
                 {intl.formatMessage({ id: "charts.explanation" })}
             </Text>

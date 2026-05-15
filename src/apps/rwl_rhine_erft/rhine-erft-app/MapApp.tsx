@@ -11,7 +11,13 @@ import {
     useDisclosure,
     Dialog
 } from "@chakra-ui/react";
-import { MapAnchor, MapContainer, useMapModel, SimpleLayer, DefaultMapProvider } from "@open-pioneer/map";
+import {
+    MapAnchor,
+    MapContainer,
+    useMapModel,
+    SimpleLayer,
+    DefaultMapProvider
+} from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -57,7 +63,7 @@ export function MapApp() {
 
     function toggleDownload() {
         setDownloadIsActive(!downloadIsActive);
-    }    
+    }
 
     //////////////////
     /// LayerSwipe ///
@@ -74,7 +80,8 @@ export function MapApp() {
 
         const updateVisibleLayers = () => {
             const visibleLayers = allLayers.filter(
-                (layer) => layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
+                (layer) =>
+                    layer.olLayer?.getVisible?.() === true && !(layer.olLayer instanceof Group)
             );
             setVisibleAvailableLayers(visibleLayers);
         };
@@ -186,7 +193,9 @@ export function MapApp() {
                                             borderRadius="lg"
                                             padding={2}
                                             boxShadow="lg"
-                                            aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
+                                            aria-label={intl.formatMessage({
+                                                id: "ariaLabel.topRight"
+                                            })}
                                             maxHeight={615}
                                             maxWidth={430}
                                             overflow="hidden"
@@ -204,8 +213,9 @@ export function MapApp() {
                                                     </Text>
                                                     <Spacer />
                                                     <Text fontSize={16}>
-                                                        ➡️ Only layers which have been selected in the
-                                                        Operational Layers are viewable for comparison
+                                                        ➡️ Only layers which have been selected in
+                                                        the Operational Layers are viewable for
+                                                        comparison
                                                     </Text>
                                                     <Flex direction="row" gap={4} p={4}>
                                                         <NativeSelect.Root>
@@ -213,14 +223,22 @@ export function MapApp() {
                                                                 placeholder="Select Left Layer"
                                                                 value={selectedLeftLayer ?? ""}
                                                                 onChange={(e) =>
-                                                                    setSelectedLeftLayer(e.target.value)
+                                                                    setSelectedLeftLayer(
+                                                                        e.target.value
+                                                                    )
                                                                 }
                                                             >
-                                                                {visibleAvailableLayers.map((layer) => (
-                                                                    <option key={layer.id} value={layer.id}>
-                                                                        {layer.title || layer.id}
-                                                                    </option>
-                                                                ))}
+                                                                {visibleAvailableLayers.map(
+                                                                    (layer) => (
+                                                                        <option
+                                                                            key={layer.id}
+                                                                            value={layer.id}
+                                                                        >
+                                                                            {layer.title ||
+                                                                                layer.id}
+                                                                        </option>
+                                                                    )
+                                                                )}
                                                             </NativeSelect.Field>
                                                         </NativeSelect.Root>
                                                         <NativeSelect.Root>
@@ -228,14 +246,22 @@ export function MapApp() {
                                                                 placeholder="Select Right Layer"
                                                                 value={selectedRightLayer ?? ""}
                                                                 onChange={(e) =>
-                                                                    setSelectedRightLayer(e.target.value)
+                                                                    setSelectedRightLayer(
+                                                                        e.target.value
+                                                                    )
                                                                 }
                                                             >
-                                                                {visibleAvailableLayers.map((layer) => (
-                                                                    <option key={layer.id} value={layer.id}>
-                                                                        {layer.title || layer.id}
-                                                                    </option>
-                                                                ))}
+                                                                {visibleAvailableLayers.map(
+                                                                    (layer) => (
+                                                                        <option
+                                                                            key={layer.id}
+                                                                            value={layer.id}
+                                                                        >
+                                                                            {layer.title ||
+                                                                                layer.id}
+                                                                        </option>
+                                                                    )
+                                                                )}
                                                             </NativeSelect.Field>
                                                         </NativeSelect.Root>
                                                     </Flex>
@@ -262,9 +288,15 @@ export function MapApp() {
                                     )}
                                 </MapAnchor>
 
-                                <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={30}>
+                                <MapAnchor
+                                    position="bottom-right"
+                                    horizontalGap={10}
+                                    verticalGap={30}
+                                >
                                     <Flex
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.bottomRight"
+                                        })}
                                         direction="row"
                                         gap={1}
                                         padding={1}
@@ -283,7 +315,9 @@ export function MapApp() {
                                             onClick={toggleMeasurement}
                                         />
                                         <ToolButton
-                                            label={intl.formatMessage({ id: "map.download.button" })}
+                                            label={intl.formatMessage({
+                                                id: "map.download.button"
+                                            })}
                                             icon={<PiDownload />}
                                             active={downloadIsActive}
                                             onClick={toggleDownload}
@@ -304,7 +338,9 @@ export function MapApp() {
                                             borderRadius="lg"
                                             padding={2}
                                             boxShadow="lg"
-                                            aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
+                                            aria-label={intl.formatMessage({
+                                                id: "ariaLabel.topLeft"
+                                            })}
                                         >
                                             <Box role="dialog" aria-labelledby={measurementTitleId}>
                                                 <TitledSection
@@ -314,7 +350,9 @@ export function MapApp() {
                                                             size="md"
                                                             mb={2}
                                                         >
-                                                            {intl.formatMessage({ id: "measurementTitle" })}
+                                                            {intl.formatMessage({
+                                                                id: "measurementTitle"
+                                                            })}
                                                         </SectionHeading>
                                                     }
                                                 >
@@ -332,7 +370,11 @@ export function MapApp() {
                                         role="dialog"
                                         aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                     >
-                                        <Toc map={mapModel.map} showBasemapSwitcher={false} showTools={true} />
+                                        <Toc
+                                            map={mapModel.map}
+                                            showBasemapSwitcher={false}
+                                            showTools={true}
+                                        />
                                         <Field.Root>
                                             <Field.Label mt={2}>
                                                 <Text as="b">
@@ -372,11 +414,13 @@ export function MapApp() {
                 </DefaultMapProvider>
             )}
 
-            <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} size={"full"}>
+            <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} placement="center">
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <Dialog.Content>
-                        <Dialog.Header>{intl.formatMessage({ id: "charts.chart_title" })}</Dialog.Header>
+                    <Dialog.Content w="80vw" maxW="80vw">
+                        <Dialog.Header>
+                            {intl.formatMessage({ id: "charts.chart_title" })}
+                        </Dialog.Header>
                         <Dialog.CloseTrigger />
                         <Dialog.Body>
                             <ChartComponentRhineErft></ChartComponentRhineErft>
