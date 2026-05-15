@@ -635,10 +635,10 @@ export function MapApp() {
                 </DefaultMapProvider>)}
             </Flex>
 
-            <Dialog.Root open={activeChart !== null} onOpenChange={closeChartModal} size={"full"}>
+            <Dialog.Root open={activeChart !== null} onOpenChange={closeChartModal} placement={"center"}>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <Dialog.Content>
+                    <Dialog.Content w="80vw" maxW="80vw">#
                         <Dialog.Header>
                             {activeChart === "crop" && "Crop Yield Chart"}
                             {activeChart === "forestry" && "Forestry Data Chart"}

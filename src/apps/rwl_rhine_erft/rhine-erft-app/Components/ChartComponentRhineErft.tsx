@@ -80,15 +80,21 @@ const ChartComponentRhineErft = () => {
 
             <Stack direction="row" wrap="wrap" mt={4}>
                 {cropCodes.map((cropCode) => (
-                    <Checkbox
+                    <Checkbox.Root
                         key={cropCode}
-                        isChecked={selectedCrops.includes(cropCode)}
-                        onChange={() => handleCheckboxChange(cropCode)}
+                        checked={selectedCrops.includes(cropCode)} // isChecked -> checked
+                        onCheckedChange={() => handleCheckboxChange(cropCode)} // onChange -> onCheckedChange
                         mr={4} 
                         mb={2}
                     >
-                        {intl.formatMessage({ id: `crops.${cropCode}` })}
-                    </Checkbox>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                            <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label>
+                            {intl.formatMessage({ id: `crops.${cropCode}` })}
+                        </Checkbox.Label>
+                    </Checkbox.Root>
                 ))}
             </Stack>
             

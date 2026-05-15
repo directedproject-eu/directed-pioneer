@@ -6,11 +6,11 @@ import {
     Box,
     Button,
     Center,
-    Checkbox,
+    NativeSelect,
     Stack,
     Text,
     Flex,
-    Select,
+    Checkbox,
     Spinner
 } from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -44,16 +44,20 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
         <>
             <Flex justifyContent="center" mb={6} direction="column" alignItems="center" gap={4}>
                 <Box width="300px">
-                    <Select
-                        value={selectedLocation}
-                        onChange={(e) => setSelectedLocation(e.target.value)}
-                    >
-                        {Object.entries(NUTS_REGIONS).map(([id, name]) => (
-                            <option key={id} value={id}>
-                                {id} ({name})
-                            </option>
-                        ))}
-                    </Select>
+                    <Box width="300px">
+                        <NativeSelect.Root>
+                            <NativeSelect.Field
+                                value={selectedLocation}
+                                onChange={(e) => setSelectedLocation(e.target.value)}
+                            >
+                                {Object.entries(NUTS_REGIONS).map(([id, name]) => (
+                                    <option key={id} value={id}>
+                                        {id} ({name})
+                                    </option>
+                                ))}
+                            </NativeSelect.Field>
+                        </NativeSelect.Root>
+                    </Box>
                 </Box>
                 
                 <Flex gap={4}>
@@ -90,15 +94,21 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                                 <Text color="gray.500">No crop data found for this region.</Text>
                             ) : (
                                 availableCrops.map((cropCode) => (
-                                    <Checkbox
+                                    <Checkbox.Root
                                         key={cropCode}
-                                        isChecked={selectedCrops.includes(cropCode)}
-                                        onChange={() => toggleCropSelection(cropCode)}
+                                        checked={selectedCrops.includes(cropCode)} // Updated prop
+                                        onCheckedChange={() => toggleCropSelection(cropCode)} // Updated prop
                                         mr={4}
                                         mb={2}
                                     >
-                                        {intl.formatMessage({ id: `crops.${cropCode}` })}
-                                    </Checkbox>
+                                        <Checkbox.HiddenInput />
+                                        <Checkbox.Control>
+                                            <Checkbox.Indicator />
+                                        </Checkbox.Control>
+                                        <Checkbox.Label>
+                                            {intl.formatMessage({ id: `crops.${cropCode}` })}
+                                        </Checkbox.Label>
+                                    </Checkbox.Root>
                                 ))
                             )}
                         </Stack>

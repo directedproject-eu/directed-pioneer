@@ -372,10 +372,10 @@ export function MapApp() {
                 </DefaultMapProvider>
             )}
 
-            <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} size={"full"}>
+            <Dialog.Root open={isOpenChart} onOpenChange={onCloseChart} placement="center">
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <Dialog.Content>
+                    <Dialog.Content w="80vw" maxW="80vw">
                         <Dialog.Header>{intl.formatMessage({ id: "charts.chart_title" })}</Dialog.Header>
                         <Dialog.CloseTrigger />
                         <Dialog.Body>
