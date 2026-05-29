@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-import { Box, Flex, Image, Link, Text, Grid } from "@chakra-ui/react";
-import { Navbar } from "navbar";
+import { Box, Flex, Image, Link, Text, Grid } from "@open-pioneer/chakra-integration";
+import { Navbar, BASE_URL } from "navbar";
 
 export function AppUI() {
-    // Make sure BASE_URL is defined. Update this to match your project's configuration if needed.
-    const BASE_URL = "/"; 
-
+    
     return (
         <Flex direction="column" height="100vh">
             <Navbar />
@@ -90,7 +88,7 @@ export function AppUI() {
                             />
                             <Box pt={6}>
                                 <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    Real World Lab 1
+                                    RWL 1 (Copenhagen): Pluvial and coastal flooding
                                 </Text>
                             </Box>
                         </Box>
@@ -124,7 +122,7 @@ export function AppUI() {
                             />
                             <Box pt={6}>
                                 <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    Real World Lab 2
+                                    RWL 2 (Emilia-Romagna): Pluvial and coastal flooding, wildfire
                                 </Text>
                             </Box>
                         </Box>
@@ -156,7 +154,7 @@ export function AppUI() {
                             />
                             <Box pt={6}>
                                 <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    Real World Lab 3
+                                    RWL 3 (Danube): Pluvial and fluvial flooding, crop yield, forestry
                                 </Text>
                             </Box>
                         </Box>
@@ -188,7 +186,7 @@ export function AppUI() {
                             />
                             <Box pt={6}>
                                 <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    Real World Lab 4
+                                    RWL 4 (Rhine-Eft): Pluvial flooding, crop yield
                                 </Text>
                             </Box>
                         </Box>
