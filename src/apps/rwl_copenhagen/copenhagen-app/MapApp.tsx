@@ -8,14 +8,7 @@ import {
     FormLabel,
     VStack,
     Text,
-    Select,
-    Spacer,
-    IconButton,
-    Popover,
-    PopoverBody,
-    PopoverContent,
-    PopoverTrigger,
-    PopoverArrow
+    Spacer
 } from "@open-pioneer/chakra-integration";
 import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
@@ -28,10 +21,9 @@ import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { Toc } from "@open-pioneer/toc";
-import { MAP_ID1 } from "./services"; //add MAP_ID2 for shared view again
-import { useId, useMemo, useState, useEffect } from "react";
+import { MAP_ID1 } from "./services"; 
+import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
-import Layer from "ol/layer/Layer";
 import OSM from "ol/source/OSM";
 import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
@@ -40,20 +32,13 @@ import { Navbar } from "navbar";
 import { LayerZoom } from "./services/LayerZoom";
 import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
-// import ExpandableBox from "./Components/ExpandableBox";
 import { Forecasts } from "./controls/Forecasts";
-import { EventsKey } from "ol/events";
-import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
 import { SaferPlacesFloodMap } from "saferplaces";
-// import { ModelClient } from "modelclient";
-import Swipe from "ol-ext/control/Swipe";
 import { ModelClient } from "mcdm";
-import { Group } from "ol/layer";
 import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
-import { FaInfo } from "react-icons/fa";
 import { ChakraProvider } from "@open-pioneer/chakra-integration";
 import { theme } from "theme";
 
@@ -86,97 +71,10 @@ export function MapApp() {
         setDownloadIsActive(!downloadIsActive);
     }
 
-    // //////////////////
-    // /// LayerSwipe ///
-    // /////////////////
-    // const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
-    // const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    // const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
-
-    // useEffect(() => {
-    //     if (!mapModel.map) return;
-
-    //     const map = mapModel.map.olMap;
-    //     const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-
-    //     const updateVisibleLayers = () => {
-    //         const visibleLayers = allLayers.filter((layer) => {
-    //             const ol = layer.olLayer;
-    //             return ol?.getVisible?.() === true && !(ol instanceof Group);
-    //         });
-    //         setVisibleAvailableLayers(visibleLayers);
-    //     };
-
-    //     updateVisibleLayers();
-
-    //     const eventKeys: EventsKey[] = allLayers
-    //         .map((layer) => {
-    //             const olLayer = layer.olLayer;
-    //             if (!olLayer || typeof olLayer.on !== "function") return null;
-    //             return olLayer.on("change:visible", () => {
-    //                 updateVisibleLayers();
-    //                 handleSwipeUpdate();
-    //             });
-    //         })
-    //         .filter((k): k is EventsKey => !!k);
-
-    //     let swipe: Swipe | null = null;
-
-    //     const removeSwipe = () => {
-    //         if (swipe) {
-    //             map.removeControl(swipe);
-    //             swipe = null;
-    //         }
-    //     };
-
-    //     const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
-    //         removeSwipe();
-    //         swipe = new Swipe({
-    //             layers: [leftLayer],
-    //             rightLayers: [rightLayer],
-    //             position: 0.5,
-    //             orientation: "vertical",
-    //             className: "ol-swipe"
-    //         });
-    //         map.addControl(swipe);
-    //     };
-
-    //     const handleSwipeUpdate = () => {
-    //         if (!selectedLeftLayer || !selectedRightLayer) {
-    //             removeSwipe();
-    //             return;
-    //         }
-
-    //         const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-    //             ?.olLayer as Layer;
-    //         const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-    //             ?.olLayer as Layer;
-
-    //         if (!leftLayer || !rightLayer) {
-    //             removeSwipe();
-    //             return;
-    //         }
-
-    //         if (leftLayer.getVisible() && rightLayer.getVisible()) {
-    //             addSwipe(leftLayer, rightLayer);
-    //         } else {
-    //             removeSwipe();
-    //         }
-    //     };
-
-    //     handleSwipeUpdate();
-
-    //     return () => {
-    //         eventKeys.forEach(unByKey);
-    //         removeSwipe();
-    //     };
-    // }, [mapModel, selectedLeftLayer, selectedRightLayer]);
-
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
             <Notifier position="bottom" />
-            {/* <ModelClient /> */}
             <TitledSection
                 title={
                     <Box
@@ -205,40 +103,6 @@ export function MapApp() {
 
                         <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                             <FloodSelector />
-                            {/* <Flex>
-                                {measurementIsActive && (
-                                    <Box
-                                        backgroundColor="white"
-                                        borderWidth="1px"
-                                        borderRadius="lg"
-                                        padding={2}
-                                        boxShadow="lg"
-                                        role="top-left"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
-                                    >
-                                        <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                            <TitledSection
-                                                title={
-                                                    <SectionHeading
-                                                        id={measurementTitleId}
-                                                        size="md"
-                                                        mb={2}
-                                                    >
-                                                        {intl.formatMessage({
-                                                            id: "measurementTitle"
-                                                        })}
-                                                    </SectionHeading>
-                                                }
-                                            >
-                                                <Measurement mapId={MAP_ID1} />
-                                            </TitledSection>
-                                        </Box>
-                                    </Box>
-                                )}
-                                <ExpandableBox title="Analysis">
-                                    <>Example Analysis Text</>
-                                </ExpandableBox>
-                            </Flex> */}
                             {/*add Table of Contents (Toc) and legend */}
                             <Box
                                 display="flex"
@@ -355,17 +219,6 @@ export function MapApp() {
                                 </Button>
                             </VStack>
 
-                            {/* {mapModel &&
-                                activeLayerIds.length > 0 &&
-                                activeLayerIds.map((layerId) => (
-                                    <FeatureInfo
-                                        key={layerId}
-                                        mapModel={mapModel.map!}
-                                        layerId={layerId}
-                                        projection="EPSG:3857"
-                                    />
-                                ))} */}
-
                             {mapModel && (
                                 <FeatureInfo
                                     mapModel={mapModel.map!}
@@ -438,7 +291,6 @@ export function MapApp() {
                     </MapContainer>
                     {/*END MAP_ID1*/}
                 </Flex>
-                {/* <FloodSlider/> */}
                 <Flex
                     role="region"
                     aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
