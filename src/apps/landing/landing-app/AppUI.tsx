@@ -55,7 +55,7 @@ export function AppUI() {
                     top="60%" // You might need to adjust this (e.g. to 65% or 70%) if it covers your text
                     left="50%"
                     transform="translate(-50%, -50%)"
-                    width="100%"
+                    width="60%"
                     maxW="1600px" // Significantly increased to allow for massive cards
                     px={4}
                 >
@@ -69,7 +69,7 @@ export function AppUI() {
                             flexDirection="column"
                             textDecoration="none"
                             bg="lightgrey"
-                            p={8} // Increased padding to match the bigger card
+                            p={3}
                             boxShadow="xl"
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -80,15 +80,15 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="20vh"
                                 backgroundImage="url('/real_world_labs_logos/RWL1.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    RWL 1 (Copenhagen): Pluvial and coastal flooding
+                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                                    Pluvial and coastal flooding
                                 </Text>
                             </Box>
                         </Box>
@@ -103,7 +103,7 @@ export function AppUI() {
                             flexDirection="column"
                             textDecoration="none"
                             bg="lightgrey"
-                            p={8}
+                            p={3}
                             boxShadow="xl"
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -114,15 +114,15 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="20vh"
                                 backgroundImage="url('/real_world_labs_logos/RWL2.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    RWL 2 (Emilia-Romagna): Pluvial and coastal flooding, wildfire
+                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                                    Pluvial and coastal flooding, wildfire
                                 </Text>
                             </Box>
                         </Box>
@@ -135,7 +135,7 @@ export function AppUI() {
                             flexDirection="column"
                             textDecoration="none"
                             bg="lightgrey"
-                            p={8}
+                            p={3}
                             boxShadow="xl"
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -146,15 +146,15 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="20vh"
                                 backgroundImage="url('/real_world_labs_logos/RWL3.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    RWL 3 (Danube): Pluvial and fluvial flooding, crop yield, forestry
+                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                                    Pluvial and fluvial flooding, crop yield, forestry
                                 </Text>
                             </Box>
                         </Box>
@@ -167,7 +167,7 @@ export function AppUI() {
                             flexDirection="column"
                             textDecoration="none"
                             bg="lightgrey"
-                            p={8}
+                            p={3}
                             boxShadow="xl"
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -178,15 +178,15 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="20vh"
                                 backgroundImage="url('/real_world_labs_logos/RWL4.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="3xl" fontWeight="bold" color="black" textAlign="center">
-                                    RWL 4 (Rhine-Eft): Pluvial flooding, crop yield
+                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                                    Pluvial flooding, crop yield
                                 </Text>
                             </Box>
                         </Box>
