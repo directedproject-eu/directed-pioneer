@@ -86,91 +86,91 @@ export function MapApp() {
         setDownloadIsActive(!downloadIsActive);
     }
 
-    //////////////////
-    /// LayerSwipe ///
-    /////////////////
-    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
-    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
+    // //////////////////
+    // /// LayerSwipe ///
+    // /////////////////
+    // const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
+    // const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
+    // const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
 
-    useEffect(() => {
-        if (!mapModel.map) return;
+    // useEffect(() => {
+    //     if (!mapModel.map) return;
 
-        const map = mapModel.map.olMap;
-        const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
+    //     const map = mapModel.map.olMap;
+    //     const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
 
-        const updateVisibleLayers = () => {
-            const visibleLayers = allLayers.filter((layer) => {
-                const ol = layer.olLayer;
-                return ol?.getVisible?.() === true && !(ol instanceof Group);
-            });
-            setVisibleAvailableLayers(visibleLayers);
-        };
+    //     const updateVisibleLayers = () => {
+    //         const visibleLayers = allLayers.filter((layer) => {
+    //             const ol = layer.olLayer;
+    //             return ol?.getVisible?.() === true && !(ol instanceof Group);
+    //         });
+    //         setVisibleAvailableLayers(visibleLayers);
+    //     };
 
-        updateVisibleLayers();
+    //     updateVisibleLayers();
 
-        const eventKeys: EventsKey[] = allLayers
-            .map((layer) => {
-                const olLayer = layer.olLayer;
-                if (!olLayer || typeof olLayer.on !== "function") return null;
-                return olLayer.on("change:visible", () => {
-                    updateVisibleLayers();
-                    handleSwipeUpdate();
-                });
-            })
-            .filter((k): k is EventsKey => !!k);
+    //     const eventKeys: EventsKey[] = allLayers
+    //         .map((layer) => {
+    //             const olLayer = layer.olLayer;
+    //             if (!olLayer || typeof olLayer.on !== "function") return null;
+    //             return olLayer.on("change:visible", () => {
+    //                 updateVisibleLayers();
+    //                 handleSwipeUpdate();
+    //             });
+    //         })
+    //         .filter((k): k is EventsKey => !!k);
 
-        let swipe: Swipe | null = null;
+    //     let swipe: Swipe | null = null;
 
-        const removeSwipe = () => {
-            if (swipe) {
-                map.removeControl(swipe);
-                swipe = null;
-            }
-        };
+    //     const removeSwipe = () => {
+    //         if (swipe) {
+    //             map.removeControl(swipe);
+    //             swipe = null;
+    //         }
+    //     };
 
-        const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
-            removeSwipe();
-            swipe = new Swipe({
-                layers: [leftLayer],
-                rightLayers: [rightLayer],
-                position: 0.5,
-                orientation: "vertical",
-                className: "ol-swipe"
-            });
-            map.addControl(swipe);
-        };
+    //     const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
+    //         removeSwipe();
+    //         swipe = new Swipe({
+    //             layers: [leftLayer],
+    //             rightLayers: [rightLayer],
+    //             position: 0.5,
+    //             orientation: "vertical",
+    //             className: "ol-swipe"
+    //         });
+    //         map.addControl(swipe);
+    //     };
 
-        const handleSwipeUpdate = () => {
-            if (!selectedLeftLayer || !selectedRightLayer) {
-                removeSwipe();
-                return;
-            }
+    //     const handleSwipeUpdate = () => {
+    //         if (!selectedLeftLayer || !selectedRightLayer) {
+    //             removeSwipe();
+    //             return;
+    //         }
 
-            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-                ?.olLayer as Layer;
-            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-                ?.olLayer as Layer;
+    //         const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
+    //             ?.olLayer as Layer;
+    //         const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
+    //             ?.olLayer as Layer;
 
-            if (!leftLayer || !rightLayer) {
-                removeSwipe();
-                return;
-            }
+    //         if (!leftLayer || !rightLayer) {
+    //             removeSwipe();
+    //             return;
+    //         }
 
-            if (leftLayer.getVisible() && rightLayer.getVisible()) {
-                addSwipe(leftLayer, rightLayer);
-            } else {
-                removeSwipe();
-            }
-        };
+    //         if (leftLayer.getVisible() && rightLayer.getVisible()) {
+    //             addSwipe(leftLayer, rightLayer);
+    //         } else {
+    //             removeSwipe();
+    //         }
+    //     };
 
-        handleSwipeUpdate();
+    //     handleSwipeUpdate();
 
-        return () => {
-            eventKeys.forEach(unByKey);
-            removeSwipe();
-        };
-    }, [mapModel, selectedLeftLayer, selectedRightLayer]);
+    //     return () => {
+    //         eventKeys.forEach(unByKey);
+    //         removeSwipe();
+    //     };
+    // }, [mapModel, selectedLeftLayer, selectedRightLayer]);
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
@@ -375,112 +375,9 @@ export function MapApp() {
                             )}
                         </MapAnchor>
 
-                        {/*layerswipe layers and legend*/}
+                        {/*legend*/}
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
                             <Flex direction="column" gap={4}>
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    role="top-right"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                                    maxHeight={615}
-                                    maxWidth={430}
-                                    overflow="hidden"
-                                    marginBottom={5}
-                                >
-                                    {/* <Flex direction="column" gap={4}> */}
-                                    <Box>
-                                        <Box maxHeight={300} overflow="auto">
-                                            <Flex
-                                                direction="column"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                            ></Flex>
-                                            <Flex alignItems="center" mt={1}>
-                                                <Popover
-                                                    trigger="hover"
-                                                    openDelay={250}
-                                                    closeDelay={100}
-                                                    placement="top"
-                                                >
-                                                    <PopoverTrigger>
-                                                        <IconButton
-                                                            marginLeft="2px"
-                                                            size="s"
-                                                            aria-label="Info"
-                                                            icon={<FaInfo />}
-                                                            variant="ghost"
-                                                            color="black"
-                                                        />
-                                                    </PopoverTrigger>
-                                                    <PopoverContent>
-                                                        <PopoverArrow />
-                                                        <PopoverBody overflow="auto">
-                                                            {intl.formatMessage({
-                                                                id: "layer_swipe.description"
-                                                            })}
-                                                        </PopoverBody>
-                                                    </PopoverContent>
-                                                </Popover>
-                                                <Text fontWeight="bold" mt={4}>
-                                                    {intl.formatMessage({
-                                                        id: "layer_swipe.title"
-                                                    })}
-                                                </Text>
-                                            </Flex>
-                                            <Spacer />
-                                            <Flex direction="row" gap={4} p={4}>
-                                                <Select
-                                                    placeholder={intl.formatMessage({
-                                                        id: "layer_swipe.left"
-                                                    })}
-                                                    value={selectedLeftLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedLeftLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-
-                                                <Select
-                                                    placeholder={intl.formatMessage({
-                                                        id: "layer_swipe.right"
-                                                    })}
-                                                    value={selectedRightLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedRightLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-                                            </Flex>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                                {/* <Flex>
-                                    <Text
-                                        fontSize={14}
-                                        fontWeight="semibold"
-                                        textAlign="right"
-                                        width="97%"
-                                    >
-                                        👇Scroll Down to View all Selected Layer Legends
-                                    </Text>
-                                </Flex> */}
-                                {/* <Flex>
-                                    <TaxonomyInfo keyword="food security" />
-                                </Flex> */}
                                 {activeKeyword && (
                                     <Flex>
                                         <TaxonomyInfo
