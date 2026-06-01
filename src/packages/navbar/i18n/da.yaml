@@ -2,7 +2,7 @@ messages:
   localeSwitcher:
     label: "Sprog:"
     locale:
-        de: Deutsch
+        de: Tysk
         en: Engelsk
         hu: Ungarsk
         da: Dansk
