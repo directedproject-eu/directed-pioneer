@@ -131,7 +131,7 @@ export const Forecasts = () => {
         init();
     }, [prepSrvc]);
 
-    const onChange = (details: { value: number[]}) => {
+    const onChange = (details: { value: number[] }) => {
         const val = details.value[0];
         if (val === undefined) return;
 
@@ -150,7 +150,7 @@ export const Forecasts = () => {
         }
     };
 
-    const onChange2 = (details:{value: number[]}) => {
+    const onChange2 = (details: { value: number[] }) => {
         const val = details.value[0];
         if (val === undefined) return;
 
@@ -168,7 +168,7 @@ export const Forecasts = () => {
         }
     };
 
-    const onChange3 = (details: { value: number[]}) => {
+    const onChange3 = (details: { value: number[] }) => {
         const val = details.value[0];
         if (val === undefined) return;
 
@@ -240,12 +240,16 @@ export const Forecasts = () => {
                             onValueChange={onChange}
                             step={1}
                         >
-                            <Slider.Track>
-                                <Slider.Range />
-                            </Slider.Track>
-                            <Slider.Thumb
-                                index={0}
-                            />
+                            <Slider.Control>
+
+                                <Slider.Track>
+                                    <Slider.Range />
+                                </Slider.Track>
+                                <Slider.Thumb
+                                    index={0}
+                                />
+                            </Slider.Control>
+
                         </Slider.Root>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
@@ -298,12 +302,14 @@ export const Forecasts = () => {
                             onValueChange={onChange2}
                             step={1}
                         >
-                            <Slider.Track>
-                                <Slider.Range />
-                            </Slider.Track>
-                            <Slider.Thumb
-                                index={0}
-                            />
+                            <Slider.Control>
+                                <Slider.Track>
+                                    <Slider.Range />
+                                </Slider.Track>
+                                <Slider.Thumb
+                                    index={0}
+                                />
+                            </Slider.Control>
                         </Slider.Root>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
@@ -355,12 +361,14 @@ export const Forecasts = () => {
                             onValueChange={onChange3}
                             step={1}
                         >
-                            <Slider.Track>
-                                <Slider.Range />
-                            </Slider.Track>
-                            <Slider.Thumb
-                                index={0}
-                            />
+                            <Slider.Control>
+                                <Slider.Track>
+                                    <Slider.Range />
+                                </Slider.Track>
+                                <Slider.Thumb
+                                    index={0}
+                                />
+                            </Slider.Control>
                         </Slider.Root>
                         {/* <h3>Selected TimeStamp: {timestamps[sliderValue]}</h3> */}
                         <Text>
