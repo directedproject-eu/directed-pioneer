@@ -14,6 +14,8 @@ const SelectorItem: React.FC<SelectorItemProps> = ({ selected, children, onClick
         <>
             <button
                 style={{
+                    display: "flex",
+                    alignItems: "center",
                     marginLeft: selected ? "0em" : "1em",
                     cursor: "pointer",
                     color: selected ? "black" : "grey",
