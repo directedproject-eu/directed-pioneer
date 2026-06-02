@@ -38,6 +38,7 @@
         "layerdownload": "workspace:^", 
         "navbar": "workspace:^",
         "taxonomy": "workspace:^",
-        "theme": "workspace:^"
+        "theme": "workspace:^", 
+        "saferplaces": "workspace:^"
     }
 }

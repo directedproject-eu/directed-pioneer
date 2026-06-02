@@ -73,6 +73,7 @@ import { theme } from "theme";
 import { ForestrySelector } from "./services/ForestrySelector";
 import { NutsSelector } from "./services/NutsSelector";
 import { FaInfo } from "react-icons/fa";
+import { SaferPlacesFloodMap } from "saferplaces";
 
 
 type ActiveChartType = "crop" | "forestry" | null;
@@ -624,6 +625,7 @@ export function MapApp() {
                                             isActive={downloadIsActive}
                                             onClick={toggleDownload}
                                         />
+                                        <SaferPlacesFloodMap/>
 
                                         <ToolButton
                                             label={intl.formatMessage({
