@@ -74,7 +74,12 @@ export class FloodMapServiceImpl implements FloodMapService {
                 sources: [{ url: url, nodata: this.NODATA_VALUE }]
             }),
             style: this.createFloodMapStyle(),
-            properties: { title: title }
+            properties: { 
+                title: title, 
+                type: "GeoTIFF", 
+                id: "geotiff"
+
+            }
         });
 
         olLayer.setZIndex(10); // Ensure it draws on top of base layers
@@ -118,18 +123,27 @@ export class FloodMapServiceImpl implements FloodMapService {
     // }
 
     private floodDepthColormap: ColorStop[] = [
-        { value: 0.0, color: "#FFFFFF", label: "0m", opacity: 0.05 }, // Transparent
-        // Shallow Flood (High Contrast)
-        { value: 0.05, color: "#87CEFA", label: "5cm", opacity: 0.95 },
-        { value: 0.5, color: "#00BFFF", label: "0.5m", opacity: 0.95 },
-        // Medium Flood
-        { value: 1.0, color: "#3282F6", label: "1m", opacity: 0.95 },
-        { value: 3.0, color: "#005BA1", label: "3m", opacity: 0.95 },
-        // Deep Flood / Clipping
-        { value: 6.0, color: "#001E64", label: "6m", opacity: 0.95 },
-        { value: 10.0, color: "#4B0082", label: "10m", opacity: 1.0 }, // Indigo/Deep Purple
-        { value: 15.0, color: "#800080", label: "15m", opacity: 1.0 }, // Solid Purple
-        { value: 15.01, color: "#FF0000", label: "> 15m", opacity: 1.0 } // Alarm Red for clipping
+        { value: 0.0,  color: "#FFFFFF", label: "0m", opacity: 0.05 }, // Transparent
+        
+        // 0-10cm flood 
+        { value: 0.02, color: "#440154", label: "2cm", opacity: 0.90 },  
+        { value: 0.05, color: "#482878", label: "5cm", opacity: 0.95 },  
+        { value: 0.10, color: "#3e4989", label: "10cm", opacity: 0.95 }, 
+        
+        // 15-35cm flood
+        { value: 0.20, color: "#31688e", label: "20cm", opacity: 0.95 }, 
+        { value: 0.35, color: "#26828e", label: "35cm", opacity: 0.95 }, 
+        
+        // 50cm-1m flood 
+        { value: 0.50, color: "#1f9e89", label: "50cm", opacity: 0.95 }, 
+        { value: 0.75, color: "#35b779", label: "75cm", opacity: 0.95 }, 
+        { value: 1.00, color: "#6ece58", label: "1m", opacity: 0.95 }, 
+        
+        // Fallback max value stop 
+        { value: 1.005, color: "#fde725", label: "Maximum", opacity: 0.95 }, 
+
+        // Alarm 
+        { value: 1.01, color: "#FF0000", label: "> 1m", opacity: 1.0 } 
     ];
 
     private createFloodMapStyle() {

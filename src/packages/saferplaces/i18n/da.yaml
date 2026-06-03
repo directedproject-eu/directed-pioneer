@@ -1,40 +1,42 @@
 messages:
   description_saferplaces:
-    text1: "Denne grænseflade understøtter begge"
+    text1: "Dette interface understøtter både"
     text2: "og"
     text3: "med SaferPlaces-modellen"
-    keyword1: "regn"
-    keyword2: "kystnære oversvømmelser"
+    keyword1: "skybrud"
+    keyword2: "kystoversvømmelse"
   info_icon_safercoast:
     description: 
-      "da: Please note that this simulation is a reflection of reality, but should not be 
-      taken as such. While the result of this simulation presents one possible outcome, 
-      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
-      should be used in tandem with outside expertise to consider external risk factors."
+      "Bemærk, at denne simulering er en afspejling af virkeligheden, 
+      men bør ikke opfattes som sådan. Selvom resultatet af denne simulering 
+      viser ét muligt udfald, er der iboende usikkerhed i oversvømmelsesmodellering; 
+      til beslutningstagning bør disse oplysninger anvendes sammen med ekstern ekspertise 
+      for at vurdere eksterne risikofaktorer."
   info_icon_saferrain:
     description: 
-      "da: Please note that this simulation is a reflection of reality, but should not be 
-      taken as such. While the result of this simulation presents one possible outcome, 
-      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
-      should be used in tandem with outside expertise to consider external risk factors."
+      "Bemærk, at denne simulering er en afspejling af virkeligheden, 
+      men bør ikke opfattes som sådan. Selvom resultatet af denne simulering 
+      viser ét muligt udfald, er der iboende usikkerhed i oversvømmelsesmodellering; 
+      til beslutningstagning bør disse oplysninger anvendes sammen med ekstern ekspertise 
+      for at vurdere eksterne risikofaktorer."
   modal: 
-    header: "da: SaferPlaces Flood Modeling"
-    credentials: "da: Please enter valid credentials to access the model dialog"
-    userName: "da: Username"
-    token: "da: Token"
-    enter: "da: Enter"
-    configuration: "da: Model Configuration"
-    credentialChangeButton: "da: Change Credentials"
-    location: "da: Location"
-    selectLocation: "da: Select a Location"
-    model: "da: Model"
-    selectModel: "da: Select a Model"
-    inputRain: "da: Rain Intensity (mm)"
-    inputSea: "da: Extreme Sea Level (m)"
-    downloadMap: "da: Download Flood Map"
-    runModel: "da: Run Model"
+    header: "SaferPlaces oversvømmelsesmodellering"
+    credentials: "Indtast gyldige legitimationsoplysninger for at få adgang til modeldialogen"
+    userName: "Brugernavn"
+    token: "Token"
+    enter: "Indtast"
+    configuration: "Modelkonfriguration"
+    credentialChangeButton: "Skift legitimationsoplysninger"
+    location: "Lokation"
+    selectLocation: "Vælg lokation "
+    model: "Model"
+    selectModel: "Vælg en Model"
+    inputRain: "Nedbørsintensitet (mm)"
+    inputSea: "Ekstremt havniveau (m)"
+    downloadMap: "Download oversvømmelseskort"
+    runModel: "Kør model"
   placeholders: 
-    info1: "da: Enter username"
-    info2: "da: Enter token"
-    info3: "da: Input Value, e.g. 10"
-    info4: "da: Input Value, e.g. 1"
+    info1: "Indtast brugernavn"
+    info2: "Indtast token"
+    info3: "Indtast værdi, fx 10"
+    info4: "Indtast værdi, fx 1"

@@ -2,18 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useService } from "open-pioneer:react-hooks";
-import { useState } from "react";
 import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
-import ExpandableBox from "../Components/ExpandableBox";
+import { Box, Flex, Heading } from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
-import {
-    IconButton,
-    HoverCard
-} from "@chakra-ui/react";
-import { FaInfo } from "react-icons/fa";
 // import { TaxonomyInfo } from "taxonomy";
-
 
 export function FloodSelector() {
     const intl = useIntl();
@@ -25,47 +18,21 @@ export function FloodSelector() {
     };
 
     return (
-        <ExpandableBox
-            title={intl.formatMessage({ id: "map.flood_layer_selector.title" })}
+        <Box
+            backgroundColor={"white"}
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            p={4}
+            boxShadow="md"
             marginBottom="10px"
             overflowY="auto"
         >
-            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement: "right"}}>
-                <HoverCard.Trigger asChild>
-                    <IconButton
-                        marginLeft="2px" 
-                        size="sm"
-                        aria-label="Info"
-                        icon={<FaInfo />}
-                        variant="ghost"
-                        color="black"
-                    >
-                        <FaInfo/>
-                    </IconButton>
-                </HoverCard.Trigger>
-                <HoverCard.Positioner>
-                    <HoverCard.Content>
-                        {/* <HoverCard.Arrow /> */}
-                        {intl.formatMessage({id: "map.flood_layer_selector.description"})}
-                        {/* {" "}
-                            <Button
-                                variant="link"
-                                color="#2e9ecc"
-                                onClick={() => setActiveKeyword("climate model")}
-                            >
-                                {intl.formatMessage({id: "map.layer_select.keyword1"})}
-                            </Button> */}
-                    </HoverCard.Content>
-                </HoverCard.Positioner>
-                {/* {activeKeyword && (
-                    <Flex>
-                        <TaxonomyInfo
-                            keyword={activeKeyword}
-                            onClose={() => setActiveKeyword(null)}
-                        />
-                    </Flex>
-                )} */}
-            </HoverCard.Root>
+            <Flex alignItems="center" marginBottom="3px">
+                <Heading size="l" color="black">
+                    {intl.formatMessage({ id: "map.flood_layer_selector.title" })}
+                </Heading>
+            </Flex>
             <Selector
                 options={["pluvial", "coastal"]}
                 setSelected={setFloodType}
@@ -73,6 +40,6 @@ export function FloodSelector() {
                 // title={intl.formatMessage({ id: "map.flood_layer_selector.floodtype" })}
                 alternativeText={false}
             ></Selector>
-        </ExpandableBox>
+        </Box>
     );
 }
