@@ -74,7 +74,12 @@ export class FloodMapServiceImpl implements FloodMapService {
                 sources: [{ url: url, nodata: this.NODATA_VALUE }]
             }),
             style: this.createFloodMapStyle(),
-            properties: { title: title }
+            properties: { 
+                title: title, 
+                type: "GeoTIFF", 
+                id: "geotiff"
+
+            }
         });
 
         olLayer.setZIndex(10); // Ensure it draws on top of base layers
