@@ -126,24 +126,24 @@ export class FloodMapServiceImpl implements FloodMapService {
         { value: 0.0,  color: "#FFFFFF", label: "0m", opacity: 0.05 }, // Transparent
         
         // 0-10cm flood 
-        { value: 0.02, color: "#440154", label: "2cm", opacity: 0.90 },  
-        { value: 0.05, color: "#482878", label: "5cm", opacity: 0.95 },  
-        { value: 0.10, color: "#3e4989", label: "10cm", opacity: 0.95 }, 
+        { value: 0.05, color: "#440154", label: "5cm", opacity: 0.95 },  
+        { value: 0.10, color: "#482878", label: "10cm", opacity: 0.95 }, 
         
-        // 15-35cm flood
-        { value: 0.20, color: "#31688e", label: "20cm", opacity: 0.95 }, 
-        { value: 0.35, color: "#26828e", label: "35cm", opacity: 0.95 }, 
+        // 20-50cm flood
+        { value: 0.20, color: "#3e4989", label: "20cm", opacity: 0.95 }, 
+        { value: 0.35, color: "#31688e", label: "35cm", opacity: 0.95 }, 
+        { value: 0.50, color: "#26828e", label: "50cm", opacity: 0.95 }, 
         
-        // 50cm-1m flood 
-        { value: 0.50, color: "#1f9e89", label: "50cm", opacity: 0.95 }, 
-        { value: 0.75, color: "#35b779", label: "75cm", opacity: 0.95 }, 
-        { value: 1.00, color: "#6ece58", label: "1m", opacity: 0.95 }, 
+        // 75cm-1.5m flood 
+        { value: 0.75, color: "#1f9e89", label: "75cm", opacity: 0.95 }, 
+        { value: 1.00, color: "#35b779", label: "1m", opacity: 0.95 }, 
+        { value: 1.50, color: "#6ece58", label: "1.5m", opacity: 0.95 }, 
         
         // Fallback max value stop 
-        { value: 1.005, color: "#fde725", label: "Maximum", opacity: 0.95 }, 
-
+        { value: 1.505, color: "#fde725", label: "Maximum", opacity: 0.95 }, 
+    
         // Alarm 
-        { value: 1.01, color: "#FF0000", label: "> 1m", opacity: 1.0 } 
+        { value: 1.51, color: "#FF0000", label: "> 1.5m", opacity: 1.0 } 
     ];
 
     private createFloodMapStyle() {

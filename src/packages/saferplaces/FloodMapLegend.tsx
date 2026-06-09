@@ -15,21 +15,20 @@ const l_06 = "#35b779";
 const l_07 = "#6ece58";
 const l_08 = "#fde725";
 const l_09 = "#FF0000";
-const l_null =  "rgba(0, 0, 0, 0)"; // Fully transparent 
-
+const l_null = "rgba(0, 0, 0, 0)"; // Fully transparent 
 
 const colorMapping = [
-    { value: null,  color: l_null,   label: "No Data" },
+    { value: null,  color: l_null,    label: "No Data" },
     { value: 0.0,  color: l_01,      label: "0" },
-    { value: 0.02, color: l_02,      label: "0.02" },
-    { value: 0.05, color: l_03,      label: "0.05" },
-    { value: 0.10, color: l_04,      label: "0.10" },
-    { value: 0.20, color: l_05,      label: "0.20" },
-    { value: 0.35, color: l_05_half, label: "0.35" },
-    { value: 0.50, color: l_06,      label: "0.50" },
-    { value: 0.75, color: l_07,      label: "0.75" }, 
-    { value: 1.00, color: l_08,      label: "1.00" },
-    { value: 1.01, color: l_09,      label: "> 1.00" }
+    { value: 0.05, color: l_02,      label: "0.05" },     
+    { value: 0.10, color: l_03,      label: "0.10" },
+    { value: 0.20, color: l_04,      label: "0.20" },
+    { value: 0.35, color: l_05,      label: "0.35" },
+    { value: 0.50, color: l_05_half, label: "0.50" },
+    { value: 0.75, color: l_06,      label: "0.75" }, 
+    { value: 1.00, color: l_07,      label: "1.00" },
+    { value: 1.50, color: l_08,      label: "1.50" },     
+    { value: 1.51, color: l_09,      label: "> 1.50" }    
 ];
 
 export function FloodMapLegend(props: LegendItemComponentProps) {
