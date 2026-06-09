@@ -8,8 +8,8 @@ import {
     VStack,
     Text,
     Spacer
-} from "@open-pioneer/chakra-integration";
-import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
+} from "@chakra-ui/react";
+import { MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -38,8 +38,8 @@ import { ModelClient } from "mcdm";
 import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
-import { ChakraProvider } from "@open-pioneer/chakra-integration";
-import { theme } from "theme";
+import { ChakraProvider } from "@chakra-ui/react";
+import { system } from "theme";
 
 import { LayerDownload } from "layerdownload";
 
@@ -52,7 +52,6 @@ export function MapApp() {
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
     const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider 
     const [windowClosed, setWindowClosed] = useState<boolean>(false); //for testing window component
-
 
     const overviewMapLayer = useMemo(
         () =>
@@ -80,13 +79,11 @@ export function MapApp() {
         setModelClientIsActive(!modelClientIsActive);
     }
 
-
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
             <Notifier position="bottom" />
-            {/* <ModelClient /> */}
-            {/* <TitledSection
+            <TitledSection
                 title={
                     <Box
                         role="region"
@@ -102,7 +99,7 @@ export function MapApp() {
             >
                 <Flex flex="1" direction="column" position="relative">
                     {/*MAP_ID1*/}
-                    {/* <MapContainer
+                    <MapContainer
                         mapId={MAP_ID1}
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
@@ -128,7 +125,7 @@ export function MapApp() {
                                 maxHeight={500}
                                 overflow="auto"
                             >
-                                <ChakraProvider theme={theme}>
+                                <ChakraProvider value={system}>
                                     <Toc
                                         mapId={MAP_ID1}
                                         showTools={true}
@@ -137,17 +134,17 @@ export function MapApp() {
                                         showBasemapSwitcher={false}
                                     />
                                 </ChakraProvider>
-                                <FormControl>
-                                    <FormLabel mt={2}>
+                                <Field>
+                                    <Field.Label mt={2}>
                                         <Text as="b">
                                             {intl.formatMessage({ id: "basemapLabel" })}
                                         </Text>
-                                    </FormLabel>
+                                    </Field.Label>
                                     <BasemapSwitcher
                                         mapId={MAP_ID1}
                                         allowSelectingEmptyBasemap={true}
                                     />
-                                </FormControl>
+                                </Field>
                             </Box>
                             <Box
                                 flexDirection="column"
@@ -272,7 +269,7 @@ export function MapApp() {
 
                         <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
                             <Flex
-                                role="bottom-right"
+                                // role="bottom-right"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
                                 direction="row"
                                 gap={1}

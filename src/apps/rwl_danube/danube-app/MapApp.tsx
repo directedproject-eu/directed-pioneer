@@ -75,7 +75,6 @@ import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@chakra-ui/react";
-import { theme } from "theme";
 import { ForestrySelector } from "./services/ForestrySelector";
 import { NutsSelector } from "./services/NutsSelector";
 import { FaInfo } from "react-icons/fa";
