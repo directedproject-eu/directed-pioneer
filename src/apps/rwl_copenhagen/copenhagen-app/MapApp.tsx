@@ -20,7 +20,7 @@ import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { Toc } from "@open-pioneer/toc";
-import { MAP_ID1 } from "./services"; 
+import { MAP_ID } from "./services"; 
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
@@ -46,7 +46,7 @@ import { LayerDownload } from "layerdownload";
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel(MAP_ID1);
+    const mapModel = useMapModel(MAP_ID);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
@@ -98,9 +98,8 @@ export function MapApp() {
                 }
             >
                 <Flex flex="1" direction="column" position="relative">
-                    {/*MAP_ID1*/}
                     <MapContainer
-                        mapId={MAP_ID1}
+                        mapId={MAP_ID}
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
@@ -127,7 +126,7 @@ export function MapApp() {
                             >
                                 <ChakraProvider value={system}>
                                     <Toc
-                                        mapId={MAP_ID1}
+                                        mapId={MAP_ID}
                                         showTools={true}
                                         collapsibleGroups={true}
                                         initiallyCollapsed={true}
@@ -141,7 +140,7 @@ export function MapApp() {
                                         </Text>
                                     </Field.Label>
                                     <BasemapSwitcher
-                                        mapId={MAP_ID1}
+                                        mapId={MAP_ID}
                                         allowSelectingEmptyBasemap={true}
                                     />
                                 </Field>
@@ -185,7 +184,7 @@ export function MapApp() {
                             </Box>
                             {downloadIsActive && (
                                 <LayerDownload
-                                    mapID={MAP_ID1}
+                                    mapID={MAP_ID}
                                     intl={intl}
                                     isOpen={downloadIsActive}
                                     onClose={() => setDownloadIsActive(false)}
@@ -262,7 +261,7 @@ export function MapApp() {
                                         }
                                     }}
                                 >
-                                    <Legend mapId={MAP_ID1} />
+                                    <Legend mapId={MAP_ID} />
                                 </Flex>
                             </Flex>
                         </MapAnchor>
@@ -290,14 +289,13 @@ export function MapApp() {
                                     isActive={downloadIsActive}
                                     onClick={toggleDownload}
                                 />
-                                <Geolocation mapId={MAP_ID1} />
-                                <InitialExtent mapId={MAP_ID1} />
-                                <ZoomIn mapId={MAP_ID1} />
-                                <ZoomOut mapId={MAP_ID1} />
+                                <Geolocation mapId={MAP_ID} />
+                                <InitialExtent mapId={MAP_ID} />
+                                <ZoomIn mapId={MAP_ID} />
+                                <ZoomOut mapId={MAP_ID} />
                             </Flex>
                         </MapAnchor>
                     </MapContainer>
-                    {/*END MAP_ID1*/}
                 </Flex>
                 <Flex
                     role="region"
@@ -306,9 +304,9 @@ export function MapApp() {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <CoordinateViewer mapId={MAP_ID1} precision={2} />
-                    <ScaleBar mapId={MAP_ID1} />
-                    <ScaleViewer mapId={MAP_ID1} />
+                    <CoordinateViewer mapId={MAP_ID} precision={2} />
+                    <ScaleBar mapId={MAP_ID} />
+                    <ScaleViewer mapId={MAP_ID} />
                 </Flex>
             </TitledSection>
         </Flex>

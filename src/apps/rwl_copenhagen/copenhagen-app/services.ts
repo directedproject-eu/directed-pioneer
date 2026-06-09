@@ -11,7 +11,7 @@ import GeoJSON from "ol/format/GeoJSON.js";
 import { Stroke, Style } from "ol/style";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
 
-export const MAP_ID1 = "main";
+export const MAP_ID = "main";
 export { LayerZoomImpl } from "./services/LayerZoom";
 export { ForecastServiceImpl } from "./services/ForecastService";
 export { FloodHandlerImpl } from "./services/FloodHandler";
@@ -384,7 +384,7 @@ interface LayerGroupDefinition {
 }
 
 export class MainMapProvider implements MapConfigProvider {
-    mapId = MAP_ID1;
+    mapId = MAP_ID;
     pygeoapiBaseUrl: string;
 
     constructor(serviceOptions: ServiceOptions) {
