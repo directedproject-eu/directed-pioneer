@@ -1,4 +1,4 @@
 messages: 
   info: 
-    clickedPoint: "da: Clicked Point"
-    selectedLayers: "da: Selected Layers"
+    clickedPoint: "Klikket punkt"
+    selectedLayers: "Valgte lag"

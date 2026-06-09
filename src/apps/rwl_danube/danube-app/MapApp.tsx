@@ -4,6 +4,7 @@
 import { useEffect, useId, useState } from "react";
 import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
 import { GiCircleForest, GiWheat } from "react-icons/gi";
+import { PiDownload, PiRulerLight } from "react-icons/pi";
 import { EventsKey } from "ol/events";
 import { Group, Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
@@ -16,15 +17,27 @@ import {
     Button,
     Container,
     Flex,
-    Dialog,
-    Field,
-    Spacer,
+    FormControl,
+    FormLabel,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Select,
     Text,
     useDisclosure,
     VStack,
-    NativeSelect,
-    defaultSystem
-} from "@chakra-ui/react";
+    IconButton,
+    Popover,
+    PopoverBody,
+    PopoverContent,
+    PopoverTrigger,
+    PopoverArrow,
+    Spacer
+} from "@open-pioneer/chakra-integration";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Legend as PioneerLegend } from "@open-pioneer/legend";
@@ -65,6 +78,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "theme";
 import { ForestrySelector } from "./services/ForestrySelector";
 import { NutsSelector } from "./services/NutsSelector";
+import { FaInfo } from "react-icons/fa";
 
 import ChartComponentCropyield from "./components/ChartComponentCropyield/ChartComponentCropyield";
 import ChartComponentForestry from "./components/ChartComponentForestry";
@@ -74,7 +88,7 @@ type ActiveChartType = "crop" | "forestry" | null;
 export function MapApp() {
     // const { isOpen, onOpen, onClose } = useDisclosure();
     const mapModel = useMapModel(MAP_ID);
-    const zoomService = useService<LayerZoom>("app.LayerZoom"); // administrative boundary layer zoom service
+    const zoomService = useService<LayerZoom>("app.LayerZoom");
     const vectorSourceFactory = useService<OgcFeaturesVectorSourceFactory>(
         "ogc-features.VectorSourceFactory"
     );
@@ -127,6 +141,7 @@ export function MapApp() {
         [nutsSelector]
     );
 
+
     useEffect(() => {
         if (clickedForestryLocation) {
             setForestryLocation(clickedForestryLocation);
@@ -146,6 +161,9 @@ export function MapApp() {
             setActiveChart("crop");
         }
     }, [clickedNuts]);
+
+
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
     function createPastEventLayer(
         collectionId: string,
@@ -228,7 +246,7 @@ export function MapApp() {
     //////////////////
     const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
     const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
+    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]);
 
     useEffect(() => {
         if (!mapModel.map) return;
@@ -628,9 +646,29 @@ export function MapApp() {
                                                                 </SectionHeading>
                                                             }
                                                         >
-                                                            <Measurement map={mapModel.map} />
-                                                        </TitledSection>
-                                                    </Box>
+                                                            {visibleAvailableLayers.map((layer) => (
+                                                                <option key={layer.id} value={layer.id}>
+                                                                    {layer.title || layer.id}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+
+                                                        <Select
+                                                            placeholder={intl.formatMessage({
+                                                                id: "layer_swipe.right"
+                                                            })}
+                                                            value={selectedRightLayer ?? ""}
+                                                            onChange={(e) =>
+                                                                setSelectedRightLayer(e.target.value)
+                                                            }
+                                                        >
+                                                            {visibleAvailableLayers.map((layer) => (
+                                                                <option key={layer.id} value={layer.id}>
+                                                                    {layer.title || layer.id}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    </Flex>
                                                 </Box>
                                             )}
                                             <Box

@@ -77,6 +77,7 @@ export function fetchFeatureInfo(
                 layerName: layer.get("title") || layer.get("id"),
                 data: { value: valueAsString }
             };
+            
         } catch (err) {
             console.error("Error reading GeoTIFF value:", err);
             return null;

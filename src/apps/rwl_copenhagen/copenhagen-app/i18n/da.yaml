@@ -53,13 +53,18 @@ overrides:
       collapseAllGroups: "Skjul alle grupper"
 
 messages:
-  heading: "RWL Region Hovedstaden"
-  basemapLabel: "Vælg baggrundskort:"
+  heading: "RWL Hovedstadsregionen"
+  basemapLabel: "Vælg basiskort:"
   description:
     title: "Beskrivelse"
-    text1: "Denne platform tjener som en måde at lære om"
-    text2: "set i lyset af"
+    text1: "Denne platform bruges til at lære om"
+    text2: "i perspektiv af "
     keyword1: "katastroferisiko"
+    keyword2: "klimaforandringer"
+  description_saferplaces:
+    text1: "Denne platform bruges til at lære om"
+    text2: "i perspektiv af"
+    keyword1: "skybrudsoversvømmelse"
     keyword2: "klimaforandringer"
   zoom_buttons:
     egedal: "Zoom til Egedal"
@@ -69,16 +74,16 @@ messages:
     roskilde: "Zoom til Roskilde"
   layer_swipe:
     title: "Vælg lag til sammenligning"
-    description: "Kun lag, der er valgt under Operationelle lag, kan ses til sammenligning."
+    description: "Kun lag, som er valgt under operationelle lag, kan vises til sammenligning."
     left: "Vælg venstre lag"
     right: "Vælg højre lag"
   forecast:
-    sea_level: "👆Træk i skyderen for at vælge dato og tidspunkt for prognoser for gennemsnitlig vandstandsafvigelse"
-    total_precip: "👆Træk i skyderen for at vælge dato og tidspunkt for prognoser for samlet nedbør"
+    sea_level: "👆Træk i baren for at vælge dato og tidspunkt for prognoser for middelafvigelse i havniveau"
+    total_precip: "👆Træk i baren for at vælge dato og tidspunkt for prognoser for total nedbør"
     precip_rate: "👆Træk i skyderen for at vælge dato og tidspunkt for prognoser for nedbørsintensitet"
     start_date: "Prognosens startdato:"
-    end_date: "Prognosens slutdato:"
-    selected_date: "Valgt dato:"
+    end_date: "Startdato for prognose: "
+    selected_date: "Slutdato for prognose: "
   legend:
     title: "Tegnforklaring"
     units: "Enheder"
@@ -92,18 +97,18 @@ messages:
       no_layers: "Ingen lag tilgængelige til download"
       button: "Download lag"
       loading: "Forbereder download..."
-      select_layer: "Vælg et lag til download"
-      description: "Kun de lag, der er aktiveret under 'Operationelle lag', er tilgængelige for download i rullelisten."
+      select_layer: "Vælg lag til download"
+      description: "Kun de lag, der er aktiverede i 'operationelle lag' er tilgengæglige til download i."
     flood_layer_selector: 
-      title: "Valg af oversvømmelseskategori"
-      description: "Valget af oversvømmelseskategori udfylder 'Operationelle lag' og skyderen med den valgte oversvømmelses modeldata. For at se disse lag på kortet skal du sørge for, at fluebenet ud for den ønskede model er synligt under 'Operationelle lag'."
+      title: "Valg af oversvømmelsekategori"
+      description: "Valget af oversvømmelseskategori udfylder de operationelle lag og baren med den valgte oversvømmelses"
       floodtype: "Vælg venligst en oversvømmelseskategori for at se modeldata"
 
   ariaLabel:
-    header: "Sidehoved"
-    footer: "Bundlinje med målestoksinformation, rumligt referencesystem og koordinatvisning"
-    map: "Kort. Brug piletasterne til at flytte kortet. Zoom ind med plusknappen og zoom ud med minusknappen."
+    header: "Topbjælke"
+    footer: "Basisbjælke med skalaoplysninger, koordinatsystem og koordinatvisning"
+    map: "Kort. Brug piletasterne til at flytte kortet. Zoom ind med plus-knappen og zoom ud med minus-knappen."
     topLeft: "Måling"
-    topRight: "Oversigtskort og baggrundskortvælger"
+    topRight: "Oversigtskort og baggrundskort-vælger"
     bottomRight: "Kortværktøjer"
   measurementTitle: "Måling"

@@ -7,9 +7,13 @@ import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../Components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
-import { IconButton, HoverCard } from "@chakra-ui/react";
+import {
+    IconButton,
+    HoverCard
+} from "@chakra-ui/react";
 import { FaInfo } from "react-icons/fa";
 // import { TaxonomyInfo } from "taxonomy";
+
 
 export function FloodSelector() {
     const intl = useIntl();

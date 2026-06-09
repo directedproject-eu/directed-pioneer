@@ -1,40 +1,40 @@
 messages:
   popUp:
     text1: 
-      "da: As defined by the IPCC (2022), vulnerability encompasses a variety of 
-      concepts and elements, including sensitivity and susceptibility to harm and lack of 
-      capacity to cope and adapt. The criteria presented in this MCDM provide an example of 
-      some external factors that could be considered when implementing an adaptation measure, 
-      however, do not encompass all vulnerabilities. The MCDM is thus a tool which can 
-      aid in decision-making, however, can never fully realize an entire socioeconomic system. 
-      Please take this into consideration when using the tool."
+      "Som defineret af IPCC (2022) omfatter sårbarhed en række begreber og elementer, 
+      herunder følsomhed og modtagelighed over for skade samt manglende kapacitet til at 
+      håndtere og tilpasse sig. De kriterier, der præsenteres i denne MCDM, giver et eksempel 
+      på nogle eksterne faktorer, der kan overvejes ved implementering af et tilpasningstiltag, 
+      men de dækker ikke alle former for sårbarhed. MCDM er således et værktøj, der kan 
+      understøtte beslutningstagning, men kan aldrig fuldt ud repræsentere et helt socioøkonomisk system. 
+      Dette bør tages i betragtning ved brug af værktøjet."
     sensitivityAnalysis:
-      "da: This chart shows the ranking of measures in all possible combinations of criteria weightings; 
-      it shows how robust the measure is. For example, we could say 'measure X' falls into Rank 1 
-      50% of the time."
+      "Dette diagram viser rangeringen af tiltag på tværs af alle mulige kombinationer af kriterievægtninger; 
+      det viser, hvor robust et tiltag er. For eksempel kan man sige, at “tiltag X” placerer sig 
+      som nr. 1 i 50 % af tilfældene."
     rankingResult:
-      "da: This chart shows the ranking of measures based on the criteria weightings which were submitted. 
-      For example, if cost was weighted as highly important to you, this chart shows which measures 
-      align best with this, with 1 being the best possible rank."
+      "Dette diagram viser rangeringen af tiltag baseret på de indsendte kriterievægtninger. 
+      Hvis for eksempel omkostning er vægtet som meget vigtig for dig, viser dette diagram, 
+      hvilke tiltag der bedst matcher dette, hvor 1 er den bedst mulige rangering."
     
   modalStart:
-    header: "da: CLIMADA Multi-Criteria Decision Making (MCDM)"
-    token: "da: Please enter a token to access the MCDM Dialog."
-    tokenEnter: "da: Enter your token here and press 'continue'"
-    continue: "da: Continue"
+    header: "CLIMADA Multikriterie-beslutningsanalyse (MCDM)"
+    token: "Indtast venligst token for at få adgang til MCDM-dialogen."
+    tokenEnter: "Indtast din token her og tryk på 'fortsæt'"
+    continue: "Fortsæt"
   modalMain: 
-    header: "da: Multi-Criteria Decision Making (MCDM)"
-    criteriaInfo: "da: Please submit criteria weights to view the chart."
-    calculate: "da: Calculating MCDM analysis..."
-    weight: "da: Please weight each criteria and press submit to view results."
-    back: "da: Back"
-    likertNot: "da: Not Important"
-    likertSomewhat: "da: Somewhat Important"
-    likertHighly: "da: Highly Important"
-    submitCriteria: "da: Submit Criteria Weights"
-    sensitivityAnalysisGraph: "da: Measure Ranking Result: Sensitivity Analysis"
-    sensitivityMeasure: "da: Measure"
-    sensitivityPercent: "da: Percentage of Total Samples"
+    header: "Multikriterie-beslutningsanalyse (MCDM)"
+    criteriaInfo: "Indsend venligst kriterievægte for at se diagrammet."
+    calculate: "MCDM-analyse beregnes..."
+    weight: "Vægt hvert kriterium og tryk på “Indsend” for at se resultater."
+    back: "Tilbage"
+    likertNot: "Ikke vigtigt "
+    likertSomewhat: "Lidt vigtigt"
+    likertHighly: "Meget vigtigt"
+    submitCriteria: "Indsend kriterievægte"
+    sensitivityAnalysisGraph: "Rangeringsresultat for tiltag: Følsomhedsanalyse"
+    sensitivityMeasure: "Tiltag"
+    sensitivityPercent: "Procent af samlede prøver"
 
   
   

@@ -5,27 +5,31 @@ import { Box, Text } from "@chakra-ui/react";
 import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { useIntl } from "open-pioneer:react-hooks";
 
-//water level colors
 const l_01 = "#ffffff";
-const l_02 = "#87CEFA";
-const l_03 = "#00BFFF";
-const l_04 = "#3282F6";
-const l_05 = "#005BA1";
-const l_06 = "#001E64";
-const l_07 = "#4B0082";
-const l_08 = "#800080";
+const l_02 = "#440154";
+const l_03 = "#482878";
+const l_04 = "#31688e";
+const l_05 = "#26828e";
+const l_05_half = "#1f9e89"; 
+const l_06 = "#35b779";
+const l_07 = "#6ece58";
+const l_08 = "#fde725";
 const l_09 = "#FF0000";
+const l_null =  "rgba(0, 0, 0, 0)"; // Fully transparent 
+
 
 const colorMapping = [
-    { value: 0.0, color: l_01, label: "0" },
-    { value: 0.05, color: l_02, label: "0.05" },
-    { value: 0.5, color: l_03, label: "0.5" },
-    { value: 1.0, color: l_04, label: "1.00" },
-    { value: 3.0, color: l_05, label: "3.00" },
-    { value: 6.0, color: l_06, label: "6.00" },
-    { value: 10.0, color: l_07, label: "10.00" },
-    { value: 15.0, color: l_08, label: "15.00" },
-    { value: 15.01, color: l_09, label: "> 15.00" }
+    { value: null,  color: l_null,   label: "No Data" },
+    { value: 0.0,  color: l_01,      label: "0" },
+    { value: 0.02, color: l_02,      label: "0.02" },
+    { value: 0.05, color: l_03,      label: "0.05" },
+    { value: 0.10, color: l_04,      label: "0.10" },
+    { value: 0.20, color: l_05,      label: "0.20" },
+    { value: 0.35, color: l_05_half, label: "0.35" },
+    { value: 0.50, color: l_06,      label: "0.50" },
+    { value: 0.75, color: l_07,      label: "0.75" }, 
+    { value: 1.00, color: l_08,      label: "1.00" },
+    { value: 1.01, color: l_09,      label: "> 1.00" }
 ];
 
 export function FloodMapLegend(props: LegendItemComponentProps) {
