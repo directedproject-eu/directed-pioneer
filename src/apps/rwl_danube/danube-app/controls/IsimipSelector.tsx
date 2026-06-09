@@ -7,15 +7,9 @@ import { IsimipHandler } from "../services/IsimipHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
-import {
-    Button,
-    IconButton, 
-    Flex,
-    HoverCard,
-} from "@chakra-ui/react";
+import { Button, IconButton, Flex, HoverCard } from "@chakra-ui/react";
 import { FaInfo } from "react-icons/fa";
 import { TaxonomyInfo } from "taxonomy";
-
 
 export function IsimipSelector() {
     const intl = useIntl();
@@ -40,10 +34,10 @@ export function IsimipSelector() {
             marginBottom="10px"
             overflowY="auto"
         >
-            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement:"right"}}>
+            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "right" }}>
                 <HoverCard.Trigger asChild>
                     <IconButton
-                        marginLeft="2px" 
+                        marginLeft="2px"
                         size="sm"
                         aria-label="Info"
                         variant="ghost"
@@ -54,36 +48,34 @@ export function IsimipSelector() {
                 </HoverCard.Trigger>
                 <HoverCard.Positioner>
                     <HoverCard.Content>
-                        <HoverCard.Arrow />
-                        {intl.formatMessage({id: "map.layer_select.info1"})}
-                        {" "}
+                        {/* <HoverCard.Arrow /> */}
+                        {intl.formatMessage({ id: "map.layer_select.info1" })}{" "}
                         <Button
                             variant="plain"
                             color="#2e9ecc"
                             onClick={() => setActiveKeyword("climate model")}
                         >
-                            {intl.formatMessage({id: "map.layer_select.keyword1"})}
-                        </Button>
-                        {" "}
-                        {intl.formatMessage({id: "map.layer_select.info2"})}
-                        {" "}
+                            {intl.formatMessage({ id: "map.layer_select.keyword1" })}
+                        </Button>{" "}
+                        {intl.formatMessage({ id: "map.layer_select.info2" })}{" "}
                         <Button
                             variant="plain"
                             color="#2e9ecc"
-                            onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
+                            onClick={() =>
+                                setActiveKeyword("Shared socio-economic pathways (SSPs)")
+                            }
                         >
-                            {intl.formatMessage({id: "map.layer_select.keyword2"})}
+                            {intl.formatMessage({ id: "map.layer_select.keyword2" })}
                         </Button>
-                        {intl.formatMessage({id: "map.layer_select.info3"})}
+                        {intl.formatMessage({ id: "map.layer_select.info3" })}
                         <Button
                             variant="plain"
                             color="#2e9ecc"
                             onClick={() => setActiveKeyword("Variables")}
                         >
-                            {intl.formatMessage({id: "map.layer_select.keyword3"})}
-                        </Button>
-                        {" "}
-                        {intl.formatMessage({id: "map.layer_select.info4"})}
+                            {intl.formatMessage({ id: "map.layer_select.keyword3" })}
+                        </Button>{" "}
+                        {intl.formatMessage({ id: "map.layer_select.info4" })}
                     </HoverCard.Content>
                 </HoverCard.Positioner>
                 {activeKeyword && (

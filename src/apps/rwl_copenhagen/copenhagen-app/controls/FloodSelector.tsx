@@ -7,13 +7,9 @@ import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../Components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
-import {
-    IconButton,
-    HoverCard
-} from "@chakra-ui/react";
+import { IconButton, HoverCard } from "@chakra-ui/react";
 import { FaInfo } from "react-icons/fa";
 // import { TaxonomyInfo } from "taxonomy";
-
 
 export function FloodSelector() {
     const intl = useIntl();
@@ -30,23 +26,22 @@ export function FloodSelector() {
             marginBottom="10px"
             overflowY="auto"
         >
-            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement: "right"}}>
+            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "right" }}>
                 <HoverCard.Trigger asChild>
                     <IconButton
-                        marginLeft="2px" 
+                        marginLeft="2px"
                         size="sm"
                         aria-label="Info"
-                        icon={<FaInfo />}
                         variant="ghost"
                         color="black"
                     >
-                        <FaInfo/>
+                        <FaInfo />
                     </IconButton>
                 </HoverCard.Trigger>
                 <HoverCard.Positioner>
                     <HoverCard.Content>
                         {/* <HoverCard.Arrow /> */}
-                        {intl.formatMessage({id: "map.flood_layer_selector.description"})}
+                        {intl.formatMessage({ id: "map.flood_layer_selector.description" })}
                         {/* {" "}
                             <Button
                                 variant="link"
