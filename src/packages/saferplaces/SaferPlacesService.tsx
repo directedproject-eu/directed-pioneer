@@ -349,7 +349,13 @@ export function SaferPlacesFloodMap() {
                                         ← {intl.formatMessage({id: "modal.credentialChangeButton"})}
                                     </Button>
                                 </Flex>
-                                <Flex justify="flex-start" align="center" mb={1} width="100%">
+                                <Flex 
+                                    justify="flex-start" 
+                                    align="center" 
+                                    mb={1} 
+                                    width="100%"
+                                    paddingRight={8}
+                                >
                                     <Text width="100%">
                                         {" "}
                                         {intl.formatMessage({
@@ -381,6 +387,50 @@ export function SaferPlacesFloodMap() {
                                         })}
                                         .
                                     </Text>
+                                    <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                        <PopoverTrigger>
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                color="black"
+                                                borderRadius="full"
+                                                paddingRight={2}
+                                                // paddingTop={6}
+                                                _hover={{
+                                                    transform: "scale(1.05)",
+                                                    bg: "rgba(0, 0, 0, 0.05)", 
+                                                }}
+                                                transition="all 0.2s ease"
+                                                leftIcon={
+                                                    <Box
+                                                        as="span"
+                                                        display="inline-flex"
+                                                        alignItems="center"
+                                                        justifyContent="center"
+                                                        width="16px"
+                                                        height="16px"
+                                                        borderRadius="50%"
+                                                        border="1.5px solid currentColor"
+                                                        fontFamily="serif"
+                                                        fontWeight="bold"
+                                                        fontStyle="normal"
+                                                        fontSize="11px"
+                                                        lineHeight="1"
+                                                        paddingBottom="1px"
+                                                    >
+                                                        i
+                                                    </Box>
+                                                }
+                                            >
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverBody overflow="auto">
+                                                {intl.formatMessage({ id: "info_icon_saferrain.description" })}
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    </Popover>
                                 </Flex>
                                 {activeKeyword && (
                                     <Flex>
@@ -428,54 +478,68 @@ export function SaferPlacesFloodMap() {
                                 </FormControl>
 
                                 {model === "safer_rain" && (
-                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
-                                        <PopoverTrigger>
-                                            <IconButton
-                                                marginLeft="2px"
-                                                size="s"
-                                                aria-label="Info"
-                                                icon={<FaInfo />}
-                                                variant="ghost"
-                                                color="black" />
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <PopoverArrow />
-                                            <PopoverBody overflow="auto">
-                                                {intl.formatMessage({ id: "info_icon_saferrain.description" })}
-                                            </PopoverBody>
-                                        </PopoverContent>
-                                    </Popover><FormControl isRequired>
-                                        <FormLabel padding={0} htmlFor="rain">
-                                            {intl.formatMessage({id: "modal.inputRain"})}{" "}
-                                        </FormLabel>
+                                    <FormControl isRequired>
+                                        <Flex paddingBottom={1} align="left">
+                                            <FormLabel paddingTop={1} htmlFor="rain">
+                                                {intl.formatMessage({id: "modal.inputRain"})}{" "}
+                                            </FormLabel>
+                                            <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
+                                                <PopoverTrigger>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        color="black"
+                                                        borderRadius="full"
+                                                        paddingRight={1}
+                                                        _hover={{
+                                                            transform: "scale(1.05)",
+                                                            bg: "rgba(0, 0, 0, 0.05)"
+                                                        }}
+                                                        transition="all 0.2s ease"
+                                                        leftIcon={
+                                                            <Box
+                                                                as="span"
+                                                                display="inline-flex"
+                                                                alignItems="center"
+                                                                justifyContent="center"
+                                                                width="16px"
+                                                                height="16px"
+                                                                borderRadius="50%"
+                                                                border="1.5px solid currentColor"
+                                                                fontFamily="serif"
+                                                                fontWeight="bold"
+                                                                fontStyle="normal"
+                                                                fontSize="11px"
+                                                                lineHeight="1"
+                                                                paddingBottom="1px"
+                                                            >
+                                                                i
+                                                            </Box>
+                                                        }
+                                                    >
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent>
+                                                    <PopoverArrow />
+                                                    <PopoverBody overflow="auto">
+                                                        {intl.formatMessage({ id: "modal.infoButtonRain" })}
+                                                    </PopoverBody>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </Flex>
                                         <Input
                                             type="text"
                                             id="rain"
                                             value={rainIntensity}
                                             onChange={handleRainIntensityChange}
-                                            placeholder={intl.formatMessage({id: "placeholders.info3"})}
-                                            variant="outline" />
-                                    </FormControl></>
+                                            placeholder={intl.formatMessage({ id: "placeholders.info3" })}
+                                            variant="outline" 
+                                        />
+                                    </FormControl>
                                 )}
 
                                 {model === "safer_coast" && (
-                                    <><Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
-                                        <PopoverTrigger>
-                                            <IconButton
-                                                marginLeft="2px"
-                                                size="s"
-                                                aria-label="Info"
-                                                icon={<FaInfo />}
-                                                variant="ghost"
-                                                color="black" />
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <PopoverArrow />
-                                            <PopoverBody overflow="auto">
-                                                {intl.formatMessage({ id: "info_icon_safercoast.description" })}
-                                            </PopoverBody>
-                                        </PopoverContent>
-                                    </Popover><FormControl isRequired>
+                                    <FormControl isRequired>
                                         <FormLabel padding={0} htmlFor="esl">
                                             {intl.formatMessage({id: "modal.inputSea"})}
                                         </FormLabel>
@@ -486,7 +550,7 @@ export function SaferPlacesFloodMap() {
                                             onChange={handleESLChange}
                                             placeholder={intl.formatMessage({id: "placeholders.info4"})}
                                             variant="outline" />
-                                    </FormControl></>
+                                    </FormControl>
                                 )}
                                 {generationStatus && <p>Status: {generationStatus}</p>}
                                 {error && <p style={{ color: "red" }}>Error: {error}</p>}

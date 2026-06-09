@@ -35,6 +35,9 @@ messages:
     inputSea: "hu: Extreme Sea Level (m)"
     downloadMap: "hu: Download Flood Map"
     runModel: "hu: Run Model"
+    infoButtonRain: "hu: Total accumulated rainwater for a rainfall event. 
+                    The simulation routes the water instantaneously throughout the domain, 
+                    thus no explicit time period has to be specified."
   placeholders: 
     info1: "hu: Enter username"
     info2: "hu: Enter token"

@@ -602,6 +602,9 @@ importers:
       react-use:
         specifier: 'catalog:'
         version: 17.6.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      saferplaces:
+        specifier: workspace:^
+        version: link:../../../packages/saferplaces
       taxonomy:
         specifier: workspace:^
         version: link:../../../packages/taxonomy

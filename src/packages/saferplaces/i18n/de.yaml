@@ -33,6 +33,9 @@ messages:
     inputSea: "de: Extreme Sea Level (m)"
     downloadMap: "de: Download Flood Map"
     runModel: "de: Run Model"
+    infoButtonRain: "de: Total accumulated rainwater for a rainfall event. 
+                    The simulation routes the water instantaneously throughout the domain, 
+                    thus no explicit time period has to be specified."
   placeholders: 
     info1: "de: Enter username"
     info2: "de: Enter token"
