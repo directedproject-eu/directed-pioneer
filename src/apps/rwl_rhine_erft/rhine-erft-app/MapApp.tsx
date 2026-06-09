@@ -293,14 +293,40 @@ export function MapApp() {
                                                     placement="top"
                                                 >
                                                     <PopoverTrigger>
-                                                        <IconButton
-                                                            marginLeft="2px"
-                                                            size="s"
-                                                            aria-label="Info"
-                                                            icon={<FaInfo />}
+                                                        <Button
+                                                            size="sm"
                                                             variant="ghost"
                                                             color="black"
-                                                        />
+                                                            borderRadius="full"
+                                                            paddingRight={0}
+                                                            paddingTop={3}
+                                                            _hover={{
+                                                                transform: "scale(1.05)",
+                                                                bg: "rgba(0, 0, 0, 0.05)", 
+                                                            }}
+                                                            transition="all 0.2s ease"
+                                                            leftIcon={
+                                                                <Box
+                                                                    as="span"
+                                                                    display="inline-flex"
+                                                                    alignItems="center"
+                                                                    justifyContent="center"
+                                                                    width="22px"
+                                                                    height="22px"
+                                                                    borderRadius="50%"
+                                                                    border="1.5px solid currentColor"
+                                                                    fontFamily="serif"
+                                                                    fontWeight="bold"
+                                                                    fontStyle="normal"
+                                                                    fontSize="12px"
+                                                                    lineHeight="1"
+                                                                    paddingBottom="1px"
+                                                                >
+                                                                    i
+                                                                </Box>
+                                                            }
+                                                        >
+                                                        </Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent>
                                                         <PopoverArrow />
