@@ -9,7 +9,7 @@ import {
     Text,
     Spacer
 } from "@chakra-ui/react";
-import { MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
+import { DefaultMapProvider, MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -46,7 +46,7 @@ import { LayerDownload } from "layerdownload";
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel(MAP_ID);
+    const { map } = useMapModel(MAP_ID);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
@@ -82,7 +82,7 @@ export function MapApp() {
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
-            <Notifier position="bottom" />
+            <Notifier />
             <TitledSection
                 title={
                     <Box
@@ -97,217 +97,206 @@ export function MapApp() {
                     </Box>
                 }
             >
-                <Flex flex="1" direction="column" position="relative">
-                    <MapContainer
-                        mapId={MAP_ID}
-                        role="main"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
-                    >
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                            <Forecasts />
-                            <FloodSlider/>
-                        </MapAnchor>
-
-                        <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                            <FloodSelector />
-                            {/*add Table of Contents (Toc) and legend */}
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="dialog"
-                                // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                maxHeight={500}
-                                overflow="auto"
+                {map && (
+                    <DefaultMapProvider map={map}>
+                        <Flex flex="1" direction="column" position="relative">
+                            <MapContainer
+                                role="main"
+                                aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                             >
-                                <ChakraProvider value={system}>
-                                    <Toc
-                                        mapId={MAP_ID}
-                                        showTools={true}
-                                        collapsibleGroups={true}
-                                        initiallyCollapsed={true}
-                                        showBasemapSwitcher={false}
-                                    />
-                                </ChakraProvider>
-                                <Field>
-                                    <Field.Label mt={2}>
-                                        <Text as="b">
-                                            {intl.formatMessage({ id: "basemapLabel" })}
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                    <Forecasts />
+                                    <FloodSlider/>
+                                </MapAnchor>
+
+                                <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                                    <FloodSelector />
+                                    {/*add Table of Contents (Toc) and legend */}
+                                    <Box
+                                        display="flex"
+                                        flexDirection="column"
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        role="dialog"
+                                        // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                        maxHeight={500}
+                                        overflow="auto"
+                                    >
+                                        <ChakraProvider value={system}>
+                                            <Toc
+                                                showTools={true}
+                                                collapsibleGroups={true}
+                                                initiallyCollapsed={true}
+                                                showBasemapSwitcher={false}
+                                            />
+                                        </ChakraProvider>
+                                        <Field.Root>
+                                            <Field.Label mt={2}>
+                                                <Text as="b">
+                                                    {intl.formatMessage({ id: "basemapLabel" })}
+                                                </Text>
+                                            </Field.Label>
+                                            <BasemapSwitcher
+                                                allowSelectingEmptyBasemap={true}
+                                            />
+                                        </Field.Root>
+                                    </Box>
+                                    <Box
+                                        flexDirection="column"
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        role="dialog"
+                                        maxHeight={100}
+                                        overflow="auto"
+                                        marginTop={2}
+                                    >
+                                        <Text fontWeight={600}>
+                                            {" "}
+                                            {intl.formatMessage({ id: "description.title" })}{" "}
                                         </Text>
-                                    </Field.Label>
-                                    <BasemapSwitcher
-                                        mapId={MAP_ID}
-                                        allowSelectingEmptyBasemap={true}
-                                    />
-                                </Field>
-                            </Box>
-                            <Box
-                                flexDirection="column"
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="dialog"
-                                maxHeight={100}
-                                overflow="auto"
-                                marginTop={2}
-                            >
-                                <Text fontWeight={600}>
-                                    {" "}
-                                    {intl.formatMessage({ id: "description.title" })}{" "}
-                                </Text>
-                                <Text>
-                                    {intl.formatMessage({ id: "description.text1" })}
-                                    <Spacer />
-                                    <Button
-                                        variant="link"
-                                        color="#2e9ecc"
-                                        onClick={() => setActiveKeyword("Disaster Risk")}
-                                    >
-                                        {intl.formatMessage({ id: "description.keyword1" })}
-                                    </Button>{" "}
-                                    {intl.formatMessage({ id: "description.text2" })}{" "}
-                                    <Button
-                                        variant="link"
-                                        color="#2e9ecc"
-                                        onClick={() => setActiveKeyword("Climate Change")}
-                                    >
-                                        {intl.formatMessage({ id: "description.keyword2" })}
-                                    </Button>
-                                    .
-                                </Text>
-                            </Box>
-                            {downloadIsActive && (
-                                <LayerDownload
-                                    mapID={MAP_ID}
-                                    intl={intl}
-                                    isOpen={downloadIsActive}
-                                    onClose={() => setDownloadIsActive(false)}
-                                />
-                            )}
-                        </MapAnchor>
-                        {/* zoom to municipalities */}
-                        <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
-                            <VStack align="stretch" spacing={2}>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.egedal" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToFrederikssund(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToHalsnaes(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToLejre(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.lejre" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToRoskilde(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
-                                </Button>
-                            </VStack>
-
-                            {mapModel && (
-                                <FeatureInfo
-                                    mapModel={mapModel.map!}
-                                    projection="EPSG:3857"
-                                    layerId={""}
-                                />
-                            )}
-                        </MapAnchor>
-
-                        {/*legend*/}
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
-                            <Flex direction="column" gap={4}>
-                                {activeKeyword && (
-                                    <Flex>
-                                        <TaxonomyInfo
-                                            keyword={activeKeyword}
-                                            onClose={() => setActiveKeyword(null)}
+                                        <Text>
+                                            {intl.formatMessage({ id: "description.text1" })}
+                                            <Spacer />
+                                            <Button
+                                                color="#2e9ecc"
+                                                onClick={() => setActiveKeyword("Disaster Risk")}
+                                            >
+                                                {intl.formatMessage({ id: "description.keyword1" })}
+                                            </Button>{" "}
+                                            {intl.formatMessage({ id: "description.text2" })}{" "}
+                                            <Button
+                                                color="#2e9ecc"
+                                                onClick={() => setActiveKeyword("Climate Change")}
+                                            >
+                                                {intl.formatMessage({ id: "description.keyword2" })}
+                                            </Button>
+                                            .
+                                        </Text>
+                                    </Box>
+                                    {downloadIsActive && (
+                                        <LayerDownload
+                                            mapID={MAP_ID}
+                                            intl={intl}
+                                            isOpen={downloadIsActive}
+                                            onClose={() => setDownloadIsActive(false)}
                                         />
-                                    </Flex>
-                                )}
-                                <Flex
-                                    maxHeight={250}
-                                    overflow="auto"
-                                    borderRadius="md"
-                                    boxShadow="lg"
-                                    alignSelf="flex-end"
-                                    sx={{
-                                        "& > *": {
-                                            border: "none !important"
-                                        },
-                                        "& *": {
-                                            top: "0 !important"
-                                        }
-                                    }}
-                                >
-                                    <Legend mapId={MAP_ID} />
-                                </Flex>
-                            </Flex>
-                        </MapAnchor>
+                                    )}
+                                </MapAnchor>
+                                {/* zoom to municipalities */}
+                                <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
+                                    <VStack align="stretch">
+                                        <Button
+                                            size="sm"
+                                            onClick={() => zoomService.zoomToEgedal(map!)}
+                                        >
+                                            {intl.formatMessage({ id: "zoom_buttons.egedal" })}
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => zoomService.zoomToFrederikssund(map!)}
+                                        >
+                                            {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => zoomService.zoomToHalsnaes(map!)}
+                                        >
+                                            {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => zoomService.zoomToLejre(map!)}
+                                        >
+                                            {intl.formatMessage({ id: "zoom_buttons.lejre" })}
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => zoomService.zoomToRoskilde(map!)}
+                                        >
+                                            {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
+                                        </Button>
+                                    </VStack>
 
-                        <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
-                            <Flex
-                                // role="bottom-right"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
-                                direction="row"
-                                gap={1}
-                                padding={1}
-                            >
-                                {/* SaferPlaces flood model dialog */}
-                                <ModelClient />
-                                <SaferPlacesFloodMap />
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "measurementTitle" })}
-                                    icon={<PiRulerLight />}
-                                    isActive={measurementIsActive}
-                                    onClick={toggleMeasurement}
-                                />
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "map.download.heading" })}
-                                    icon={<PiDownload />}
-                                    isActive={downloadIsActive}
-                                    onClick={toggleDownload}
-                                />
-                                <Geolocation mapId={MAP_ID} />
-                                <InitialExtent mapId={MAP_ID} />
-                                <ZoomIn mapId={MAP_ID} />
-                                <ZoomOut mapId={MAP_ID} />
-                            </Flex>
-                        </MapAnchor>
-                    </MapContainer>
-                </Flex>
-                <Flex
-                    role="region"
-                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
-                    gap={3}
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <CoordinateViewer mapId={MAP_ID} precision={2} />
-                    <ScaleBar mapId={MAP_ID} />
-                    <ScaleViewer mapId={MAP_ID} />
-                </Flex>
+                                    {map && (
+                                        <FeatureInfo
+                                            mapModel={map!}
+                                            projection="EPSG:3857"
+                                            layerId={""}
+                                        />
+                                    )}
+                                </MapAnchor>
+
+                                {/*legend*/}
+                                <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
+                                    <Flex direction="column" gap={4}>
+                                        {activeKeyword && (
+                                            <Flex>
+                                                <TaxonomyInfo
+                                                    keyword={activeKeyword}
+                                                    onClose={() => setActiveKeyword(null)}
+                                                />
+                                            </Flex>
+                                        )}
+                                        <Flex
+                                            maxHeight={250}
+                                            overflow="auto"
+                                            borderRadius="md"
+                                            boxShadow="lg"
+                                            alignSelf="flex-end"
+                                        >
+                                            <Legend />
+                                        </Flex>
+                                    </Flex>
+                                </MapAnchor>
+
+                                <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
+                                    <Flex
+                                        // role="bottom-right"
+                                        aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                        direction="row"
+                                        gap={1}
+                                        padding={1}
+                                    >
+                                        {/* SaferPlaces flood model dialog */}
+                                        {/*<ModelClient />*/}
+                                        <SaferPlacesFloodMap />
+                                        <ToolButton
+                                            label={intl.formatMessage({ id: "measurementTitle" })}
+                                            icon={<PiRulerLight />}
+                                            onClick={toggleMeasurement}
+                                        />
+                                        <ToolButton
+                                            label={intl.formatMessage({ id: "map.download.heading" })}
+                                            icon={<PiDownload />}
+                                            onClick={toggleDownload}
+                                        />
+                                        <Geolocation />
+                                        <InitialExtent />
+                                        <ZoomIn />
+                                        <ZoomOut />
+                                    </Flex>
+                                </MapAnchor>
+                            </MapContainer>
+                        </Flex>
+                        <Flex
+                            role="region"
+                            aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
+                            gap={3}
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <CoordinateViewer precision={2} />
+                            <ScaleBar />
+                            <ScaleViewer />
+                        </Flex>
+                    </DefaultMapProvider>
+                )}
             </TitledSection>
         </Flex>
     );
