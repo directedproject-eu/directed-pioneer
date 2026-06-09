@@ -49,7 +49,6 @@ catalog:
   # Trails Community packages
   "@open-pioneer-community/window": ^0.1.0
 
-
   # Other dependencies
   "@chakra-ui/react": ^3.35.0
   "@conterra/reactivity-core": ^0.8.0
@@ -110,6 +109,7 @@ catalog:
   vitest: ^4.0.17
 
 overrides:
+  "entities@4.5.0": "^6.0.1"
   # https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
   "semver@<7.5.2": ">=7.5.2"
   # https://github.com/advisories/GHSA-72xf-g2v4-qvf3
@@ -152,24 +152,43 @@ overrides:
   "csstype@<3.2.3": ">=3.2.3"
 
   # Ensure patched packages have the expected version (patch was tested with this version):
-  "@ark-ui/react": "5.30.0"
-  "react-select": "5.10.2"
-  "@zag-js/toast": "1.31.1"
+  "@chakra-ui/react": "3.35.0"
+  "@ark-ui/react": "5.36.2"
+  "@zag-js/dialog": "1.40.0"
+  "@zag-js/drawer": "1.40.0"
+  "@zag-js/hover-card": "1.40.0"
+  "@zag-js/menu": "1.40.0"
+  "@zag-js/popover": "1.40.0"
+  "@zag-js/tooltip": "1.40.0"
+  "@zag-js/interact-outside": "1.40.0"
 
 allowUnusedPatches: true
 ignorePatchFailures: false
 patchedDependencies:
   # Ensure valids ids for aria-activedescendant and fix touch events in shadow DOM (see https://github.com/JedWatson/react-select/issues/5824)
-  "react-select": "patches/react-select.patch"
+  # "react-select": "patches/react-select.patch"
 
   # Ensure all portals are mounted under `.pioneer-root` div
-  # "@ark-ui/react@*": "patches/@ark-ui__react.patch"
-
+  "@ark-ui/react@*": "patches/@ark-ui__react.patch"
   # Fix display of toasts that are created before the Notifier UI is mounted
   # See https://github.com/chakra-ui/zag/issues/2922
-  #"@zag-js/toast": patches/@zag-js__toast.patch
+  # "@zag-js/toast": patches/@zag-js__toast.patch
 
-# Install older versions by default
+  # Fixes 'interact-outside' logic not tabbing between elements within the same shadow dom.
+  # Can be removed if https://github.com/chakra-ui/zag/issues/3088 is fixed.
+  # "@zag-js/interact-outside": patches/@zag-js__interact-outside.patch
+
+  # Fix popover positioning (popover, tooltip, toggle tip, ...).
+  # - See https://github.com/chakra-ui/zag/pull/3127 for the shadow dom problems (getDoc() -> getRootNode())
+  # - See https://github.com/chakra-ui/zag/pull/3129 for the positioning/click-outside problems
+  "@zag-js/dialog": patches/@zag-js__dialog.patch
+  "@zag-js/drawer": patches/@zag-js__drawer.patch
+  "@zag-js/hover-card": patches/@zag-js__hover-card.patch
+  "@zag-js/menu": patches/@zag-js__menu.patch
+  "@zag-js/popover": patches/@zag-js__popover.patch
+  "@zag-js/tooltip": patches/@zag-js__tooltip.patch
+
+  # Install older versions by default
 resolutionMode: "lowest-direct"
 
 # Configure a release cooldown
@@ -195,7 +214,6 @@ ignoredBuiltDependencies:
   - core-js
   - unrs-resolver
 
-
 # Don't automatically link to workspace packages (use e.g. "workspace:^" instead).
 linkWorkspacePackages: false
 autoInstallPeers: true
@@ -208,3 +226,8 @@ shamefullyHoist: true
 # Cyclic dependencies are a code smell but should not trigger hard errors in pnpm.
 ignoreWorkspaceCycles: true
 
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  unrs-resolver: true
