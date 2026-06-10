@@ -19,7 +19,8 @@ const SelectorItem: React.FC<SelectorItemProps> = ({ selected, children, onClick
                     marginLeft: selected ? "0em" : "1em",
                     cursor: "pointer",
                     color: selected ? "black" : "grey",
-                    fontSize: "1.1em",
+                    // fontSize: "1.1em",
+                    fontSize: "15px",
                     fontWeight: selected ? "bold" : "normal"
                 }}
                 onClick={onClick}
