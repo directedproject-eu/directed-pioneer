@@ -6,5 +6,5 @@ messages:
     topLeft: "Messen"
     topRight: "Übersichtskarte und Auswahl der Hintergrundkarte"
     bottomRight: "Kartenwerkzeuge"
-  basemapLabel: "Hintergrundkarte auswählen:"
+  basemapLabel: "Hintergrundkarte auswählen"
   measurementTitle: "Messen"

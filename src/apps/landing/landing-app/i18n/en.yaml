@@ -6,5 +6,5 @@ messages:
     topLeft: "Measurement"
     topRight: "Overview map and basemap switcher"
     bottomRight: "Maptools"
-  basemapLabel: "Select basemap:"
+  basemapLabel: "Select basemap"
   measurementTitle: "Measurement"
