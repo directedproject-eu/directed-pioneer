@@ -52,11 +52,11 @@ export function AppUI() {
                 <Box
                     position="absolute"
                     zIndex="1"
-                    top="60%" // You might need to adjust this (e.g. to 65% or 70%) if it covers your text
+                    top="60%" 
                     left="50%"
                     transform="translate(-50%, -50%)"
                     width="100%"
-                    maxW="1600px" // Significantly increased to allow for massive cards
+                    maxW="1600px" 
                     px={4}
                 >
                     <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={12}>
@@ -69,7 +69,7 @@ export function AppUI() {
                             flexDirection="column"
                             textDecoration="none"
                             bg="lightgrey"
-                            p={8} // Increased padding to match the bigger card
+                            p={8} 
                             boxShadow="xl"
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -80,7 +80,7 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="25vh " // Doubled from 250px
                                 backgroundImage="url('/real_world_labs_logos/RWL1.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
@@ -96,7 +96,7 @@ export function AppUI() {
                         {/* Card 2 */}
                         <Box
                             as="a"
-                            href="https://directed-rwl2.saferplaces.co/"
+                            href={`${BASE_URL}apps/rwl_danube/index.html`}
                             target="_blank"
                             rel="noopener noreferrer"
                             display="flex"
@@ -114,7 +114,7 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="500px" 
                                 backgroundImage="url('/real_world_labs_logos/RWL2.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
@@ -146,7 +146,7 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="500px" 
                                 backgroundImage="url('/real_world_labs_logos/RWL3.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
@@ -178,7 +178,7 @@ export function AppUI() {
                         >
                             <Box
                                 w="100%"
-                                h="500px" // Doubled from 250px
+                                h="500px"
                                 backgroundImage="url('/real_world_labs_logos/RWL4.png')"
                                 backgroundSize="contain"
                                 backgroundRepeat="no-repeat"
