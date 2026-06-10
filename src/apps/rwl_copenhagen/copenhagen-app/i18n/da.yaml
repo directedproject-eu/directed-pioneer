@@ -3,6 +3,17 @@ overrides:
     emptyBasemapLabel: "Uden baggrundskort"
     layerNotAvailable: "Lag ikke tilgængeligt"
     selected: "Valgt"
+  "@open-pioneer/chakra-snippets":
+    clipboard:
+      copy: "kopiere"
+      copied: "kopieret"
+    close-button:
+      ariaLabel: "Lukke"
+    carousel:
+      next: "Næste"
+      prev: "Tidligere"
+    password-input:
+      triggerAriaLabel: "Skift adgangskodesynlighed"
   "@open-pioneer/geolocation":
     locateNotSupported: "Geolokation understøttes ikke."
     locateMeStart: "Start geolokation"
@@ -12,6 +23,9 @@ overrides:
     positionUnavailable: "Geolokationens position kan ikke bestemmes."
     timeout: "Geolokation blev annulleret på grund af timeout."
     unknownError: "Der opstod en uventet fejl under geolokationen."
+  "@open-pioneer/map":
+    attribution:
+      label: "Tilskrivninger"
   "@open-pioneer/map-navigation":
     initial-extent:
       title: "Zoom til startudstrækning"
@@ -32,10 +46,20 @@ overrides:
     tooltips:
       help: "Klik for at starte måling."
       continue: "Dobbeltklik for at afslutte målingen."
+  "@open-pioneer/notifier":
+    regionLabel: "Meddelelser"
+    notification:
+      close: "Lukke meddelelse"
+  "@open-pioneer/overview-map":
+    ariaLabel: "Oversigtskort"
+    ariaDescription: "Dette kort viser en oversigt over det aktuelle kortudsnit."
   "@open-pioneer/legend":
     altLabel: "tegnforklaring for lag {layerName}"
     fallbackLabel: "tegnforklaring ikke tilgængelig"
     basemapLabel: "Baggrundskort"
+  "@open-pioneer/scale-viewer":
+   regionLabel: "Skala"
+   scaleLabel: "Nuværende skala: 1 til {scale}"
   "@open-pioneer/toc":
     basemapsLabel: "Baggrundskort"
     descriptionLabel: "Lagbeskrivelse"
@@ -51,6 +75,9 @@ overrides:
     tools:
       hideAllLayers: "Skjul alle lag"
       collapseAllGroups: "Skjul alle grupper"
+  "@open-pioneer-community/window":
+    ariaLabel:
+      close: "Luk vinduet"
 
 messages:
   heading: "RWL Hovedstadsregionen"
