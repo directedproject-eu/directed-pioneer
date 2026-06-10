@@ -4,10 +4,11 @@ import {
     Box,
     Button,
     Flex,
-    Field,
     VStack,
     Text,
-    Spacer
+    Spacer, 
+    Link, 
+    Select
 } from "@chakra-ui/react";
 import { DefaultMapProvider, MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
@@ -124,6 +125,8 @@ export function MapApp() {
                                         // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                         maxHeight={500}
                                         overflow="auto"
+                                        paddingTop={4}
+                                        paddingLeft={3}
                                     >
                                         <ChakraProvider value={system}>
                                             <Toc
@@ -133,50 +136,53 @@ export function MapApp() {
                                                 showBasemapSwitcher={false}
                                             />
                                         </ChakraProvider>
-                                        <Field.Root>
-                                            <Field.Label mt={2}>
+                                        <Select.Root>
+                                            <Select.Label mt={2}>
                                                 <Text as="b">
                                                     {intl.formatMessage({ id: "basemapLabel" })}
                                                 </Text>
-                                            </Field.Label>
+                                            </Select.Label>
                                             <BasemapSwitcher
                                                 allowSelectingEmptyBasemap={true}
                                             />
-                                        </Field.Root>
+                                        </Select.Root>
                                     </Box>
                                     <Box
                                         flexDirection="column"
                                         backgroundColor="white"
                                         borderWidth="1px"
                                         borderRadius="lg"
-                                        padding={2}
+                                        padding={3}
                                         boxShadow="lg"
                                         role="dialog"
                                         maxHeight={100}
                                         overflow="auto"
                                         marginTop={2}
                                     >
-                                        <Text fontWeight={600}>
+                                        <Text fontWeight={600} fontSize={15}>
                                             {" "}
                                             {intl.formatMessage({ id: "description.title" })}{" "}
                                         </Text>
-                                        <Text>
+                                        <Text fontSize={14} paddingTop={1}>
                                             {intl.formatMessage({ id: "description.text1" })}
                                             <Spacer />
-                                            <Button
+                                            <Link
+                                                variant="plain"
                                                 color="#2e9ecc"
+                                                marginRight={0.5}
                                                 onClick={() => setActiveKeyword("Disaster Risk")}
                                             >
                                                 {intl.formatMessage({ id: "description.keyword1" })}
-                                            </Button>{" "}
+                                            </Link>{" "}
                                             {intl.formatMessage({ id: "description.text2" })}{" "}
-                                            <Button
+                                            <Link
+                                                variant="plain"
+                                                marginLeft={0.5}
                                                 color="#2e9ecc"
                                                 onClick={() => setActiveKeyword("Climate Change")}
                                             >
                                                 {intl.formatMessage({ id: "description.keyword2" })}
-                                            </Button>
-                                            .
+                                            </Link>
                                         </Text>
                                     </Box>
                                     {downloadIsActive && (

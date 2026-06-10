@@ -81,7 +81,7 @@ overrides:
 
 messages:
   heading: "RWL Hovedstadsregionen"
-  basemapLabel: "Vælg basiskort:"
+  basemapLabel: "Vælg basiskort"
   description:
     title: "Beskrivelse"
     text1: "Denne platform bruges til at lære om"

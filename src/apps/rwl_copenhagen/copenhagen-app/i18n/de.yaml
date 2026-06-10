@@ -54,7 +54,7 @@ overrides:
 
 messages:
   heading: "RWL Die Hauptstadtregion Dänemarks"
-  basemapLabel: "Basemap auswählen:"
+  basemapLabel: "Basemap auswählen"
   description:
     title: "Beschreibung"
     text1: "Diese Plattform dient als Möglichkeit, mehr über"
