@@ -4,7 +4,6 @@
 import { useEffect, useId, useState } from "react";
 import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
 import { GiCircleForest, GiWheat } from "react-icons/gi";
-import { PiDownload, PiRulerLight } from "react-icons/pi";
 import { EventsKey } from "ol/events";
 import { Group, Vector as VectorLayer } from "ol/layer.js";
 import Layer from "ol/layer/Layer";
@@ -17,15 +16,6 @@ import {
     Button,
     Container,
     Flex,
-    FormControl,
-    FormLabel,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
     Select,
     Text,
     useDisclosure,
@@ -36,8 +26,12 @@ import {
     PopoverContent,
     PopoverTrigger,
     PopoverArrow,
-    Spacer
-} from "@open-pioneer/chakra-integration";
+    Spacer,
+    Dialog,
+    NativeSelect,
+    Field,
+    defaultSystem
+} from "@chakra-ui/react";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Legend as PioneerLegend } from "@open-pioneer/legend";
@@ -160,9 +154,6 @@ export function MapApp() {
             setActiveChart("crop");
         }
     }, [clickedNuts]);
-
-
-    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
     function createPastEventLayer(
         collectionId: string,
@@ -645,29 +636,9 @@ export function MapApp() {
                                                                 </SectionHeading>
                                                             }
                                                         >
-                                                            {visibleAvailableLayers.map((layer) => (
-                                                                <option key={layer.id} value={layer.id}>
-                                                                    {layer.title || layer.id}
-                                                                </option>
-                                                            ))}
-                                                        </Select>
-
-                                                        <Select
-                                                            placeholder={intl.formatMessage({
-                                                                id: "layer_swipe.right"
-                                                            })}
-                                                            value={selectedRightLayer ?? ""}
-                                                            onChange={(e) =>
-                                                                setSelectedRightLayer(e.target.value)
-                                                            }
-                                                        >
-                                                            {visibleAvailableLayers.map((layer) => (
-                                                                <option key={layer.id} value={layer.id}>
-                                                                    {layer.title || layer.id}
-                                                                </option>
-                                                            ))}
-                                                        </Select>
-                                                    </Flex>
+                                                            <Measurement map={mapModel.map} />
+                                                        </TitledSection>
+                                                    </Box>
                                                 </Box>
                                             )}
                                             <Box
