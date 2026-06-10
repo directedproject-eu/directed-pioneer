@@ -122,10 +122,12 @@ export const TimeSlider = () => {
                             onValueChange={onChange}
                             step={1}
                         >
-                            <Slider.Track>
-                                <Slider.Range />
-                            </Slider.Track>
-                            <Slider.Thumb index={0} />
+                            <Slider.Control>
+                                <Slider.Track>
+                                    <Slider.Range />
+                                </Slider.Track>
+                                <Slider.Thumb index={0} />
+                            </Slider.Control>
                         </Slider.Root>
                         <Text>
                             {intl.formatMessage({
