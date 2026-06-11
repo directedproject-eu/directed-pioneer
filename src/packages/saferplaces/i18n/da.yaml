@@ -35,6 +35,9 @@ messages:
     inputSea: "Ekstremt havniveau (m)"
     downloadMap: "Download oversvømmelseskort"
     runModel: "Kør model"
+    infoButtonRain: "da: Total accumulated rainwater for a rainfall event. 
+                    The simulation routes the water instantaneously throughout the domain, 
+                    thus no explicit time period has to be specified."
   placeholders: 
     info1: "Indtast brugernavn"
     info2: "Indtast token"

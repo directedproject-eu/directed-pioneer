@@ -20,7 +20,8 @@ import {
     Dialog,
     Field,
     NativeSelect,
-    HoverCard
+    HoverCard, 
+    Link
 } from "@chakra-ui/react";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater, FaInfo } from "react-icons/fa";
@@ -86,7 +87,7 @@ export function SaferPlacesFloodMap() {
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
 
     const intl = useIntl();
-    const { isOpen, onOpen, onClose } = useDisclosure(); // For model dialog
+    const { open, onOpen, onClose } = useDisclosure(); // For model dialog
 
     // --- Services ---
     const floodMapService = useService<FloodMapService>("app.FloodMapService"); // FloodMapService to add new layer to TOC
@@ -274,11 +275,11 @@ export function SaferPlacesFloodMap() {
     return (
         <Box>
             <ToolButton label="Run Flood Models" icon={<FaWater />} onClick={onOpen} />
-            <Dialog.Root closeOnInteractOutside={true} open={isOpen} onOpenChange={onClose}>
+            <Dialog.Root closeOnInteractOutside={true} open={ open} onOpenChange={(e) => !e.open && onClose()} placement="center">
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content>
-                        <Dialog.Header>
+                        <Dialog.Header fontSize={18} fontWeight="bold" alignContent="center">
                             {intl.formatMessage({id: "modal.header"})}
                         </Dialog.Header>
                         <Dialog.CloseTrigger />
@@ -340,43 +341,91 @@ export function SaferPlacesFloodMap() {
                                             justifyContent="flex-end"
                                             size="sm"
                                             variant="ghost"
+                                            color="#2e9ecc"
                                             onClick={() => setTokenSubmitted(false)}
                                         >
                                             ← {intl.formatMessage({id: "modal.credentialChangeButton"})}
                                         </Button>
                                     </Flex>
-                                    <Flex justify="flex-start" align="center" mb={1} width="100%">
+                                    <Flex justify="flex-start" align="center" mb={1} width="100%" paddingRight={8}>
                                         <Text width="100%">
                                             {" "}
                                             {intl.formatMessage({
                                                 id: "description_saferplaces.text1"
                                             })}{" "}
-                                            <Button
+                                            <Link
                                                 variant="plain"
                                                 color="#2e9ecc"
+                                                paddingEnd={0.5}
+                                                paddingStart={0.5}
                                                 onClick={() => setActiveKeyword("pluvial flood")}
                                             >
                                                 {intl.formatMessage({
                                                     id: "description_saferplaces.keyword1"
                                                 })}
-                                            </Button>{" "}
+                                            </Link>{" "}
                                             {intl.formatMessage({
                                                 id: "description_saferplaces.text2"
                                             })}{" "}
-                                            <Button
+                                            <Link
                                                 variant="plain"
                                                 color="#2e9ecc"
+                                                paddingEnd={0.5}
+                                                paddingStart={0.5}
                                                 onClick={() => setActiveKeyword("coastal flood")}
                                             >
                                                 {intl.formatMessage({
                                                     id: "description_saferplaces.keyword2"
                                                 })}
-                                            </Button>{" "}
+                                            </Link>{" "}
                                             {intl.formatMessage({
                                                 id: "description_saferplaces.text3"
                                             })}
                                             .
                                         </Text>
+                                        <HoverCard.Root 
+                                            openDelay={250} 
+                                            closeDelay={100} 
+                                            positioning={{placement: "bottom"}}
+                                        >
+                                        <HoverCard.Trigger asChild>
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                color="black"
+                                                borderRadius="full"
+                                                paddingRight={2}
+                                                _hover={{
+                                                    transform: "scale(1.05)",
+                                                    bg: "rgba(0, 0, 0, 0.05)",
+                                                }}
+                                                transition="all 0.2s ease"
+                                            >
+                                                <Box
+                                                    as="span"
+                                                    display="inline-flex"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    width="22px"
+                                                    height="22px"
+                                                    borderRadius="50%"
+                                                    border="1.5px solid currentColor"
+                                                    fontFamily="serif"
+                                                    fontWeight="bold"
+                                                    fontSize="13px"
+                                                    lineHeight="1"
+                                                    pb="1px"
+                                                >
+                                                    i
+                                                </Box>
+                                            </Button>
+                                        </HoverCard.Trigger>
+                                        <HoverCard.Positioner>
+                                            <HoverCard.Content>
+                                                {intl.formatMessage({ id: "info_icon_saferrain.description" })}
+                                            </HoverCard.Content>
+                                        </HoverCard.Positioner>
+                                    </HoverCard.Root>
                                     </Flex>
                                     {activeKeyword && (
                                         <Flex>
@@ -387,12 +436,10 @@ export function SaferPlacesFloodMap() {
                                         </Flex>
                                     )}
                                     <Field.Root required>
-                                        <Field.Label padding={0}> 
+                                        <Field.Label padding={0} htmlFor="location"> 
                                             {intl.formatMessage({id: "modal.location"})}
                                         </Field.Label>
-                                        <NativeSelect.Root
-                                            id="location"
-                                        >
+                                        <NativeSelect.Root id="location">
                                             <NativeSelect.Field 
                                                 placeholder={intl.formatMessage({id: "modal.selectLocation"})}
                                                 onChange={handleLocationChange}
@@ -408,12 +455,10 @@ export function SaferPlacesFloodMap() {
                                     </Field.Root>
 
                                     <Field.Root required>
-                                        <Field.Label padding={0}> 
+                                        <Field.Label padding={0} htmlFor="model"> 
                                             {intl.formatMessage({id: "modal.model"})} 
                                         </Field.Label>
-                                        <NativeSelect.Root
-                                            id="model"
-                                        >
+                                        <NativeSelect.Root id="model">
                                             <NativeSelect.Field
                                                 value={model}
                                                 placeholder={intl.formatMessage({id: "modal.selectModel"})}
@@ -428,57 +473,66 @@ export function SaferPlacesFloodMap() {
                                     </Field.Root>
 
                                     {model === "safer_rain" && (
-                                        <><HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement: "top"}}>
-                                            <HoverCard.Trigger asChild>
-                                                <IconButton
-                                                    marginLeft="2px"
-                                                    size="sm"
-                                                    aria-label="Info"
-                                                    variant="ghost"
-                                                    color="black">
-                                                    <FaInfo />
-                                                </IconButton>
-                                            </HoverCard.Trigger>
-                                            <HoverCard.Positioner>
-                                                <HoverCard.Content>
-                                                    <HoverCard.Arrow />
-                                                    {intl.formatMessage({ id: "info_icon_saferrain.description" })}
-                                                </HoverCard.Content>
-                                            </HoverCard.Positioner>
-                                        </HoverCard.Root>
-                                        <Field.Root required>
-                                            <Field.Label padding={0} htmlFor="rain">
-                                                {intl.formatMessage({id: "modal.inputRain"})}{" "}
-                                            </Field.Label>
-                                            <Input
-                                                type="text"
-                                                id="rain"
-                                                value={rainIntensity}
-                                                onChange={handleRainIntensityChange}
-                                                placeholder={intl.formatMessage({id: "placeholders.info3"})}
-                                                variant="outline" />
-                                        </Field.Root></>
+                                        <><Flex justify="flex-start" align="center" mb={1} width="100%" paddingRight={8}>
+                                            <Text>
+                                                {intl.formatMessage({ id: "modal.inputRain" })}{" "}
+                                            </Text>
+                                            <HoverCard.Root
+                                                    openDelay={250}
+                                                    closeDelay={100}
+                                                    positioning={{ placement: "bottom" }}
+                                                >
+                                                    <HoverCard.Trigger asChild>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            color="black"
+                                                            borderRadius="full"
+                                                            paddingRight={2}
+                                                            _hover={{
+                                                                transform: "scale(1.05)",
+                                                                bg: "rgba(0, 0, 0, 0.05)",
+                                                            }}
+                                                            transition="all 0.2s ease"
+                                                        >
+                                                            <Box
+                                                                as="span"
+                                                                display="inline-flex"
+                                                                alignItems="center"
+                                                                justifyContent="center"
+                                                                width="22px"
+                                                                height="22px"
+                                                                borderRadius="50%"
+                                                                border="1.5px solid currentColor"
+                                                                fontFamily="serif"
+                                                                fontWeight="bold"
+                                                                fontSize="13px"
+                                                                lineHeight="1"
+                                                                pb="1px"
+                                                            >
+                                                                i
+                                                            </Box>
+                                                        </Button>
+                                                    </HoverCard.Trigger>
+                                                    <HoverCard.Positioner>
+                                                        <HoverCard.Content>
+                                                            {intl.formatMessage({ id: "modal.infoButtonRain" })}
+                                                        </HoverCard.Content>
+                                                    </HoverCard.Positioner>
+                                                </HoverCard.Root>
+                                            </Flex>
+                                            <Field.Root required>
+                                                <Input
+                                                    type="text"
+                                                    id="rain"
+                                                    value={rainIntensity}
+                                                    onChange={handleRainIntensityChange}
+                                                    placeholder={intl.formatMessage({ id: "placeholders.info3" })}
+                                                    variant="outline" />
+                                            </Field.Root></>
                                     )}
 
                                     {model === "safer_coast" && (
-                                        <><HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement:"top"}}>
-                                            <HoverCard.Trigger asChild>
-                                                <IconButton
-                                                    marginLeft="2px"
-                                                    size="sm"
-                                                    aria-label="Info"
-                                                    variant="ghost"
-                                                    color="black">
-                                                    <FaInfo />
-                                                </IconButton>
-                                            </HoverCard.Trigger>
-                                            <HoverCard.Positioner>
-                                                <HoverCard.Content>
-                                                    <HoverCard.Arrow />
-                                                    {intl.formatMessage({ id: "info_icon_safercoast.description" })}
-                                                </HoverCard.Content>
-                                            </HoverCard.Positioner>
-                                        </HoverCard.Root>
                                         <Field.Root required>
                                             <Field.Label padding={0} htmlFor="esl">
                                                 {intl.formatMessage({id: "modal.inputSea"})}
@@ -490,7 +544,7 @@ export function SaferPlacesFloodMap() {
                                                 onChange={handleESLChange}
                                                 placeholder={intl.formatMessage({id: "placeholders.info4"})}
                                                 variant="outline" />
-                                        </Field.Root></>
+                                        </Field.Root>
                                     )}
                                     {generationStatus && <p>Status: {generationStatus}</p>}
                                     {error && <p style={{ color: "red" }}>Error: {error}</p>}
