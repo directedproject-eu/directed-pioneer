@@ -201,7 +201,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 const blob = await response.blob();
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
-                link.download = `${layerIdFromParams}_test.tif`;
+                link.download = `${layerIdFromParams}.tif`;
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
@@ -234,6 +234,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     left={"50%"}
                     transform={"translate(-50%, -50%)"}
                 >
+                    <Dialog.CloseTrigger ref={btnRef} />
                     <Dialog.Header fontWeight="bold" borderBottomWidth="1px" mb={2}>
                         <HoverCard.Root
                             openDelay={250}
@@ -247,7 +248,6 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                     marginLeft="2px"
                                     size="sm"
                                     aria-label="Info"
-                                    icon={<FaInfo />}
                                     variant="ghost"
                                     color="black"
                                 >
@@ -255,7 +255,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                 </IconButton>
                             </HoverCard.Trigger>
                             <HoverCard.Content
-                                position={"absolute"}    
+                                position={"absolute"}
                             >
                                 {/* <HoverCard.Arrow /> */}
                                 {intl.formatMessage({ id: "map.download.description" })}
@@ -314,10 +314,9 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                         )}
                     </Dialog.Body>
                     <Dialog.Footer borderTopWidth="1px" mt={2}>
-                        <Dialog.CloseTrigger
-                            onClick={onClose}
-                            ref={btnRef}
-                        />
+                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                            Close
+                        </Button>
                     </Dialog.Footer>
                 </Dialog.Content>
             </Dialog.Backdrop>
