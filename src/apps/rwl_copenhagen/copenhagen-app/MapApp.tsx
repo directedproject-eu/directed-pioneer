@@ -135,6 +135,7 @@ export function MapApp() {
                                                 initiallyCollapsed={true}
                                                 showBasemapSwitcher={false}
                                             />
+                                            
                                         </ChakraProvider>
                                         <Select.Root>
                                             <Select.Label mt={2}>
@@ -270,7 +271,7 @@ export function MapApp() {
                                         padding={1}
                                     >
                                         {/* SaferPlaces flood model dialog */}
-                                        {/*<ModelClient />*/}
+                                        <ModelClient />
                                         <SaferPlacesFloodMap />
                                         <ToolButton
                                             label={intl.formatMessage({ id: "measurementTitle" })}

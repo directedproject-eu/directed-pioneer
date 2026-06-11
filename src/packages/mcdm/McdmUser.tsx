@@ -139,7 +139,7 @@ const processSensitivityData = (rawData: Record<string, Record<string, number>>)
     return { categories: sortedMeasures, series: series };
 };
 
-export function ModelClient({ isOpen, onClose }: ModelClientProps) {
+export function ModelClient() {
     // Use the `useService` hook to get the MCDM service instance
     const clientService = useService<McdmService>("app.McdmService");
     const [tokenInput, setTokenInput] = useState<string>("");
@@ -148,6 +148,8 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     // const { isOpen, onOpen, onClose } = useDisclosure();
+    const { open, onOpen, onClose } = useDisclosure(); // For dialog
+
     const intl = useIntl(); // i18n
     // const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Default mode ranks
 
@@ -395,7 +397,8 @@ export function ModelClient({ isOpen, onClose }: ModelClientProps) {
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
             />
-            <Dialog.Root open={isOpen} onOpenChange={onClose} placement={"center"}>
+            {/* <Dialog.Root open={isOpen} onOpenChange={onClose} placement={"center"}> */}
+            <Dialog.Root closeOnInteractOutside={true} open={ open} onOpenChange={(e) => !e.open && onClose()} placement="center">
                 <Dialog.Backdrop />
                 <Dialog.Content
                     position={"fixed"}
