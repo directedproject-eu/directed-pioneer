@@ -24,7 +24,7 @@ const SelectorItem: React.FC<SelectorItemProps> = ({ selected, children, onClick
                 }}
                 onClick={onClick}
             >
-                {selected && <SlArrowRight />}
+                {selected && <SlArrowRight size={12}/>}
                 {children}
             </button>
         </>
