@@ -7,7 +7,7 @@ import { IsimipHandler } from "../services/IsimipHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
-import { Button, IconButton, Flex, HoverCard } from "@chakra-ui/react";
+import { Button, IconButton, Flex, HoverCard, Text, Portal } from "@chakra-ui/react";
 import { FaInfo } from "react-icons/fa";
 import { TaxonomyInfo } from "taxonomy";
 
@@ -46,38 +46,51 @@ export function IsimipSelector() {
                         <FaInfo />
                     </IconButton>
                 </HoverCard.Trigger>
-                <HoverCard.Positioner>
-                    <HoverCard.Content>
-                        {/* <HoverCard.Arrow /> */}
-                        {intl.formatMessage({ id: "map.layer_select.info1" })}{" "}
-                        <Button
-                            variant="plain"
-                            color="#2e9ecc"
-                            onClick={() => setActiveKeyword("climate model")}
-                        >
-                            {intl.formatMessage({ id: "map.layer_select.keyword1" })}
-                        </Button>{" "}
-                        {intl.formatMessage({ id: "map.layer_select.info2" })}{" "}
-                        <Button
-                            variant="plain"
-                            color="#2e9ecc"
-                            onClick={() =>
-                                setActiveKeyword("Shared socio-economic pathways (SSPs)")
-                            }
-                        >
-                            {intl.formatMessage({ id: "map.layer_select.keyword2" })}
-                        </Button>
-                        {intl.formatMessage({ id: "map.layer_select.info3" })}
-                        <Button
-                            variant="plain"
-                            color="#2e9ecc"
-                            onClick={() => setActiveKeyword("Variables")}
-                        >
-                            {intl.formatMessage({ id: "map.layer_select.keyword3" })}
-                        </Button>{" "}
-                        {intl.formatMessage({ id: "map.layer_select.info4" })}
-                    </HoverCard.Content>
-                </HoverCard.Positioner>
+                <Portal>
+                    <HoverCard.Positioner>
+                        <HoverCard.Content>
+                            <Text>
+                                {/* <HoverCard.Arrow /> */}
+                                {intl.formatMessage({ id: "map.layer_select.info1" })}
+                                {" "}
+                                <Text
+                                    as="span"
+                                    color="#49b7e6"
+                                    cursor="pointer"
+                                    onClick={() => setActiveKeyword("climate model")}
+                                >
+                                    {intl.formatMessage({ id: "map.layer_select.keyword1" })}
+                                </Text>
+                                {" "}
+                                {intl.formatMessage({ id: "map.layer_select.info2" })}
+                                {" "}
+                                <Text
+                                    as={"span"}
+                                    color="#49b7e6"
+                                    cursor={"pointer"}
+                                    onClick={() =>
+                                        setActiveKeyword("Shared socio-economic pathways (SSPs)")
+                                    }
+                                >
+                                    {intl.formatMessage({ id: "map.layer_select.keyword2" })}
+                                </Text>
+                                {" "}
+                                {intl.formatMessage({ id: "map.layer_select.info3" })}
+                                {" "}
+                                <Text
+                                    as={"span"}
+                                    color="#49b7e6"
+                                    cursor={"pointer"}
+                                    onClick={() => setActiveKeyword("Variables")}
+                                >
+                                    {intl.formatMessage({ id: "map.layer_select.keyword3" })}
+                                </Text>
+                                {" "}
+                                {intl.formatMessage({ id: "map.layer_select.info4" })}
+                            </Text>
+                        </HoverCard.Content>
+                    </HoverCard.Positioner>
+                </Portal>
                 {activeKeyword && (
                     <Flex>
                         <TaxonomyInfo
