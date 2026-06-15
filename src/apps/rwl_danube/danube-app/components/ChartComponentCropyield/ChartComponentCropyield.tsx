@@ -129,34 +129,43 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                 </Box>
             </Center>
 
-            <Text mt={"2em"} size={"2em"}>
-                {intl.formatMessage({ id: "charts.zala_crop.explanation1" })}{" "}
-                <Button
-                    variant="link"
-                    color="#2e9ecc"
+            <Text mt={"2em"} textStyle={"2em"}>
+                {intl.formatMessage({ id: "charts.zala_crop.explanation1" })}
+                {" "}
+                <Text
+                    as="span"
+                    color={"#49b7e6"}
+                    cursor="pointer"
                     onClick={() => setActiveKeyword("agriculture")}
                 >
                     {intl.formatMessage({ id: "charts.zala_crop.keyword1" })}
-                </Button>{" "}
-                {intl.formatMessage({ id: "charts.zala_crop.explanation2" })}{" "}
-                <Button
-                    variant="link"
-                    color="#2e9ecc"
+                </Text>
+                {" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation2" })}
+                {" "}
+                <Text
+                    as="span"
+                    color="#49b7e6"
+                    cursor="pointer"
                     onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
                 >
                     {intl.formatMessage({ id: "charts.zala_crop.keyword2" })}
-                </Button>{" "}
-                {intl.formatMessage({ id: "charts.zala_crop.explanation3" })}{" "}
-                {intl.formatMessage({ id: "charts.zala_crop.explanation4" })}{" "}
-                <Button
-                    variant="link"
-                    color="#2e9ecc"
+                </Text>
+                {" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation3" })}
+                {" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation4" })}
+                {" "}
+                <Text
+                    as="span"
+                    color="#49b7e6"
+                    cursor="pointer"
                     onClick={() => setActiveKeyword("Agricultural and ecological drought")}
                 >
                     {intl.formatMessage({ id: "charts.zala_crop.keyword3" })}
-                </Button>
+                </Text>
                 {intl.formatMessage({ id: "charts.zala_crop.explanation5" })}
-            </Text>
+            </Text >
 
             <Flex alignItems="center" mt={4}>
                 <Text>{intl.formatMessage({ id: "charts.zala_crop.explanation6" })}</Text>
@@ -164,11 +173,13 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
 
             <Box padding="15px" />
 
-            {activeKeyword && (
-                <Flex>
-                    <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
-                </Flex>
-            )}
+            {
+                activeKeyword && (
+                    <Flex>
+                        <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
+                    </Flex>
+                )
+            }
         </>
     );
 };
