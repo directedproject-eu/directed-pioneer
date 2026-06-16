@@ -410,9 +410,10 @@ export function ModelClient() {
                     </Dialog.CloseTrigger>
                     <Dialog.Body overflow="auto">
                         {!tokenSubmitted ? (
-                            <Field.Root>
+                            <Field.Root required>
                                 <Field.Label padding={2} htmlFor="token">
                                     {intl.formatMessage({ id: "modalStart.token" })}{" "}
+                                    <Field.RequiredIndicator />
                                 </Field.Label>
                                 <Input
                                     type="text"

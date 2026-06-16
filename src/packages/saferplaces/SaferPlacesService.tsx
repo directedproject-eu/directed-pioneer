@@ -6,23 +6,17 @@ import {
     Box,
     Button,
     Input,
-    Select,
     useDisclosure,
     VStack,
     Flex,
-    Text, 
-    Popover, 
-    PopoverBody, 
-    PopoverContent, 
-    PopoverTrigger,
-    PopoverArrow, 
-    IconButton,
+    Text,
     Dialog,
     Field,
     NativeSelect,
     HoverCard, 
     Link
 } from "@chakra-ui/react";
+import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaWater, FaInfo } from "react-icons/fa";
 import { useService } from "open-pioneer:react-hooks";
@@ -279,10 +273,14 @@ export function SaferPlacesFloodMap() {
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content>
-                        <Dialog.Header fontSize={18} fontWeight="bold" alignContent="center">
-                            {intl.formatMessage({id: "modal.header"})}
+                        <Dialog.Header alignContent="center">
+                            <Dialog.Title>
+                                {intl.formatMessage({id: "modal.header"})}
+                            </Dialog.Title>
                         </Dialog.Header>
-                        <Dialog.CloseTrigger />
+                        <Dialog.CloseTrigger asChild>
+                            <CloseButton size="sm" />
+                        </Dialog.CloseTrigger>
                         <Dialog.Body>
                             {!tokenSubmitted ? (
                                 // --- TOKEN INPUT VIEW (Page 1) ---
@@ -295,6 +293,7 @@ export function SaferPlacesFloodMap() {
                                     <Field.Root required>
                                         <Field.Label htmlFor="user">
                                             {intl.formatMessage({id: "modal.userName"})}
+                                            <Field.RequiredIndicator />
                                         </Field.Label>
                                         <Input
                                             type="text"
@@ -308,6 +307,7 @@ export function SaferPlacesFloodMap() {
                                     <Field.Root required>
                                         <Field.Label htmlFor="token">
                                             {intl.formatMessage({id: "modal.token"})}
+                                            <Field.RequiredIndicator />
                                         </Field.Label>
                                         <Input
                                             type="password"
@@ -438,6 +438,7 @@ export function SaferPlacesFloodMap() {
                                     <Field.Root required>
                                         <Field.Label padding={0} htmlFor="location"> 
                                             {intl.formatMessage({id: "modal.location"})}
+                                            <Field.RequiredIndicator />
                                         </Field.Label>
                                         <NativeSelect.Root id="location">
                                             <NativeSelect.Field 
@@ -456,7 +457,8 @@ export function SaferPlacesFloodMap() {
 
                                     <Field.Root required>
                                         <Field.Label padding={0} htmlFor="model"> 
-                                            {intl.formatMessage({id: "modal.model"})} 
+                                            {intl.formatMessage({id: "modal.model"})}
+                                            <Field.RequiredIndicator />
                                         </Field.Label>
                                         <NativeSelect.Root id="model">
                                             <NativeSelect.Field
@@ -473,55 +475,55 @@ export function SaferPlacesFloodMap() {
                                     </Field.Root>
 
                                     {model === "safer_rain" && (
-                                        <><Flex justify="flex-start" align="center" mb={1} width="100%" paddingRight={8}>
-                                            <Text>
-                                                {intl.formatMessage({ id: "modal.inputRain" })}{" "}
-                                            </Text>
-                                            <HoverCard.Root
+                                        <>
+                                            <Field.Root required>
+                                                <Field.Label padding={0} htmlFor="esl">
+                                                    {intl.formatMessage({id: "modal.inputRain"})}
+                                                    <Field.RequiredIndicator />
+                                                    <HoverCard.Root
                                                     openDelay={250}
                                                     closeDelay={100}
                                                     positioning={{ placement: "bottom" }}
-                                                >
-                                                    <HoverCard.Trigger asChild>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            color="black"
-                                                            borderRadius="full"
-                                                            paddingRight={2}
-                                                            _hover={{
-                                                                transform: "scale(1.05)",
-                                                                bg: "rgba(0, 0, 0, 0.05)",
-                                                            }}
-                                                            transition="all 0.2s ease"
-                                                        >
-                                                            <Box
-                                                                as="span"
-                                                                display="inline-flex"
-                                                                alignItems="center"
-                                                                justifyContent="center"
-                                                                width="22px"
-                                                                height="22px"
-                                                                borderRadius="50%"
-                                                                border="1.5px solid currentColor"
-                                                                fontFamily="serif"
-                                                                fontWeight="bold"
-                                                                fontSize="13px"
-                                                                lineHeight="1"
-                                                                pb="1px"
+                                                    >
+                                                        <HoverCard.Trigger asChild>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                color="black"
+                                                                borderRadius="full"
+                                                                paddingRight={2}
+                                                                _hover={{
+                                                                    transform: "scale(1.05)",
+                                                                    bg: "rgba(0, 0, 0, 0.05)",
+                                                                }}
+                                                                transition="all 0.2s ease"
                                                             >
-                                                                i
-                                                            </Box>
-                                                        </Button>
-                                                    </HoverCard.Trigger>
-                                                    <HoverCard.Positioner>
-                                                        <HoverCard.Content>
-                                                            {intl.formatMessage({ id: "modal.infoButtonRain" })}
-                                                        </HoverCard.Content>
-                                                    </HoverCard.Positioner>
-                                                </HoverCard.Root>
-                                            </Flex>
-                                            <Field.Root required>
+                                                                <Box
+                                                                    as="span"
+                                                                    display="inline-flex"
+                                                                    alignItems="center"
+                                                                    justifyContent="center"
+                                                                    width="22px"
+                                                                    height="22px"
+                                                                    borderRadius="50%"
+                                                                    border="1.5px solid currentColor"
+                                                                    fontFamily="serif"
+                                                                    fontWeight="bold"
+                                                                    fontSize="13px"
+                                                                    lineHeight="1"
+                                                                    pb="1px"
+                                                                >
+                                                                    i
+                                                                </Box>
+                                                            </Button>
+                                                        </HoverCard.Trigger>
+                                                        <HoverCard.Positioner>
+                                                            <HoverCard.Content>
+                                                                {intl.formatMessage({ id: "modal.infoButtonRain" })}
+                                                            </HoverCard.Content>
+                                                        </HoverCard.Positioner>
+                                                    </HoverCard.Root>
+                                                </Field.Label>
                                                 <Input
                                                     type="text"
                                                     id="rain"
@@ -536,6 +538,7 @@ export function SaferPlacesFloodMap() {
                                         <Field.Root required>
                                             <Field.Label padding={0} htmlFor="esl">
                                                 {intl.formatMessage({id: "modal.inputSea"})}
+                                                <Field.RequiredIndicator />
                                             </Field.Label>
                                             <Input
                                                 type="number"

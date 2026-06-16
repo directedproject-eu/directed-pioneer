@@ -33,6 +33,7 @@ import {
     defaultSystem,
     HoverCard
 } from "@chakra-ui/react";
+import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Legend as PioneerLegend } from "@open-pioneer/legend";
@@ -65,7 +66,6 @@ import { LayerSelector } from "./controls/LayerSelector";
 import { TimeSlider } from "./controls/TimeSlider";
 import ExpandableBox from "./components/ExpandableBox";
 import StationInformation from "./components/StationInformation";
-import ResizeBox from "./components/ResizeBox";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { GeosphereForecasts } from "./controls/GeosphereForecasts";
 import { LayerDownload } from "layerdownload";
@@ -351,11 +351,15 @@ export function MapApp() {
                                     <Dialog.Positioner>
                                         <Dialog.Content>
                                             <Dialog.Header>
-                                                {intl.formatMessage({
-                                                    id: "welcome_window.header"
-                                                })}
+                                                <Dialog.Title>
+                                                    {intl.formatMessage({
+                                                        id: "welcome_window.header"
+                                                    })}
+                                                </Dialog.Title>
                                             </Dialog.Header>
-                                            <Dialog.CloseTrigger />
+                                            <Dialog.CloseTrigger asChild>
+                                                <CloseButton size="sm" />
+                                            </Dialog.CloseTrigger>
                                             <Dialog.Body pb={6}>
                                                 <Text as="b">
                                                     {intl.formatMessage({
@@ -748,10 +752,11 @@ export function MapApp() {
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content w="80vw" maxW="80vw">
-                        #
                         <Dialog.Header>
-                            {activeChart === "crop" && "Crop Yield Chart"}
-                            {activeChart === "forestry" && "Forestry Data Chart"}
+                            <Dialog.Title>
+                                {activeChart === "crop" && "Crop Yield Chart"}
+                                {activeChart === "forestry" && "Forestry Data Chart"}
+                            </Dialog.Title>
                         </Dialog.Header>
                         <Dialog.CloseTrigger />
                         <Dialog.Body>
