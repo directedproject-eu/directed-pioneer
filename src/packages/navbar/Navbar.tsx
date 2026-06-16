@@ -236,18 +236,18 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
             href={href}
             p={2}
             rounded={"md"}
-            // _hover={{ bg: useColorModeValue("gray.200", "gray.900") }}
             _dark={{ _hover: { bg: "gray.900" } }}
+            _hover={{ textDecoration: "none", bg: "gray.100" }} 
+            display="block" 
+            w="full"        
         >
-            <Stack direction={"row"} align={"center"}>
+            <Flex justify={"space-between"} align={"center"} w="full">
                 <Box>
                     <Flex fontWeight={500}>{label}</Flex>
                     {subLabel && <Flex fontSize={"md"}>{subLabel}</Flex>}
-                </Box>
-                <Flex justify={"flex-end"} align={"center"} flex={1}>
-                    <Icon color={"#2e9ecc"} w={5} h={5} as={SlArrowRight} />
-                </Flex>
-            </Stack>
+                </Box>                
+                <Icon color={"#2e9ecc"} w={4} h={4} as={SlArrowRight} />
+            </Flex>
         </Link>
     );
 };

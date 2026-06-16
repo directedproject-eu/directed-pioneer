@@ -456,7 +456,7 @@ export function MapApp() {
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content w="80vw" maxW="80vw">
-                        <Dialog.Header>
+                        <Dialog.Header fontSize="xl" fontWeight={"bold"}>
                             {intl.formatMessage({ id: "charts.chart_title" })}
                         </Dialog.Header>
                         <Dialog.CloseTrigger />
