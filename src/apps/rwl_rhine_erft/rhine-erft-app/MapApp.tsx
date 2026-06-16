@@ -9,7 +9,8 @@ import {
     NativeSelect,
     Spacer,
     useDisclosure,
-    Dialog
+    Dialog,
+    HoverCard
 } from "@chakra-ui/react";
 import {
     MapAnchor,
@@ -204,23 +205,60 @@ export function MapApp() {
                                             <Box>
                                                 <Box maxHeight={300} overflow="auto">
                                                     <Flex
-                                                        direction="column"
-                                                        justifyContent="center"
                                                         alignItems="center"
-                                                    ></Flex>
-                                                    <Text fontWeight="bold" mt={4}>
-                                                        Select Layers for Comparison
-                                                    </Text>
-                                                    <Spacer />
-                                                    <Text fontSize={16}>
-                                                        ➡️ Only layers which have been selected in
-                                                        the Operational Layers are viewable for
-                                                        comparison
-                                                    </Text>
+                                                        flexDirection={"row"}
+                                                    >
+                                                        <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
+                                                            <HoverCard.Trigger asChild>
+                                                                <Button
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    color="black"
+                                                                    borderRadius="full"
+                                                                    paddingRight={2}
+                                                                    _hover={{
+                                                                        transform: "scale(1.05)",
+                                                                        bg: "rgba(0, 0, 0, 0.05)",
+                                                                    }}
+                                                                    transition="all 0.2s ease"
+                                                                >
+                                                                    <Box
+                                                                        as="span"
+                                                                        display="inline-flex"
+                                                                        alignItems="center"
+                                                                        justifyContent="center"
+                                                                        width="20px"
+                                                                        height="20px"
+                                                                        borderRadius="50%"
+                                                                        border="1.5px solid currentColor"
+                                                                        fontFamily="serif"
+                                                                        fontWeight="bold"
+                                                                        fontSize="12px"
+                                                                        lineHeight="1"
+                                                                        pb="1px"
+                                                                    >
+                                                                        i
+                                                                    </Box>
+                                                                </Button>
+                                                            </HoverCard.Trigger>
+                                                            <HoverCard.Positioner>
+                                                                <HoverCard.Content>
+                                                                    {intl.formatMessage({
+                                                                        id: "layer_swipe.description"
+                                                                    })}
+                                                                </HoverCard.Content>
+                                                            </HoverCard.Positioner>
+                                                        </HoverCard.Root>
+                                                        <Text fontWeight="bold">
+                                                            {intl.formatMessage({
+                                                                id: "layer_swipe.title"
+                                                            })}
+                                                        </Text>
+                                                    </Flex>
                                                     <Flex direction="row" gap={4} p={4}>
                                                         <NativeSelect.Root>
                                                             <NativeSelect.Field
-                                                                placeholder="Select Left Layer"
+                                                                placeholder={intl.formatMessage({ id: "layer_swipe.left" })}
                                                                 value={selectedLeftLayer ?? ""}
                                                                 onChange={(e) =>
                                                                     setSelectedLeftLayer(
@@ -243,7 +281,7 @@ export function MapApp() {
                                                         </NativeSelect.Root>
                                                         <NativeSelect.Root>
                                                             <NativeSelect.Field
-                                                                placeholder="Select Right Layer"
+                                                                placeholder={intl.formatMessage({ id: "layer_swipe.right" })}
                                                                 value={selectedRightLayer ?? ""}
                                                                 onChange={(e) =>
                                                                     setSelectedRightLayer(
