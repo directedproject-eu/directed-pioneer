@@ -6,8 +6,8 @@ import {
     Flex,
     VStack,
     Text,
-    Spacer, 
-    Link, 
+    Spacer,
+    Link,
     Select
 } from "@chakra-ui/react";
 import { DefaultMapProvider, MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
@@ -21,7 +21,7 @@ import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { Toc } from "@open-pioneer/toc";
-import { MAP_ID } from "./services"; 
+import { MAP_ID } from "./services";
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
@@ -107,7 +107,7 @@ export function MapApp() {
                             >
                                 <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                     <Forecasts />
-                                    <FloodSlider/>
+                                    <FloodSlider />
                                 </MapAnchor>
 
                                 <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
@@ -135,7 +135,7 @@ export function MapApp() {
                                                 initiallyCollapsed={true}
                                                 showBasemapSwitcher={false}
                                             />
-                                            
+
                                         </ChakraProvider>
                                         <Select.Root>
                                             <Select.Label mt={2}>
@@ -186,14 +186,6 @@ export function MapApp() {
                                             </Link>
                                         </Text>
                                     </Box>
-                                    {downloadIsActive && (
-                                        <LayerDownload
-                                            mapID={MAP_ID}
-                                            intl={intl}
-                                            isOpen={downloadIsActive}
-                                            onClose={() => setDownloadIsActive(false)}
-                                        />
-                                    )}
                                 </MapAnchor>
                                 {/* zoom to municipalities */}
                                 <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
@@ -290,6 +282,14 @@ export function MapApp() {
                                     </Flex>
                                 </MapAnchor>
                             </MapContainer>
+                            {downloadIsActive && (
+                                <LayerDownload
+                                    mapID={MAP_ID}
+                                    intl={intl}
+                                    isOpen={downloadIsActive}
+                                    onClose={() => setDownloadIsActive(false)}
+                                />
+                            )}
                         </Flex>
                         <Flex
                             role="region"

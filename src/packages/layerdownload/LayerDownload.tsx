@@ -20,7 +20,10 @@ import {
     Dialog,
     HoverCard,
     IconButton,
-    Portal
+    Portal,
+    Flex,
+    Box,
+    Spacer
 } from "@chakra-ui/react";
 import { FaInfo } from "react-icons/fa";
 
@@ -227,7 +230,6 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     maxW="lg"
                     w="90%"
                     mx="auto"
-                    p={4}
                     zIndex={1600}
                     position={"fixed"}
                     top={"50%"}
@@ -235,35 +237,58 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     transform={"translate(-50%, -50%)"}
                 >
                     <Dialog.CloseTrigger ref={btnRef} />
-                    <Dialog.Header fontWeight="bold" borderBottomWidth="1px" mb={2}>
-                        <HoverCard.Root
-                            openDelay={250}
-                            closeDelay={100}
-                            positioning={{ placement: "top" }}
-                            open={popoverIsOpen}
-                            onOpenChange={() => setPopoverIsOpen(!popoverIsOpen)}
+                    <Dialog.Body gap={4} flexDirection="column" >
+                        <Flex
+                            alignItems="center"
+                            flexDirection={"row"}
                         >
-                            <HoverCard.Trigger asChild>
-                                <IconButton
-                                    marginLeft="2px"
-                                    size="sm"
-                                    aria-label="Info"
-                                    variant="ghost"
-                                    color="black"
-                                >
-                                    <FaInfo />
-                                </IconButton>
-                            </HoverCard.Trigger>
-                            <HoverCard.Content
-                                position={"absolute"}
-                            >
-                                {/* <HoverCard.Arrow /> */}
-                                {intl.formatMessage({ id: "map.download.description" })}
-                            </HoverCard.Content>
-                        </HoverCard.Root>
-                        {intl.formatMessage({ id: "map.download.heading" })}
-                    </Dialog.Header>
-                    <Dialog.Body>
+                            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
+                                <HoverCard.Trigger asChild>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        color="black"
+                                        borderRadius="full"
+                                        paddingRight={2}
+                                        _hover={{
+                                            transform: "scale(1.05)",
+                                            bg: "rgba(0, 0, 0, 0.05)",
+                                        }}
+                                        transition="all 0.2s ease"
+                                    >
+                                        <Box
+                                            as="span"
+                                            display="inline-flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            width="20px"
+                                            height="20px"
+                                            borderRadius="50%"
+                                            border="1.5px solid currentColor"
+                                            fontFamily="serif"
+                                            fontWeight="bold"
+                                            fontSize="12px"
+                                            lineHeight="1"
+                                            pb="1px"
+                                        >
+                                            i
+                                        </Box>
+                                    </Button>
+                                </HoverCard.Trigger>
+                                <HoverCard.Positioner>
+                                    <HoverCard.Content>
+                                        {intl.formatMessage({
+                                            id: "map.download.description"
+                                        })}
+                                    </HoverCard.Content>
+                                </HoverCard.Positioner>
+                            </HoverCard.Root>
+                            <Text fontWeight="bold">
+                                {intl.formatMessage({
+                                    id: "map.download.heading"
+                                })}
+                            </Text>
+                        </Flex>
                         {visibleLayers.length === 0 ? (
                             <Text fontSize="sm" color="gray.600">
                                 {intl.formatMessage({ id: "map.download.no_layers" })}
@@ -312,12 +337,12 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                 </Button>
                             </VStack>
                         )}
+                        <Flex width="100%" justifyContent="flex-end" mt={4}>
+                            <Button colorScheme="blue" onClick={onClose}>
+                                Close
+                            </Button>
+                        </Flex>
                     </Dialog.Body>
-                    <Dialog.Footer borderTopWidth="1px" mt={2}>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                    </Dialog.Footer>
                 </Dialog.Content>
             </Dialog.Backdrop>
         </Dialog.Root>
