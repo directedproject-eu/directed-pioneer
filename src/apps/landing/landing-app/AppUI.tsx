@@ -29,7 +29,7 @@ export function AppUI() {
                     padding="16px"
                 >
                     <Text
-                        fontSize="40"
+                        fontSize="3xl"
                         fontWeight="bold"
                         color="white"
                         textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
@@ -37,7 +37,7 @@ export function AppUI() {
                         Fostering disaster-resilience with the Directed Data Fabric
                     </Text>
                     <Text
-                        fontSize="25"
+                        fontSize="xl"
                         fontWeight="bold"
                         color="white"
                         textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"

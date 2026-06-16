@@ -6,7 +6,6 @@ import {
     Box,
     Center,
     Text,
-    Select,
     Flex,
     Field,
     NativeSelect
@@ -77,6 +76,7 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
                             </option>
                         ))}
                         </NativeSelect.Field>
+                        <NativeSelect.Indicator />
                     </NativeSelect.Root>
                 </Box>
             </Flex>
@@ -103,6 +103,7 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
                                     </option>
                                 ))}
                             </NativeSelect.Field>
+                            <NativeSelect.Indicator />
                         </NativeSelect.Root>
                     </Field.Root>
 
@@ -119,12 +120,13 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
                                     </option>
                                 ))}
                             </NativeSelect.Field>
+                            <NativeSelect.Indicator />
                         </NativeSelect.Root>
                     </Field.Root>
                 </Flex>
             </Center>
 
-            <Text mt={"2em"} size={"2em"}>
+            <Text mt={"2em"} textStyle={"2em"}>
                 {intl.formatMessage({ id: "charts.forestry.explanation1" })}
             </Text>
 
