@@ -89,13 +89,20 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
         const url = `${wmsUrl}?service=WMS&request=GetCapabilities`;
         const res = await fetch(url);
         if (!res.ok) throw new Error("GetCapabilities failed");
-
+    
         const text = await res.text();
         const xml = new DOMParser().parseFromString(text, "text/xml");
-
-        const maxWidth = xml.querySelector("MaxImageWidth, MaxWidth")?.textContent;
-        const maxHeight = xml.querySelector("MaxImageHeight, MaxHeight")?.textContent;
-
+    
+        // WMS 1.3.0 uses MaxWidth/MaxHeight, WMS 1.1.x uses MaxImageWidth/MaxImageHeight
+        const maxWidth =
+            xml.querySelector("MaxWidth")?.textContent ||
+            xml.querySelector("MaxImageWidth")?.textContent;
+        const maxHeight =
+            xml.querySelector("MaxHeight")?.textContent ||
+            xml.querySelector("MaxImageHeight")?.textContent;
+    
+        console.log("WMS MaxWidth:", maxWidth, "MaxHeight:", maxHeight);
+    
         return {
             maxWidth: maxWidth ? Number(maxWidth) : 4096,
             maxHeight: maxHeight ? Number(maxHeight) : 4096
@@ -151,37 +158,50 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 link.click();
                 link.remove();
             } else if (type === "WMS_tiles") {
-                // console.log("Layer to download: ", layer);
                 let layerIdFromParams = properties.source?.params_?.LAYERS;
                 const urlFromParams = properties.source?.urls[0];
+
+                // Read CRS from the layer source projection
+                const projection = layer.olLayer?.getSource()?.getProjection?.();
+                const crs = projection ? projection.getCode() : "EPSG:3857";
+                console.log("Layer CRS:", crs);
 
                 if (urlFromParams === "https://directed.dev.52north.org/geoserver/directed/wms") {
                     layerIdFromParams = "directed:" + layerIdFromParams;
                 }
 
-                // console.log("urlFromParams:", urlFromParams);
-
                 const mapExtent = mapModel?.map?.initialExtent;
-                const resolution = mapModel?.map?.resolution;
 
-                if (!mapExtent || !resolution) {
-                    throw new Error("Map extent or resolution not available");
+                if (!mapExtent) {
+                    throw new Error("Map extent not available");
                 }
 
-                // Calculate width and height in pixels based on resolution
-                const widthMeters = mapExtent.xMax - mapExtent.xMin;
-                const heightMeters = mapExtent.yMax - mapExtent.yMin;
-
-                let widthPx = Math.round(widthMeters / resolution);
-                let heightPx = Math.round(heightMeters / resolution);
-
-                // Clamp to server max
+                // Get the server's maximum supported image size
                 const { maxWidth, maxHeight } = await getWmsMaxSize(urlFromParams);
 
-                const scale = Math.min(maxWidth / widthPx, maxHeight / heightPx, 1);
+                // Maintain aspect ratio, use max dimensions
+                const widthMeters = mapExtent.xMax - mapExtent.xMin;
+                const heightMeters = mapExtent.yMax - mapExtent.yMin;
+                const aspectRatio = widthMeters / heightMeters;
 
-                widthPx = Math.round(widthPx * scale);
-                heightPx = Math.round(heightPx * scale);
+                let widthPx: number;
+                let heightPx: number;
+
+                if (aspectRatio >= 1) {
+                    widthPx = maxWidth;
+                    heightPx = Math.round(maxWidth / aspectRatio);
+                    if (heightPx > maxHeight) {
+                        heightPx = maxHeight;
+                        widthPx = Math.round(maxHeight * aspectRatio);
+                    }
+                } else {
+                    heightPx = maxHeight;
+                    widthPx = Math.round(maxHeight * aspectRatio);
+                    if (widthPx > maxWidth) {
+                        widthPx = maxWidth;
+                        heightPx = Math.round(maxWidth / aspectRatio);
+                    }
+                }
 
                 const params = new URLSearchParams({
                     service: "WMS",
@@ -189,8 +209,8 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     request: "GetMap",
                     layers: `${layerIdFromParams}`,
                     styles: "",
-                    crs: "EPSG:3857",
-                    bbox: `${mapExtent?.xMin},${mapExtent?.yMin},${mapExtent?.xMax},${mapExtent?.yMax}`,
+                    crs: crs,
+                    bbox: `${mapExtent.xMin},${mapExtent.yMin},${mapExtent.xMax},${mapExtent.yMax}`,
                     width: `${widthPx}`,
                     height: `${heightPx}`,
                     format: "image/tiff"
