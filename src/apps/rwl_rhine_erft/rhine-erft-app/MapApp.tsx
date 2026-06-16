@@ -9,7 +9,8 @@ import {
     NativeSelect,
     useDisclosure,
     Dialog,
-    HoverCard
+    HoverCard,
+    ChakraProvider
 } from "@chakra-ui/react";
 import {
     MapAnchor,
@@ -46,6 +47,7 @@ import Swipe from "ol-ext/control/Swipe";
 import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
+import { system } from "theme";
 
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -400,11 +402,13 @@ export function MapApp() {
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                             >
-                                <Toc
-                                    map={mapModel.map}
-                                    showBasemapSwitcher={false}
-                                    showTools={true}
-                                />
+                                <ChakraProvider value={system}>
+                                    <Toc
+                                        map={mapModel.map}
+                                        showBasemapSwitcher={false}
+                                        showTools={true}
+                                    />
+                                </ChakraProvider>
                                 <Field.Root>
                                     <Field.Label mt={2}>
                                         <Text as="b">

@@ -65,6 +65,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { ForestrySelector } from "./services/ForestrySelector";
 import { NutsSelector } from "./services/NutsSelector";
 import { SaferPlacesFloodMap } from "saferplaces";
+import { system } from "theme";
+
 
 import ChartComponentCropyield from "./components/ChartComponentCropyield/ChartComponentCropyield";
 import ChartComponentForestry from "./components/ChartComponentForestry";
@@ -675,7 +677,7 @@ export function MapApp() {
                                         })}
                                         marginBottom="10px"
                                     >
-                                        <ChakraProvider value={defaultSystem}>
+                                        <ChakraProvider value={system}>
                                             <Toc
                                                 map={mapModel.map}
                                                 showTools={true}
