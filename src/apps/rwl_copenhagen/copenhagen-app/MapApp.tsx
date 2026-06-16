@@ -266,14 +266,14 @@ export function MapApp() {
                                         <ModelClient />
                                         <SaferPlacesFloodMap />
                                         <ToolButton
-                                            label={intl.formatMessage({ id: "measurementTitle" })}
-                                            icon={<PiRulerLight />}
-                                            onClick={toggleMeasurement}
-                                        />
-                                        <ToolButton
                                             label={intl.formatMessage({ id: "map.download.heading" })}
                                             icon={<PiDownload />}
                                             onClick={toggleDownload}
+                                        />
+                                        <ToolButton
+                                            label={intl.formatMessage({ id: "measurementTitle" })}
+                                            icon={<PiRulerLight />}
+                                            onClick={toggleMeasurement}
                                         />
                                         <Geolocation />
                                         <InitialExtent />

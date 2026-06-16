@@ -72,7 +72,6 @@ import { LayerDownload } from "layerdownload";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ForestrySelector } from "./services/ForestrySelector";
 import { NutsSelector } from "./services/NutsSelector";
-import { FaInfo } from "react-icons/fa";
 import { SaferPlacesFloodMap } from "saferplaces";
 
 import ChartComponentCropyield from "./components/ChartComponentCropyield/ChartComponentCropyield";
@@ -589,14 +588,7 @@ export function MapApp() {
                                                 gap={1}
                                                 padding={1}
                                             >
-                                                <ToolButton
-                                                    label={intl.formatMessage({
-                                                        id: "map.download.button"
-                                                    })}
-                                                    icon={<PiDownload />}
-                                                    active={downloadIsActive}
-                                                    onClick={toggleDownload}
-                                                />
+                                                <SaferPlacesFloodMap />
                                                 <ToolButton
                                                     label={intl.formatMessage({
                                                         id: "charts.zala_crop.button_title"
@@ -604,13 +596,20 @@ export function MapApp() {
                                                     icon={<GiWheat />}
                                                     onClick={() => setActiveChart("crop")}
                                                 />
-
                                                 <ToolButton
                                                     label={intl.formatMessage({
                                                         id: "charts.forestry.button_title"
                                                     })}
                                                     icon={<GiCircleForest />}
                                                     onClick={() => setActiveChart("forestry")}
+                                                />
+                                                <ToolButton
+                                                    label={intl.formatMessage({
+                                                        id: "map.download.button"
+                                                    })}
+                                                    icon={<PiDownload />}
+                                                    active={downloadIsActive}
+                                                    onClick={toggleDownload}
                                                 />
                                                 <ToolButton
                                                     label={intl.formatMessage({

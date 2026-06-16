@@ -7,7 +7,6 @@ import {
     Field,
     Text,
     NativeSelect,
-    Spacer,
     useDisclosure,
     Dialog,
     HoverCard
@@ -34,7 +33,8 @@ import { useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
-import { PiChartLineDownLight, PiRulerLight, PiDownload } from "react-icons/pi";
+import { GiWheat } from "react-icons/gi";
+import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { FeatureInfo } from "featureinfo";
@@ -343,14 +343,8 @@ export function MapApp() {
                                             label={intl.formatMessage({
                                                 id: "charts.button_title"
                                             })}
-                                            icon={<PiChartLineDownLight />}
+                                            icon={<GiWheat />}
                                             onClick={onOpenChart}
-                                        />
-                                        <ToolButton
-                                            label={intl.formatMessage({ id: "measurementTitle" })}
-                                            icon={<PiRulerLight />}
-                                            active={measurementIsActive}
-                                            onClick={toggleMeasurement}
                                         />
                                         <ToolButton
                                             label={intl.formatMessage({
@@ -359,6 +353,12 @@ export function MapApp() {
                                             icon={<PiDownload />}
                                             active={downloadIsActive}
                                             onClick={toggleDownload}
+                                        />
+                                        <ToolButton
+                                            label={intl.formatMessage({ id: "measurementTitle" })}
+                                            icon={<PiRulerLight />}
+                                            active={measurementIsActive}
+                                            onClick={toggleMeasurement}
                                         />
                                         <Geolocation map={mapModel.map} />
                                         <InitialExtent map={mapModel.map} />
