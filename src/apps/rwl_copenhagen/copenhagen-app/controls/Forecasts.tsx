@@ -199,7 +199,7 @@ export const Forecasts = () => {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div>
             {seaLayerVisible && (
                 <div
                     style={{
