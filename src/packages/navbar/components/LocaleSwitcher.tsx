@@ -44,6 +44,7 @@ const LocaleSwitcher: React.FC = () => {
                         </option>
                     ))}
                 </NativeSelect.Field>
+                <NativeSelect.Indicator />
             </NativeSelect.Root>
         </Field.Root>
     );
