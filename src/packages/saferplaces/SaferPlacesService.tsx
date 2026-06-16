@@ -452,6 +452,7 @@ export function SaferPlacesFloodMap() {
                                                     </option>
                                                 ))}
                                             </NativeSelect.Field>
+                                            <NativeSelect.Indicator />
                                         </NativeSelect.Root>
                                     </Field.Root>
 
@@ -471,6 +472,7 @@ export function SaferPlacesFloodMap() {
                                                 <option value="safer_rain">Safer Rain</option>
                                                 <option value="safer_coast">Safer Coast</option>
                                             </NativeSelect.Field>
+                                            <NativeSelect.Indicator />
                                         </NativeSelect.Root>
                                     </Field.Root>
 

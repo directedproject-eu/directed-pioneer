@@ -19,13 +19,9 @@ import {
     Text,
     Dialog,
     HoverCard,
-    IconButton,
-    Portal,
     Flex,
-    Box,
-    Spacer
+    Box
 } from "@chakra-ui/react";
-import { FaInfo } from "react-icons/fa";
 
 export interface LayerDownloadProps {
     mapID: string;

@@ -17,7 +17,7 @@ import { useIntl } from "open-pioneer:react-hooks";
 import CropyieldChart from "./CropyieldChart";
 import { TaxonomyInfo } from "taxonomy";
 import { useCropYieldData } from "./useCropYieldData";
-import { locations, NUTS_REGIONS } from "./utils";
+import { NUTS_REGIONS } from "./utils";
 interface Props {
     nutsId?: string;
 }
@@ -56,6 +56,7 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                                     </option>
                                 ))}
                             </NativeSelect.Field>
+                            <NativeSelect.Indicator />
                         </NativeSelect.Root>
                     </Box>
                 </Box>

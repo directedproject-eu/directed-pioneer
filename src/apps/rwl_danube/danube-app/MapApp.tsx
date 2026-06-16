@@ -16,17 +16,9 @@ import {
     Button,
     Container,
     Flex,
-    Select,
     Text,
     useDisclosure,
     VStack,
-    IconButton,
-    Popover,
-    PopoverBody,
-    PopoverContent,
-    PopoverTrigger,
-    PopoverArrow,
-    Spacer,
     Dialog,
     NativeSelect,
     Field,
@@ -529,6 +521,7 @@ export function MapApp() {
                                                                             )
                                                                         )}
                                                                     </NativeSelect.Field>
+                                                                    <NativeSelect.Indicator />
                                                                 </NativeSelect.Root>
                                                                 <NativeSelect.Root>
                                                                     <NativeSelect.Field
@@ -558,6 +551,7 @@ export function MapApp() {
                                                                             )
                                                                         )}
                                                                     </NativeSelect.Field>
+                                                                    <NativeSelect.Indicator />
                                                                 </NativeSelect.Root>
                                                             </Flex>
                                                         </Box>
