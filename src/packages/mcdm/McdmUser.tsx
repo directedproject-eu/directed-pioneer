@@ -14,6 +14,7 @@ import {
     HoverCard,
     IconButton
 } from "@chakra-ui/react";
+import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { Tooltip } from "@open-pioneer/chakra-snippets/tooltip";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
@@ -64,11 +65,6 @@ const SensitivityChart: React.FC<SensitivityChartProps> = ({ chartOptions }) => 
     }
     return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 };
-
-interface ModelClientProps {
-    isOpen?: boolean;
-    onClose?: () => void;
-}
 
 const sensitivityData = {
     "Barrier": {
@@ -147,7 +143,6 @@ export function ModelClient() {
     const [ranksData, setRanksData] = useState<Record<string, number> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    // const { isOpen, onOpen, onClose } = useDisclosure();
     const { open, onOpen, onClose } = useDisclosure(); // For dialog
 
     const intl = useIntl(); // i18n
@@ -393,12 +388,11 @@ export function ModelClient() {
     return (
         <Box>
             <ToolButton
-                label="Multi-Criteria Decision Making (MCDM)"
+                label={intl.formatMessage({ id: "modalStart.header" })}
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
             />
-            {/* <Dialog.Root open={isOpen} onOpenChange={onClose} placement={"center"}> */}
-            <Dialog.Root closeOnInteractOutside={true} open={ open} onOpenChange={(e) => !e.open && onClose()} placement="center">
+            <Dialog.Root closeOnInteractOutside={true} open={ open} onOpenChange={(e) => !e.open && onClose()} size="cover" placement="center">
                 <Dialog.Backdrop />
                 <Dialog.Content
                     position={"fixed"}
@@ -406,9 +400,15 @@ export function ModelClient() {
                     left={"50%"}
                     transform={"translate(-50%, -50%)"}
                 >
-                    <Dialog.Header>CLIMADA Multi-Criteria Decision Making (MCDM)</Dialog.Header>
-                    <Dialog.CloseTrigger disabled={loading} />
-                    <Dialog.Body>
+                    <Dialog.Header>
+                        <Dialog.Title>
+                            {intl.formatMessage({ id: "modalStart.header" })}
+                        </Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.CloseTrigger asChild disabled={loading}>
+                        <CloseButton size="sm" />
+                    </Dialog.CloseTrigger>
+                    <Dialog.Body overflow="auto">
                         {!tokenSubmitted ? (
                             <Field.Root>
                                 <Field.Label padding={2} htmlFor="token">
@@ -461,7 +461,7 @@ export function ModelClient() {
                                                 <HoverCard.Positioner>
                                                     <HoverCard.Content>
                                                         <HoverCard.Arrow />
-                                                        {intl.formatMessage({ id: "info_mcdm.text1" })}
+                                                        {intl.formatMessage({ id: "popUp.text1" })}
                                                     </HoverCard.Content>
                                                 </HoverCard.Positioner>
                                             </HoverCard.Root>
@@ -476,7 +476,7 @@ export function ModelClient() {
                                                 ← {intl.formatMessage({ id: "modalMain.back" })}
                                             </Button>
                                         </Flex>
-                                        {/* optionally uncomment this and the mode state to have input for modes */}
+                                        {/* optionally uncomment this and the mode state to have input for modes (careful: this is still Chakra v2) */}
                                         {/* <Text fontWeight="semibold" padding={1}>
                                             Please select an Analysis Mode and rate each criteria.
                                         </Text>
@@ -519,7 +519,7 @@ export function ModelClient() {
                                                     <Field.Label>
                                                         {criterionDisplayNames[typedCriteria]}
                                                     </Field.Label>
-                                                    <Box padding={2}>
+                                                    <Box padding={2} width="full">
                                                         <Flex justify="space-between" mb={1}>
                                                             <Text fontSize="sm">Not important</Text>
                                                             <Text fontSize="sm">
@@ -530,6 +530,7 @@ export function ModelClient() {
                                                             </Text>
                                                         </Flex>
                                                         <Slider.Root
+                                                            width="full"  
                                                             value={[weights[typedCriteria]]}
                                                             min={0}
                                                             max={1}
@@ -542,18 +543,30 @@ export function ModelClient() {
                                                             }
                                                             defaultValue={[0]}
                                                         >
-                                                            <Slider.Track>
-                                                                <Slider.Range />
-                                                            </Slider.Track>
-                                                            <Tooltip
-                                                                showArrow
-                                                                contentProps={{ css: { "--tooltip-bg": "white" } }}
-                                                                positioning={{ placement: "top" }}
-                                                                open
-                                                                content={weights[typedCriteria]}
-                                                            >
-                                                                <Slider.Thumb index={0} />
-                                                            </Tooltip>
+                                                            <Slider.Control>
+                                                                <Slider.Track>
+                                                                    <Slider.Range />
+                                                                </Slider.Track>
+
+                                                                <Slider.Thumb index={0}>
+                                                                    <Slider.HiddenInput />
+                                                                    <Box
+                                                                        position="absolute"
+                                                                        top="-1.5rem"
+                                                                        left="50%"
+                                                                        transform="translateX(-50%)"
+                                                                        bg="white"
+                                                                        px={2}
+                                                                        py={0.5}
+                                                                        borderRadius="md"
+                                                                        boxShadow="sm"
+                                                                        fontSize="xs"
+                                                                        whiteSpace="nowrap"
+                                                                    >
+                                                                        {weights[typedCriteria].toFixed(2)}
+                                                                    </Box>
+                                                                </Slider.Thumb>
+                                                            </Slider.Control>
                                                         </Slider.Root>
                                                     </Box>
                                                 </Field.Root>
@@ -587,7 +600,7 @@ export function ModelClient() {
                                                 alignItems="center"
                                             >
                                                 <Tooltip
-                                                    content={intl.formatMessage({ id: "modalMain.rankingResult" })}
+                                                    content={intl.formatMessage({ id: "popUp.rankingResult" })}
                                                     aria-label="A tooltip"
                                                 >
                                                     <FaInfoCircle color="gray" cursor="pointer" />
@@ -604,11 +617,6 @@ export function ModelClient() {
                             </>
                         )}
                     </Dialog.Body>
-                    <Dialog.Footer>
-                        <Dialog.CloseTrigger
-                            onClick={onClose}
-                        />
-                    </Dialog.Footer>
                 </Dialog.Content>
             </Dialog.Root>
         </Box>
