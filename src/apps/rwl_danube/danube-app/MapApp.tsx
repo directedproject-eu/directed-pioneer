@@ -510,6 +510,7 @@ export function MapApp() {
                                                                     )
                                                                 )}
                                                             </NativeSelect.Field>
+                                                            <NativeSelect.Indicator />
                                                         </NativeSelect.Root>
                                                         <NativeSelect.Root>
                                                             <NativeSelect.Field
@@ -539,6 +540,7 @@ export function MapApp() {
                                                                     )
                                                                 )}
                                                             </NativeSelect.Field>
+                                                            <NativeSelect.Indicator />
                                                         </NativeSelect.Root>
                                                     </Flex>
                                                 </Box>
