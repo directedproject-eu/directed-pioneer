@@ -46,7 +46,6 @@ export default defineConfig(({ mode }) => {
                 sites: [
                     "apps/rwl_copenhagen",
                     "apps/rwl_danube",
-                    "apps/rwl_emilia_romagna",
                     "apps/rwl_rhine_erft"
                 ],
 
