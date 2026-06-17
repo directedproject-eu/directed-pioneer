@@ -29,5 +29,4 @@ messages:
     userManual: "User Manual"
     login: "Login"
     logout: "Logout"
-    
-        
+    loggedInAs: "Logged in as"

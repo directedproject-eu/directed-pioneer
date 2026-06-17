@@ -155,7 +155,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                 {authService && authState?.kind === "authenticated" ? (
                     <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
                         <Text>
-                            {intl.formatMessage({ id: "navbar.loggedInAs" }, { name: authState.sessionInfo?.userName ?? "unknown" })}
+                            {intl.formatMessage({ id: "navbar.loggedInAs" })}<br />{ authState.sessionInfo?.userName ?? "unknown" }
                         </Text>
                         <Button onClick={() => authService.logout()}>
                             {intl.formatMessage({ id: "navbar.logout" })}
