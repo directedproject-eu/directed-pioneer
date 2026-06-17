@@ -1,4 +1,4 @@
-FROM node:20-slim AS build
+FROM node:24-slim AS build
 
 ARG BASE_PATH=/
 
@@ -7,7 +7,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 RUN npm install -g corepack@latest
 RUN corepack enable
-RUN corepack use pnpm@10.x
+RUN corepack use pnpm@11.x
 
 COPY . /app
 WORKDIR /app
