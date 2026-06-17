@@ -549,9 +549,10 @@ export function MapApp() {
                                             </Box>
                                         </Box>
                                         <Flex
-                                            maxHeight={800}
                                             minWidth={250}
-                                            overflow="auto"
+                                            overflow="hidden"
+                                            maxHeight="500px"
+                                            overflowY="auto"
                                             borderRadius="md"
                                             boxShadow="lg"
                                             // marginLeft="auto"
@@ -676,6 +677,8 @@ export function MapApp() {
                                             id: "ariaLabel.toc"
                                         })}
                                         marginBottom="10px"
+                                        maxHeight={500}
+                                        overflow="auto"
                                     >
                                         <ChakraProvider value={system}>
                                             <Toc

@@ -401,6 +401,8 @@ export function MapApp() {
                                 boxShadow="lg"
                                 role="dialog"
                                 aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                maxHeight={500}
+                                overflow="auto"
                             >
                                 <ChakraProvider value={system}>
                                     <Toc
