@@ -10,7 +10,7 @@ export function AppUI() {
             <Navbar />
             <Flex flex="1" position="relative" width="100%">
                 <Image
-                    src="/Fig.1 - FRB Niederberg.jpg"
+                    src="/Fig1-FRB_Niederberg.jpg"
                     alt="background image"
                     objectFit="cover"
                     width="100%"
