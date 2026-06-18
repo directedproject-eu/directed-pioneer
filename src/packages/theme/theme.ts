@@ -5,7 +5,12 @@ import { createSystem, defaultConfig, defineGlobalStyles } from "@chakra-ui/reac
 const globalCss = defineGlobalStyles({
     // Target ONLY the trigger button by checking for aria-haspopup,
     // and ONLY when it is NOT open.
-    ".toc-layer-item-details-button[aria-haspopup]:not([aria-expanded='true']):not([data-state='open'])": {
+    // ".toc-layer-item-details-button[aria-haspopup]:not([aria-expanded='true']):not([data-state='open'])": {
+    ".toc-layer-item-details-button[aria-haspopup]:not([data-part*='close']), .toc-layer-item-details-button:not(.chakra-popover__closeTrigger)": {
+        position: "relative",
+        display: "inline-flex", 
+        alignItems: "center",
+        justifyContent: "center", 
         // Hide ONLY the direct child SVG (the 3-dots), protecting nested Popover SVGs
         "& > svg": {
             display: "none !important",
@@ -22,7 +27,8 @@ const globalCss = defineGlobalStyles({
             width: "18px",
             height: "18px",
             borderRadius: "50%",
-            border: "1.5px solid currentColor",
+            border: "1.5px solid black",
+            color: "black",
   
             // "i" icon typography
             fontFamily: "serif",
