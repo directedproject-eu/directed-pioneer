@@ -114,7 +114,7 @@
         "@open-pioneer-community/window": "catalog:"
     },
     "engines": {
-        "node": ">= 20",
+        "node": ">= 24",
         "pnpm": ">= 10"
     },
     "packageManager": "pnpm@11.2.1",
