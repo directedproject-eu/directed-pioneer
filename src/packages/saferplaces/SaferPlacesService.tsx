@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import {
     Box,
     Button,
@@ -24,6 +24,7 @@ import { FloodMapService } from "./FloodMapService";
 import { ApiService, JobStatusResponse } from "processclient";
 import { TaxonomyInfo } from "taxonomy";
 import { useIntl } from "open-pioneer:react-hooks";
+import { GeosphereDataService, GeosphereRainData } from "./GeosphereDataService";
 
 
 // --- Interfaces ---
@@ -80,6 +81,13 @@ export function SaferPlacesFloodMap() {
     const [tokenSubmitted, setTokenSubmitted] = useState(false);
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
 
+    // --- Geosphere Rain Forecast States ---
+    const [forecastMap, setForecastMap] = useState<GeosphereRainData>({});
+    const [availableTimestamps, setAvailableTimestamps] = useState<string[]>([]);
+    const [selectedDateTime, setSelectedDateTime] = useState<string>(""); // Format: "YYYY-MM-DDTHH:mm"
+    const [timeRangeBounds, setTimeRangeBounds] = useState<{ min: string; max: string }>({ min: "", max: "" });
+    const geosphereDataService = useService<GeosphereDataService>("app.GeosphereDataService"); 
+
     const intl = useIntl();
     const { open, onOpen, onClose } = useDisclosure(); // For model dialog
 
@@ -129,6 +137,40 @@ export function SaferPlacesFloodMap() {
 
     // const handleBarrierFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     const files = event.target.files;
+
+    // --- Geosphere Rainfall Data ---
+    // Parse key format "20260618T000000Z" to standard format "2026-06-18T00:00"
+    const parseToPickerFormat = (ts: string) => {
+        const year = ts.slice(0, 4);
+        const month = ts.slice(4, 6);
+        const day = ts.slice(6, 8);
+        const hour = ts.slice(9, 11);
+        const min = ts.slice(11, 13);
+        return `${year}-${month}-${day}T${hour}:${min}`;
+    };
+
+    useEffect(() => {
+        if (selectedLocation === "Vienna" && model === "safer_rain" && geosphereDataService) {
+            const loadForecastBounds = async () => {
+                try {
+                    const { timestamps, rawData } = await geosphereDataService.fetchForecastData();
+                    setForecastMap(rawData);
+                    setAvailableTimestamps(timestamps);
+
+                    if (timestamps.length > 0) {
+                        const minUiTime = parseToPickerFormat(timestamps[0]!);
+                        const maxUiTime = parseToPickerFormat(timestamps[timestamps.length - 1]!);
+                        
+                        setTimeRangeBounds({ min: minUiTime, max: maxUiTime });
+                        setSelectedDateTime(minUiTime); // Initialize value to start of forecast window
+                    }
+                } catch (err) {
+                    setError("Failed to fetch operational time window limits from Geosphere.");
+                }
+            };
+            loadForecastBounds();
+        }
+    }, [selectedLocation, model, geosphereDataService]);
 
    
     const processFinalResult = (data: JobStatusResponse) => {
@@ -199,10 +241,25 @@ export function SaferPlacesFloodMap() {
 
         if (model === "safer_rain") {
             apiUrl = API_PROCESS_RAIN_URL;
+            let finalRainInput: string = rainIntensity;
+
+            if (selectedLocation === "Vienna" && geosphereDataService) {
+                // Look up the URL for the user-selected date-time string
+                const matchedUrl = geosphereDataService.getUrlbyIsoString(selectedDateTime, forecastMap, availableTimestamps);
+                
+                if (!matchedUrl) {
+                    setError("The selected hour doesn't have an available dataset. Please pick a different time slot.");
+                    setGenerationStatus("Failed");
+                    return;
+                }
+
+                finalRainInput = matchedUrl;
+            }
+
             requestDataPayload = {
                 inputs: {
                     dem: selectedDemFile,
-                    rain: rainIntensity, // Parse string to return integer, even with leading zeros
+                    rain: finalRainInput, // Parse string to return integer, even with leading zeros
                     water: `s3://${s3Bucket}/api_data/${outputRain}`, // Construct S3 output
                     mode: "lambda", // Async lambda, sync batch
                     presigned_url_out: true,
@@ -477,63 +534,91 @@ export function SaferPlacesFloodMap() {
                                     </Field.Root>
 
                                     {model === "safer_rain" && (
-                                        <>
-                                            <Field.Root required>
-                                                <Field.Label padding={0} htmlFor="esl">
-                                                    {intl.formatMessage({id: "modal.inputRain"})}
+                                        <Field.Root required>
+                                            <Flex align="center" justify="flex-start" gap={1} mb={1}>
+                                                <Field.Label padding={0} htmlFor="rain" margin={0}>
+                                                    {intl.formatMessage({ id: "modal.inputRain" })}
                                                     <Field.RequiredIndicator />
-                                                    <HoverCard.Root
+                                                </Field.Label>
+
+                                                <HoverCard.Root
                                                     openDelay={250}
                                                     closeDelay={100}
                                                     positioning={{ placement: "bottom" }}
-                                                    >
-                                                        <HoverCard.Trigger asChild>
-                                                            <Button
-                                                                size="sm"
-                                                                variant="ghost"
-                                                                color="black"
-                                                                borderRadius="full"
-                                                                paddingRight={2}
-                                                                _hover={{
-                                                                    transform: "scale(1.05)",
-                                                                    bg: "rgba(0, 0, 0, 0.05)",
-                                                                }}
-                                                                transition="all 0.2s ease"
+                                                >
+                                                    <HoverCard.Trigger asChild>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            color="black"
+                                                            borderRadius="full"
+                                                            p={0}
+                                                            minW="22px"
+                                                            h="22px"
+                                                            _hover={{
+                                                                transform: "scale(1.05)",
+                                                                bg: "rgba(0, 0, 0, 0.05)",
+                                                            }}
+                                                            transition="all 0.2s ease"
+                                                        >
+                                                            <Box
+                                                                as="span"
+                                                                display="inline-flex"
+                                                                alignItems="center"
+                                                                justifyContent="center"
+                                                                width="18px"
+                                                                height="18px"
+                                                                borderRadius="50%"
+                                                                border="1.5px solid currentColor"
+                                                                fontFamily="serif"
+                                                                fontWeight="bold"
+                                                                fontSize="11px"
+                                                                lineHeight="1"
+                                                                pb="1px"
                                                             >
-                                                                <Box
-                                                                    as="span"
-                                                                    display="inline-flex"
-                                                                    alignItems="center"
-                                                                    justifyContent="center"
-                                                                    width="22px"
-                                                                    height="22px"
-                                                                    borderRadius="50%"
-                                                                    border="1.5px solid currentColor"
-                                                                    fontFamily="serif"
-                                                                    fontWeight="bold"
-                                                                    fontSize="13px"
-                                                                    lineHeight="1"
-                                                                    pb="1px"
-                                                                >
-                                                                    i
-                                                                </Box>
-                                                            </Button>
-                                                        </HoverCard.Trigger>
-                                                        <HoverCard.Positioner>
-                                                            <HoverCard.Content>
-                                                                {intl.formatMessage({ id: "modal.infoButtonRain" })}
-                                                            </HoverCard.Content>
-                                                        </HoverCard.Positioner>
-                                                    </HoverCard.Root>
-                                                </Field.Label>
+                                                                i
+                                                            </Box>
+                                                        </Button>
+                                                    </HoverCard.Trigger>
+                                                    <HoverCard.Positioner>
+                                                        <HoverCard.Content>
+                                                            {selectedLocation === "Vienna" 
+                                                                ? "Select a date and time from the available GeoSphere rainfall forecast date range to run the model simulation. Rainfall is the accumulated total amount of rainfall since the start of the forecast, based on GeoSphere's forecast model AROME. Forecasts are available for 60 hours at hourly intervals."
+                                                                : intl.formatMessage({ id: "modal.infoButtonRain" })
+                                                            }
+                                                        </HoverCard.Content>
+                                                    </HoverCard.Positioner>
+                                                </HoverCard.Root>
+                                            </Flex>
+
+                                            {selectedLocation === "Vienna" ? (
+                                                /* --- TIME-PICKER VIEW FOR VIENNA FORECASTS --- */
+                                                <VStack align="stretch" gap={1} width="100%">
+                                                    <Input
+                                                        type="datetime-local"
+                                                        id="rain"
+                                                        value={selectedDateTime}
+                                                        min={timeRangeBounds.min}
+                                                        max={timeRangeBounds.max}
+                                                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedDateTime(e.target.value)}
+                                                        variant="outline"
+                                                    />
+                                                    <Text fontSize="sm" color="gray.500">
+                                                        Available forecast range: {timeRangeBounds.min?.replace("T", " ")} to {timeRangeBounds.max?.replace("T", " ")}
+                                                    </Text>
+                                                </VStack>
+                                            ) : (
+                                                /* --- Default manual value for other places --- */
                                                 <Input
                                                     type="text"
                                                     id="rain"
                                                     value={rainIntensity}
                                                     onChange={handleRainIntensityChange}
                                                     placeholder={intl.formatMessage({ id: "placeholders.info3" })}
-                                                    variant="outline" />
-                                            </Field.Root></>
+                                                    variant="outline" 
+                                                />
+                                            )}
+                                        </Field.Root>
                                     )}
 
                                     {model === "safer_coast" && (
@@ -577,7 +662,8 @@ export function SaferPlacesFloodMap() {
                                         onClick={handleGenerateMap}
                                         disabled={
                                             !selectedLocation ||
-                                            (model === "safer_rain" && !rainIntensity) || // Only rainIntensity for safer_rain
+                                            (model === "safer_rain" && selectedLocation !== "Vienna" && !rainIntensity) || // If it's not Vienna, check manual text input
+                                            (model === "safer_rain" && selectedLocation === "Vienna" && !selectedDateTime) || // If Vienna check that date-time has been chosen
                                             (model === "safer_coast" && extremeSeaLevel === 0) || // Only ESL for safer_coast
                                             !!jobId
                                         }
