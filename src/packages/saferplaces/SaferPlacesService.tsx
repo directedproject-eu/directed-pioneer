@@ -81,6 +81,9 @@ export function SaferPlacesFloodMap() {
     const [tokenSubmitted, setTokenSubmitted] = useState(false);
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
 
+    // --- Rainfall input state vars for manual or geosphere input ---
+    const [ rainSourceMode, setRainSourceMode] = useState<"manual" | "geosphere" | "" >("");
+
     // --- Geosphere Rain Forecast States ---
     const [forecastMap, setForecastMap] = useState<GeosphereRainData>({});
     const [availableTimestamps, setAvailableTimestamps] = useState<string[]>([]);
@@ -243,7 +246,7 @@ export function SaferPlacesFloodMap() {
             apiUrl = API_PROCESS_RAIN_URL;
             let finalRainInput: string = rainIntensity;
 
-            if (selectedLocation === "Vienna" && geosphereDataService) {
+            if (selectedLocation === "Vienna" && rainSourceMode === "geosphere" && geosphereDataService) {
                 // Look up the URL for the user-selected date-time string
                 const matchedUrl = geosphereDataService.getUrlbyIsoString(selectedDateTime, forecastMap, availableTimestamps);
                 
@@ -534,91 +537,99 @@ export function SaferPlacesFloodMap() {
                                     </Field.Root>
 
                                     {model === "safer_rain" && (
-                                        <Field.Root required>
-                                            <Flex align="center" justify="flex-start" gap={1} mb={1}>
-                                                <Field.Label padding={0} htmlFor="rain" margin={0}>
-                                                    {intl.formatMessage({ id: "modal.inputRain" })}
-                                                    <Field.RequiredIndicator />
-                                                </Field.Label>
-
-                                                <HoverCard.Root
-                                                    openDelay={250}
-                                                    closeDelay={100}
-                                                    positioning={{ placement: "bottom" }}
-                                                >
-                                                    <HoverCard.Trigger asChild>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            color="black"
-                                                            borderRadius="full"
-                                                            p={0}
-                                                            minW="22px"
-                                                            h="22px"
-                                                            _hover={{
-                                                                transform: "scale(1.05)",
-                                                                bg: "rgba(0, 0, 0, 0.05)",
-                                                            }}
-                                                            transition="all 0.2s ease"
-                                                        >
-                                                            <Box
-                                                                as="span"
-                                                                display="inline-flex"
-                                                                alignItems="center"
-                                                                justifyContent="center"
-                                                                width="18px"
-                                                                height="18px"
-                                                                borderRadius="50%"
-                                                                border="1.5px solid currentColor"
-                                                                fontFamily="serif"
-                                                                fontWeight="bold"
-                                                                fontSize="11px"
-                                                                lineHeight="1"
-                                                                pb="1px"
-                                                            >
-                                                                i
-                                                            </Box>
-                                                        </Button>
-                                                    </HoverCard.Trigger>
-                                                    <HoverCard.Positioner>
-                                                        <HoverCard.Content>
-                                                            {selectedLocation === "Vienna" 
-                                                                ? "Select a date and time from the available GeoSphere rainfall forecast date range to run the model simulation. Rainfall is the accumulated total amount of rainfall since the start of the forecast, based on GeoSphere's forecast model AROME. Forecasts are available for 60 hours at hourly intervals."
-                                                                : intl.formatMessage({ id: "modal.infoButtonRain" })
+                                        <VStack align="stretch" gap={4} width="100%">
+                                            {/* --- 1. Rain Input Mode Selection Dropdown (only for Vienna + Pluvial) --- */}
+                                            {selectedLocation === "Vienna" && (
+                                                <Field.Root required>
+                                                    <Field.Label padding={0} htmlFor="rainSourceMode">
+                                                        Rainfall Data Source
+                                                        <Field.RequiredIndicator />
+                                                    </Field.Label>
+                                                    <NativeSelect.Root id="rainSourceMode">
+                                                        <NativeSelect.Field
+                                                            value={rainSourceMode}
+                                                            onChange={(e: ChangeEvent<HTMLSelectElement>) => 
+                                                                setRainSourceMode(e.target.value as "manual" | "geosphere" | "")
                                                             }
-                                                        </HoverCard.Content>
-                                                    </HoverCard.Positioner>
-                                                </HoverCard.Root>
-                                            </Flex>
-
-                                            {selectedLocation === "Vienna" ? (
-                                                /* --- TIME-PICKER VIEW FOR VIENNA FORECASTS --- */
-                                                <VStack align="stretch" gap={1} width="100%">
-                                                    <Input
-                                                        type="datetime-local"
-                                                        id="rain"
-                                                        value={selectedDateTime}
-                                                        min={timeRangeBounds.min}
-                                                        max={timeRangeBounds.max}
-                                                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedDateTime(e.target.value)}
-                                                        variant="outline"
-                                                    />
-                                                    <Text fontSize="sm" color="gray.500">
-                                                        Available forecast range: {timeRangeBounds.min?.replace("T", " ")} to {timeRangeBounds.max?.replace("T", " ")}
-                                                    </Text>
-                                                </VStack>
-                                            ) : (
-                                                /* --- Default manual value for other places --- */
-                                                <Input
-                                                    type="text"
-                                                    id="rain"
-                                                    value={rainIntensity}
-                                                    onChange={handleRainIntensityChange}
-                                                    placeholder={intl.formatMessage({ id: "placeholders.info3" })}
-                                                    variant="outline" 
-                                                />
+                                                        >
+                                                            <option value="">Select rain input method...</option>
+                                                            <option value="manual">Manual Intensity Input (mm)</option>
+                                                            <option value="geosphere">GeoSphere Austria Rainfall Forecasts</option>
+                                                        </NativeSelect.Field>
+                                                        <NativeSelect.Indicator />
+                                                    </NativeSelect.Root>
+                                                </Field.Root>
                                             )}
-                                        </Field.Root>
+
+                                            {/* --- 2. String Input Field (only if a method is chosen, or if location is not Vienna) --- */}
+                                            {(selectedLocation !== "Vienna" || rainSourceMode !== "") && (
+                                                <Field.Root required>
+                                                    <Flex align="center" justify="flex-start" gap={1} mb={1}>
+                                                        <Field.Label padding={0} htmlFor="rain" margin={0}>
+                                                            {selectedLocation === "Vienna" && rainSourceMode === "geosphere"
+                                                                ? "Select Forecast Time"
+                                                                : intl.formatMessage({ id: "modal.inputRain" })
+                                                            }
+                                                            <Field.RequiredIndicator />
+                                                        </Field.Label>
+
+                                                        <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
+                                                            <HoverCard.Trigger asChild>
+                                                                <Button
+                                                                    size="sm" variant="ghost" color="black" borderRadius="full"
+                                                                    p={0} minW="22px" h="22px" transition="all 0.2s ease"
+                                                                    _hover={{ transform: "scale(1.05)", bg: "rgba(0, 0, 0, 0.05)" }}
+                                                                >
+                                                                    <Box
+                                                                        as="span" display="inline-flex" alignItems="center" justifyContent="center"
+                                                                        width="18px" height="18px" borderRadius="50%" border="1.5px solid currentColor"
+                                                                        fontFamily="serif" fontWeight="bold" fontSize="11px" lineHeight="1" pb="1px"
+                                                                    >
+                                                                        i
+                                                                    </Box>
+                                                                </Button>
+                                                            </HoverCard.Trigger>
+                                                            <HoverCard.Positioner>
+                                                                <HoverCard.Content>
+                                                                    {selectedLocation === "Vienna" && rainSourceMode === "geosphere"
+                                                                        ? "Select a date and time from the available GeoSphere rainfall forecast date range to run the model simulation. Rainfall is the accumulated total amount of rainfall since the start of the forecast, based on GeoSphere's forecast model AROME. Forecasts are available for 60 hours at hourly intervals."
+                                                                        : intl.formatMessage({ id: "modal.infoButtonRain" })
+                                                                    }
+                                                                </HoverCard.Content>
+                                                            </HoverCard.Positioner>
+                                                        </HoverCard.Root>
+                                                    </Flex>
+
+                                                    {selectedLocation === "Vienna" && rainSourceMode === "geosphere" ? (
+                                                        /* --- TIME-PICKER VIEW FOR LIVE FORECASTS --- */
+                                                        <VStack align="stretch" gap={1} width="100%">
+                                                            <Input
+                                                                type="datetime-local"
+                                                                id="rain"
+                                                                value={selectedDateTime}
+                                                                min={timeRangeBounds.min}
+                                                                max={timeRangeBounds.max}
+                                                                onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedDateTime(e.target.value)}
+                                                                variant="outline"
+                                                            />
+                                                            <Text fontSize="sm" color="gray.500">
+                                                                Available forecast range: {timeRangeBounds.min?.replace("T", " ")} to {timeRangeBounds.max?.replace("T", " ")}
+                                                            </Text>
+                                                        </VStack>
+                                                    ) : (
+                                                        /* --- MANUAL TEXT FIELD VALUE --- */
+                                                        <Input
+                                                            type="text"
+                                                            id="rain"
+                                                            value={rainIntensity}
+                                                            onChange={handleRainIntensityChange}
+                                                            placeholder={intl.formatMessage({ id: "placeholders.info3" })}
+                                                            variant="outline" 
+                                                        />
+                                                    )}
+                                                </Field.Root>
+                                            )}
+                                        </VStack>
                                     )}
 
                                     {model === "safer_coast" && (
@@ -662,8 +673,12 @@ export function SaferPlacesFloodMap() {
                                         onClick={handleGenerateMap}
                                         disabled={
                                             !selectedLocation ||
-                                            (model === "safer_rain" && selectedLocation !== "Vienna" && !rainIntensity) || // If it's not Vienna, check manual text input
-                                            (model === "safer_rain" && selectedLocation === "Vienna" && !selectedDateTime) || // If Vienna check that date-time has been chosen
+                                            // If Vienna active, require source selection method first
+                                            (model === "safer_rain" && selectedLocation !== "Vienna" && !rainSourceMode) || 
+                                            // If pluvial process or Vienna in manual mode, require rain intensity string input
+                                            (model === "safer_rain" && (selectedLocation ! === "Vienna" || rainSourceMode === "manual") && !rainIntensity) || 
+                                            // If Vienna + pluvial in geosphere mode, require date time selection 
+                                            (model === "safer_rain" && selectedLocation === "Vienna" && rainSourceMode === "geosphere" && !selectedDateTime) ||
                                             (model === "safer_coast" && extremeSeaLevel === 0) || // Only ESL for safer_coast
                                             !!jobId
                                         }
