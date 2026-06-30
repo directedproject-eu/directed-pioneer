@@ -57,6 +57,10 @@ interface SaferCoastInputs {
     debug: boolean;
 }
 
+interface GroupedForecasts {
+    [dateStr: string]: string[];
+}
+
 type SaferCoastPayload = {
     inputs: SaferCoastInputs;
 }
@@ -87,9 +91,12 @@ export function SaferPlacesFloodMap() {
     // --- Geosphere Rain Forecast States ---
     const [forecastMap, setForecastMap] = useState<GeosphereRainData>({});
     const [availableTimestamps, setAvailableTimestamps] = useState<string[]>([]);
-    const [selectedDateTime, setSelectedDateTime] = useState<string>(""); // Format: "YYYY-MM-DDTHH:mm"
+    const [selectedDateTime, setSelectedDateTime] = useState<string>(""); 
     const [timeRangeBounds, setTimeRangeBounds] = useState<{ min: string; max: string }>({ min: "", max: "" });
-    const geosphereDataService = useService<GeosphereDataService>("app.GeosphereDataService"); 
+    const [groupedForecasts, setGroupedForecasts] = useState<GroupedForecasts>({}); 
+    const [selectedDay, setSelectedDay] = useState<string>(""); 
+    const [selectedHour, setSelectedHour] = useState<string>(""); 
+    const geosphereDataService = useService<GeosphereDataService>("app.GeosphereDataService");
 
     const intl = useIntl();
     const { open, onOpen, onClose } = useDisclosure(); // For model dialog
@@ -142,15 +149,6 @@ export function SaferPlacesFloodMap() {
     //     const files = event.target.files;
 
     // --- Geosphere Rainfall Data ---
-    // Parse key format "20260618T000000Z" to standard format "2026-06-18T00:00"
-    const parseToPickerFormat = (ts: string) => {
-        const year = ts.slice(0, 4);
-        const month = ts.slice(4, 6);
-        const day = ts.slice(6, 8);
-        const hour = ts.slice(9, 11);
-        const min = ts.slice(11, 13);
-        return `${year}-${month}-${day}T${hour}:${min}`;
-    };
 
     useEffect(() => {
         if (selectedLocation === "Vienna" && model === "safer_rain" && geosphereDataService) {
@@ -160,12 +158,37 @@ export function SaferPlacesFloodMap() {
                     setForecastMap(rawData);
                     setAvailableTimestamps(timestamps);
 
-                    if (timestamps.length > 0) {
-                        const minUiTime = parseToPickerFormat(timestamps[0]!);
-                        const maxUiTime = parseToPickerFormat(timestamps[timestamps.length - 1]!);
+                    const groups: GroupedForecasts = {};
+
+                    // Parse key format "20260618T000000Z" to standard format "2026-06-18T00:00"
+                    timestamps.forEach((ts: string) => {
+                        const year = ts.slice(0, 4);
+                        const month = ts.slice(4, 6);
+                        const day = ts.slice(6, 8);
+                        const hour = ts.slice(9, 11);
+                        const min = ts.slice(11, 13);
+
+                        const dateKey = `${year}-${month}-${day}`; // "2026-06-18"
+                        const timeVal = `${hour}:${min}`; // "00:00"
+
+                        if (!groups[dateKey]) {
+                            groups[dateKey] = []; 
+                        }
+                        groups[dateKey].push(timeVal); 
+                    });
+
+                    setGroupedForecasts(groups); 
+
+                    // Default selection to the first available options
+                    const dynamicDays = Object.keys(groups).sort();
+                    if (dynamicDays.length > 0 && dynamicDays[0]) {
+                        const defaultDay = dynamicDays[0];
+                        setSelectedDay(defaultDay);
                         
-                        setTimeRangeBounds({ min: minUiTime, max: maxUiTime });
-                        setSelectedDateTime(minUiTime); // Initialize value to start of forecast window
+                        const hoursForDay = groups[defaultDay];
+                        if (hoursForDay && hoursForDay.length > 0 && hoursForDay[0]) {
+                            setSelectedHour(hoursForDay[0]);
+                        }
                     }
                 } catch (err) {
                     setError("Failed to fetch operational time window limits from Geosphere.");
@@ -174,6 +197,23 @@ export function SaferPlacesFloodMap() {
             loadForecastBounds();
         }
     }, [selectedLocation, model, geosphereDataService]);
+
+    // Handlers for geosphere forecasts date 
+    const handleDayChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const day = event.target.value;
+        setSelectedDay(day);
+        
+        const availableHours = groupedForecasts[day] || [];
+        if (availableHours.length > 0 && availableHours[0]) {
+            setSelectedHour(availableHours[0]);
+        } else {
+            setSelectedHour("");
+        }
+    };
+    
+    const handleHourChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setSelectedHour(event.target.value);
+    };
 
    
     const processFinalResult = (data: JobStatusResponse) => {
@@ -248,8 +288,11 @@ export function SaferPlacesFloodMap() {
 
             if (selectedLocation === "Vienna" && rainSourceMode === "geosphere" && geosphereDataService) {
                 // Look up the URL for the user-selected date-time string
-                const matchedUrl = geosphereDataService.getUrlbyIsoString(selectedDateTime, forecastMap, availableTimestamps);
-                
+                // const matchedUrl = geosphereDataService.getUrlbyIsoString(selectedDateTime, forecastMap, availableTimestamps);
+                const isoStringPayload = `${selectedDay}T${selectedHour}`;
+                const matchedUrl = geosphereDataService.getUrlbyIsoString(isoStringPayload, forecastMap, availableTimestamps);
+
+
                 if (!matchedUrl) {
                     setError("The selected hour doesn't have an available dataset. Please pick a different time slot.");
                     setGenerationStatus("Failed");
@@ -552,7 +595,7 @@ export function SaferPlacesFloodMap() {
                                                                 setRainSourceMode(e.target.value as "manual" | "geosphere" | "")
                                                             }
                                                         >
-                                                            <option value="">Select rain input method...</option>
+                                                            <option value="">Select Rain Input Source</option>
                                                             <option value="manual">Manual Intensity Input (mm)</option>
                                                             <option value="geosphere">GeoSphere Austria Rainfall Forecasts</option>
                                                         </NativeSelect.Field>
@@ -601,21 +644,31 @@ export function SaferPlacesFloodMap() {
                                                     </Flex>
 
                                                     {selectedLocation === "Vienna" && rainSourceMode === "geosphere" ? (
-                                                        /* --- TIME-PICKER VIEW FOR LIVE FORECASTS --- */
-                                                        <VStack align="stretch" gap={1} width="100%">
-                                                            <Input
-                                                                type="datetime-local"
-                                                                id="rain"
-                                                                value={selectedDateTime}
-                                                                min={timeRangeBounds.min}
-                                                                max={timeRangeBounds.max}
-                                                                onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedDateTime(e.target.value)}
-                                                                variant="outline"
-                                                            />
-                                                            <Text fontSize="sm" color="gray.500">
-                                                                Available forecast range: {timeRangeBounds.min?.replace("T", " ")} to {timeRangeBounds.max?.replace("T", " ")}
-                                                            </Text>
-                                                        </VStack>
+                                                        <Flex gap={3} width="100%">
+                                                            <Box flex={1}>
+                                                                <Text fontSize="xs" mb={1} color="gray.600">Date</Text>
+                                                                <NativeSelect.Root id="forecastDaySelect">
+                                                                    <NativeSelect.Field value={selectedDay} onChange={handleDayChange}>
+                                                                        {Object.keys(groupedForecasts).sort().map((dayStr) => (
+                                                                            <option key={dayStr} value={dayStr}>{dayStr}</option>
+                                                                        ))}
+                                                                    </NativeSelect.Field>
+                                                                    <NativeSelect.Indicator />
+                                                                </NativeSelect.Root>
+                                                            </Box>
+
+                                                            <Box flex={1}>
+                                                                <Text fontSize="xs" mb={1} color="gray.600">Time</Text>
+                                                                <NativeSelect.Root id="forecastHourSelect">
+                                                                    <NativeSelect.Field value={selectedHour} onChange={handleHourChange}>
+                                                                        {(groupedForecasts[selectedDay] || []).map((hourStr) => (
+                                                                            <option key={hourStr} value={hourStr}>{hourStr} </option>
+                                                                        ))}
+                                                                    </NativeSelect.Field>
+                                                                    <NativeSelect.Indicator />
+                                                                </NativeSelect.Root>
+                                                            </Box>
+                                                        </Flex>
                                                     ) : (
                                                         /* --- MANUAL TEXT FIELD VALUE --- */
                                                         <Input
@@ -673,13 +726,10 @@ export function SaferPlacesFloodMap() {
                                         onClick={handleGenerateMap}
                                         disabled={
                                             !selectedLocation ||
-                                            // If Vienna active, require source selection method first
                                             (model === "safer_rain" && selectedLocation !== "Vienna" && !rainSourceMode) || 
-                                            // If pluvial process or Vienna in manual mode, require rain intensity string input
-                                            (model === "safer_rain" && (selectedLocation ! === "Vienna" || rainSourceMode === "manual") && !rainIntensity) || 
-                                            // If Vienna + pluvial in geosphere mode, require date time selection 
-                                            (model === "safer_rain" && selectedLocation === "Vienna" && rainSourceMode === "geosphere" && !selectedDateTime) ||
-                                            (model === "safer_coast" && extremeSeaLevel === 0) || // Only ESL for safer_coast
+                                            (model === "safer_rain" && (selectedLocation !== "Vienna" || rainSourceMode === "manual") && !rainIntensity) || 
+                                            (model === "safer_rain" && selectedLocation === "Vienna" && rainSourceMode === "geosphere" && (!selectedDay || !selectedHour)) ||
+                                            (model === "safer_coast" && extremeSeaLevel === 0) || 
                                             !!jobId
                                         }
                                     >
