@@ -603,8 +603,8 @@ export function SaferPlacesFloodMap() {
                                             {/* --- 1. Rain Input Mode Selection Dropdown (only for Vienna + Pluvial) --- */}
                                             {selectedLocation === "Vienna" && (
                                                 <Field.Root required>
-                                                    <Field.Label padding={0} htmlFor="rainSourceMode">
-                                                        Rainfall Data Source
+                                                    <Field.Label padding={0}>
+                                                        {intl.formatMessage({id: "modal.rainSource"})}
                                                         <Field.RequiredIndicator />
                                                     </Field.Label>
                                                     <NativeSelect.Root id="rainSourceMode">
@@ -614,9 +614,9 @@ export function SaferPlacesFloodMap() {
                                                                 setRainSourceMode(e.target.value as "manual" | "geosphere" | "")
                                                             }
                                                         >
-                                                            <option value="">Select Rain Input Source</option>
-                                                            <option value="manual">Manual Intensity Input (mm)</option>
-                                                            <option value="geosphere">GeoSphere Austria Rainfall Forecasts</option>
+                                                            <option value="">{intl.formatMessage({id: "modal.rainSourceSelect"})}</option>
+                                                            <option value="manual">{intl.formatMessage({id: "modal.rainSourceLabelManual"})}</option>
+                                                            <option value="geosphere">{intl.formatMessage({id: "modal.rainSourceLabelGeosphere"})}</option>
                                                         </NativeSelect.Field>
                                                         <NativeSelect.Indicator />
                                                     </NativeSelect.Root>
@@ -629,7 +629,7 @@ export function SaferPlacesFloodMap() {
                                                     <Flex align="center" justify="flex-start" gap={1} mb={1}>
                                                         <Field.Label padding={0} htmlFor="rain" margin={0}>
                                                             {selectedLocation === "Vienna" && rainSourceMode === "geosphere"
-                                                                ? "Select Forecast Time"
+                                                                ? intl.formatMessage({ id: "modal.inputRainGeosphere" })
                                                                 : intl.formatMessage({ id: "modal.inputRain" })
                                                             }
                                                             <Field.RequiredIndicator />
@@ -654,7 +654,7 @@ export function SaferPlacesFloodMap() {
                                                             <HoverCard.Positioner>
                                                                 <HoverCard.Content>
                                                                     {selectedLocation === "Vienna" && rainSourceMode === "geosphere"
-                                                                        ? "Select a date and time from the available GeoSphere rainfall forecast date range to run the model simulation. Rainfall is the accumulated total amount of rainfall since the start of the forecast, based on GeoSphere's forecast model AROME. Forecasts are available for 60 hours at hourly intervals."
+                                                                        ? intl.formatMessage({ id: "modal.infoButtonRainGeosphere" })
                                                                         : intl.formatMessage({ id: "modal.infoButtonRain" })
                                                                     }
                                                                 </HoverCard.Content>
@@ -666,7 +666,7 @@ export function SaferPlacesFloodMap() {
                                                         <VStack align="stretch" gap={1} width="100%">
                                                             <Flex gap={3} width="100%">
                                                                 <Box flex={1}>
-                                                                    <Text fontSize="xs" mb={1} color="gray.600">Date</Text>
+                                                                    <Text fontSize="xs" mb={1} color="gray.600">{intl.formatMessage({id: "modal.inputRainGeosphereDate"})}</Text>
                                                                     <NativeSelect.Root id="forecastDaySelect">
                                                                         <NativeSelect.Field value={selectedDay} onChange={handleDayChange}>
                                                                             {Object.keys(groupedForecasts).sort().map((dayStr) => (
@@ -678,7 +678,7 @@ export function SaferPlacesFloodMap() {
                                                                 </Box>
 
                                                                 <Box flex={1}>
-                                                                    <Text fontSize="xs" mb={1} color="gray.600">Time</Text>
+                                                                    <Text fontSize="xs" mb={1} color="gray.600">{intl.formatMessage({id: "modal.inputRainGeosphereTime"})}</Text>
                                                                     <NativeSelect.Root id="forecastHourSelect">
                                                                         <NativeSelect.Field value={selectedHour} onChange={handleHourChange}>
                                                                             {(groupedForecasts[selectedDay] || []).map((hourStr) => (
@@ -690,7 +690,7 @@ export function SaferPlacesFloodMap() {
                                                                 </Box>
                                                             </Flex>
                                                             <Text fontSize="sm" color="gray.500" mt={1}>
-                                                                Available Forecast Range: {formatTimestampForDisplay(timeRangeBounds.min)} to {formatTimestampForDisplay(timeRangeBounds.max)}
+                                                                {intl.formatMessage({id: "modal.rainGeosphereDateRange"})} {formatTimestampForDisplay(timeRangeBounds.min)} to {formatTimestampForDisplay(timeRangeBounds.max)}
                                                             </Text>
                                                         </VStack>
                                                     ) : (
