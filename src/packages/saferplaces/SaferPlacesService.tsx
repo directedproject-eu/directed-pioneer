@@ -179,6 +179,14 @@ export function SaferPlacesFloodMap() {
 
                     setGroupedForecasts(groups); 
 
+                    // Get range of forecasts
+                    if (timestamps.length > 0) {
+                        setTimeRangeBounds({ 
+                            min: timestamps[0] || "", 
+                            max: timestamps[timestamps.length - 1] || "" 
+                        });
+                    }
+
                     // Default selection to the first available options
                     const dynamicDays = Object.keys(groups).sort();
                     if (dynamicDays.length > 0 && dynamicDays[0]) {
@@ -367,6 +375,17 @@ export function SaferPlacesFloodMap() {
             setTokenSubmitted(true); // Open model config page
             setError(""); // Clean-up, clear previous errors when moving to next screen
         }
+    };
+
+    // For forecast range label
+    const formatTimestampForDisplay = (ts: string) => {
+        if (!ts || ts.length < 11) return "";
+        const year = ts.slice(0, 4);
+        const month = ts.slice(4, 6);
+        const day = ts.slice(6, 8);
+        const hour = ts.slice(9, 11);
+        const min = ts.slice(11, 13);
+        return `${year}-${month}-${day} ${hour}:${min}`;
     };
 
     return (
@@ -644,31 +663,36 @@ export function SaferPlacesFloodMap() {
                                                     </Flex>
 
                                                     {selectedLocation === "Vienna" && rainSourceMode === "geosphere" ? (
-                                                        <Flex gap={3} width="100%">
-                                                            <Box flex={1}>
-                                                                <Text fontSize="xs" mb={1} color="gray.600">Date</Text>
-                                                                <NativeSelect.Root id="forecastDaySelect">
-                                                                    <NativeSelect.Field value={selectedDay} onChange={handleDayChange}>
-                                                                        {Object.keys(groupedForecasts).sort().map((dayStr) => (
-                                                                            <option key={dayStr} value={dayStr}>{dayStr}</option>
-                                                                        ))}
-                                                                    </NativeSelect.Field>
-                                                                    <NativeSelect.Indicator />
-                                                                </NativeSelect.Root>
-                                                            </Box>
+                                                        <VStack align="stretch" gap={1} width="100%">
+                                                            <Flex gap={3} width="100%">
+                                                                <Box flex={1}>
+                                                                    <Text fontSize="xs" mb={1} color="gray.600">Date</Text>
+                                                                    <NativeSelect.Root id="forecastDaySelect">
+                                                                        <NativeSelect.Field value={selectedDay} onChange={handleDayChange}>
+                                                                            {Object.keys(groupedForecasts).sort().map((dayStr) => (
+                                                                                <option key={dayStr} value={dayStr}>{dayStr}</option>
+                                                                            ))}
+                                                                        </NativeSelect.Field>
+                                                                        <NativeSelect.Indicator />
+                                                                    </NativeSelect.Root>
+                                                                </Box>
 
-                                                            <Box flex={1}>
-                                                                <Text fontSize="xs" mb={1} color="gray.600">Time</Text>
-                                                                <NativeSelect.Root id="forecastHourSelect">
-                                                                    <NativeSelect.Field value={selectedHour} onChange={handleHourChange}>
-                                                                        {(groupedForecasts[selectedDay] || []).map((hourStr) => (
-                                                                            <option key={hourStr} value={hourStr}>{hourStr} </option>
-                                                                        ))}
-                                                                    </NativeSelect.Field>
-                                                                    <NativeSelect.Indicator />
-                                                                </NativeSelect.Root>
-                                                            </Box>
-                                                        </Flex>
+                                                                <Box flex={1}>
+                                                                    <Text fontSize="xs" mb={1} color="gray.600">Time</Text>
+                                                                    <NativeSelect.Root id="forecastHourSelect">
+                                                                        <NativeSelect.Field value={selectedHour} onChange={handleHourChange}>
+                                                                            {(groupedForecasts[selectedDay] || []).map((hourStr) => (
+                                                                                <option key={hourStr} value={hourStr}>{hourStr} </option>
+                                                                            ))}
+                                                                        </NativeSelect.Field>
+                                                                        <NativeSelect.Indicator />
+                                                                    </NativeSelect.Root>
+                                                                </Box>
+                                                            </Flex>
+                                                            <Text fontSize="sm" color="gray.500" mt={1}>
+                                                                Available Forecast Range: {formatTimestampForDisplay(timeRangeBounds.min)} to {formatTimestampForDisplay(timeRangeBounds.max)}
+                                                            </Text>
+                                                        </VStack>
                                                     ) : (
                                                         /* --- MANUAL TEXT FIELD VALUE --- */
                                                         <Input
