@@ -169,12 +169,10 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                     </Flex>
                 ) : null}
                 <div style={{ width: "350px", display: "flex", padding: "0px 20px" }}>
-                    <Text>
+                    <Text fontSize={14}>
                         {intl.formatMessage({ id: "disclaimerContent.brief" })}
                     </Text>
-                    <Disclaimer>
-                        <DisclaimerContent />
-                    </Disclaimer>
+                    <Disclaimer/>
                 </div>
             </Flex>
 

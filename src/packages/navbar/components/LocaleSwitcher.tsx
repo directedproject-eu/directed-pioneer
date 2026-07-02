@@ -32,7 +32,7 @@ const LocaleSwitcher: React.FC = () => {
 
     return (
         <Field.Root>
-            <Field.Label textAlign="center">{intl.formatMessage({ id: "localeSwitcher.label" })}</Field.Label>
+            {/* <Field.Label textAlign="center">{intl.formatMessage({ id: "localeSwitcher.label" })}</Field.Label> */}
             <NativeSelect.Root>
                 <NativeSelect.Field
                     value={currentLocale}
