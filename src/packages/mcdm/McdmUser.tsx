@@ -14,9 +14,8 @@ import {
     HoverCard
 } from "@chakra-ui/react";
 import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
-import { Tooltip } from "@open-pioneer/chakra-snippets/tooltip";
 import { ToolButton } from "@open-pioneer/map-ui-components";
-import { FaBalanceScale, FaInfoCircle } from "react-icons/fa";
+import { FaBalanceScale } from "react-icons/fa";
 import { Spinner, Center, Text } from "@chakra-ui/react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
