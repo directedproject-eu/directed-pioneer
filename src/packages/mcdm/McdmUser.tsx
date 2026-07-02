@@ -11,8 +11,7 @@ import {
     Input,
     Dialog,
     Field,
-    HoverCard,
-    IconButton
+    HoverCard
 } from "@chakra-ui/react";
 import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { Tooltip } from "@open-pioneer/chakra-snippets/tooltip";
@@ -450,14 +449,36 @@ export function ModelClient() {
                                             </Text>
                                             <HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement:"top"}}>
                                                 <HoverCard.Trigger asChild>
-                                                    <IconButton
-                                                        marginLeft="2px"
+                                                    <Button
                                                         size="sm"
-                                                        aria-label="Info"
                                                         variant="ghost"
-                                                        color="black">
-                                                        <FaInfoCircle />
-                                                    </IconButton>
+                                                        color="black"
+                                                        borderRadius="full"
+                                                        paddingRight={2}
+                                                        _hover={{
+                                                            transform: "scale(1.05)",
+                                                            bg: "rgba(0, 0, 0, 0.05)",
+                                                        }}
+                                                        transition="all 0.2s ease"
+                                                    >
+                                                        <Box
+                                                            as="span"
+                                                            display="inline-flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            width="22px"
+                                                            height="22px"
+                                                            borderRadius="50%"
+                                                            border="1.5px solid currentColor"
+                                                            fontFamily="serif"
+                                                            fontWeight="bold"
+                                                            fontSize="13px"
+                                                            lineHeight="1"
+                                                            pb="1px"
+                                                        >
+                                                            i
+                                                        </Box>
+                                                    </Button>
                                                 </HoverCard.Trigger>
                                                 <HoverCard.Positioner>
                                                     <HoverCard.Content>
@@ -585,12 +606,49 @@ export function ModelClient() {
 
                                         <Flex paddingY={4} />
                                         <Flex justifyContent="space-between" alignItems="center">
-                                            <Tooltip
-                                                content={intl.formatMessage({ id: "popUp.sensitivityAnalysis" })}
-                                                aria-label="A tooltip"
+                                            <HoverCard.Root 
+                                                openDelay={250} 
+                                                closeDelay={100} 
+                                                positioning={{placement: "bottom"}}
                                             >
-                                                <FaInfoCircle color="gray" cursor="pointer" />
-                                            </Tooltip>
+                                                <HoverCard.Trigger asChild> 
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        color="black"
+                                                        borderRadius="full"
+                                                        paddingRight={2}
+                                                        _hover={{
+                                                            transform: "scale(1.05)",
+                                                            bg: "rgba(0, 0, 0, 0.05)",
+                                                        }}
+                                                        transition="all 0.2s ease"
+                                                    >
+                                                        <Box
+                                                            as="span"
+                                                            display="inline-flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            width="22px"
+                                                            height="22px"
+                                                            borderRadius="50%"
+                                                            border="1.5px solid currentColor"
+                                                            fontFamily="serif"
+                                                            fontWeight="bold"
+                                                            fontSize="13px"
+                                                            lineHeight="1"
+                                                            pb="1px"
+                                                        >
+                                                            i
+                                                        </Box>
+                                                    </Button>
+                                                </HoverCard.Trigger>
+                                                <HoverCard.Positioner>
+                                                    <HoverCard.Content>
+                                                        {intl.formatMessage({ id: "popUp.sensitivityAnalysis" })}
+                                                    </HoverCard.Content>
+                                                </HoverCard.Positioner>
+                                            </HoverCard.Root>
                                         </Flex>
                                         <SensitivityChart chartOptions={sensitivityChartOptions} />
                                         {/* <hr style={{ margin: "20px 0" }} /> */}
@@ -600,12 +658,49 @@ export function ModelClient() {
                                                 justifyContent="space-between"
                                                 alignItems="center"
                                             >
-                                                <Tooltip
-                                                    content={intl.formatMessage({ id: "popUp.rankingResult" })}
-                                                    aria-label="A tooltip"
+                                                <HoverCard.Root 
+                                                openDelay={250} 
+                                                closeDelay={100} 
+                                                positioning={{placement: "bottom"}}
                                                 >
-                                                    <FaInfoCircle color="gray" cursor="pointer" />
-                                                </Tooltip>
+                                                    <HoverCard.Trigger asChild> 
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            color="black"
+                                                            borderRadius="full"
+                                                            paddingRight={2}
+                                                            _hover={{
+                                                                transform: "scale(1.05)",
+                                                                bg: "rgba(0, 0, 0, 0.05)",
+                                                            }}
+                                                            transition="all 0.2s ease"
+                                                        >
+                                                            <Box
+                                                                as="span"
+                                                                display="inline-flex"
+                                                                alignItems="center"
+                                                                justifyContent="center"
+                                                                width="22px"
+                                                                height="22px"
+                                                                borderRadius="50%"
+                                                                border="1.5px solid currentColor"
+                                                                fontFamily="serif"
+                                                                fontWeight="bold"
+                                                                fontSize="13px"
+                                                                lineHeight="1"
+                                                                pb="1px"
+                                                            >
+                                                                i
+                                                            </Box>
+                                                        </Button>
+                                                    </HoverCard.Trigger>
+                                                    <HoverCard.Positioner>
+                                                        <HoverCard.Content>
+                                                            {intl.formatMessage({ id: "popUp.rankingResult" })}
+                                                        </HoverCard.Content>
+                                                    </HoverCard.Positioner>
+                                                </HoverCard.Root>
                                             </Flex>
                                         )}
                                         {UserWeightChartOptions && (
