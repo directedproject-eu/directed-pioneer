@@ -7,8 +7,7 @@ import { IsimipHandler } from "../services/IsimipHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
-import { Button, IconButton, Flex, HoverCard, Text, Portal } from "@chakra-ui/react";
-import { FaInfo } from "react-icons/fa";
+import { Button, Box, Flex, HoverCard, Text, Portal } from "@chakra-ui/react";
 import { TaxonomyInfo } from "taxonomy";
 
 export function IsimipSelector() {
@@ -34,17 +33,21 @@ export function IsimipSelector() {
             marginBottom="10px"
             overflowY="auto"
         >
-            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "right" }}>
+            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
                 <HoverCard.Trigger asChild>
-                    <IconButton
-                        marginLeft="2px"
-                        size="sm"
-                        aria-label="Info"
-                        variant="ghost"
-                        color="black"
+                    <Button
+                        size="sm" variant="ghost" color="black" borderRadius="full"
+                        p={0} minW="30px" h="30px" transition="all 0.2s ease" paddingBottom={1}
+                        _hover={{ transform: "scale(1.05)", bg: "rgba(0, 0, 0, 0.05)" }}
                     >
-                        <FaInfo />
-                    </IconButton>
+                        <Box
+                            as="span" display="inline-flex" alignItems="center" justifyContent="center"
+                            width="25px" height="25px" borderRadius="50%" border="1.5px solid currentColor"
+                            fontFamily="serif" fontWeight="bold" fontSize="15px" lineHeight="1" pb="1px"
+                        >
+                            i
+                        </Box>
+                    </Button>
                 </HoverCard.Trigger>
                 <Portal>
                     <HoverCard.Positioner>
