@@ -23,7 +23,6 @@ import React from "react";
 import { AuthService } from "@open-pioneer/authentication";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import Disclaimer from "./components/Disclaimer";
-import DisclaimerContent from "./components/DisclaimerContent";
 import LocaleSwitcher from "./components/LocaleSwitcher";
 import { useIntl } from "open-pioneer:react-hooks";
 
