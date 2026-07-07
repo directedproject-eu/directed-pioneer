@@ -128,9 +128,14 @@ messages:
       description: "Kun de lag, der er aktiverede i 'operationelle lag' er tilgengæglige til download i."
     flood_layer_selector: 
       title: "Valg af oversvømmelsekategori"
-      description: "Valget af oversvømmelseskategori udfylder de operationelle lag og baren med den valgte oversvømmelses"
-      floodtype: "Vælg venligst en oversvømmelseskategori for at se modeldata"
-
+      description1: "Når man vælger en oversvømmelseskategori, udfyldes de operationelle lag og bjælken med 
+                    resultater fra"
+      keyword1: "regn-"
+      connector: "og"
+      keyword2: "kystmodellerne."
+      description2: "For at kunne se disse lag på kortet skal du sikre dig, at afkrydsningsfeltet ved siden 
+                    af den ønskede model er synligt under »Operative lag«."
+      description: 
   ariaLabel:
     header: "Topbjælke"
     footer: "Basisbjælke med skalaoplysninger, koordinatsystem og koordinatvisning"

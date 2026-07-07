@@ -1,20 +1,27 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
+import { useState } from "react";
 import { useService } from "open-pioneer:react-hooks";
+import { MapAnchor, useMapModel } from "@open-pioneer/map";
+import { useIntl } from "open-pioneer:react-hooks";
+import { MAP_ID } from "../services";
 import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
-import { useIntl } from "open-pioneer:react-hooks";
 import {
     HoverCard, 
     Box, 
     Flex, 
     Heading, 
     Button, 
+    Link
 } from "@chakra-ui/react";
+import { TaxonomyInfo } from "taxonomy";
 
 export function FloodSelector() {
     const intl = useIntl();
+    const { map } = useMapModel(MAP_ID);
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
     const prepSrvc = useService<FloodHandler>("app.FloodHandler");
 
     const setFloodType = (option: string) => {
@@ -22,6 +29,7 @@ export function FloodSelector() {
     };
 
     return (
+        <>
         <Box
             backgroundColor={"white"}
             borderWidth="1px"
@@ -71,19 +79,65 @@ export function FloodSelector() {
                     </HoverCard.Trigger>
                     <HoverCard.Positioner>
                         <HoverCard.Content>
-                            {intl.formatMessage({ id: "map.flood_layer_selector.description" })}
+                            <Box
+                                flexDirection="column"
+                                backgroundColor="white"
+                                borderRadius="lg"
+                                padding={0}
+                                role="dialog"
+                                maxHeight={100}
+                                overflow="auto"
+                                marginTop={2}
+                            >
+                                {intl.formatMessage({ id: "map.flood_layer_selector.description1" })}
+                                <Link
+                                    variant="plain"
+                                    color="#2e9ecc"
+                                    paddingEnd={1.5}
+                                    paddingStart={1.5}
+                                    onClick={() => setActiveKeyword("pluvial flood")}
+                                >
+                                    {intl.formatMessage({
+                                        id: "map.flood_layer_selector.keyword1"
+                                    })}
+                                </Link>
+                                {intl.formatMessage({ id: "map.flood_layer_selector.connector" })}
+                                <Link
+                                    variant="plain"
+                                    color="#2e9ecc"
+                                    paddingEnd={1.5}
+                                    paddingStart={1.5}
+                                    onClick={() => setActiveKeyword("coastal flood")}
+                                >
+                                    {intl.formatMessage({
+                                        id: "map.flood_layer_selector.keyword2"
+                                    })}
+                                </Link>
+                                {intl.formatMessage({ id: "map.flood_layer_selector.description2" })}
+                            </Box>
                         </HoverCard.Content>
                     </HoverCard.Positioner>
-            </HoverCard.Root>
+                </HoverCard.Root>
             </Flex>
             <Selector
                 options={["pluvial", "coastal"]}
                 setSelected={setFloodType}
                 marginBottom="1px"
-                // title={intl.formatMessage({ id: "map.flood_layer_selector.floodtype" })}
                 alternativeText={false}
             ></Selector>
         </Box>
+            <MapAnchor position="bottom-right" horizontalGap={5} verticalGap={200}>
+                <Flex direction="column" gap={4}>
+                    {activeKeyword && (
+                        <Flex>
+                            <TaxonomyInfo
+                                keyword={activeKeyword}
+                                onClose={() => setActiveKeyword(null)} />
+                        </Flex>
+                    )}
+                </Flex>
+            </MapAnchor>
+        </>
     );
 }
         
