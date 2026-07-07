@@ -53,7 +53,7 @@ overrides:
       collapseAllGroups: "Alle Gruppen einklappen"
 
 messages:
-  heading: "RWL Die Hauptstadtregion Dänemarks"
+  heading: "RWL Region Ostdänemark"
   basemapLabel: "Basemap auswählen"
   description:
     title: "Beschreibung"

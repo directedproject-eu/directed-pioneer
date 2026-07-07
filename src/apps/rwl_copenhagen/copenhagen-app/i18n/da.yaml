@@ -80,7 +80,7 @@ overrides:
       close: "Luk vinduet"
 
 messages:
-  heading: "RWL Hovedstadsregionen"
+  heading: "RWL Regionen i det østlige Danmark"
   basemapLabel: "Vælg basiskort"
   description:
     title: "Beskrivelse"

@@ -53,7 +53,7 @@ overrides:
       collapseAllGroups: "Collapse all groups"
 
 messages:
-  heading: "RWL The Capital Region of Denmark"
+  heading: "RWL Region of Eastern Denmark"
   basemapLabel: "Select basemap"
   description:
     title: "Description"

@@ -68,9 +68,10 @@ export function AppUI() {
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="lightgrey"
+                            bg="darkgrey"
                             p={3}
-                            boxShadow="xl"
+                            boxShadow="lg"
+                            rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
@@ -87,7 +88,13 @@ export function AppUI() {
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                                <Text 
+                                    fontSize="2xl" 
+                                    fontWeight="bold" 
+                                    color="white" 
+                                    textAlign="center" 
+                                    textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
+                                >
                                     Pluvial and coastal flooding
                                 </Text>
                             </Box>
@@ -102,9 +109,10 @@ export function AppUI() {
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="lightgrey"
+                            bg="darkgrey"
                             p={3}
-                            boxShadow="xl"
+                            boxShadow="lg"
+                            rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
@@ -121,7 +129,13 @@ export function AppUI() {
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                            <Text 
+                                fontSize="2xl" 
+                                fontWeight="bold" 
+                                color="white" 
+                                textAlign="center" 
+                                textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
+                            >
                                     Pluvial and coastal flooding, wildfire
                                 </Text>
                             </Box>
@@ -134,9 +148,10 @@ export function AppUI() {
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="lightgrey"
+                            bg="darkgrey"
                             p={3}
-                            boxShadow="xl"
+                            boxShadow="lg"
+                            rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
@@ -153,7 +168,13 @@ export function AppUI() {
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                            <Text 
+                                fontSize="2xl" 
+                                fontWeight="bold" 
+                                color="white" 
+                                textAlign="center" 
+                                textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
+                            >
                                     Pluvial and fluvial flooding, crop yield, forestry
                                 </Text>
                             </Box>
@@ -166,9 +187,10 @@ export function AppUI() {
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="lightgrey"
+                            bg="darkgrey"
                             p={3}
-                            boxShadow="xl"
+                            boxShadow="lg"
+                            rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
@@ -185,7 +207,13 @@ export function AppUI() {
                                 backgroundPosition="center"
                             />
                             <Box pt={6}>
-                                <Text fontSize="2xl" fontWeight="bold" color="black" textAlign="center">
+                            <Text 
+                                fontSize="2xl" 
+                                fontWeight="bold" 
+                                color="white" 
+                                textAlign="center" 
+                                textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
+                            >
                                     Pluvial flooding, crop yield
                                 </Text>
                             </Box>
