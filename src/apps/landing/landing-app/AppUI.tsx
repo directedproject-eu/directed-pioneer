@@ -52,25 +52,28 @@ export function AppUI() {
                 <Box
                     position="absolute"
                     zIndex="1"
-                    top="60%" // You might need to adjust this (e.g. to 65% or 70%) if it covers your text
+                    top="50%" // You might need to adjust this (e.g. to 65% or 70%) if it covers your text
                     left="50%"
                     transform="translate(-50%, -50%)"
-                    width="60%"
-                    maxW="1600px" // Significantly increased to allow for massive cards
+                    width="100%"
+                    maxW="3000px" // Significantly increased to allow for massive cards
                     px={4}
                 >
-                    <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={12}>
+                    <Grid templateColumns={{ base: "1fr", md: "repeat(4, 1fr)" }} gap={12}>
                         
                         {/* Card 1 */}
                         <Box
                             as="a"
                             href={`${BASE_URL}apps/rwl_copenhagen/index.html`}
+                            backgroundImage="url('/real_world_labs_logos/DenmarkRWL.png')"
+                            backgroundSize="contain"
+                            backgroundRepeat="no-repeat"
+                            backgroundPosition="center"
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="darkgrey"
-                            p={3}
-                            boxShadow="lg"
+                            // p={3}
+                            // boxShadow="lg"
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -79,39 +82,23 @@ export function AppUI() {
                                 boxShadow: "2xl"
                             }}
                         >
-                            <Box
-                                w="100%"
-                                h="20vh"
-                                backgroundImage="url('/real_world_labs_logos/RWL1.png')"
-                                backgroundSize="contain"
-                                backgroundRepeat="no-repeat"
-                                backgroundPosition="center"
-                            />
-                            <Box pt={6}>
-                                <Text 
-                                    fontSize="2xl" 
-                                    fontWeight="bold" 
-                                    color="white" 
-                                    textAlign="center" 
-                                    textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
-                                >
-                                    Pluvial and coastal flooding
-                                </Text>
-                            </Box>
                         </Box>
 
                         {/* Card 2 */}
                         <Box
                             as="a"
                             href="https://directed-rwl2.saferplaces.co/"
+                            backgroundImage="url('/real_world_labs_logos/ERRWL.png')"
+                            backgroundSize="contain"
+                            backgroundRepeat="no-repeat"
+                            backgroundPosition="center"
                             target="_blank"
                             rel="noopener noreferrer"
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="darkgrey"
-                            p={3}
-                            boxShadow="lg"
+                            // p={3}
+                            // boxShadow="lg"
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -120,37 +107,21 @@ export function AppUI() {
                                 boxShadow: "2xl"
                             }}
                         >
-                            <Box
-                                w="100%"
-                                h="20vh"
-                                backgroundImage="url('/real_world_labs_logos/RWL2.png')"
-                                backgroundSize="contain"
-                                backgroundRepeat="no-repeat"
-                                backgroundPosition="center"
-                            />
-                            <Box pt={6}>
-                            <Text 
-                                fontSize="2xl" 
-                                fontWeight="bold" 
-                                color="white" 
-                                textAlign="center" 
-                                textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
-                            >
-                                    Pluvial and coastal flooding, wildfire
-                                </Text>
-                            </Box>
                         </Box>
 
                         {/* Card 3 */}
                         <Box
                             as="a"
                             href={`${BASE_URL}apps/rwl_danube/index.html`}
+                            backgroundImage="url('/real_world_labs_logos/DanubeRWL.png')"
+                            backgroundSize="contain"
+                            backgroundRepeat="no-repeat"
+                            backgroundPosition="center"
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="darkgrey"
-                            p={3}
-                            boxShadow="lg"
+                            // p={3}
+                            // boxShadow="lg"
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -159,37 +130,21 @@ export function AppUI() {
                                 boxShadow: "2xl"
                             }}
                         >
-                            <Box
-                                w="100%"
-                                h="20vh"
-                                backgroundImage="url('/real_world_labs_logos/RWL3.png')"
-                                backgroundSize="contain"
-                                backgroundRepeat="no-repeat"
-                                backgroundPosition="center"
-                            />
-                            <Box pt={6}>
-                            <Text 
-                                fontSize="2xl" 
-                                fontWeight="bold" 
-                                color="white" 
-                                textAlign="center" 
-                                textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
-                            >
-                                    Pluvial and fluvial flooding, crop yield, forestry
-                                </Text>
-                            </Box>
                         </Box>
 
                         {/* Card 4 */}
                         <Box
                             as="a"
                             href={`${BASE_URL}apps/rwl_rhine_erft/index.html`}
+                            backgroundImage="url('/real_world_labs_logos/RhineErftRWL.png')"
+                            backgroundSize="contain"
+                            backgroundRepeat="no-repeat"
+                            backgroundPosition="center"
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            bg="darkgrey"
-                            p={3}
-                            boxShadow="lg"
+                            // p={3}
+                            // boxShadow="lg"
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
@@ -201,21 +156,9 @@ export function AppUI() {
                             <Box
                                 w="100%"
                                 h="20vh"
-                                backgroundImage="url('/real_world_labs_logos/RWL4.png')"
-                                backgroundSize="contain"
-                                backgroundRepeat="no-repeat"
-                                backgroundPosition="center"
+                               
                             />
-                            <Box pt={6}>
-                            <Text 
-                                fontSize="2xl" 
-                                fontWeight="bold" 
-                                color="white" 
-                                textAlign="center" 
-                                textShadow="2px 2px 4px rgba(0, 0, 0, 0.7)"
-                            >
-                                    Pluvial flooding, crop yield
-                                </Text>
+                                <Box pt={12} pb={20}>
                             </Box>
                         </Box>
 
