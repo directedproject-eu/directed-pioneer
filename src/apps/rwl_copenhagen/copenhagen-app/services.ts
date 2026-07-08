@@ -10,6 +10,8 @@ import { Vector as VectorSource } from "ol/source.js";
 import GeoJSON from "ol/format/GeoJSON.js";
 import { Stroke, Style } from "ol/style";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
+import { WmsLegend } from "./Components/Legends/WmsLegend";
+
 
 export const MAP_ID = "main";
 export { LayerZoomImpl } from "./services/LayerZoom";
@@ -870,19 +872,27 @@ export class MainMapProvider implements MapConfigProvider {
             visible: true,
             olLayer: new TileLayer({
                 source: new TileWMS({
-                    url: "https://api.dataforsyningen.dk/wms/hip_vandfoering", 
+                    url: "https://api.dataforsyningen.dk/wms/hip_dtg_10m_100m", 
                     params: {
-                        "LAYERS": "hip_vandfoering", 
-                        "TILED": true,
-                        "token": "71df49e95bf4efbe85bdad48a9a2870d" 
-                    },
-                    properties: {
-                        title: "Groundwater Data"
-                    },
+                        "LAYERS": "100m_phreatic_all_max", 
+                        "token": "838abd17c582cd65b5c7e46e0f9bb582"
+                    }
                 }),
+                properties: {
+                    title: "100m_phreatic_all_max", 
+                    id: "100m_phreatic_all_max",
+                    type: "WMS_tiles"
+                },
             }),
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
             isBaseLayer: false
         });
+
+      
 
         return {
             initialView: {

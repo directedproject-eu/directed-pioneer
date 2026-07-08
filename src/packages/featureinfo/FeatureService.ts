@@ -36,22 +36,45 @@ export function fetchFeatureInfo(
             l.getSource() instanceof TileWMS
     ) as TileLayer<TileWMS>[];
 
-    // WMS-FeatureInfo Promises
     const wmsFetches = visibleWMSTileLayers.map((layer) => {
         const source = layer.getSource();
+        if (!source) return Promise.resolve(null); 
+        const sourceUrls = source.getUrls ? source.getUrls() : [source.getUrls()]; 
+        const textFormatEndpoints = [
+            "https://api.dataforsyningen.dk/wms"
+        ]; 
+        const requiresPlainText = sourceUrls?.some(url =>
+            url && textFormatEndpoints.some(endpoint => url.includes(endpoint))
+        ); 
+
+        const infoFormat = requiresPlainText? "text/plain" : "application/json"; 
+
         const url = source?.getFeatureInfoUrl(coordinate, viewResolution, projection, {
-            INFO_FORMAT: "application/json"
+            infoFormat 
         });
 
         if (!url) return Promise.resolve(null);
 
         return fetch(url)
-            .then((res) => res.json())
-            .then((data) => ({
-                layerName: layer.get("title") || layer.get("id"),
-                data
-            }))
-            .catch(() => null);
+            .then((res) => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return infoFormat === "text/plain" ? res.text() : res.json();
+            })
+            .then((data) => {
+                // Parse response
+                let parsedData = data;
+                
+                if (infoFormat === "text/plain" && typeof data === "string") {
+                    // Split by newline and filter out empty lines
+                    parsedData = data.split(/\r?\n/).filter(line => line.trim() !== "");
+                }
+
+                return {
+                    layerName: layer.get("title") || layer.get("id"),
+                    data: parsedData,
+                    format: infoFormat
+                };
+            });
     });
 
     // 2. GeoTIFF pixel value Promises
