@@ -6,11 +6,10 @@ import {
     Box,
     Center,
     Text,
-    Select,
     Flex,
-    FormLabel,
-    FormControl
-} from "@open-pioneer/chakra-integration";
+    Field,
+    NativeSelect
+} from "@chakra-ui/react";
 import { useIntl } from "open-pioneer:react-hooks";
 import ForestryChart from "./ForestryChart";
 
@@ -66,16 +65,19 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
         <>
             <Flex justifyContent="center" mb={4}>
                 <Box width="300px">
-                    <Select
-                        value={selectedLocation}
-                        onChange={(e) => setSelectedLocation(e.target.value)}
-                    >
+                    <NativeSelect.Root>
+                        <NativeSelect.Field
+                            value={selectedLocation}
+                            onChange={(e) => setSelectedLocation(e.target.value)}
+                        >
                         {locations.map((loc) => (
                             <option key={loc.id} value={loc.id}>
                                 {loc.name}
                             </option>
                         ))}
-                    </Select>
+                        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
                 </Box>
             </Flex>
 
@@ -88,37 +90,43 @@ const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
 
             <Center mt={4}>
                 <Flex gap={8} width="100%" maxWidth="600px" justifyContent="center">
-                    <FormControl>
-                        <FormLabel textAlign="center">Left Y-axis</FormLabel>
-                        <Select
-                            value={leftAxisVariable}
-                            onChange={(e) => setLeftAxisVariable(e.target.value)}
-                        >
-                            {variables.map((v) => (
-                                <option key={`left-${v.id}`} value={v.id}>
-                                    {v.name}
-                                </option>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <Field.Root>
+                        <Field.Label textAlign="center">Left Y-axis</Field.Label>
+                        <NativeSelect.Root>
+                            <NativeSelect.Field
+                                value={leftAxisVariable}
+                                onChange={(e) => setLeftAxisVariable(e.target.value)}
+                            >
+                                {variables.map((v) => (
+                                    <option key={`left-${v.id}`} value={v.id}>
+                                        {v.name}
+                                    </option>
+                                ))}
+                            </NativeSelect.Field>
+                            <NativeSelect.Indicator />
+                        </NativeSelect.Root>
+                    </Field.Root>
 
-                    <FormControl>
-                        <FormLabel textAlign="center">Right Y-axis</FormLabel>
-                        <Select
-                            value={rightAxisVariable}
-                            onChange={(e) => setRightAxisVariable(e.target.value)}
-                        >
-                            {variables.map((v) => (
-                                <option key={`right-${v.id}`} value={v.id}>
-                                    {v.name}
-                                </option>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <Field.Root>
+                        <Field.Label textAlign="center">Right Y-axis</Field.Label>
+                        <NativeSelect.Root>
+                            <NativeSelect.Field
+                                value={rightAxisVariable}
+                                onChange={(e) => setRightAxisVariable(e.target.value)}
+                            >
+                                {variables.map((v) => (
+                                    <option key={`right-${v.id}`} value={v.id}>
+                                        {v.name}
+                                    </option>
+                                ))}
+                            </NativeSelect.Field>
+                            <NativeSelect.Indicator />
+                        </NativeSelect.Root>
+                    </Field.Root>
                 </Flex>
             </Center>
 
-            <Text mt={"2em"} size={"2em"}>
+            <Text mt={"2em"} textStyle={"2em"}>
                 {intl.formatMessage({ id: "charts.forestry.explanation1" })}
             </Text>
 

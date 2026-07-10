@@ -13,25 +13,15 @@ import GeoTIFF from "ol/source/GeoTIFF";
 import VectorSource from "ol/source/Vector";
 import {
     Button,
-    Select,
+    NativeSelect,
     Spinner,
     VStack,
     Text,
-    AlertDialog,
-    AlertDialogHeader,
-    AlertDialogBody,
-    AlertDialogContent,
-    AlertDialogOverlay,
-    AlertDialogFooter,
-    AlertDialogCloseButton,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverArrow,
-    PopoverBody,
-    IconButton
-} from "@open-pioneer/chakra-integration";
-import { FaInfo } from "react-icons/fa";
+    Dialog,
+    HoverCard,
+    Flex,
+    Box
+} from "@chakra-ui/react";
 
 export interface LayerDownloadProps {
     mapID: string;
@@ -95,13 +85,20 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
         const url = `${wmsUrl}?service=WMS&request=GetCapabilities`;
         const res = await fetch(url);
         if (!res.ok) throw new Error("GetCapabilities failed");
-
+    
         const text = await res.text();
         const xml = new DOMParser().parseFromString(text, "text/xml");
-
-        const maxWidth = xml.querySelector("MaxImageWidth, MaxWidth")?.textContent;
-        const maxHeight = xml.querySelector("MaxImageHeight, MaxHeight")?.textContent;
-
+    
+        // WMS 1.3.0 uses MaxWidth/MaxHeight, WMS 1.1.x uses MaxImageWidth/MaxImageHeight
+        const maxWidth =
+            xml.querySelector("MaxWidth")?.textContent ||
+            xml.querySelector("MaxImageWidth")?.textContent;
+        const maxHeight =
+            xml.querySelector("MaxHeight")?.textContent ||
+            xml.querySelector("MaxImageHeight")?.textContent;
+    
+        console.log("WMS MaxWidth:", maxWidth, "MaxHeight:", maxHeight);
+    
         return {
             maxWidth: maxWidth ? Number(maxWidth) : 4096,
             maxHeight: maxHeight ? Number(maxHeight) : 4096
@@ -157,37 +154,50 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 link.click();
                 link.remove();
             } else if (type === "WMS_tiles") {
-                // console.log("Layer to download: ", layer);
                 let layerIdFromParams = properties.source?.params_?.LAYERS;
                 const urlFromParams = properties.source?.urls[0];
+
+                // Read CRS from the layer source projection
+                const projection = layer.olLayer?.getSource()?.getProjection?.();
+                const crs = projection ? projection.getCode() : "EPSG:3857";
+                console.log("Layer CRS:", crs);
 
                 if (urlFromParams === "https://directed.dev.52north.org/geoserver/directed/wms") {
                     layerIdFromParams = "directed:" + layerIdFromParams;
                 }
 
-                // console.log("urlFromParams:", urlFromParams);
-
                 const mapExtent = mapModel?.map?.initialExtent;
-                const resolution = mapModel?.map?.resolution;
 
-                if (!mapExtent || !resolution) {
-                    throw new Error("Map extent or resolution not available");
+                if (!mapExtent) {
+                    throw new Error("Map extent not available");
                 }
 
-                // Calculate width and height in pixels based on resolution
-                const widthMeters = mapExtent.xMax - mapExtent.xMin;
-                const heightMeters = mapExtent.yMax - mapExtent.yMin;
-
-                let widthPx = Math.round(widthMeters / resolution);
-                let heightPx = Math.round(heightMeters / resolution);
-
-                // Clamp to server max
+                // Get the server's maximum supported image size
                 const { maxWidth, maxHeight } = await getWmsMaxSize(urlFromParams);
 
-                const scale = Math.min(maxWidth / widthPx, maxHeight / heightPx, 1);
+                // Maintain aspect ratio, use max dimensions
+                const widthMeters = mapExtent.xMax - mapExtent.xMin;
+                const heightMeters = mapExtent.yMax - mapExtent.yMin;
+                const aspectRatio = widthMeters / heightMeters;
 
-                widthPx = Math.round(widthPx * scale);
-                heightPx = Math.round(heightPx * scale);
+                let widthPx: number;
+                let heightPx: number;
+
+                if (aspectRatio >= 1) {
+                    widthPx = maxWidth;
+                    heightPx = Math.round(maxWidth / aspectRatio);
+                    if (heightPx > maxHeight) {
+                        heightPx = maxHeight;
+                        widthPx = Math.round(maxHeight * aspectRatio);
+                    }
+                } else {
+                    heightPx = maxHeight;
+                    widthPx = Math.round(maxHeight * aspectRatio);
+                    if (widthPx > maxWidth) {
+                        widthPx = maxWidth;
+                        heightPx = Math.round(maxWidth / aspectRatio);
+                    }
+                }
 
                 const params = new URLSearchParams({
                     service: "WMS",
@@ -195,8 +205,8 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                     request: "GetMap",
                     layers: `${layerIdFromParams}`,
                     styles: "",
-                    crs: "EPSG:3857",
-                    bbox: `${mapExtent?.xMin},${mapExtent?.yMin},${mapExtent?.xMax},${mapExtent?.yMax}`,
+                    crs: crs,
+                    bbox: `${mapExtent.xMin},${mapExtent.yMin},${mapExtent.xMax},${mapExtent.yMax}`,
                     width: `${widthPx}`,
                     height: `${heightPx}`,
                     format: "image/tiff"
@@ -210,7 +220,7 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                 const blob = await response.blob();
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
-                link.download = `${layerIdFromParams}_test.tif`;
+                link.download = `${layerIdFromParams}.tif`;
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
@@ -228,86 +238,110 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
 
     const btnRef = React.useRef<HTMLButtonElement>(null);
     return (
-        <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={btnRef} isCentered>
-            <AlertDialogOverlay
-                bg="blackAlpha.500"
-                backdropFilter="auto"
-                backdropBlur="4px"
-                zIndex={1400}
-            >
-                <AlertDialogContent
+        <Dialog.Root open={isOpen} onOpenChange={onClose} initialFocusEl={() => btnRef.current} placement={"center"}>
+            <Dialog.Backdrop>
+                <Dialog.Content
                     borderRadius="lg"
                     boxShadow="2xl"
                     maxW="lg"
                     w="90%"
                     mx="auto"
-                    p={4}
-                    zIndex={1500}
+                    zIndex={1600}
+                    position={"fixed"}
+                    top={"50%"}
+                    left={"50%"}
+                    transform={"translate(-50%, -50%)"}
                 >
-                    <AlertDialogHeader fontWeight="bold" borderBottomWidth="1px" mb={2}>
-                        <Popover
-                            trigger="hover"
-                            openDelay={250}
-                            closeDelay={100}
-                            placement="top"
-                            isOpen={popoverIsOpen}
-                            onOpen={() => setPopoverIsOpen(true)}
-                            onClose={() => setPopoverIsOpen(false)}
+                    <Dialog.CloseTrigger ref={btnRef} />
+                    <Dialog.Body gap={4} flexDirection="column" >
+                        <Flex
+                            alignItems="center"
+                            flexDirection={"row"}
                         >
-                            <PopoverTrigger>
-                                <IconButton
-                                    marginLeft="2px"
-                                    size="s"
-                                    aria-label="Info"
-                                    icon={<FaInfo />}
-                                    variant="ghost"
-                                    color="black"
-                                />
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <PopoverArrow />
-                                <PopoverBody overflow="auto">
-                                    {intl.formatMessage({ id: "map.download.description" })}
-                                </PopoverBody>
-                            </PopoverContent>
-                        </Popover>
-                        {intl.formatMessage({ id: "map.download.heading" })}
-                    </AlertDialogHeader>
-                    <AlertDialogBody>
+                            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
+                                <HoverCard.Trigger asChild>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        color="black"
+                                        borderRadius="full"
+                                        paddingRight={2}
+                                        _hover={{
+                                            transform: "scale(1.05)",
+                                            bg: "rgba(0, 0, 0, 0.05)",
+                                        }}
+                                        transition="all 0.2s ease"
+                                    >
+                                        <Box
+                                            as="span"
+                                            display="inline-flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            width="20px"
+                                            height="20px"
+                                            borderRadius="50%"
+                                            border="1.5px solid currentColor"
+                                            fontFamily="serif"
+                                            fontWeight="bold"
+                                            fontSize="12px"
+                                            lineHeight="1"
+                                            pb="1px"
+                                        >
+                                            i
+                                        </Box>
+                                    </Button>
+                                </HoverCard.Trigger>
+                                <HoverCard.Positioner>
+                                    <HoverCard.Content>
+                                        {intl.formatMessage({
+                                            id: "map.download.description"
+                                        })}
+                                    </HoverCard.Content>
+                                </HoverCard.Positioner>
+                            </HoverCard.Root>
+                            <Text fontWeight="bold">
+                                {intl.formatMessage({
+                                    id: "map.download.heading"
+                                })}
+                            </Text>
+                        </Flex>
                         {visibleLayers.length === 0 ? (
                             <Text fontSize="sm" color="gray.600">
                                 {intl.formatMessage({ id: "map.download.no_layers" })}
                             </Text>
                         ) : (
-                            <VStack align="stretch" spacing={3} mt={1}>
-                                <Select
-                                    placeholder={intl.formatMessage({
-                                        id: "map.download.select_layer"
-                                    })}
-                                    value={selectedLayer?.id || ""}
-                                    onChange={(e) => {
-                                        const layer =
-                                            visibleLayers.find((l) => l.id === e.target.value) ||
-                                            null;
-                                        setSelectedLayer(layer);
-                                    }}
-                                >
-                                    {visibleLayers.map(
-                                        (layer) =>
-                                            layer.olLayer?.getProperties()?.type !== "OSM" && (
-                                                <option key={layer.id} value={layer.id}>
-                                                    {layer.title || layer.id}
-                                                </option>
-                                            )
-                                    )}
-                                </Select>
+                            <VStack align="stretch" gap={3} mt={1}>
+                                <NativeSelect.Root>
+                                    <NativeSelect.Field
+                                        placeholder={intl.formatMessage({
+                                            id: "map.download.select_layer"
+                                        })}
+                                        value={selectedLayer?.id || ""}
+                                        onChange={(e) => {
+                                            const layer =
+                                                visibleLayers.find((l) => l.id === e.target.value) ||
+                                                null;
+                                            setSelectedLayer(layer);
+                                        }}
+                                    >
+                                        {visibleLayers.map(
+                                            (layer) =>
+                                                layer.olLayer?.getProperties()?.type !== "OSM" && (
+                                                    <option key={layer.id} value={layer.id}>
+                                                        {layer.title || layer.id}
+                                                    </option>
+                                                )
+                                        )}
+                                    </NativeSelect.Field>
+                                    <NativeSelect.Indicator />
+                                </NativeSelect.Root>
 
                                 <Button
                                     colorScheme="blue"
-                                    isDisabled={
+                                    disabled={
                                         !selectedLayer ||
                                         selectedLayer.olLayer?.getProperties()?.["type"] ===
-                                            "OSM" ||
+                                        "OSM" ||
                                         loading
                                     }
                                     onClick={() => selectedLayer && handleDownload(selectedLayer)}
@@ -319,15 +353,14 @@ export function LayerDownload({ mapID, intl, isOpen, onClose }: LayerDownloadPro
                                 </Button>
                             </VStack>
                         )}
-                    </AlertDialogBody>
-                    <AlertDialogFooter borderTopWidth="1px" mt={2}>
-                        <AlertDialogCloseButton
-                            onClick={onClose}
-                            ref={btnRef}
-                        ></AlertDialogCloseButton>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
+                        <Flex width="100%" justifyContent="flex-end" mt={4}>
+                            <Button colorScheme="blue" onClick={onClose}>
+                                Close
+                            </Button>
+                        </Flex>
+                    </Dialog.Body>
+                </Dialog.Content>
+            </Dialog.Backdrop>
+        </Dialog.Root>
     );
 }

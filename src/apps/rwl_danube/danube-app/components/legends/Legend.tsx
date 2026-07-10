@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { Box, Text } from "@open-pioneer/chakra-integration";
+import { Box, Text } from "@chakra-ui/react";
 import { useIntl, useService } from "open-pioneer:react-hooks";
 import { LayerHighlighter } from "../../services/LayerHighlighter";
-import { IsimipHandler } from "./services/IsimipHandler";
+import { IsimipHandler } from "../../services/IsimipHandler";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
 

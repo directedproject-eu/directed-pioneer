@@ -9,13 +9,17 @@ export default defineBuildConfig({
             references: {
                 mapRegistry: "map.MapRegistry"
             }
-        }
+        }, 
+        GeosphereDataServiceImpl: {
+            provides: ["app.GeosphereDataService"],
+        }, 
     },
-    i18n: ["en", "de", "da"],
+    i18n: ["en", "de", "da", "hu"],
     ui: {
         references: [
             "app.FloodMapService", 
-            "app.ApiService"
+            "app.ApiService", 
+            "app.GeosphereDataService"
         ]
     }
 });

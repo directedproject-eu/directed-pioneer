@@ -7,34 +7,52 @@ messages:
     keyword2: "Küstenüberflutungen"
   info_icon_safercoast:
     description: 
-      "de: Please note that this simulation is a reflection of reality, but should not be 
-        taken as such. While the result of this simulation presents one possible outcome, 
-        uncertainty is inherent in flood modeling; for decision-making purposes, this information 
-        should be used in tandem with outside expertise to consider external risk factors."
+        "Bitte beachten Sie, dass diese Simulation zwar die Realität widerspiegelt, jedoch nicht 
+        als solche angesehen werden sollte. Das Ergebnis dieser Simulation stellt zwar einen möglichen Ausgang dar, 
+        allerdings ist die Hochwassermodellierung naturgemäß mit Unsicherheiten behaftet; für Entscheidungszwecke 
+        sollten diese Informationen in Verbindung mit externem Fachwissen herangezogen werden, um externe 
+        Risikofaktoren zu berücksichtigen."
   info_icon_saferrain:
     description: 
-      "de: Please note that this simulation is a reflection of reality, but should not be 
-      taken as such. While the result of this simulation presents one possible outcome, 
-      uncertainty is inherent in flood modeling; for decision-making purposes, this information 
-      should be used in tandem with outside expertise to consider external risk factors."
+      "Bitte beachten Sie, dass diese Simulation zwar die Realität widerspiegelt, jedoch nicht 
+        als solche angesehen werden sollte. Das Ergebnis dieser Simulation stellt zwar einen möglichen Ausgang dar, 
+        allerdings ist die Hochwassermodellierung naturgemäß mit Unsicherheiten behaftet; für Entscheidungszwecke 
+        sollten diese Informationen in Verbindung mit externem Fachwissen herangezogen werden, um externe 
+        Risikofaktoren zu berücksichtigen."
   modal: 
-    header: "de: SaferPlaces Flood Modeling"
-    credentials: "de: Please enter valid credentials to access the model dialog"
-    userName: "de: Username"
-    token: "dde: Token"
-    enter: "de: Enter"
-    configuration: "de: Model Configuration"
-    credentialChangeButton: "de: Change Credentials"
-    location: "de: Location"
-    selectLocation: "de: Select a Location"
-    model: "de: Model"
-    selectModel: "de: Select a Model"
-    inputRain: "de: Rain Intensity (mm)"
-    inputSea: "de: Extreme Sea Level (m)"
-    downloadMap: "de: Download Flood Map"
-    runModel: "de: Run Model"
+    header: "SaferPlaces Hochwassermodellierung"
+    credentials: "Bitte geben Sie gültige Anmeldedaten ein, um den Modelldialog aufzurufen"
+    userName: "Benutzername"
+    token: "Token"
+    enter: "Eingabe"
+    configuration: "Modellkonfiguration"
+    credentialChangeButton: "Anmeldedaten ändern"
+    location: "Standort"
+    selectLocation: "Wählen einen Standort aus"
+    model: "Modell"
+    selectModel: "Modell Auswählen"
+    rainSource: "Quelle für Niederschlagsdaten"
+    rainSourceSelect: "Regen-Eingangsquelle auswählen"
+    rainSourceLabelManual: "Manuelle Eingabe der Intensität"
+    rainSourceLabelGeosphere: "Niederschlagsprognosen von Geosphere Österreich"
+    rainGeosphereDateRange: "Verfügbarer Prognosebereich:"
+    inputRainGeosphereDate: "Datum"
+    inputRainGeosphereTime: "Zeit"
+    inputRainGeosphere: "Prognosezeit Auswählen"
+    inputRain: "Regenintensität (mm)"
+    inputSea: "Extremer Meeresspiegel (m)"
+    downloadMap: "Hochwasserkarte herunterladen"
+    runModel: "Modell Ausführen"
+    infoButtonRain: "Gesamtmenge des gesammelten Regenwassers während eines Niederschlagsereignisses. 
+                    Die Simulation leitet das Wasser sofort durch den gesamten Bereich weiter, 
+                    sodass kein expliziter Zeitraum angegeben werden muss."
+    infoButtonRainGeosphere: 
+                    "Wählen Sie aus den verfügbaren Niederschlagsprognosen ein Datum und eine Uhrzeit aus, um 
+                    die Modellsimulation durchzuführen. Der Niederschlag entspricht der kumulierten Gesamtmenge 
+                    seit Beginn der Prognose, basierend auf dem GeoSphere-Prognosemodell 
+                    AROME. Die Prognosen sind für einen Zeitraum von 60 Stunden in stündlichen Intervallen verfügbar."
   placeholders: 
-    info1: "de: Enter username"
-    info2: "de: Enter token"
-    info3: "de: Input Value, e.g. 10"
-    info4: "de: Input Value, e.g. 1"
+    info1: "Benutzernamen eingeben"
+    info2: "Token eingeben"
+    info3: "Eingabewert, z. B. 10"
+    info4: "Eingabewert, z. B.  1"

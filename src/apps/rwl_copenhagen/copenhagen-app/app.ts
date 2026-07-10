@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import { ApplicationConfig, createCustomElement } from "@open-pioneer/runtime";
-import { theme } from "@open-pioneer/theme";
 import * as appMetadata from "open-pioneer:app";
 import { MapApp } from "./MapApp";
+import {config as themeConfig} from "@open-pioneer/base-theme";
 
 // Reads the 'lang' parameter from the URL and, if set, uses it
 // for the application's locale.
@@ -13,8 +13,8 @@ const FORCED_LANG = URL_PARAMS.get("lang") || undefined;
 
 const element = createCustomElement({
     component: MapApp,
-    theme,
     appMetadata,
+    chakraSystemConfig: themeConfig,
     config: {
         locale: FORCED_LANG
     },

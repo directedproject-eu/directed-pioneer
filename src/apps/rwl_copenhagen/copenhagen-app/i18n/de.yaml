@@ -53,8 +53,8 @@ overrides:
       collapseAllGroups: "Alle Gruppen einklappen"
 
 messages:
-  heading: "RWL Die Hauptstadtregion Dänemarks"
-  basemapLabel: "Basemap auswählen:"
+  heading: "RWL Region Ostdänemark"
+  basemapLabel: "Basemap auswählen"
   description:
     title: "Beschreibung"
     text1: "Diese Plattform dient als Möglichkeit, mehr über"
@@ -96,8 +96,13 @@ messages:
       description: "Nur die sichtbaren Layer in den Operational Layers sind über das Dropdown-Menü zum Herunterladen verfügbar."
     flood_layer_selector: 
       title: "Auswahl der Überschwemmungskategorie"
-      description: "Die Auswahl der Überschwemmungskategorie füllt die Operational Layers und den Slider mit den Modellausgaben der ausgewählten Überschwemmung. Um diese Layer auf der Karte anzuzeigen, stellen Sie sicher, dass das Häkchen neben dem gewünschten Modell in den Operational Layers sichtbar ist."
-      floodtype: "Um Modellausgaben anzuzeigen, wählen Sie bitte eine Überschwemmungskategorie aus"
+      description1: "Die Auswahl der Überschwemmungskategorie füllt die Operational Layers und den Slider mit Simulationsergebnissen
+                    für Hochwasser durch"
+      keyword1: "Starkregenereignisse"
+      connector: "und"
+      keyword2: "Küstenüberschwemmungen."
+      description2: "Um diese Layer auf der Karte anzuzeigen, stellen Sie sicher, 
+                    dass das Häkchen neben dem gewünschten Modell in den Operational Layers sichtbar ist."
   ariaLabel:
     header: "Kopfzeile"
     footer: "Fußleiste mit Maßstabsinformationen, räumlichem Bezugssystem und Koordinatenanzeige"

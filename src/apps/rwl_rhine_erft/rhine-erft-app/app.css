@@ -105,3 +105,7 @@
     background-color: #708894 !important;
     color: white !important;
 }
+
+.custom-basemap-switcher {
+    width: 100%;
+}

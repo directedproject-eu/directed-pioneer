@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useState } from "react";
-import { Box, Button, Collapse, Text } from "@chakra-ui/react";
-import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { Box, Button, Collapsible, Text } from "@chakra-ui/react";
+import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 
 type ExpandableBoxProps = {
     title: string;
@@ -33,14 +33,16 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Text fontWeight="bold">{title}</Text>
                 <Button size="sm" onClick={() => setIsExpanded(!isExpanded)}>
-                    {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                    {isExpanded ? <SlArrowUp /> : <SlArrowDown />}
                 </Button>
             </Box>
-            <Collapse in={isExpanded} animateOpacity>
-                <Box maxHeight={"15em"} overflow={overflowY} mt={4}>
-                    {children}
-                </Box>
-            </Collapse>
+            <Collapsible.Root open={isExpanded}>
+                <Collapsible.Content>
+                    <Box maxHeight={"15em"} overflow={overflowY} mt={4}>
+                        {children}
+                    </Box>                
+                </Collapsible.Content>
+            </Collapsible.Root>
         </Box>
     );
 };

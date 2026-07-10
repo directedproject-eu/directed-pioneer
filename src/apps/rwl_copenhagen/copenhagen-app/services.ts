@@ -11,7 +11,7 @@ import GeoJSON from "ol/format/GeoJSON.js";
 import { Stroke, Style } from "ol/style";
 import { WaterLevelLegend } from "./Components/Legends/WaterLevelLegend";
 
-export const MAP_ID1 = "main";
+export const MAP_ID = "main";
 export { LayerZoomImpl } from "./services/LayerZoom";
 export { ForecastServiceImpl } from "./services/ForecastService";
 export { FloodHandlerImpl } from "./services/FloodHandler";
@@ -384,7 +384,7 @@ interface LayerGroupDefinition {
 }
 
 export class MainMapProvider implements MapConfigProvider {
-    mapId = MAP_ID1;
+    mapId = MAP_ID;
     pygeoapiBaseUrl: string;
 
     constructor(serviceOptions: ServiceOptions) {
@@ -863,6 +863,27 @@ export class MainMapProvider implements MapConfigProvider {
         //     isBaseLayer: false
         // });
 
+        const test_groundwater = new SimpleLayer({
+            id: "groundwater_test",
+            title: "Groundwater",
+            description: "Testing Dataforsyningen groundwater WMS",
+            visible: true,
+            olLayer: new TileLayer({
+                source: new TileWMS({
+                    url: "https://api.dataforsyningen.dk/wms/hip_vandfoering", 
+                    params: {
+                        "LAYERS": "hip_vandfoering", 
+                        "TILED": true,
+                        "token": "71df49e95bf4efbe85bdad48a9a2870d" 
+                    },
+                    properties: {
+                        title: "Groundwater Data"
+                    },
+                }),
+            }),
+            isBaseLayer: false
+        });
+
         return {
             initialView: {
                 kind: "position",
@@ -890,7 +911,8 @@ export class MainMapProvider implements MapConfigProvider {
                         this.createMunicipalityLayer("lejre"),
                         this.createMunicipalityLayer("roskilde")
                     ]
-                })
+                }), 
+                test_groundwater
                 // coastalFloodingGroup,
                 // pluvialFloodingGroup,
                 // scalgoGroup

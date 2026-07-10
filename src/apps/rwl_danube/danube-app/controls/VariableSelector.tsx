@@ -17,6 +17,7 @@ export function VariableSelector() {
             <Selector
                 options={["hurs", "pr", "rsds", "sfcwind", "spei12", "tasmax", "tasmin", "tas"]}
                 setSelected={setSelected}
+                alternativeText={false}
             ></Selector>
         </ExpandableBox>
     );

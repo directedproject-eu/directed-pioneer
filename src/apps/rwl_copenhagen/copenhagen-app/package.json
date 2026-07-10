@@ -3,11 +3,10 @@
     "private": true,
     "main": "services.ts",
     "dependencies": {
-        "@chakra-ui/icons": "catalog:",
+        "@chakra-ui/react": "catalog:",
         "@emotion/react": "catalog:",
         "@emotion/styled": "catalog:",
         "@open-pioneer/basemap-switcher": "catalog:",
-        "@open-pioneer/chakra-integration": "catalog:",
         "@open-pioneer/coordinate-viewer": "catalog:",
         "@open-pioneer/geolocation": "catalog:",
         "@open-pioneer/map": "catalog:",
@@ -19,7 +18,6 @@
         "@open-pioneer/runtime": "catalog:",
         "@open-pioneer/scale-bar": "catalog:",
         "@open-pioneer/scale-viewer": "catalog:",
-        "@open-pioneer/theme": "catalog:",
         "@open-pioneer/toc": "catalog:",
         "@open-pioneer/legend": "catalog:",
         "chroma-js": "catalog:",
@@ -29,12 +27,11 @@
         "react-dom": "catalog:",
         "react-icons": "catalog:",
         "react-use": "catalog:",
-        "featureinfo": "workspace:^",
-        "layerdownload": "workspace:^",
-        "mcdm": "workspace:^",
         "navbar": "workspace:^",
-        "saferplaces": "workspace:^",
         "taxonomy": "workspace:^",
-        "theme": "workspace:^"
+        "saferplaces": "workspace:^",
+        "mcdm": "workspace:^",
+        "layerdownload": "workspace:^",
+        "@open-pioneer-community/window": "catalog:"
     }
 }

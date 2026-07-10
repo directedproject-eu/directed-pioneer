@@ -18,6 +18,9 @@ overrides:
     positionUnavailable: "A földrajzi hely nem határozható meg."
     timeout: "A helymeghatározás időtúllépés miatt megszakadt."
     unknownError: "Váratlan hiba történt a helymeghatározás során."
+  "@open-pioneer/map":
+    attribution:
+      label: "Források"
   "@open-pioneer/map-navigation":
     initial-extent:
       title: "Nagyítás a kezdeti kiterjedésre"
@@ -57,6 +60,27 @@ overrides:
     tools:
       hideAllLayers: "Minden réteg elrejtése"
       collapseAllGroups: "Összes csoport összecsukása"
+  "@open-pioneer/notifier":
+    regionLabel: "Hírek"
+    notification:
+      close: "Üzenet bezárása"
+  "@open-pioneer/overview-map":
+    ariaLabel: "Áttekintő térkép"
+    ariaDescription: "Ez a térkép áttekintést nyújt az aktuális térképkivágatról."
+  "@open-pioneer/scale-viewer":
+    regionLabel: "Méretarány"
+    scaleLabel: "Jelenlegi méretarány: 1 : {scale}"
+  "@open-pioneer/chakra-snippets":
+    clipboard:
+      copy: "Másolás"
+      copied: "Másolva"
+    close-button:
+      ariaLabel: "Bezárás"
+    carousel:
+      next: "Következő"
+      prev: "Előző"
+    password-input:
+      triggerAriaLabel: "Jelszó láthatóságának átváltása"
       
 messages:
   basemapLabel: "Alap térkép kiválasztása"

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import { useEffect, useState } from "react";
-import { HStack } from "@open-pioneer/chakra-integration";
+import { HStack } from "@chakra-ui/react";
 import { SimpleLayer } from "@open-pioneer/map";
 import { useService } from "open-pioneer:react-hooks";
 import { IsimipHandler } from "../services/IsimipHandler";

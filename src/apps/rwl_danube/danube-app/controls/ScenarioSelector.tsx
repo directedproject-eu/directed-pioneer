@@ -17,8 +17,9 @@ export function ScenarioSelector() {
         <ExpandableBox title="Select a scenario" marginBottom="10px">
             <Selector
                 options={["ssp585", "ssp370"]}
-                heading="Select a scenario"
+                title="Select a scenario"
                 setSelected={setSelected}
+                alternativeText={false}
             ></Selector>
         </ExpandableBox>
     );

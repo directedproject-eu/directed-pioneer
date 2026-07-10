@@ -4,20 +4,13 @@ import {
     Box,
     Button,
     Flex,
-    FormControl,
-    FormLabel,
     VStack,
     Text,
-    Select,
     Spacer,
-    IconButton,
-    Popover,
-    PopoverBody,
-    PopoverContent,
-    PopoverTrigger,
-    PopoverArrow
-} from "@open-pioneer/chakra-integration";
-import { MapAnchor, MapContainer, useMapModel, SimpleLayer } from "@open-pioneer/map";
+    Link,
+    Select
+} from "@chakra-ui/react";
+import { DefaultMapProvider, MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -28,10 +21,9 @@ import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { Toc } from "@open-pioneer/toc";
-import { MAP_ID1 } from "./services"; //add MAP_ID2 for shared view again
-import { useId, useMemo, useState, useEffect } from "react";
+import { MAP_ID } from "./services";
+import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
-import Layer from "ol/layer/Layer";
 import OSM from "ol/source/OSM";
 import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
@@ -40,33 +32,32 @@ import { Navbar } from "navbar";
 import { LayerZoom } from "./services/LayerZoom";
 import { FeatureInfo } from "featureinfo";
 import { useService } from "open-pioneer:react-hooks";
-// import ExpandableBox from "./Components/ExpandableBox";
 import { Forecasts } from "./controls/Forecasts";
-import { EventsKey } from "ol/events";
-import { unByKey } from "ol/Observable";
 import { TaxonomyInfo } from "taxonomy";
 import { SaferPlacesFloodMap } from "saferplaces";
-// import { ModelClient } from "modelclient";
-import Swipe from "ol-ext/control/Swipe";
 import { ModelClient } from "mcdm";
-import { Group } from "ol/layer";
 import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
-import { FaInfo } from "react-icons/fa";
-import { ChakraProvider } from "@open-pioneer/chakra-integration";
-import { theme } from "theme";
+import { ChakraProvider } from "@chakra-ui/react";
+import { system } from "theme";
+import { useEffect } from "react";
 
 import { LayerDownload } from "layerdownload";
 
 export function MapApp() {
     const intl = useIntl();
     const measurementTitleId = useId();
-    const mapModel = useMapModel(MAP_ID1);
+    const { map } = useMapModel(MAP_ID);
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-    const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider
+    const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider 
+    const [windowClosed, setWindowClosed] = useState<boolean>(false); //for testing window component
+
+    useEffect(() => {
+        document.title = intl.formatMessage({ id: "heading" });
+    }, [intl]);
 
     const overviewMapLayer = useMemo(
         () =>
@@ -78,6 +69,8 @@ export function MapApp() {
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+    const [floodModelIsActive, setFloodModelIsActive] = useState<boolean>(false);
+    const [modelClientIsActive, setModelClientIsActive] = useState<boolean>(false);
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
@@ -85,475 +78,223 @@ export function MapApp() {
     function toggleDownload() {
         setDownloadIsActive(!downloadIsActive);
     }
-
-    //////////////////
-    /// LayerSwipe ///
-    /////////////////
-    const [selectedLeftLayer, setSelectedLeftLayer] = useState<string | null>(null);
-    const [selectedRightLayer, setSelectedRightLayer] = useState<string | null>(null);
-    const [visibleAvailableLayers, setVisibleAvailableLayers] = useState<SimpleLayer[]>([]); //filter for visible layers
-
-    useEffect(() => {
-        if (!mapModel.map) return;
-
-        const map = mapModel.map.olMap;
-        const allLayers = mapModel.map.layers.getRecursiveLayers() as SimpleLayer[];
-
-        const updateVisibleLayers = () => {
-            const visibleLayers = allLayers.filter((layer) => {
-                const ol = layer.olLayer;
-                return ol?.getVisible?.() === true && !(ol instanceof Group);
-            });
-            setVisibleAvailableLayers(visibleLayers);
-        };
-
-        updateVisibleLayers();
-
-        const eventKeys: EventsKey[] = allLayers
-            .map((layer) => {
-                const olLayer = layer.olLayer;
-                if (!olLayer || typeof olLayer.on !== "function") return null;
-                return olLayer.on("change:visible", () => {
-                    updateVisibleLayers();
-                    handleSwipeUpdate();
-                });
-            })
-            .filter((k): k is EventsKey => !!k);
-
-        let swipe: Swipe | null = null;
-
-        const removeSwipe = () => {
-            if (swipe) {
-                map.removeControl(swipe);
-                swipe = null;
-            }
-        };
-
-        const addSwipe = (leftLayer: Layer, rightLayer: Layer) => {
-            removeSwipe();
-            swipe = new Swipe({
-                layers: [leftLayer],
-                rightLayers: [rightLayer],
-                position: 0.5,
-                orientation: "vertical",
-                className: "ol-swipe"
-            });
-            map.addControl(swipe);
-        };
-
-        const handleSwipeUpdate = () => {
-            if (!selectedLeftLayer || !selectedRightLayer) {
-                removeSwipe();
-                return;
-            }
-
-            const leftLayer = (mapModel.map.layers.getLayerById(selectedLeftLayer) as SimpleLayer)
-                ?.olLayer as Layer;
-            const rightLayer = (mapModel.map.layers.getLayerById(selectedRightLayer) as SimpleLayer)
-                ?.olLayer as Layer;
-
-            if (!leftLayer || !rightLayer) {
-                removeSwipe();
-                return;
-            }
-
-            if (leftLayer.getVisible() && rightLayer.getVisible()) {
-                addSwipe(leftLayer, rightLayer);
-            } else {
-                removeSwipe();
-            }
-        };
-
-        handleSwipeUpdate();
-
-        return () => {
-            eventKeys.forEach(unByKey);
-            removeSwipe();
-        };
-    }, [mapModel, selectedLeftLayer, selectedRightLayer]);
+    function toggleFloodModel() {
+        setFloodModelIsActive(!floodModelIsActive);
+    }
+    function toggleModelClient() {
+        setModelClientIsActive(!modelClientIsActive);
+    }
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
-            <Notifier position="bottom" />
-            {/* <ModelClient /> */}
-            <TitledSection
-                title={
-                    <Box
-                        role="region"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.header" })}
-                        textAlign="left"
-                        py={1}
-                    >
-                        <SectionHeading size={"md"} color="#2e9ecc" mt={6} mb={6}>
-                            {intl.formatMessage({ id: "heading" })}
-                        </SectionHeading>
-                    </Box>
-                }
-            >
-                <Flex flex="1" direction="column" position="relative">
-                    {/*MAP_ID1*/}
-                    <MapContainer
-                        mapId={MAP_ID1}
-                        role="main"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
-                    >
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                            <Forecasts />
-                            <FloodSlider />
-                        </MapAnchor>
+            <Notifier />
+            {map && (
+                <DefaultMapProvider map={map}>
+                    <Flex flex="1" direction="column" position="relative">
+                        <MapContainer
+                            role="main"
+                            aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
+                        >
+                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                <Forecasts />
+                                <FloodSlider />
+                            </MapAnchor>
 
-                        <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                            <FloodSelector />
-                            {/* <Flex>
-                                {measurementIsActive && (
-                                    <Box
-                                        backgroundColor="white"
-                                        borderWidth="1px"
-                                        borderRadius="lg"
-                                        padding={2}
-                                        boxShadow="lg"
-                                        role="top-left"
-                                        aria-label={intl.formatMessage({ id: "ariaLabel.topLeft" })}
-                                    >
-                                        <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                            <TitledSection
-                                                title={
-                                                    <SectionHeading
-                                                        id={measurementTitleId}
-                                                        size="md"
-                                                        mb={2}
-                                                    >
-                                                        {intl.formatMessage({
-                                                            id: "measurementTitle"
-                                                        })}
-                                                    </SectionHeading>
-                                                }
-                                            >
-                                                <Measurement mapId={MAP_ID1} />
-                                            </TitledSection>
-                                        </Box>
-                                    </Box>
-                                )}
-                                <ExpandableBox title="Analysis">
-                                    <>Example Analysis Text</>
-                                </ExpandableBox>
-                            </Flex> */}
-                            {/*add Table of Contents (Toc) and legend */}
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="dialog"
-                                // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                maxHeight={500}
-                                overflow="auto"
-                            >
-                                <ChakraProvider theme={theme}>
-                                    <Toc
-                                        mapId={MAP_ID1}
-                                        showTools={true}
-                                        collapsibleGroups={true}
-                                        initiallyCollapsed={true}
-                                        showBasemapSwitcher={false}
-                                    />
-                                </ChakraProvider>
-                                <FormControl>
-                                    <FormLabel mt={2}>
-                                        <Text as="b">
-                                            {intl.formatMessage({ id: "basemapLabel" })}
-                                        </Text>
-                                    </FormLabel>
-                                    <BasemapSwitcher
-                                        mapId={MAP_ID1}
-                                        allowSelectingEmptyBasemap={true}
-                                    />
-                                </FormControl>
-                            </Box>
-                            <Box
-                                flexDirection="column"
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="dialog"
-                                maxHeight={100}
-                                overflow="auto"
-                                marginTop={2}
-                            >
-                                <Text fontWeight={600}>
-                                    {" "}
-                                    {intl.formatMessage({ id: "description.title" })}{" "}
-                                </Text>
-                                <Text>
-                                    {intl.formatMessage({ id: "description.text1" })}
-                                    <Spacer />
-                                    <Button
-                                        variant="link"
-                                        color="#2e9ecc"
-                                        onClick={() => setActiveKeyword("Disaster Risk")}
-                                    >
-                                        {intl.formatMessage({ id: "description.keyword1" })}
-                                    </Button>{" "}
-                                    {intl.formatMessage({ id: "description.text2" })}{" "}
-                                    <Button
-                                        variant="link"
-                                        color="#2e9ecc"
-                                        onClick={() => setActiveKeyword("Climate Change")}
-                                    >
-                                        {intl.formatMessage({ id: "description.keyword2" })}
-                                    </Button>
-                                    .
-                                </Text>
-                            </Box>
-                            {downloadIsActive && (
-                                <LayerDownload
-                                    mapID={MAP_ID1}
-                                    intl={intl}
-                                    isOpen={downloadIsActive}
-                                    onClose={() => setDownloadIsActive(false)}
-                                />
-                            )}
-                        </MapAnchor>
-                        {/* zoom to municipalities */}
-                        <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
-                            <VStack align="stretch" spacing={2}>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToEgedal(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.egedal" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToFrederikssund(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToHalsnaes(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToLejre(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.lejre" })}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={() => zoomService.zoomToRoskilde(mapModel.map!)}
-                                >
-                                    {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
-                                </Button>
-                            </VStack>
-
-                            {/* {mapModel &&
-                                activeLayerIds.length > 0 &&
-                                activeLayerIds.map((layerId) => (
-                                    <FeatureInfo
-                                        key={layerId}
-                                        mapModel={mapModel.map!}
-                                        layerId={layerId}
-                                        projection="EPSG:3857"
-                                    />
-                                ))} */}
-
-                            {mapModel && (
-                                <FeatureInfo
-                                    mapModel={mapModel.map!}
-                                    projection="EPSG:3857"
-                                    layerId={""}
-                                />
-                            )}
-                        </MapAnchor>
-
-                        {/*layerswipe layers and legend*/}
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
-                            <Flex direction="column" gap={4}>
+                            <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                                <FloodSelector />
+                                {/*add Table of Contents (Toc) and legend */}
                                 <Box
+                                    display="flex"
+                                    flexDirection="column"
                                     backgroundColor="white"
                                     borderWidth="1px"
                                     borderRadius="lg"
                                     padding={2}
                                     boxShadow="lg"
-                                    role="top-right"
-                                    aria-label={intl.formatMessage({ id: "ariaLabel.topRight" })}
-                                    maxHeight={615}
-                                    maxWidth={430}
-                                    overflow="hidden"
-                                    marginBottom={5}
-                                >
-                                    {/* <Flex direction="column" gap={4}> */}
-                                    <Box>
-                                        <Box maxHeight={300} overflow="auto">
-                                            <Flex
-                                                direction="column"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                            ></Flex>
-                                            <Flex alignItems="center" mt={1}>
-                                                <Popover
-                                                    trigger="hover"
-                                                    openDelay={250}
-                                                    closeDelay={100}
-                                                    placement="top"
-                                                >
-                                                    <PopoverTrigger>
-                                                        <IconButton
-                                                            marginLeft="2px"
-                                                            size="s"
-                                                            aria-label="Info"
-                                                            icon={<FaInfo />}
-                                                            variant="ghost"
-                                                            color="black"
-                                                        />
-                                                    </PopoverTrigger>
-                                                    <PopoverContent>
-                                                        <PopoverArrow />
-                                                        <PopoverBody overflow="auto">
-                                                            {intl.formatMessage({
-                                                                id: "layer_swipe.description"
-                                                            })}
-                                                        </PopoverBody>
-                                                    </PopoverContent>
-                                                </Popover>
-                                                <Text fontWeight="bold" mt={4}>
-                                                    {intl.formatMessage({
-                                                        id: "layer_swipe.title"
-                                                    })}
-                                                </Text>
-                                            </Flex>
-                                            <Spacer />
-                                            <Flex direction="row" gap={4} p={4}>
-                                                <Select
-                                                    placeholder={intl.formatMessage({
-                                                        id: "layer_swipe.left"
-                                                    })}
-                                                    value={selectedLeftLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedLeftLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-
-                                                <Select
-                                                    placeholder={intl.formatMessage({
-                                                        id: "layer_swipe.right"
-                                                    })}
-                                                    value={selectedRightLayer ?? ""}
-                                                    onChange={(e) =>
-                                                        setSelectedRightLayer(e.target.value)
-                                                    }
-                                                >
-                                                    {visibleAvailableLayers.map((layer) => (
-                                                        <option key={layer.id} value={layer.id}>
-                                                            {layer.title || layer.id}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-                                            </Flex>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                                {/* <Flex>
-                                    <Text
-                                        fontSize={14}
-                                        fontWeight="semibold"
-                                        textAlign="right"
-                                        width="97%"
-                                    >
-                                        👇Scroll Down to View all Selected Layer Legends
-                                    </Text>
-                                </Flex> */}
-                                {/* <Flex>
-                                    <TaxonomyInfo keyword="food security" />
-                                </Flex> */}
-                                {activeKeyword && (
-                                    <Flex>
-                                        <TaxonomyInfo
-                                            keyword={activeKeyword}
-                                            onClose={() => setActiveKeyword(null)}
-                                        />
-                                    </Flex>
-                                )}
-                                <Flex
-                                    maxHeight={250}
+                                    role="dialog"
+                                    // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                    maxHeight={500}
                                     overflow="auto"
-                                    borderRadius="md"
-                                    boxShadow="lg"
-                                    alignSelf="flex-end"
-                                    sx={{
-                                        "& > *": {
-                                            border: "none !important"
-                                        },
-                                        "& *": {
-                                            top: "0 !important"
-                                        }
-                                    }}
+                                    paddingTop={4}
+                                    paddingLeft={3}
                                 >
-                                    <Legend mapId={MAP_ID1} />
-                                </Flex>
-                            </Flex>
-                        </MapAnchor>
+                                    <ChakraProvider value={system}>
+                                        <Toc
+                                            showTools={true}
+                                            collapsibleGroups={true}
+                                            initiallyCollapsed={true}
+                                            showBasemapSwitcher={false}
+                                        />
 
-                        <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
-                            <Flex
-                                role="bottom-right"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
-                                direction="row"
-                                gap={1}
-                                padding={1}
-                            >
-                                {/* SaferPlaces flood model dialog */}
-                                <ModelClient />
-                                <SaferPlacesFloodMap />
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "measurementTitle" })}
-                                    icon={<PiRulerLight />}
-                                    isActive={measurementIsActive}
-                                    onClick={toggleMeasurement}
-                                />
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "map.download.heading" })}
-                                    icon={<PiDownload />}
-                                    isActive={downloadIsActive}
-                                    onClick={toggleDownload}
-                                />
-                                <Geolocation mapId={MAP_ID1} />
-                                <InitialExtent mapId={MAP_ID1} />
-                                <ZoomIn mapId={MAP_ID1} />
-                                <ZoomOut mapId={MAP_ID1} />
-                            </Flex>
-                        </MapAnchor>
-                    </MapContainer>
-                    {/*END MAP_ID1*/}
-                </Flex>
-                {/* <FloodSlider/> */}
-                <Flex
-                    role="region"
-                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
-                    gap={3}
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <CoordinateViewer mapId={MAP_ID1} precision={2} />
-                    <ScaleBar mapId={MAP_ID1} />
-                    <ScaleViewer mapId={MAP_ID1} />
-                </Flex>
-            </TitledSection>
+                                    </ChakraProvider>
+                                    <Select.Root>
+                                        <Select.Label mt={2}>
+                                            <Text as="b">
+                                                {intl.formatMessage({ id: "basemapLabel" })}
+                                            </Text>
+                                        </Select.Label>
+                                        <BasemapSwitcher
+                                            allowSelectingEmptyBasemap={true}
+                                        />
+                                    </Select.Root>
+                                </Box>
+                                <Box
+                                    flexDirection="column"
+                                    backgroundColor="white"
+                                    borderWidth="1px"
+                                    borderRadius="lg"
+                                    padding={3}
+                                    boxShadow="lg"
+                                    role="dialog"
+                                    maxHeight={100}
+                                    overflow="auto"
+                                    marginTop={2}
+                                >
+                                    <Text fontWeight={600} fontSize={15}>
+                                        {" "}
+                                        {intl.formatMessage({ id: "description.title" })}{" "}
+                                    </Text>
+                                    <Text fontSize={14} paddingTop={1}>
+                                        {intl.formatMessage({ id: "description.text1" })}
+                                        <Spacer />
+                                        <Link
+                                            variant="plain"
+                                            color="#2e9ecc"
+                                            marginRight={0.5}
+                                            onClick={() => setActiveKeyword("Disaster Risk")}
+                                        >
+                                            {intl.formatMessage({ id: "description.keyword1" })}
+                                        </Link>{" "}
+                                        {intl.formatMessage({ id: "description.text2" })}{" "}
+                                        <Link
+                                            variant="plain"
+                                            marginLeft={0.5}
+                                            color="#2e9ecc"
+                                            onClick={() => setActiveKeyword("Climate Change")}
+                                        >
+                                            {intl.formatMessage({ id: "description.keyword2" })}
+                                        </Link>
+                                    </Text>
+                                </Box>
+                            </MapAnchor>
+                            {/* zoom to municipalities */}
+                            <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
+                                <VStack align="stretch">
+                                    <Button
+                                        size="sm"
+                                        onClick={() => zoomService.zoomToEgedal(map!)}
+                                    >
+                                        {intl.formatMessage({ id: "zoom_buttons.egedal" })}
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        onClick={() => zoomService.zoomToFrederikssund(map!)}
+                                    >
+                                        {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        onClick={() => zoomService.zoomToHalsnaes(map!)}
+                                    >
+                                        {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        onClick={() => zoomService.zoomToLejre(map!)}
+                                    >
+                                        {intl.formatMessage({ id: "zoom_buttons.lejre" })}
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        onClick={() => zoomService.zoomToRoskilde(map!)}
+                                    >
+                                        {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
+                                    </Button>
+                                </VStack>
+
+                                {map && (
+                                    <FeatureInfo
+                                        mapModel={map!}
+                                        projection="EPSG:3857"
+                                        layerId={""}
+                                    />
+                                )}
+                            </MapAnchor>
+
+                            {/*legend*/}
+                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
+                                <Flex direction="column" gap={4}>
+                                    {activeKeyword && (
+                                        <Flex>
+                                            <TaxonomyInfo
+                                                keyword={activeKeyword}
+                                                onClose={() => setActiveKeyword(null)}
+                                            />
+                                        </Flex>
+                                    )}
+                                    <Flex
+                                        maxHeight={250}
+                                        overflow="auto"
+                                        borderRadius="md"
+                                        boxShadow="lg"
+                                        alignSelf="flex-end"
+                                    >
+                                        <Legend />
+                                    </Flex>
+                                </Flex>
+                            </MapAnchor>
+
+                            <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
+                                <Flex
+                                    // role="bottom-right"
+                                    aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}
+                                    direction="row"
+                                    gap={1}
+                                    padding={1}
+                                >
+                                    {/* SaferPlaces flood model dialog */}
+                                    <ModelClient />
+                                    <SaferPlacesFloodMap />
+                                    <ToolButton
+                                        label={intl.formatMessage({ id: "map.download.heading" })}
+                                        icon={<PiDownload />}
+                                        onClick={toggleDownload}
+                                    />
+                                    <ToolButton
+                                        label={intl.formatMessage({ id: "measurementTitle" })}
+                                        icon={<PiRulerLight />}
+                                        onClick={toggleMeasurement}
+                                    />
+                                    <Geolocation />
+                                    <InitialExtent />
+                                    <ZoomIn />
+                                    <ZoomOut />
+                                </Flex>
+                            </MapAnchor>
+                        </MapContainer>
+                        {downloadIsActive && (
+                            <LayerDownload
+                                mapID={MAP_ID}
+                                intl={intl}
+                                isOpen={downloadIsActive}
+                                onClose={() => setDownloadIsActive(false)}
+                            />
+                        )}
+                    </Flex>
+                    <Flex
+                        role="region"
+                        aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
+                        gap={3}
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <CoordinateViewer precision={2} />
+                        <ScaleBar />
+                        <ScaleViewer />
+                    </Flex>
+                </DefaultMapProvider>
+            )}
         </Flex>
     );
 }

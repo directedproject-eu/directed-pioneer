@@ -29,6 +29,7 @@ export function ModelSelector() {
                     "ukesm1-0-ll"
                 ]}
                 setSelected={setSelected}
+                alternativeText={false}
             ></Selector>
         </ExpandableBox>
     );

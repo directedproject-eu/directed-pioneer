@@ -53,8 +53,8 @@ overrides:
       collapseAllGroups: "Collapse all groups"
 
 messages:
-  heading: "RWL The Capital Region of Denmark"
-  basemapLabel: "Select basemap:"
+  heading: "RWL Region of Eastern Denmark"
+  basemapLabel: "Select basemap"
   description:
     title: "Description"
     text1: "This platform serves as a way to learn about"
@@ -101,8 +101,12 @@ messages:
       description: "Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."
     flood_layer_selector: 
       title: "Flood Category Selector"
-      description: "The flood category selection populates the Operational Layers and Slider with the selected flood's model outputs. To view these layers in the map, make sure the checkmark next to the desired model is visible in the Operational Layers."
-      floodtype: "To view model outputs, please choose a flooding category"
+      description1: "The Flood Category Selector populates the Operational Layers and slider with"
+      keyword1: "pluvial"
+      connector: "and"
+      keyword2: "coastal"
+      description2: "flood model outputs. To view these layers in the map, make sure the checkmark next to the desired model is 
+                      visible in the Operational Layers."
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"

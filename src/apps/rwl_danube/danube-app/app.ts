@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 import { ApplicationConfig, createCustomElement } from "@open-pioneer/runtime";
 import { KeycloakProperties } from "@open-pioneer/authentication-keycloak";
-import { theme } from "@open-pioneer/theme";
 import * as appMetadata from "open-pioneer:app";
+import {config as themeConfig} from "@open-pioneer/base-theme";
 import { MapApp } from "./MapApp";
 
 const element = createCustomElement({
     component: MapApp,
-    theme,
+    chakraSystemConfig: themeConfig,
     appMetadata,
     async resolveConfig(): Promise<ApplicationConfig> {
         try {

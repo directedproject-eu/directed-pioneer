@@ -152,3 +152,7 @@
     -webkit-transform: translateX(-6px);
     transform: translateX(-6px);
 }
+
+.custom-basemap-switcher {
+    width: 100%;
+}

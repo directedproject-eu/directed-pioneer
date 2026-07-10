@@ -4,9 +4,10 @@ import { MapModel } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import WebGLTileLayer from "ol/layer/WebGLTile";
+import { GeoTIFF } from "ol/source";
 import VectorLayer from "ol/layer/Vector"; // Added import for Vector Layers
 
-// fetch feature info for all visible WMS, GeoTIFF, and Vector layers at clicked map coord
+//fetch feature info for all visible WMS layers at clicked map coord
 export function fetchFeatureInfo(
     mapModel: MapModel,
     coordinate: number[],
@@ -35,6 +36,7 @@ export function fetchFeatureInfo(
             l.getSource() instanceof TileWMS
     ) as TileLayer<TileWMS>[];
 
+    // WMS-FeatureInfo Promises
     const wmsFetches = visibleWMSTileLayers.map((layer) => {
         const source = layer.getSource();
         const url = source?.getFeatureInfoUrl(coordinate, viewResolution, projection, {
@@ -75,6 +77,7 @@ export function fetchFeatureInfo(
                 layerName: layer.get("title") || layer.get("id"),
                 data: { value: valueAsString }
             };
+            
         } catch (err) {
             console.error("Error reading GeoTIFF value:", err);
             return null;
@@ -140,6 +143,8 @@ export function setupClickHandler(
                 fetchFeatureInfo(mapModel, coordinate, viewResolution, projection, setFeatureInfo, pixel);
             }
         });
+
+        console.log("Click handler set up for visible layers");
     } else {
         console.warn("Map model or OpenLayers map not available");
     }

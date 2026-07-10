@@ -5,32 +5,18 @@ import React, { useState, useMemo, ChangeEvent } from "react";
 import {
     Box,
     Button,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalCloseButton,
-    FormLabel,
-    FormControl,
     useDisclosure,
     Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
-    Tooltip,
     Flex,
-    Input, 
-    Popover, 
-    PopoverBody, 
-    PopoverContent, 
-    PopoverTrigger,
-    PopoverArrow, 
-    IconButton
-} from "@open-pioneer/chakra-integration";
+    Input,
+    Dialog,
+    Field,
+    HoverCard
+} from "@chakra-ui/react";
+import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { ToolButton } from "@open-pioneer/map-ui-components";
-import { FaBalanceScale, FaInfoCircle, FaInfo } from "react-icons/fa";
-import { Spinner, Center, Text } from "@open-pioneer/chakra-integration";
+import { FaBalanceScale } from "react-icons/fa";
+import { Spinner, Center, Text } from "@chakra-ui/react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useIntl } from "open-pioneer:react-hooks";
@@ -155,7 +141,8 @@ export function ModelClient() {
     const [ranksData, setRanksData] = useState<Record<string, number> | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { open, onOpen, onClose } = useDisclosure(); // For dialog
+
     const intl = useIntl(); // i18n
     // const [mode, setMode] = useState<"ranks" | "sensitivity">("ranks"); // Default mode ranks
 
@@ -170,7 +157,9 @@ export function ModelClient() {
     });
 
     // Handles changes to slider values for each criteria
-    const handleWeightChange = (criteria: keyof Weights, newValue: number) => {
+    const handleWeightChange = (criteria: keyof Weights, details: { value: number[] }) => {
+        const newValue = details.value[0];
+        if (newValue === undefined) return;
         setWeights((prevWeights) => ({
             ...prevWeights,
             [criteria]: newValue
@@ -198,7 +187,7 @@ export function ModelClient() {
         // Construct the process execution payload
         const jobDescription: ProcessExecution = {
             inputs: inputs,
-            synchronous: false, 
+            synchronous: false,
             processId: processId,
             response: "document"
         };
@@ -397,21 +386,33 @@ export function ModelClient() {
     return (
         <Box>
             <ToolButton
-                label={intl.formatMessage({ id: "modalMain.header" })}
+                label={intl.formatMessage({ id: "modalStart.header" })}
                 icon={<FaBalanceScale />}
                 onClick={onOpen}
             />
-            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="full">
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>{intl.formatMessage({ id: "modalStart.header" })}</ModalHeader>
-                    <ModalCloseButton isDisabled={loading} />
-                    <ModalBody>
+            <Dialog.Root closeOnInteractOutside={true} open={ open} onOpenChange={(e) => !e.open && onClose()} size="cover" placement="center">
+                <Dialog.Backdrop />
+                <Dialog.Content
+                    position={"fixed"}
+                    top={"50%"}
+                    left={"50%"}
+                    transform={"translate(-50%, -50%)"}
+                >
+                    <Dialog.Header>
+                        <Dialog.Title>
+                            {intl.formatMessage({ id: "modalStart.header" })}
+                        </Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.CloseTrigger asChild disabled={loading}>
+                        <CloseButton size="sm" />
+                    </Dialog.CloseTrigger>
+                    <Dialog.Body overflow="auto">
                         {!tokenSubmitted ? (
-                            <FormControl>
-                                <FormLabel padding={2} htmlFor="token">
+                            <Field.Root required>
+                                <Field.Label padding={2} htmlFor="token">
                                     {intl.formatMessage({ id: "modalStart.token" })}{" "}
-                                </FormLabel>
+                                    <Field.RequiredIndicator />
+                                </Field.Label>
                                 <Input
                                     type="text"
                                     id="token"
@@ -427,11 +428,11 @@ export function ModelClient() {
                                             setTokenSubmitted(true); // Move on to criteria weightings
                                         }
                                     }}
-                                    isDisabled={!tokenInput.trim()}
+                                    disabled={!tokenInput.trim()}
                                 >
                                     {intl.formatMessage({ id: "modalStart.continue" })}
                                 </Button>
-                            </FormControl>
+                            </Field.Root>
                         ) : (
                             <>
                                 {loading ? (
@@ -445,23 +446,46 @@ export function ModelClient() {
                                             <Text fontWeight="semibold">
                                                 ⚖️ {intl.formatMessage({ id: "modalMain.weight" })}
                                             </Text>
-                                            <Popover trigger="hover" openDelay={250} closeDelay={100} placement="top">
-                                                <PopoverTrigger>
-                                                    <IconButton
-                                                        marginLeft="2px"
-                                                        size="s"
-                                                        aria-label="Info"
-                                                        icon={<FaInfo />}
+                                            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{placement:"top"}}>
+                                                <HoverCard.Trigger asChild>
+                                                    <Button
+                                                        size="sm"
                                                         variant="ghost"
-                                                        color="black" />
-                                                </PopoverTrigger>
-                                                <PopoverContent>
-                                                    <PopoverArrow />
-                                                    <PopoverBody overflow="auto">
+                                                        color="black"
+                                                        borderRadius="full"
+                                                        paddingRight={2}
+                                                        _hover={{
+                                                            transform: "scale(1.05)",
+                                                            bg: "rgba(0, 0, 0, 0.05)",
+                                                        }}
+                                                        transition="all 0.2s ease"
+                                                    >
+                                                        <Box
+                                                            as="span"
+                                                            display="inline-flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            width="22px"
+                                                            height="22px"
+                                                            borderRadius="50%"
+                                                            border="1.5px solid currentColor"
+                                                            fontFamily="serif"
+                                                            fontWeight="bold"
+                                                            fontSize="13px"
+                                                            lineHeight="1"
+                                                            pb="1px"
+                                                        >
+                                                            i
+                                                        </Box>
+                                                    </Button>
+                                                </HoverCard.Trigger>
+                                                <HoverCard.Positioner>
+                                                    <HoverCard.Content>
+                                                        <HoverCard.Arrow />
                                                         {intl.formatMessage({ id: "popUp.text1" })}
-                                                    </PopoverBody>
-                                                </PopoverContent>
-                                            </Popover>
+                                                    </HoverCard.Content>
+                                                </HoverCard.Positioner>
+                                            </HoverCard.Root>
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
@@ -473,7 +497,7 @@ export function ModelClient() {
                                                 ← {intl.formatMessage({ id: "modalMain.back" })}
                                             </Button>
                                         </Flex>
-                                        {/* optionally uncomment this and the mode state to have input for modes */}
+                                        {/* optionally uncomment this and the mode state to have input for modes (careful: this is still Chakra v2) */}
                                         {/* <Text fontWeight="semibold" padding={1}>
                                             Please select an Analysis Mode and rate each criteria.
                                         </Text>
@@ -512,48 +536,61 @@ export function ModelClient() {
                                                     "Implementation Time: How important is the time it takes to implement the measure?"
                                             };
                                             return (
-                                                <FormControl key={typedCriteria} mb={4}>
-                                                    <FormLabel>
+                                                <Field.Root key={typedCriteria} mb={4}>
+                                                    <Field.Label>
                                                         {criterionDisplayNames[typedCriteria]}
-                                                    </FormLabel>
-                                                    <Box padding={2}>
+                                                    </Field.Label>
+                                                    <Box padding={2} width="full">
                                                         <Flex justify="space-between" mb={1}>
-                                                            <Text fontSize="sm">{intl.formatMessage({ id: "modalMain.likertNot" })}</Text>
+                                                            <Text fontSize="sm">Not important</Text>
                                                             <Text fontSize="sm">
-                                                                {intl.formatMessage({ id: "modalMain.likertSomewhat" })}
+                                                                Somewhat important
                                                             </Text>
                                                             <Text fontSize="sm">
-                                                                {intl.formatMessage({ id: "modalMain.likertHighly" })}
+                                                                Highly important
                                                             </Text>
                                                         </Flex>
-                                                        <Slider
-                                                            value={weights[typedCriteria]}
+                                                        <Slider.Root
+                                                            width="full"  
+                                                            value={[weights[typedCriteria]]}
                                                             min={0}
                                                             max={1}
                                                             step={0.01}
-                                                            onChange={(newValue) =>
+                                                            onValueChange={(newValue) =>
                                                                 handleWeightChange(
                                                                     typedCriteria,
                                                                     newValue
                                                                 )
                                                             }
-                                                            defaultValue={0}
+                                                            defaultValue={[0]}
                                                         >
-                                                            <SliderTrack>
-                                                                <SliderFilledTrack />
-                                                            </SliderTrack>
-                                                            <Tooltip
-                                                                hasArrow
-                                                                color="white"
-                                                                placement="top"
-                                                                isOpen
-                                                                label={weights[typedCriteria]}
-                                                            >
-                                                                <SliderThumb />
-                                                            </Tooltip>
-                                                        </Slider>
+                                                            <Slider.Control>
+                                                                <Slider.Track>
+                                                                    <Slider.Range />
+                                                                </Slider.Track>
+
+                                                                <Slider.Thumb index={0}>
+                                                                    <Slider.HiddenInput />
+                                                                    <Box
+                                                                        position="absolute"
+                                                                        top="-1.5rem"
+                                                                        left="50%"
+                                                                        transform="translateX(-50%)"
+                                                                        bg="white"
+                                                                        px={2}
+                                                                        py={0.5}
+                                                                        borderRadius="md"
+                                                                        boxShadow="sm"
+                                                                        fontSize="xs"
+                                                                        whiteSpace="nowrap"
+                                                                    >
+                                                                        {weights[typedCriteria].toFixed(2)}
+                                                                    </Box>
+                                                                </Slider.Thumb>
+                                                            </Slider.Control>
+                                                        </Slider.Root>
                                                     </Box>
-                                                </FormControl>
+                                                </Field.Root>
                                             );
                                         })}
 
@@ -561,19 +598,56 @@ export function ModelClient() {
                                             type="button"
                                             size="md"
                                             onClick={handleSubmit}
-                                            isDisabled={loading}
+                                            disabled={loading}
                                         >
-                                            {intl.formatMessage({ id: "modalMain.submitCriteria" })}
+                                            Submit Criteria Weights
                                         </Button>
 
                                         <Flex paddingY={4} />
                                         <Flex justifyContent="space-between" alignItems="center">
-                                            <Tooltip
-                                                label={intl.formatMessage({ id: "popUp.sensitivityAnalysis" })}
-                                                aria-label="A tooltip"
+                                            <HoverCard.Root 
+                                                openDelay={250} 
+                                                closeDelay={100} 
+                                                positioning={{placement: "bottom"}}
                                             >
-                                                <FaInfoCircle color="gray" cursor="pointer" />
-                                            </Tooltip>
+                                                <HoverCard.Trigger asChild> 
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        color="black"
+                                                        borderRadius="full"
+                                                        paddingRight={2}
+                                                        _hover={{
+                                                            transform: "scale(1.05)",
+                                                            bg: "rgba(0, 0, 0, 0.05)",
+                                                        }}
+                                                        transition="all 0.2s ease"
+                                                    >
+                                                        <Box
+                                                            as="span"
+                                                            display="inline-flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            width="22px"
+                                                            height="22px"
+                                                            borderRadius="50%"
+                                                            border="1.5px solid currentColor"
+                                                            fontFamily="serif"
+                                                            fontWeight="bold"
+                                                            fontSize="13px"
+                                                            lineHeight="1"
+                                                            pb="1px"
+                                                        >
+                                                            i
+                                                        </Box>
+                                                    </Button>
+                                                </HoverCard.Trigger>
+                                                <HoverCard.Positioner>
+                                                    <HoverCard.Content>
+                                                        {intl.formatMessage({ id: "popUp.sensitivityAnalysis" })}
+                                                    </HoverCard.Content>
+                                                </HoverCard.Positioner>
+                                            </HoverCard.Root>
                                         </Flex>
                                         <SensitivityChart chartOptions={sensitivityChartOptions} />
                                         {/* <hr style={{ margin: "20px 0" }} /> */}
@@ -583,12 +657,49 @@ export function ModelClient() {
                                                 justifyContent="space-between"
                                                 alignItems="center"
                                             >
-                                                <Tooltip
-                                                    label={intl.formatMessage({ id: "modalMain.rankingResult" })}
-                                                    aria-label="A tooltip"
+                                                <HoverCard.Root 
+                                                openDelay={250} 
+                                                closeDelay={100} 
+                                                positioning={{placement: "bottom"}}
                                                 >
-                                                    <FaInfoCircle color="gray" cursor="pointer" />
-                                                </Tooltip>
+                                                    <HoverCard.Trigger asChild> 
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            color="black"
+                                                            borderRadius="full"
+                                                            paddingRight={2}
+                                                            _hover={{
+                                                                transform: "scale(1.05)",
+                                                                bg: "rgba(0, 0, 0, 0.05)",
+                                                            }}
+                                                            transition="all 0.2s ease"
+                                                        >
+                                                            <Box
+                                                                as="span"
+                                                                display="inline-flex"
+                                                                alignItems="center"
+                                                                justifyContent="center"
+                                                                width="22px"
+                                                                height="22px"
+                                                                borderRadius="50%"
+                                                                border="1.5px solid currentColor"
+                                                                fontFamily="serif"
+                                                                fontWeight="bold"
+                                                                fontSize="13px"
+                                                                lineHeight="1"
+                                                                pb="1px"
+                                                            >
+                                                                i
+                                                            </Box>
+                                                        </Button>
+                                                    </HoverCard.Trigger>
+                                                    <HoverCard.Positioner>
+                                                        <HoverCard.Content>
+                                                            {intl.formatMessage({ id: "popUp.rankingResult" })}
+                                                        </HoverCard.Content>
+                                                    </HoverCard.Positioner>
+                                                </HoverCard.Root>
                                             </Flex>
                                         )}
                                         {UserWeightChartOptions && (
@@ -600,9 +711,9 @@ export function ModelClient() {
                                 )}
                             </>
                         )}
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
+                    </Dialog.Body>
+                </Dialog.Content>
+            </Dialog.Root>
         </Box>
     );
 }

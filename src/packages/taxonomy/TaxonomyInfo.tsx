@@ -12,8 +12,9 @@ import {
     CloseButton,
     Button,
     Flex
-} from "@open-pioneer/chakra-integration";
+} from "@chakra-ui/react";
 import parse from "html-react-parser";
+import { LuExternalLink } from "react-icons/lu";
 
 interface TaxonomyInfoProps {
     keyword: string;
@@ -99,15 +100,15 @@ export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
             <Spacer />
             <Flex direction="column" gap={1} mt={1}>
                 {searchUrl && (
-                    <Link href={searchUrl} isExternal>
+                    <Link href={searchUrl} target="_blank" >
                         <Button size="md" bg="#2e9ecc" color="white" variant="solid" mt={4}>
-                            View Term in Hub
+                            View Term in Hub <LuExternalLink/>
                         </Button>
                     </Link>
                 )}
-                <Link href="https://connectivity-hub.weadapt.org/" isExternal>
+                <Link href="https://connectivity-hub.weadapt.org/" target="_blank">
                     <Button size="md" bg="#2e9ecc" color="white" variant="solid" mt={4}>
-                        Search Hub Terms
+                        Search Hub Terms <LuExternalLink />
                     </Button>
                 </Link>
             </Flex>

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 import { LegendItemComponentProps } from "@open-pioneer/legend";
-import { Box, Text } from "@open-pioneer/chakra-integration";
+import { Box, Text } from "@chakra-ui/react";
 import { SimpleLayer } from "@open-pioneer/map";
 import React, { useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";

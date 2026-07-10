@@ -7,19 +7,8 @@ import { IsimipHandler } from "../services/IsimipHandler";
 import Selector from "./Selector";
 import ExpandableBox from "../components/ExpandableBox";
 import { useIntl } from "open-pioneer:react-hooks";
-import {
-    Button,
-    IconButton, 
-    Flex,
-    Popover, 
-    PopoverBody, 
-    PopoverContent, 
-    PopoverTrigger,
-    PopoverArrow
-} from "@open-pioneer/chakra-integration";
-import { FaInfo } from "react-icons/fa";
+import { Button, Box, Flex, HoverCard, Text, Portal } from "@chakra-ui/react";
 import { TaxonomyInfo } from "taxonomy";
-
 
 export function IsimipSelector() {
     const intl = useIntl();
@@ -44,51 +33,67 @@ export function IsimipSelector() {
             marginBottom="10px"
             overflowY="auto"
         >
-            <Popover trigger="hover" openDelay={250} closeDelay={100} placement="right">
-                <PopoverTrigger>
-                    <IconButton
-                        marginLeft="2px" 
-                        size="s"
-                        aria-label="Info"
-                        icon={<FaInfo />}
-                        variant="ghost"
-                        color="black"
-                    />
-                </PopoverTrigger>
-                <PopoverContent>
-                    <PopoverArrow />
-                    <PopoverBody>
-                        {intl.formatMessage({id: "map.layer_select.info1"})}
-                        {" "}
-                        <Button
-                            variant="link"
-                            color="#2e9ecc"
-                            onClick={() => setActiveKeyword("climate model")}
+            <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
+                <HoverCard.Trigger asChild>
+                    <Button
+                        size="sm" variant="ghost" color="black" borderRadius="full"
+                        p={0} minW="30px" h="30px" transition="all 0.2s ease" paddingBottom={1}
+                        _hover={{ transform: "scale(1.05)", bg: "rgba(0, 0, 0, 0.05)" }}
+                    >
+                        <Box
+                            as="span" display="inline-flex" alignItems="center" justifyContent="center"
+                            width="25px" height="25px" borderRadius="50%" border="1.5px solid currentColor"
+                            fontFamily="serif" fontWeight="bold" fontSize="15px" lineHeight="1" pb="1px"
                         >
-                            {intl.formatMessage({id: "map.layer_select.keyword1"})}
-                        </Button>
-                        {" "}
-                        {intl.formatMessage({id: "map.layer_select.info2"})}
-                        {" "}
-                        <Button
-                            variant="link"
-                            color="#2e9ecc"
-                            onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
-                        >
-                            {intl.formatMessage({id: "map.layer_select.keyword2"})}
-                        </Button>
-                        {intl.formatMessage({id: "map.layer_select.info3"})}
-                        <Button
-                            variant="link"
-                            color="#2e9ecc"
-                            onClick={() => setActiveKeyword("Variables")}
-                        >
-                            {intl.formatMessage({id: "map.layer_select.keyword3"})}
-                        </Button>
-                        {" "}
-                        {intl.formatMessage({id: "map.layer_select.info4"})}
-                    </PopoverBody>
-                </PopoverContent>
+                            i
+                        </Box>
+                    </Button>
+                </HoverCard.Trigger>
+                <Portal>
+                    <HoverCard.Positioner>
+                        <HoverCard.Content>
+                            <Text>
+                                {/* <HoverCard.Arrow /> */}
+                                {intl.formatMessage({ id: "map.layer_select.info1" })}
+                                {" "}
+                                <Text
+                                    as="span"
+                                    color="#49b7e6"
+                                    cursor="pointer"
+                                    onClick={() => setActiveKeyword("climate model")}
+                                >
+                                    {intl.formatMessage({ id: "map.layer_select.keyword1" })}
+                                </Text>
+                                {" "}
+                                {intl.formatMessage({ id: "map.layer_select.info2" })}
+                                {" "}
+                                <Text
+                                    as={"span"}
+                                    color="#49b7e6"
+                                    cursor={"pointer"}
+                                    onClick={() =>
+                                        setActiveKeyword("Shared socio-economic pathways (SSPs)")
+                                    }
+                                >
+                                    {intl.formatMessage({ id: "map.layer_select.keyword2" })}
+                                </Text>
+                                {" "}
+                                {intl.formatMessage({ id: "map.layer_select.info3" })}
+                                {" "}
+                                <Text
+                                    as={"span"}
+                                    color="#49b7e6"
+                                    cursor={"pointer"}
+                                    onClick={() => setActiveKeyword("Variables")}
+                                >
+                                    {intl.formatMessage({ id: "map.layer_select.keyword3" })}
+                                </Text>
+                                {" "}
+                                {intl.formatMessage({ id: "map.layer_select.info4" })}
+                            </Text>
+                        </HoverCard.Content>
+                    </HoverCard.Positioner>
+                </Portal>
                 {activeKeyword && (
                     <Flex>
                         <TaxonomyInfo
@@ -97,7 +102,7 @@ export function IsimipSelector() {
                         />
                     </Flex>
                 )}
-            </Popover>
+            </HoverCard.Root>
             <Selector
                 options={[
                     "canesm5",

@@ -1,25 +1,27 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
+import { useState } from "react";
 import { useService } from "open-pioneer:react-hooks";
+import { MapAnchor, useMapModel } from "@open-pioneer/map";
+import { useIntl } from "open-pioneer:react-hooks";
+import { MAP_ID } from "../services";
 import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
-import ExpandableBox from "../Components/ExpandableBox";
-import { useIntl } from "open-pioneer:react-hooks";
 import {
-    IconButton,
-    Popover,
-    PopoverBody,
-    PopoverContent,
-    PopoverTrigger,
-    PopoverArrow
-} from "@open-pioneer/chakra-integration";
-import { FaInfo } from "react-icons/fa";
-// import { TaxonomyInfo } from "taxonomy";
+    HoverCard, 
+    Box, 
+    Flex, 
+    Heading, 
+    Button, 
+    Link
+} from "@chakra-ui/react";
+import { TaxonomyInfo } from "taxonomy";
 
 export function FloodSelector() {
     const intl = useIntl();
-    // const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
+    const { map } = useMapModel(MAP_ID);
+    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
     const prepSrvc = useService<FloodHandler>("app.FloodHandler");
 
     const setFloodType = (option: string) => {
@@ -27,52 +29,117 @@ export function FloodSelector() {
     };
 
     return (
-        <ExpandableBox
-            title={intl.formatMessage({ id: "map.flood_layer_selector.title" })}
+        <>
+        <Box
+            backgroundColor={"white"}
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            p={3}
+            boxShadow="md"
             marginBottom="10px"
             overflowY="auto"
         >
-            <Popover trigger="hover" openDelay={250} closeDelay={100} placement="right">
-                <PopoverTrigger>
-                    <IconButton
-                        marginLeft="2px"
-                        size="s"
-                        aria-label="Info"
-                        icon={<FaInfo />}
-                        variant="ghost"
-                        color="black"
-                    />
-                </PopoverTrigger>
-                <PopoverContent>
-                    <PopoverArrow />
-                    <PopoverBody overflow="auto">
-                        {intl.formatMessage({ id: "map.flood_layer_selector.description" })}
-                        {/* {" "}
+            <Flex alignItems="center" marginBottom="3px">
+                <Heading fontSize={15} color="black">
+                    {intl.formatMessage({ id: "map.flood_layer_selector.title" })}
+                </Heading>
+                <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
+                    <HoverCard.Trigger asChild>
                         <Button
-                            variant="link"
-                            color="#2e9ecc"
-                            onClick={() => setActiveKeyword("climate model")}
+                            size="sm"
+                            variant="ghost"
+                            color="black"
+                            borderRadius="full"
+                            paddingRight={2}
+                            _hover={{
+                                transform: "scale(1.05)",
+                                bg: "rgba(0, 0, 0, 0.05)",
+                            }}
+                            transition="all 0.2s ease"
                         >
-                            {intl.formatMessage({id: "map.layer_select.keyword1"})}
-                        </Button> */}
-                    </PopoverBody>
-                </PopoverContent>
-                {/* {activeKeyword && (
-                    <Flex>
-                        <TaxonomyInfo
-                            keyword={activeKeyword}
-                            onClose={() => setActiveKeyword(null)}
-                        />
-                    </Flex>
-                )} */}
-            </Popover>
+                            <Box
+                                as="span"
+                                display="inline-flex"
+                                alignItems="center"
+                                justifyContent="center"
+                                width="20px"
+                                height="20px"
+                                borderRadius="50%"
+                                border="1.5px solid currentColor"
+                                fontFamily="serif"
+                                fontWeight="bold"
+                                fontSize="12px"
+                                lineHeight="1"
+                                pb="1px"
+                            >
+                                i
+                            </Box>
+                        </Button>
+                    </HoverCard.Trigger>
+                    <HoverCard.Positioner>
+                        <HoverCard.Content>
+                            <Box
+                                flexDirection="column"
+                                backgroundColor="white"
+                                borderRadius="lg"
+                                padding={0}
+                                role="dialog"
+                                maxHeight={100}
+                                overflow="auto"
+                                marginTop={2}
+                            >
+                                {intl.formatMessage({ id: "map.flood_layer_selector.description1" })}
+                                <Link
+                                    variant="plain"
+                                    color="#2e9ecc"
+                                    paddingEnd={1.5}
+                                    paddingStart={1.5}
+                                    onClick={() => setActiveKeyword("pluvial flood")}
+                                >
+                                    {intl.formatMessage({
+                                        id: "map.flood_layer_selector.keyword1"
+                                    })}
+                                </Link>
+                                {intl.formatMessage({ id: "map.flood_layer_selector.connector" })}
+                                <Link
+                                    variant="plain"
+                                    color="#2e9ecc"
+                                    paddingEnd={1.5}
+                                    paddingStart={1.5}
+                                    onClick={() => setActiveKeyword("coastal flood")}
+                                >
+                                    {intl.formatMessage({
+                                        id: "map.flood_layer_selector.keyword2"
+                                    })}
+                                </Link>
+                                {intl.formatMessage({ id: "map.flood_layer_selector.description2" })}
+                            </Box>
+                        </HoverCard.Content>
+                    </HoverCard.Positioner>
+                </HoverCard.Root>
+            </Flex>
             <Selector
                 options={["pluvial", "coastal"]}
                 setSelected={setFloodType}
-                marginBottom="5px"
-                // title={intl.formatMessage({ id: "map.flood_layer_selector.floodtype" })}
+                marginBottom="1px"
                 alternativeText={false}
             ></Selector>
-        </ExpandableBox>
+        </Box>
+            <MapAnchor position="bottom-right" horizontalGap={5} verticalGap={200}>
+                <Flex direction="column" gap={4}>
+                    {activeKeyword && (
+                        <Flex>
+                            <TaxonomyInfo
+                                keyword={activeKeyword}
+                                onClose={() => setActiveKeyword(null)} />
+                        </Flex>
+                    )}
+                </Flex>
+            </MapAnchor>
+        </>
     );
 }
+        
+            
+           

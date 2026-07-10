@@ -29,10 +29,26 @@ messages:
     selectLocation: "Select a Location"
     model: "Model"
     selectModel: "Select a Model"
+    rainSource: "Rainfall Data Source"
+    rainSourceSelect: "Select Rain Input Source"
+    rainSourceLabelManual: "Manual Intensity Input"
+    rainSourceLabelGeosphere: "GeoSphere Austria Rainfall Forecasts"
+    rainGeosphereDateRange: "Available Forecast Range:"
+    inputRainGeosphereDate: "Date"
+    inputRainGeosphereTime: "Time"
+    inputRainGeosphere: "Select Forecast Time"
     inputRain: "Rain Intensity (mm)"
     inputSea: "Extreme Sea Level (m)"
     downloadMap: "Download Flood Map"
     runModel: "Run Model"
+    infoButtonRain: "Total accumulated rainwater for a rainfall event. 
+                    The simulation routes the water instantaneously throughout the domain, 
+                    thus no explicit time period has to be specified."
+    infoButtonRainGeosphere: 
+                    "Select a date and time from the available rainfall forecasts to 
+                    run the model simulation. Rainfall is the accumulated total amount of 
+                    rainfall since the start of the forecast, based on GeoSphere's forecast 
+                    model AROME. Forecasts are available for 60 hours at hourly intervals."
   placeholders: 
     info1: "Enter username"
     info2: "Enter token"

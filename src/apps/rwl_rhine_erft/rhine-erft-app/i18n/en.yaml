@@ -21,7 +21,7 @@ messages:
     download:
       heading: "Download Layer"
       no_layers: "No layers available for download"
-      button: "Donwload Layer"
+      button: "Download Layer"
       loading: "Preparing download..."
       select_layer: "Select a layer to download"
       description: "Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."

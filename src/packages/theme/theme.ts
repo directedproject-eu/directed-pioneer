@@ -1,48 +1,55 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
-import { extendTheme } from "@chakra-ui/react";
+import { createSystem, defaultConfig, defineGlobalStyles } from "@chakra-ui/react";
 
-export const theme = extendTheme({
-    styles: {
-        global: {
-            // Target the specific button class from the Trails TOC package
-            ".toc-layer-item-details-button": {
-                // Hide the existing 3-dots SVG
-                "& svg": {
-                    display: "none !important",
-                },
-        
-                // Create the "i" icon using a pseudo-element
-                "& .chakra-button__icon::before": {
-                    content: '"i"',
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-          
-                    // Create a circle
-                    width: "18px",
-                    height: "18px",
-                    borderRadius: "50%",
-                    border: "1.5px solid currentColor",
-          
-                    // "i" icon typography
-                    fontFamily: "serif",
-                    fontWeight: "bold",
-                    fontStyle: "normal",
-                    fontSize: "12px",
-                    lineHeight: "1",
-          
-                    // Center the i
-                    paddingBottom: "1px", 
-                    transition: "transform 0.2s ease",
-                },
+const globalCss = defineGlobalStyles({
+    // Target ONLY the trigger button by checking for aria-haspopup,
+    // and ONLY when it is NOT open.
+    // ".toc-layer-item-details-button[aria-haspopup]:not([aria-expanded='true']):not([data-state='open'])": {
+    ".toc-layer-item-details-button[aria-haspopup]:not([data-part*='close']), .toc-layer-item-details-button:not(.chakra-popover__closeTrigger)": {
+        position: "relative",
+        display: "inline-flex", 
+        alignItems: "center",
+        justifyContent: "center", 
+        // Hide ONLY the direct child SVG (the 3-dots), protecting nested Popover SVGs
+        "& > svg": {
+            display: "none !important",
+        },
 
-                // Hover effect for new icon
-                "&:hover .chakra-button__icon::before": {
-                    transform: "scale(1.1)",
-                    backgroundColor: "rgba(0, 0, 0, 0.05)",
-                }
-            }
+        // Create the "i" icon using a pseudo-element
+        "&::before": {
+            content: '"i"',
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+  
+            // Create a circle
+            width: "18px",
+            height: "18px",
+            borderRadius: "50%",
+            border: "1.5px solid black",
+            color: "black",
+  
+            // "i" icon typography
+            fontFamily: "serif",
+            fontWeight: "bold",
+            fontStyle: "normal",
+            fontSize: "12px",
+            lineHeight: "1",
+  
+            // Center the i
+            paddingBottom: "1px", 
+            transition: "transform 0.2s ease",
+        },
+
+        // Hover effect for new icon
+        "&:hover::before": {
+            transform: "scale(1.1)",
+            backgroundColor: "rgba(0, 0, 0, 0.05)",
         }
     }
+});
+
+export const system = createSystem(defaultConfig, {
+    globalCss
 });
