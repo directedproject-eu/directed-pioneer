@@ -107,6 +107,17 @@ messages:
       keyword2: "coastal"
       description2: "flood model outputs. To view these layers in the map, make sure the checkmark next to the desired model is 
                       visible in the Operational Layers."
+  # layers: 
+  #   groundwater: 
+  #     meanChangeNearSurface2071-2100_desc: "Mean change in near-surface groundwater in the future for the period 2071-2100. Data via Dataforsyningen",
+  #     meanChangeNearSurface2071-2100_title: "Mean Change Near-Surface Groundwater 2071-2100",                               
+  #     meanChangeNearSurface2041-2070_desc: "Mean change in near-surface groundwater in the future for the period 2041-2070. 
+  #                                           Data via Dataforsyningen",
+  #     meanChangeNearSurface2041-2070_title: "Mean Change Near-Surface Groundwater 2041-2070",
+  #     maxNearSurfaceToday_title:  "Maximum Near-Surface Groundwater Today",
+  #     maxNearSurfaceToday_desc:  "Maximum near-surface groundwater today. Data via Dataforsyningen.",
+  #     minNearSurfaceToday_title: "Minimum Near-Surface Groundwater Today",
+  #     minNearSurfaceToday_desc:  "Minimum near-surface groundwater today. Data via Dataforsyningen.",                        
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"
