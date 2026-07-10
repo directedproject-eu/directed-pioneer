@@ -65,6 +65,7 @@ export class ForecastServiceImpl implements ForecastService {
                     id: "dmi_forecasts",
                     title: "DMI Forecasts",
                     visible: false,
+                    description: "Weather forecasts from the Danish Meteorological Institute (DMI).",
                     layers: [
                         new SimpleLayer({
                             id: "sea_forecast_mean_deviation",
