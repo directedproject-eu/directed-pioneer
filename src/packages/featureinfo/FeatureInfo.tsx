@@ -115,24 +115,52 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
     );
 
     const renderFeatureProperties = (data: Record<string, unknown>) => {
+        // 1. Parse out only value_0 for groundwater text/plain format
+        if (data.type === "single_value" && typeof data.value === "number") {
+            return (
+                <VStack align="start" gap={1}>
+                    <Text fontSize="sm" fontWeight="medium" color="gray.700">
+                        Value: {" "}
+                        <Text as="span" fontWeight="bold" color="blue.600">
+                            {round(data.value)} m
+                        </Text>
+                    </Text>
+                </VStack>
+            );
+        }
+        // 1. Handle text/plain info format as fallback
+        if (data.type === "text" && Array.isArray(data.lines)) {
+            return (
+                <VStack align="start" gap={1} bg="gray.50" p={2} borderRadius="md" border="1px solid" borderColor="gray.100">
+                    {(data.lines as string[]).map((line, i) => (
+                        <Text key={i} fontSize="xs" fontFamily="monospace" color="gray.700" whiteSpace="pre-wrap">
+                            {line}
+                        </Text>
+                    ))}
+                </VStack>
+            );
+        }
+    
+        // 2. Handle GeoJSON response
         if (data.type === "FeatureCollection") {
             const features = data?.features as Array<Record<string, unknown>> | undefined;
             if (!features || features.length === 0) {
                 return <Text fontSize="sm" color="gray.500" fontStyle="italic">No features available</Text>;
             }
-
+    
             const properties = features[0]?.properties as Record<string, unknown> | undefined;
             if (!properties) {
                 return <Text fontSize="sm" color="gray.500" fontStyle="italic">No layer properties available</Text>;
             }
-
+    
             return <RenderTableData properties={properties} />;
         }
-
+    
+        // 3. Handle key-value objects (raster values or vector properties)
         if (Object.keys(data).length > 0) {
             return <RenderTableData properties={data} />;
         }
-
+    
         return <Text fontSize="sm" color="gray.500" fontStyle="italic">No features available</Text>;
     };
 
