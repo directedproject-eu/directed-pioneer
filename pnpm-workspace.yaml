@@ -131,7 +131,8 @@ overrides:
   # https://github.com/advisories/GHSA-67mh-4wv8-2f99
   "esbuild@<0.25.0": ">=0.25.0"
   # https://github.com/advisories/GHSA-968p-4wvh-cqc8
-  "@babel/runtime": ">=7.26.10"
+  # "@babel/runtime": ">=7.26.10"
+  "@babel/runtime": "7.24.0"
   # https://github.com/advisories/GHSA-5j98-mcp5-4vw2
   "glob@>=10.x <= 11.0.3": "^11.1.0"
 
@@ -143,8 +144,8 @@ overrides:
   # See e.g. https://github.com/emotion-js/emotion/issues/2371
   "@emotion/react>@emotion/babel-plugin": "-"
   "@emotion/styled>@emotion/babel-plugin": "-"
-  "@emotion/react>@babel/runtime": "-"
-  "@emotion/styled>@babel/runtime": "-"
+  # "@emotion/react>@babel/runtime": "-"
+  # "@emotion/styled>@babel/runtime": "-"
 
   # Resolve duplicate packages
   "stylis@<4.3.5": ">= 4.3.5"
