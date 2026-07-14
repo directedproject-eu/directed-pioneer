@@ -144,8 +144,8 @@ overrides:
   # See e.g. https://github.com/emotion-js/emotion/issues/2371
   "@emotion/react>@emotion/babel-plugin": "-"
   "@emotion/styled>@emotion/babel-plugin": "-"
-  # "@emotion/react>@babel/runtime": "-"
-  # "@emotion/styled>@babel/runtime": "-"
+  "@emotion/react>@babel/runtime": "-"
+  "@emotion/styled>@babel/runtime": "-"
 
   # Resolve duplicate packages
   "stylis@<4.3.5": ">= 4.3.5"
