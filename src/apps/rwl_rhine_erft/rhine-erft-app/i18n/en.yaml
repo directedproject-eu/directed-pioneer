@@ -25,18 +25,38 @@ messages:
       loading: "Preparing download..."
       select_layer: "Select a layer to download"
       description: "Only those layers wich are activated in the 'Operational Layers' are available for download in the dropdown list."
+    slider:
+      time:
+        title: "HRB Eicherscheid – time series"
+        start: "Start:"
+        end: "End:"
+        selected_time: "Selected time:"
   layer_swipe:
     title: "Select Layers for Comparison"
     description: "Only layers which have been selected in the Operational Layers are viewable for comparison."
     left: "Select Left Layer"
     right: "Select Right Layer"
+  flood_depth:
+    layer_title: "HRB Eicherscheid – water depth (time series)"
+    layer_description: "Simulated flood scenario (base breach, HQ100) for the Eicherscheid flood retention basin. The displayed water depth [m] corresponds to the time selected via the time slider."
+  flow_velocity:
+    layer_title: "HRB Eicherscheid – flow velocity (time series)"
+    layer_description: "Simulated flood scenario (base breach, HQ100) for the Eicherscheid flood retention basin. The displayed flow velocity [m/s] corresponds to the time selected via the time slider."
+  flood_depth_max:
+    layer_title: "HRB Eicherscheid – maximum water depth"
+    layer_description: "Maximum simulated water depth [m] over the entire simulation period (base breach, HQ100) for the Eicherscheid flood retention basin."
+  flow_velocity_max:
+    layer_title: "HRB Eicherscheid – maximum flow velocity"
+    layer_description: "Maximum simulated flow velocity [m/s] over the entire simulation period (base breach, HQ100) for the Eicherscheid flood retention basin."
   legends:
     water_depth:
       extraordinary: "Heavy rain - water depth (extraordinary)"
       extreme: "Heavy rain - water depth (extreme)"
+      unit: "Water depth in meters (m)"
     flow_velocity:
       extraordinary: "Heavy rain - flow velocity (extraordinary)"
       extreme: "Heavy rain - flow velocity (extreme)"
+      unit: "Flow velocity in meters per second (m/s)"
     descriptions: 
       bkg: "The layer is provided by the Federal Agency for Cartography and Geodesy (BKG) and shows simulation results of potential heavy rainfall scenarios. More information can be found online via https://gdz.bkg.bund.de/index.php/default/wms-hinweiskarte-starkregengefahren-wms-starkregen.html."
       geobasis_nrw: "The layer is provided by the District Council Cologne. More information can be found online via https://www.bezreg-koeln.nrw.de/geobasis-nrw/webdienste/geodatendienste."

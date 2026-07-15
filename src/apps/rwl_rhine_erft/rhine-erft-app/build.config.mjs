@@ -8,6 +8,21 @@ export default defineBuildConfig({
     services: {
         MainMapProvider: {
             provides: ["map.MapConfigProvider"]
+        },
+        FloodDepthServiceImpl: {
+            provides: ["app.FloodDepthService"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
+        },
+        FlowVelocityServiceImpl: {
+            provides: ["app.FlowVelocityService"],
+            references: {
+                mapRegistry: "map.MapRegistry"
+            }
         }
+    },
+    ui: {
+        references: ["app.FloodDepthService", "app.FlowVelocityService"]
     }
 });

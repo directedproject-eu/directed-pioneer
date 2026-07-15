@@ -24,18 +24,38 @@ messages:
       loading: "Bereite Download vor..."
       select_layer: "Wähle einen Layer zum Herunterladen aus"
       description: "Nur die sichtbaren Layer in den Operational Layers sind über das Dropdown-Menü zum Herunterladen verfügbar."
+    slider:
+      time:
+        title: "HRB Eicherscheid – Zeitverlauf"
+        start: "Start:"
+        end: "Ende:"
+        selected_time: "Gewählter Zeitpunkt:"
   layer_swipe:
     title: "Layer zum Vergleichen auswählen"
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
     left: "Linken Layer auswählen"
     right: "Rechten Layer auswählen"
+  flood_depth:
+    layer_title: "HRB Eicherscheid – Wassertiefe (Zeitreihe)"
+    layer_description: "Simuliertes Überflutungsszenario (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid. Die dargestellte Wassertiefe [m] entspricht dem über den Zeitslider gewählten Zeitpunkt."
+  flow_velocity:
+    layer_title: "HRB Eicherscheid – Fließgeschwindigkeit (Zeitreihe)"
+    layer_description: "Simuliertes Überflutungsszenario (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid. Die dargestellte Fließgeschwindigkeit [m/s] entspricht dem über den Zeitslider gewählten Zeitpunkt."
+  flood_depth_max:
+    layer_title: "HRB Eicherscheid – maximale Wassertiefe"
+    layer_description: "Maximale simulierte Wassertiefe [m] über den gesamten Simulationszeitraum (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid."
+  flow_velocity_max:
+    layer_title: "HRB Eicherscheid – maximale Fließgeschwindigkeit"
+    layer_description: "Maximale simulierte Fließgeschwindigkeit [m/s] über den gesamten Simulationszeitraum (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid."
   legends:
     water_depth:
       extraordinary: "Starkregen - Wassertiefe (außergewöhnlich)"
       extreme: "Starkregen - Wassertiefe (extrem)"
+      unit: "Wassertiefe in Metern (m)"
     flow_velocity:
       extraordinary: "Starkregen - Fließgeschwindigkeit (außergewöhnlich)"
       extreme: "Starkregen - Fließgeschwindigkeit (extrem)"
+      unit: "Fließgeschwindigkeit in Metern pro Sekunde (m/s)"
     descriptions: 
       bkg: "Die Ebene wird vom Bundesamt für Kartografie und Geodäsie (BKG) bereitgestellt und zeigt Simulationsergebnisse für potenzielle Starkregenszenarien an. Weitere Informationen finden Sie online unter https://gdz.bkg.bund.de/index.php/default/wms-hinweiskarte-starkregengefahren-wms-starkregen.html."
       geobasis_nrw: "Die Ebene wird vom Bezirksrat Köln bereitgestellt. Weitere Informationen finden Sie online unter https://www.bezreg-koeln.nrw.de/geobasis-nrw/webdienste/geodatendienste."

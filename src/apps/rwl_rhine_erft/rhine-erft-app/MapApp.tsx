@@ -48,6 +48,7 @@ import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 import { system } from "theme";
+import { FloodTimeSlider } from "./controls/FloodTimeSlider";
 
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -178,6 +179,11 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
+                        {/* Zentrierter Timeslider, sichtbar nur wenn der Wassertiefe-Layer aktiv ist */}
+                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                            <FloodTimeSlider />
+                        </MapAnchor>
+
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
                             <Flex direction="column" gap={4}>
                                 <Box

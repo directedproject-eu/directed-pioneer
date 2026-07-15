@@ -2,23 +2,62 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
+import WebGLTileLayer from "ol/layer/WebGLTile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
+import { GeoTIFF } from "ol/source";
+import proj4 from "proj4";
+import { register } from "ol/proj/proj4";
+import { FunctionComponent } from "react";
+import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { WmsLegend } from "./Components/Legends/WMSLegend";
+import { WaterDepthLegend } from "./Components/Legends/WaterDepthLegend";
+import { FlowVelocityLegend } from "./Components/Legends/FlowVelocityLegend";
 import { ServiceOptions } from "@open-pioneer/runtime";
+import { buildColorGradient, GeoTiffColorStop } from "./config/geotiffStyle";
+import {
+    SOURCE_PROJECTION,
+    NODATA,
+    waterDepthColorMap,
+    buildMaxUrl as buildDepthMaxUrl
+} from "./config/floodDepth";
+import { flowVelocityColorMap, buildVelocityMaxUrl } from "./config/flowVelocity";
+
+// EPSG:25832 (UTM 32N) registrieren, damit die statischen GeoTIFF-Max-Layer korrekt
+// nach EPSG:3857 reprojiziert werden (idempotent; die GeoTIFF-Services tun dasselbe).
+proj4.defs(
+    SOURCE_PROJECTION,
+    "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+);
+register(proj4);
+
+// Service-Implementierungen, die in build.config.mjs registriert sind, müssen aus
+// dieser zentralen services.ts (re-)exportiert werden, damit der Pioneer-Build sie findet.
+export { FloodDepthServiceImpl } from "./services/FloodDepthService";
+export { FlowVelocityServiceImpl } from "./services/FlowVelocityService";
 
 export const MAP_ID = "main";
 
 
 export interface WmsLayerOptions {
     title: string;
-    layerName: string;      
-    propertyTitle: string;   
+    layerName: string;
+    propertyTitle: string;
     id: string;
     url: string;
-    description: string;     
+    description: string;
     sourceDomain: string;
-    visible?: boolean;      
+    visible?: boolean;
+}
+
+/** Konfiguration eines statischen GeoTIFF-Layers (z.B. maximale Wassertiefe/Geschwindigkeit). */
+export interface GeoTiffLayerConfig {
+    id: string;
+    title: string;
+    description: string;
+    url: string;
+    colorMap: GeoTiffColorStop[];
+    LegendComponent: FunctionComponent<LegendItemComponentProps>;
 }
 
 ///////////////////
@@ -83,6 +122,7 @@ export interface WmsLayerOptions {
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
     layerConfigs: WmsLayerOptions[];
+    geoTiffLayers: GeoTiffLayerConfig[];
 
     constructor(options: ServiceOptions) {
         const intl = options.intl;
@@ -171,6 +211,27 @@ export class MainMapProvider implements MapConfigProvider {
                 sourceDomain: "wms.nrw"
             }
         ];
+
+        // Statische GeoTIFF-Layer: Maximum über den gesamten Simulationszeitraum
+        // (unabhängig vom Timeslider). Teilen Farbskala und Legende mit der jeweiligen Zeitreihe.
+        this.geoTiffLayers = [
+            {
+                id: "flood_depth_max",
+                title: intl.formatMessage({ id: "flood_depth_max.layer_title" }),
+                description: intl.formatMessage({ id: "flood_depth_max.layer_description" }),
+                url: buildDepthMaxUrl(),
+                colorMap: waterDepthColorMap,
+                LegendComponent: WaterDepthLegend
+            },
+            {
+                id: "flow_velocity_max",
+                title: intl.formatMessage({ id: "flow_velocity_max.layer_title" }),
+                description: intl.formatMessage({ id: "flow_velocity_max.layer_description" }),
+                url: buildVelocityMaxUrl(),
+                colorMap: flowVelocityColorMap,
+                LegendComponent: FlowVelocityLegend
+            }
+        ];
     }
 
     createWmsLayer({title,layerName,propertyTitle,id,url,description,sourceDomain,visible = false}: WmsLayerOptions): SimpleLayer { 
@@ -201,6 +262,43 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
+    createGeoTiffLayer({
+        id,
+        title,
+        description,
+        url,
+        colorMap,
+        LegendComponent
+    }: GeoTiffLayerConfig): SimpleLayer {
+        return new SimpleLayer({
+            id: id,
+            title: title,
+            description: description,
+            visible: false,
+            isBaseLayer: false,
+            olLayer: new WebGLTileLayer({
+                source: new GeoTIFF({
+                    projection: SOURCE_PROJECTION,
+                    normalize: false,
+                    sources: [{ url: url, nodata: NODATA }]
+                }),
+                style: {
+                    color: buildColorGradient(colorMap)
+                },
+                properties: {
+                    title: title,
+                    id: id,
+                    type: "GeoTIFF"
+                }
+            }),
+            attributes: {
+                "legend": {
+                    Component: LegendComponent
+                }
+            }
+        });
+    }
+
     async getMapConfig(): Promise<MapConfig> {
         return {
             initialView: {
@@ -218,7 +316,8 @@ export class MainMapProvider implements MapConfigProvider {
                     }),
                     isBaseLayer: true
                 }),
-                ...this.layerConfigs.map(config => this.createWmsLayer(config))
+                ...this.layerConfigs.map(config => this.createWmsLayer(config)),
+                ...this.geoTiffLayers.map(config => this.createGeoTiffLayer(config))
             ]
         };
     }
