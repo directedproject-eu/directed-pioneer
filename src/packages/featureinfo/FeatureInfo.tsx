@@ -115,20 +115,25 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
     );
 
     const renderFeatureProperties = (data: Record<string, unknown>) => {
-        // 1. Parse out only value_0 for groundwater text/plain format
-        if (data.type === "single_value" && typeof data.value === "number") {
+        // 1. Handle custom WMS layer values (Saferplaces, Scalgo, RIM2D, 10yr flood depth)
+        if (data.type === "single_value" && (typeof data.value === "number" || typeof data.value === "string")) {
+            const displayValue = typeof data.value === "number" ? round(data.value) : data.value;
+            const label = (data.label as string) || "Value";
+            const unit = (data.unit as string) || "m";
+
             return (
                 <VStack align="start" gap={1}>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.700">
-                        Value: {" "}
+                    <Text fontSize="xs" color="gray.600" fontFamily="monospace" bg="gray.50" px={2} py={1} borderRadius="md" border="1px solid" borderColor="gray.200">
+                        {label}:{" "}
                         <Text as="span" fontWeight="bold" color="blue.600">
-                            {round(data.value)} m
+                            {displayValue} {unit}
                         </Text>
                     </Text>
                 </VStack>
             );
         }
-        // 1. Handle text/plain info format as fallback
+       
+        // 2. Handle text/plain info format as fallback
         if (data.type === "text" && Array.isArray(data.lines)) {
             return (
                 <VStack align="start" gap={1} bg="gray.50" p={2} borderRadius="md" border="1px solid" borderColor="gray.100">
@@ -141,7 +146,7 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
             );
         }
     
-        // 2. Handle GeoJSON response
+        // 3. Handle GeoJSON response
         if (data.type === "FeatureCollection") {
             const features = data?.features as Array<Record<string, unknown>> | undefined;
             if (!features || features.length === 0) {
@@ -155,8 +160,32 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
     
             return <RenderTableData properties={properties} />;
         }
+        // 4. Handle GeoTIFF response, keep "value" & no units as this is usually diverse  i.e. DMI, geosphere, etc. 
+        if (Object.keys(data).length === 1 && "value" in data && data.value !== null) {
+            return (
+                <Box mt={1}>
+                    <Text
+                        display="inline-block"
+                        fontSize="xs"
+                        color="gray.600"
+                        fontFamily="monospace"
+                        bg="gray.50"
+                        px={2}
+                        py={1}
+                        borderRadius="md"
+                        border="1px solid"
+                        borderColor="gray.200"
+                    >
+                        Value: {""}
+                        <Text as="span" fontWeight="bold" color="blue.600">
+                            {String(data.value)}
+                        </Text>
+                    </Text>
+                </Box>
+            );
+        }
     
-        // 3. Handle key-value objects (raster values or vector properties)
+        // 5. Handle key-value objects (raster values or vector properties)
         if (Object.keys(data).length > 0) {
             return <RenderTableData properties={data} />;
         }
@@ -194,6 +223,17 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
 
                             <Popover.Title p={4} pb={2}>
                                 <VStack align="start" gap={3}>
+                                    <Box>
+                                        <Text fontWeight="bold" fontSize="xs" textTransform="uppercase" letterSpacing="wide" color="gray.500" mb={1}>
+                                            Coordinates
+                                        </Text>
+                                        {/* Notice the updated formatCoordinate usage here */}
+                                        <Text fontSize="xs" color="gray.600" fontFamily="monospace" bg="gray.50" px={2} py={1} borderRadius="md" border="1px solid" borderColor="gray.200">
+                                            {mapCoordinate 
+                                                ? `Lat: ${formatCoordinate(mapCoordinate.lat, true)} | Lon: ${formatCoordinate(mapCoordinate.lon, false)}` 
+                                                : "Loading..."}
+                                        </Text>
+                                    </Box>
                                     <Box pr={6}>
                                         <Text fontWeight="bold" fontSize="xs" textTransform="uppercase" letterSpacing="wide" color="gray.500" mb={2}>
                                             Selected Layers
@@ -206,23 +246,22 @@ export function FeatureInfo({ mapModel, projection }: FeatureInfoProps) {
                                             ))}
                                         </Flex>
                                     </Box>
-
-                                    <Box>
-                                        <Text fontWeight="bold" fontSize="xs" textTransform="uppercase" letterSpacing="wide" color="gray.500" mb={1}>
-                                            Coordinates
-                                        </Text>
-                                        {/* Notice the updated formatCoordinate usage here */}
-                                        <Text fontSize="xs" color="gray.600" fontFamily="monospace" bg="gray.50" px={2} py={1} borderRadius="md" border="1px solid" borderColor="gray.200">
-                                            {mapCoordinate 
-                                                ? `Lat: ${formatCoordinate(mapCoordinate.lat, true)} | Lon: ${formatCoordinate(mapCoordinate.lon, false)}` 
-                                                : "Loading..."}
-                                        </Text>
-                                    </Box>
                                 </VStack>
                             </Popover.Title>
 
                             <Popover.Body p={0}>
                                 <VStack align="stretch" gap={0}>
+                                    <Text 
+                                        fontWeight="bold" 
+                                        fontSize="xs" 
+                                        textTransform="uppercase" 
+                                        letterSpacing="wide" 
+                                        color="gray.500" 
+                                        mt={2}
+                                        ml={4}
+                                    >
+                                            Layer Information
+                                    </Text>
                                     {featureInfo.features.map((f) => (
                                         <Box
                                             key={f.layerName}
