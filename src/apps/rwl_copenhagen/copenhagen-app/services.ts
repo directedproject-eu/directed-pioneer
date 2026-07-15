@@ -260,7 +260,7 @@ export class MainMapProvider implements MapConfigProvider {
                 osm,
                 municipalityGroup, 
                 groundWaterGroup,
-                skadesokonomi
+                // skadesokonomi
             ]
         };
     }
