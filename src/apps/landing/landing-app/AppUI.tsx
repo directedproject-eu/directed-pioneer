@@ -52,34 +52,33 @@ export function AppUI() {
                 <Box
                     position="absolute"
                     zIndex="1"
-                    top="50%" // You might need to adjust this (e.g. to 65% or 70%) if it covers your text
+                    top="60%" 
                     left="50%"
                     transform="translate(-50%, -50%)"
                     width="100%"
-                    maxW="3000px" // Significantly increased to allow for massive cards
+                    maxW="3000px" 
                     px={4}
                 >
-                    <Grid templateColumns={{ base: "1fr", md: "repeat(4, 1fr)" }} gap={12}>
+                    <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={1}>
                         
                         {/* Card 1 */}
                         <Box
                             as="a"
                             href={`${BASE_URL}apps/rwl_copenhagen/index.html`}
-                            backgroundImage="url('/real_world_labs_logos/DenmarkRWL.png')"
+                            backgroundImage="url('/real_world_labs_logos/DenmarkFinal.png')"
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
+                            height={180}
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            // p={3}
-                            // boxShadow="lg"
+                            ml={40}
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
-                                boxShadow: "2xl"
                             }}
                         >
                         </Box>
@@ -88,23 +87,22 @@ export function AppUI() {
                         <Box
                             as="a"
                             href="https://directed-rwl2.saferplaces.co/"
-                            backgroundImage="url('/real_world_labs_logos/ERRWL.png')"
+                            backgroundImage="url('/real_world_labs_logos/ERFinal.png')"
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
+                            height={180}
                             target="_blank"
                             rel="noopener noreferrer"
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            // p={3}
-                            // boxShadow="lg"
+                            mr={40}
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
-                                boxShadow: "2xl"
                             }}
                         >
                         </Box>
@@ -113,21 +111,21 @@ export function AppUI() {
                         <Box
                             as="a"
                             href={`${BASE_URL}apps/rwl_danube/index.html`}
-                            backgroundImage="url('/real_world_labs_logos/DanubeRWL.png')"
+                            backgroundImage="url('/real_world_labs_logos/DanubeFinal.png')"
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
+                            height={180}
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            // p={3}
-                            // boxShadow="lg"
+                            ml={40}
+                            mt={10}
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
-                                boxShadow: "2xl"
                             }}
                         >
                         </Box>
@@ -136,32 +134,24 @@ export function AppUI() {
                         <Box
                             as="a"
                             href={`${BASE_URL}apps/rwl_rhine_erft/index.html`}
-                            backgroundImage="url('/real_world_labs_logos/RhineErftRWL.png')"
+                            backgroundImage="url('/real_world_labs_logos/RhineErftFinal.png')"
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
+                            height={180}
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            // p={3}
-                            // boxShadow="lg"
+                            mr={40}
+                            mt={10}
                             rounded={6}
                             transition="all 0.3s ease"
                             _hover={{ 
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
-                                boxShadow: "2xl"
                             }}
                         >
-                            <Box
-                                w="100%"
-                                h="20vh"
-                               
-                            />
-                                <Box pt={12} pb={20}>
-                            </Box>
                         </Box>
-
                     </Grid>
                 </Box>
             </Flex>
