@@ -61,19 +61,18 @@ export function fetchFeatureInfo(
         // Check if the layer endpoint needs text/plain format
         const sourceUrls = source.getUrls ? source.getUrls() : [];
         const textFormatEndpoints = ["https://api.dataforsyningen.dk/wms"];
-        const requiresPlainText = sourceUrls?.some(url =>
-            url && textFormatEndpoints.some(endpoint => url.includes(endpoint))
+        const requiresPlainText = sourceUrls?.some((url) =>
+            url && textFormatEndpoints.some((endpoint) => url.includes(endpoint))
         );
     
         const infoFormat = requiresPlainText ? "text/plain" : "application/json";
     
-        // Clear out any properties by providing explicit overrides to getFeatureInfoUrl
         const url = source.getFeatureInfoUrl(
             coordinate, 
             viewResolution, 
             projection, 
             {
-                INFO_FORMAT: infoFormat // force OL to build the exact format string for text/plain 
+                INFO_FORMAT: infoFormat 
             }
         );
     
@@ -86,7 +85,7 @@ export function fetchFeatureInfo(
             })
             .then((rawData) => {
                 let finalizedData: Record<string, unknown> = {};
-            
+    
                 if (infoFormat === "text/plain" && typeof rawData === "string") {
                     // --- Plain text for groundwater layers in Copenhagen ---
                     const match = rawData.match(/value_0\s*=\s*['"]?(-?\d+(\.\d+)?)['"]?/);
@@ -98,71 +97,102 @@ export function fetchFeatureInfo(
                             unit: "m"
                         };
                     } else {
-                        const lines = rawData.split(/\r?\n/).filter(line => line.trim() !== "");
+                        const lines = rawData.split(/\r?\n/).filter((line) => line.trim() !== "");
                         finalizedData = { type: "text", lines: lines };
                     }
                 } else {
                     // --- JSON (Saferplaces, Scalgo, RIM2D) ---
-                    // const json = rawData as Record<string, unknown>;
                     const json = rawData as unknown as WmsFeatureCollection;
-
-                    if (!json?.features || json.features.length === 0){
+    
+                    if (!json?.features || json.features.length === 0) {
                         finalizedData = {}; 
                     } else {
-                         // Extract the first feature's properties
-                            const features = json?.features;
-                            const properties = features?.[0]?.properties; 
-                    
-                            if (properties) {
-                                // Saferplaces / SCALGO Copenhagen
-                                if (properties.GRAY_INDEX !== undefined) {
+                        const features = json?.features;
+                        const properties = features?.[0]?.properties; 
+    
+                        if (properties) {
+                            // Saferplaces / SCALGO / Skadesokonomi
+                            if (properties.GRAY_INDEX !== undefined) {
+                                const rawVal = properties.GRAY_INDEX; 
+                                if (rawVal === null || rawVal === undefined || Number.isNaN(rawVal)){
+                                    finalizedData= {}; // To trigger "No Features Available" in FeatureInfo
+                                } else {
+                                    // Extract WMS layer param to filter featureinfo labels/units (i.e. 'rwl1_saferplaces_coastal_roskilde_170cm')
+                                    const wmsParams = source.getParams ? source.getParams() : {};
+                                    const wmsLayerParam = String(wmsParams.LAYERS || wmsParams.QUERY_LAYERS || "").toLowerCase();
+                                    
+                                    // Check layer.get("id") and layer.get("title") as fallback
+                                    const layerId = String(layer.get("id") || "").toLowerCase();
+                                    const layerTitle = String(layer.get("title") || "").toLowerCase();
+        
+                                    // Combine the string to match no matter the identifier 
+                                    const targetSearchString = `${wmsLayerParam} ${layerId} ${layerTitle}`;
+        
+                                    let label = "Water Depth";
+                                    let unit = "m";
+        
+                                    // SaferPlaces Coastal (cm)
+                                    if (targetSearchString.includes("rwl1_saferplaces_coastal")) {
+                                        label = "Water Depth";
+                                        unit = "cm";
+                                    } 
+                                    // SaferPlaces Pluvial (m)
+                                    else if (targetSearchString.includes("rwl1_saferplaces_pluvial")) {
+                                        label = "Water Depth";
+                                        unit = "m";
+                                    } 
+                                    // Damage Cost/Skadesokonomi (DKK)
+                                    else if (targetSearchString.includes("rwl1_skadesokonomi")) {
+                                        label = "Mean Flood Damage";
+                                        unit = "DKK";
+                                    }
+        
                                     finalizedData = {
                                         type: "single_value",
                                         value: properties.GRAY_INDEX as number,
-                                        label: "Water Depth", 
-                                        unit: "m"
-                                    };
-                                } 
-                                // RIM2D Copenhagen 
-                                else if (properties.GDAL_Band_Number_1 !== undefined) {
-                                    finalizedData = {
-                                        type: "single_value",
-                                        value: properties.GDAL_Band_Number_1 as number,
-                                        label: "Water Depth", 
-                                        unit: "m"
+                                        label: label, 
+                                        unit: unit
                                     };
                                 }
-                                // 10 year flood-depth Danube 
-                                else if (properties.b_flddph !== undefined) {
-                                    const riverName = properties.a_nameText ? String(properties.a_nameText).trim() : "";
-                                    const depthLabel = riverName ? `Flood Depth in River ${riverName}` : "Flood Depth";
-                                
-                                    finalizedData = {
-                                        type: "single_value",
-                                        value: properties.b_flddph as number,
-                                        label: depthLabel,
-                                        unit: "m"
-                                    };
-                                }
-                                // Fallback if layer has properties, but are not specific model indexes
-                                else {
-                                    finalizedData = json as unknown as Record<string, unknown>;
-                                }
-                            } else {
-                                // Fallback if response has no standard properties dictionary
+                            } 
+                            // RIM2D Copenhagen 
+                            else if (properties.GDAL_Band_Number_1 !== undefined) {
+                                finalizedData = {
+                                    type: "single_value",
+                                    value: properties.GDAL_Band_Number_1 as number,
+                                    label: "Water Depth", 
+                                    unit: "m"
+                                };
+                            }
+                            // 10 year flood-depth Danube 
+                            else if (properties.b_flddph !== undefined) {
+                                const riverName = properties.a_nameText ? String(properties.a_nameText).trim() : "";
+                                const depthLabel = riverName ? `Flood Depth in River ${riverName}` : "Flood Depth";
+    
+                                finalizedData = {
+                                    type: "single_value",
+                                    value: properties.b_flddph as number,
+                                    label: depthLabel,
+                                    unit: "m"
+                                };
+                            }
+                            // Fallback if layer has properties, but are not specific model indexes
+                            else {
                                 finalizedData = json as unknown as Record<string, unknown>;
                             }
+                        } else {
+                            finalizedData = json as unknown as Record<string, unknown>;
                         }
                     }
-                    
-                   
-            
+                }
+    
                 return {
                     layerName: layer.get("title") || layer.get("id"),
                     data: finalizedData
                 };
             });
-        });
+    });
+
 
     // 2. GeoTIFF pixel value Promises
     const visibleGeoTIFFLayers = allLayers.filter(
