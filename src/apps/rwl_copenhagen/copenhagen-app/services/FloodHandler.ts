@@ -133,7 +133,7 @@ export class FloodHandlerImpl implements FloodHandler {
                 allLocations.forEach((locationId) => {
                     const subLayerId = `${modelKey}-${locationId}`;
                     const capitalizedLocation = locationId.charAt(0).toUpperCase() + locationId.slice(1); // Add caps
-                    const modelTitle = layer_info[modelKey]["title"].replace(" Model", ""); // Trim "model" out of layer title
+                    const modelTitle = layer_info[modelKey]["title"]; 
                     const layer = new TileLayer({
                         properties: { 
                             title: `${capitalizedLocation} ${modelTitle}`,

@@ -7,6 +7,24 @@ import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import VectorLayer from "ol/layer/Vector"; // Added import for Vector Layers
 
+
+interface WmsFeature {
+    type: "Feature";
+    id?: string | number;
+    geometry?: Record<string, unknown> | null;
+    properties?: Record<string, unknown>;
+}
+
+interface WmsFeatureCollection {
+    type: "FeatureCollection"; 
+    features?: WmsFeature[]; 
+    totalFeatures?: string | number; 
+    numberReturned?: number; 
+    timeStamp?: string; 
+    crs?: Record<string, unknown> | null;
+}
+
+
 //fetch feature info for all visible WMS layers at clicked map coord
 export function fetchFeatureInfo(
     mapModel: MapModel,
@@ -36,23 +54,145 @@ export function fetchFeatureInfo(
             l.getSource() instanceof TileWMS
     ) as TileLayer<TileWMS>[];
 
-    // WMS-FeatureInfo Promises
     const wmsFetches = visibleWMSTileLayers.map((layer) => {
         const source = layer.getSource();
-        const url = source?.getFeatureInfoUrl(coordinate, viewResolution, projection, {
-            INFO_FORMAT: "application/json"
-        });
-
+        if (!source) return Promise.resolve(null);
+    
+        // Check if the layer endpoint needs text/plain format
+        const sourceUrls = source.getUrls ? source.getUrls() : [];
+        const textFormatEndpoints = ["https://api.dataforsyningen.dk/wms"];
+        const requiresPlainText = sourceUrls?.some((url) =>
+            url && textFormatEndpoints.some((endpoint) => url.includes(endpoint))
+        );
+    
+        const infoFormat = requiresPlainText ? "text/plain" : "application/json";
+    
+        const url = source.getFeatureInfoUrl(
+            coordinate, 
+            viewResolution, 
+            projection, 
+            {
+                INFO_FORMAT: infoFormat 
+            }
+        );
+    
         if (!url) return Promise.resolve(null);
-
+    
         return fetch(url)
-            .then((res) => res.json())
-            .then((data) => ({
-                layerName: layer.get("title") || layer.get("id"),
-                data
-            }))
-            .catch(() => null);
+            .then((res) => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return infoFormat === "text/plain" ? res.text() : res.json();
+            })
+            .then((rawData) => {
+                let finalizedData: Record<string, unknown> = {};
+    
+                if (infoFormat === "text/plain" && typeof rawData === "string") {
+                    // --- Plain text for groundwater layers in Copenhagen ---
+                    const match = rawData.match(/value_0\s*=\s*['"]?(-?\d+(\.\d+)?)['"]?/);
+                    if (match && match[1]) {
+                        finalizedData = { 
+                            type: "single_value", 
+                            value: parseFloat(match[1]),
+                            label: "Groundwater Level", 
+                            unit: "m"
+                        };
+                    } else {
+                        const lines = rawData.split(/\r?\n/).filter((line) => line.trim() !== "");
+                        finalizedData = { type: "text", lines: lines };
+                    }
+                } else {
+                    // --- JSON (Saferplaces, Scalgo, RIM2D) ---
+                    const json = rawData as unknown as WmsFeatureCollection;
+    
+                    if (!json?.features || json.features.length === 0) {
+                        finalizedData = {}; 
+                    } else {
+                        const features = json?.features;
+                        const properties = features?.[0]?.properties; 
+    
+                        if (properties) {
+                            // Saferplaces / SCALGO / Skadesokonomi
+                            if (properties.GRAY_INDEX !== undefined) {
+                                const rawVal = properties.GRAY_INDEX; 
+                                if (rawVal === null || rawVal === undefined || Number.isNaN(rawVal)){
+                                    finalizedData= {}; // To trigger "No Features Available" in FeatureInfo
+                                } else {
+                                    // Extract WMS layer param to filter featureinfo labels/units (i.e. 'rwl1_saferplaces_coastal_roskilde_170cm')
+                                    const wmsParams = source.getParams ? source.getParams() : {};
+                                    const wmsLayerParam = String(wmsParams.LAYERS || wmsParams.QUERY_LAYERS || "").toLowerCase();
+                                    
+                                    // Check layer.get("id") and layer.get("title") as fallback
+                                    const layerId = String(layer.get("id") || "").toLowerCase();
+                                    const layerTitle = String(layer.get("title") || "").toLowerCase();
+        
+                                    // Combine the string to match no matter the identifier 
+                                    const targetSearchString = `${wmsLayerParam} ${layerId} ${layerTitle}`;
+        
+                                    let label = "Water Depth";
+                                    let unit = "m";
+        
+                                    // SaferPlaces Coastal (cm)
+                                    if (targetSearchString.includes("rwl1_saferplaces_coastal")) {
+                                        label = "Water Depth";
+                                        unit = "cm";
+                                    } 
+                                    // SaferPlaces Pluvial (m)
+                                    else if (targetSearchString.includes("rwl1_saferplaces_pluvial")) {
+                                        label = "Water Depth";
+                                        unit = "m";
+                                    } 
+                                    // Damage Cost/Skadesokonomi (DKK)
+                                    else if (targetSearchString.includes("rwl1_skadesokonomi")) {
+                                        label = "Mean Flood Damage";
+                                        unit = "DKK";
+                                    }
+        
+                                    finalizedData = {
+                                        type: "single_value",
+                                        value: properties.GRAY_INDEX as number,
+                                        label: label, 
+                                        unit: unit
+                                    };
+                                }
+                            } 
+                            // RIM2D Copenhagen 
+                            else if (properties.GDAL_Band_Number_1 !== undefined) {
+                                finalizedData = {
+                                    type: "single_value",
+                                    value: properties.GDAL_Band_Number_1 as number,
+                                    label: "Water Depth", 
+                                    unit: "m"
+                                };
+                            }
+                            // 10 year flood-depth Danube 
+                            else if (properties.b_flddph !== undefined) {
+                                const riverName = properties.a_nameText ? String(properties.a_nameText).trim() : "";
+                                const depthLabel = riverName ? `Flood Depth in River ${riverName}` : "Flood Depth";
+    
+                                finalizedData = {
+                                    type: "single_value",
+                                    value: properties.b_flddph as number,
+                                    label: depthLabel,
+                                    unit: "m"
+                                };
+                            }
+                            // Fallback if layer has properties, but are not specific model indexes
+                            else {
+                                finalizedData = json as unknown as Record<string, unknown>;
+                            }
+                        } else {
+                            finalizedData = json as unknown as Record<string, unknown>;
+                        }
+                    }
+                }
+    
+                return {
+                    layerName: layer.get("title") || layer.get("id"),
+                    data: finalizedData
+                };
+            });
     });
+
 
     // 2. GeoTIFF pixel value Promises
     const visibleGeoTIFFLayers = allLayers.filter(
@@ -63,6 +203,7 @@ export function fetchFeatureInfo(
         layer.changed(); //ensure latest data
         try {
             const valueAtPixel = currentPixel ? layer.getData(currentPixel) : null;
+            // let parsedValue: number | null = null;
             let valueAsString: number | string | null = null;
 
             if (
@@ -71,10 +212,17 @@ export function fetchFeatureInfo(
                 valueAtPixel instanceof Uint8ClampedArray
             ) {
                 valueAsString = valueAtPixel[0]?.toFixed(2);
+                // parsedValue = parsedFloat(valueAtPixel[0]?.toFixed(2))
             }
 
             return {
                 layerName: layer.get("title") || layer.get("id"),
+                // data: {
+                //     type: "single_value",
+                //     value: parsedValue,
+                //     label: "Value", 
+                //     unit: "m"           
+                // }
                 data: { value: valueAsString }
             };
             

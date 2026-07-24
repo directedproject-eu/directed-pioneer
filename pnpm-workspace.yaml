@@ -6,9 +6,9 @@ packages:
 # Shared version expressions (yaml anchors).
 # This is a yaml feature and is not interpreted by pnpm directly.
 __versions:
-  - &react_version ^19.2.5
-  - &core_packages_version ^4.5.0
-  - &ol_base_packages_version ^1.2.0
+  - &react_version ^19.2.6
+  - &core_packages_version ^4.6.0
+  - &ol_base_packages_version ^1.3.0
 
 # https://pnpm.io/catalogs
 catalog:
@@ -51,14 +51,15 @@ catalog:
 
   # Other dependencies
   "@chakra-ui/react": ^3.35.0
-  "@conterra/reactivity-core": ^0.8.0
+  "@conterra/reactivity-core": ^0.8.6
+  "@conterra/reactivity-events": ^0.8.6
   "@emotion/cache": ^11.14.0
   "@emotion/react": ^11.14.0
   "@emotion/styled": ^11.14.1
-  "@formatjs/intl": ^3.1.8
+  "@formatjs/intl": ^4.1.13
   chroma-js: ^3.1.2
   framer-motion: ^12.23.24
-  ol: ^10.7.0
+  ol: ^10.9.0
   ol-ext: ^4.0.36
   react-dom: *react_version
   react-icons: ^5.6.0
@@ -66,77 +67,78 @@ catalog:
   react: *react_version
 
   # Devtools
-  "@open-pioneer/build-package-cli": ^3.0.7
-  "@open-pioneer/build-support": ^3.0.5
-  "@open-pioneer/check-pnpm-duplicates": ^0.2.6
-  "@open-pioneer/vite-plugin-pioneer": ^5.1.0
+  "@open-pioneer/build-package-cli": ^3.1.0
+  "@open-pioneer/build-support": ^3.1.0
+  "@open-pioneer/check-pnpm-duplicates": ^0.3.2
+  "@open-pioneer/vite-plugin-pioneer": ^6.0.0
   "@testing-library/dom": ^10.4.1
   "@testing-library/jest-dom": ^6.9.1
-  "@testing-library/react": ^16.3.0
+  "@testing-library/react": ^16.3.2
   "@testing-library/user-event": ^14.6.1
   "@types/js-yaml": ^4.0.9
-  "@types/node": ^20.19.22
+  "@types/node": ^20.19.41
   "@types/react-dom": ^19.2.3
-  "@types/react": ^19.2.8
+  "@types/react": ^19.2.17
   "@typescript-eslint/eslint-plugin": ^8.47.0
-  "@typescript-eslint/parser": ^8.53.0
+  "@typescript-eslint/parser": ^8.61.1
   "@vitejs/plugin-react-swc": ^4.2.0
-  "typescript-eslint": ^8.53.0
-  eslint: ^9.39.2
+  "typescript-eslint": ^8.61.1
+  eslint: ^9.39.4
   eslint-config-prettier: ^10.1.8
-  eslint-import-resolver-typescript: ^4.4.4
-  eslint-plugin-headers: ^1.3.3
+  eslint-import-resolver-typescript: ^4.4.5
+  eslint-plugin-headers: ^1.3.4
   eslint-plugin-import: ^2.32.0
   eslint-plugin-jsx-a11y: ^6.10.2
   eslint-plugin-react: ^7.37.5
-  eslint-plugin-react-hooks: ^5.2.0
-  eslint-plugin-unused-imports: ^4.3.0
+  eslint-plugin-react-hooks: ^7.1.1
+  eslint-plugin-unused-imports: ^4.4.1
   fast-glob: ^3.3.3
-  handlebars: ^4.7.8
-  happy-dom: ^20.3.1
+  handlebars: ^4.7.9
+  happy-dom: ^20.10.6
   husky: ^9.1.7
-  js-yaml: ^4.1.1
-  jsdom: ^27.4.0
-  lint-staged: ^16.2.7
-  prettier: ^3.8.0
-  rimraf: ^6.1.2
-  sass: ^1.97.2
-  tsx: ^4.21.0
-  typedoc: ^0.28.17
-  typescript: ^5.9.3
-  vite: ^7.3.1
+  js-yaml: ^4.2.0
+  jsdom: ^29.1.1
+  lint-staged: ^17.0.7
+  prettier: ^3.8.3
+  rimraf: ^6.1.3
+  sass: ^1.101.0
+  tsx: ^4.22.4
+  typedoc: ^0.28.19
+  typescript: ^6.0.3
+  vite: ^8.0.16
   vite-plugin-eslint: ^1.8.1
-  vitest: ^4.0.17
+  vitest: ^4.1.9
 
 overrides:
   "entities@4.5.0": "^6.0.1"
-  # https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
-  "semver@<7.5.2": ">=7.5.2"
-  # https://github.com/advisories/GHSA-72xf-g2v4-qvf3
-  "tough-cookie@<4.1.3": ">=4.1.3"
-  # https://github.com/advisories/GHSA-grv7-fg5c-xmjg
-  "braces@<3.0.3": ">=3.0.3"
-  # https://github.com/advisories/GHSA-3h5v-q93c-6h6q
-  "ws@>=8.0.0 <8.17.1": ">=8.17.1"
-  # https://github.com/advisories/GHSA-3q56-9cc2-46j4
-  "fast-loops@<1.1.4": ">=1.1.4"
-  # https://github.com/advisories/GHSA-952p-6rrq-rcjv
-  "micromatch@<4.0.8": ">=4.0.8"
-  # https://github.com/advisories/GHSA-gcx4-mw62-g8wm
-  "vite-plugin-eslint>rollup": ">=3.29.5"
-  # https://github.com/advisories/GHSA-3xgq-45jj-v275
-  "cross-spawn@<7.0.5": ">=7.0.5"
-  # https://github.com/advisories/GHSA-mwcw-c2x4-8c55
-  "nanoid@<3.3.8": "^3.3.8"
-  # https://github.com/advisories/GHSA-67mh-4wv8-2f99
-  "esbuild@<0.25.0": ">=0.25.0"
-  # https://github.com/advisories/GHSA-968p-4wvh-cqc8
-  "@babel/runtime": ">=7.26.10"
-  # https://github.com/advisories/GHSA-5j98-mcp5-4vw2
-  "glob@>=10.x <= 11.0.3": "^11.1.0"
+  # # https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
+  # "semver@<7.5.2": ">=7.5.2"
+  # # https://github.com/advisories/GHSA-72xf-g2v4-qvf3
+  # "tough-cookie@<4.1.3": ">=4.1.3"
+  # # https://github.com/advisories/GHSA-grv7-fg5c-xmjg
+  # "braces@<3.0.3": ">=3.0.3"
+  # # https://github.com/advisories/GHSA-3h5v-q93c-6h6q
+  # "ws@>=8.0.0 <8.17.1": ">=8.17.1"
+  # # https://github.com/advisories/GHSA-3q56-9cc2-46j4
+  # "fast-loops@<1.1.4": ">=1.1.4"
+  # # https://github.com/advisories/GHSA-952p-6rrq-rcjv
+  # "micromatch@<4.0.8": ">=4.0.8"
+  # # https://github.com/advisories/GHSA-gcx4-mw62-g8wm
+  # "vite-plugin-eslint>rollup": ">=3.29.5"
+  # # https://github.com/advisories/GHSA-3xgq-45jj-v275
+  # "cross-spawn@<7.0.5": ">=7.0.5"
+  # # https://github.com/advisories/GHSA-mwcw-c2x4-8c55
+  # "nanoid@<3.3.8": "^3.3.8"
+  # # https://github.com/advisories/GHSA-67mh-4wv8-2f99
+  # "esbuild@<0.25.0": ">=0.25.0"
+  # # https://github.com/advisories/GHSA-968p-4wvh-cqc8
+  # # "@babel/runtime": ">=7.26.10"
+  # "@babel/runtime": "7.24.0"
+  # # https://github.com/advisories/GHSA-5j98-mcp5-4vw2
+  # "glob@>=10.x <= 11.0.3": "^11.1.0"
 
-  # https://github.com/advisories/GHSA-7h2j-956f-4vf2
-  "@isaacs/brace-expansion@<=5.0.0": "^5.0.1"
+  # # https://github.com/advisories/GHSA-7h2j-956f-4vf2
+  # "@isaacs/brace-expansion@<=5.0.0": "^5.0.1"
 
   # We don't actually use the babel plugin.
   # The babel runtime is also not used as a production dependency.

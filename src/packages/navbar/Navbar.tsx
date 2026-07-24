@@ -140,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                 </Flex>
                 <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }} align="center">
                     <Image
-                        src="/Directed-Project-Logo-Blue-White_Background.png"
+                        src="/data-fabric-logo4.png"
                         alt="Directed Project Data Fabric"
                         height="60px"
                     />
