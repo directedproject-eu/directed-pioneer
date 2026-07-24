@@ -165,6 +165,7 @@ messages:
       Ziel ist die Unterstützung Interessenvertreters bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel.
       Bitte beachten Sie, dass die App noch in der Entwicklung ist."
   zoom_buttons:
+    title: "Zoom auf"
     vienna: "Zoom auf Wien"
     zala: "Zoom auf Zala"
   ariaLabel:

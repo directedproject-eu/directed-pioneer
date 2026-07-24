@@ -4,7 +4,6 @@ import {
     Box,
     Button,
     Flex,
-    VStack,
     Text,
     Spacer,
     Link,
@@ -25,7 +24,7 @@ import { MAP_ID } from "./services";
 import { useId, useMemo, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
-import { PiRulerLight, PiDownload } from "react-icons/pi";
+import { PiRulerLight, PiDownload, PiCaretLeft, PiCaretRight } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Legend } from "@open-pioneer/legend";
 import { Navbar } from "navbar";
@@ -54,6 +53,7 @@ export function MapApp() {
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
     const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider 
     const [windowClosed, setWindowClosed] = useState<boolean>(false); //for testing window component
+    const [zoomMenuOpen, setZoomMenuOpen] = useState<boolean>(false);
 
     useEffect(() => {
         document.title = intl.formatMessage({ id: "heading" });
@@ -102,9 +102,10 @@ export function MapApp() {
                             </MapAnchor>
 
                             <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                                <FloodSelector />
-                                {/*add Table of Contents (Toc) and legend */}
+                                <FloodSelector setActiveKeyword={setActiveKeyword} />
+                                <style>{`@media (max-height: 768px) { .cph-toc-box { max-height: calc(100vh - 420px) !important; } }`}</style>
                                 <Box
+                                    className="cph-toc-box"
                                     display="flex"
                                     flexDirection="column"
                                     backgroundColor="white"
@@ -115,7 +116,8 @@ export function MapApp() {
                                     role="dialog"
                                     // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
                                     maxHeight={500}
-                                    overflow="auto"
+                                    overflowY="auto"
+                                    overflowX="hidden"
                                     paddingTop={4}
                                     paddingLeft={3}
                                 >
@@ -179,39 +181,65 @@ export function MapApp() {
                                 </Box>
                             </MapAnchor>
                             {/* zoom to municipalities */}
-                            <MapAnchor position="bottom-left" horizontalGap={15} verticalGap={60}>
-                                <VStack align="stretch">
+                            <MapAnchor position="bottom-left" horizontalGap={5} verticalGap={5}>
+                                <Flex direction="row" align="center" gap={2} flexWrap="wrap">
                                     <Button
                                         size="sm"
-                                        onClick={() => zoomService.zoomToEgedal(map!)}
+                                        flexShrink={0}
+                                        onClick={() => setZoomMenuOpen(!zoomMenuOpen)}
+                                        aria-expanded={zoomMenuOpen}
                                     >
-                                        {intl.formatMessage({ id: "zoom_buttons.egedal" })}
+                                        {zoomMenuOpen ? (
+                                            <PiCaretLeft />
+                                        ) : (
+                                            <>
+                                                {intl.formatMessage({ id: "zoom_buttons.title" })}
+                                                <PiCaretRight />
+                                            </>
+                                        )}
                                     </Button>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => zoomService.zoomToFrederikssund(map!)}
-                                    >
-                                        {intl.formatMessage({ id: "zoom_buttons.frederikssund" })}
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => zoomService.zoomToHalsnaes(map!)}
-                                    >
-                                        {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => zoomService.zoomToLejre(map!)}
-                                    >
-                                        {intl.formatMessage({ id: "zoom_buttons.lejre" })}
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => zoomService.zoomToRoskilde(map!)}
-                                    >
-                                        {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
-                                    </Button>
-                                </VStack>
+                                    {zoomMenuOpen && (
+                                        <>
+                                            <Button
+                                                size="sm"
+                                                flexShrink={0}
+                                                onClick={() => zoomService.zoomToEgedal(map!)}
+                                            >
+                                                {intl.formatMessage({ id: "zoom_buttons.egedal" })}
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                flexShrink={0}
+                                                onClick={() => zoomService.zoomToFrederikssund(map!)}
+                                            >
+                                                {intl.formatMessage({
+                                                    id: "zoom_buttons.frederikssund"
+                                                })}
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                flexShrink={0}
+                                                onClick={() => zoomService.zoomToHalsnaes(map!)}
+                                            >
+                                                {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                flexShrink={0}
+                                                onClick={() => zoomService.zoomToLejre(map!)}
+                                            >
+                                                {intl.formatMessage({ id: "zoom_buttons.lejre" })}
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                flexShrink={0}
+                                                onClick={() => zoomService.zoomToRoskilde(map!)}
+                                            >
+                                                {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
+                                            </Button>
+                                        </>
+                                    )}
+                                </Flex>
 
                                 {map && (
                                     <FeatureInfo
@@ -223,13 +251,14 @@ export function MapApp() {
                             </MapAnchor>
 
                             {/*legend*/}
-                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
+                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                                 <Flex direction="column" gap={4}>
                                     {activeKeyword && (
-                                        <Flex>
+                                        <Flex alignSelf="flex-end">
                                             <TaxonomyInfo
                                                 keyword={activeKeyword}
                                                 onClose={() => setActiveKeyword(null)}
+                                                maxWidth="calc(30vw - 20px)"
                                             />
                                         </Flex>
                                     )}
@@ -245,7 +274,7 @@ export function MapApp() {
                                 </Flex>
                             </MapAnchor>
 
-                            <MapAnchor position="bottom-right" horizontalGap={10} verticalGap={60}>
+                            <MapAnchor position="bottom-right" horizontalGap={5} verticalGap={5}>
                                 <Flex
                                     // role="bottom-right"
                                     aria-label={intl.formatMessage({ id: "ariaLabel.bottomRight" })}

@@ -1,27 +1,28 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { useState } from "react";
 import { useService } from "open-pioneer:react-hooks";
-import { MapAnchor, useMapModel } from "@open-pioneer/map";
+import { useMapModel } from "@open-pioneer/map";
 import { useIntl } from "open-pioneer:react-hooks";
 import { MAP_ID } from "../services";
 import { FloodHandler } from "../services/FloodHandler";
 import Selector from "./Selector";
 import {
-    HoverCard, 
-    Box, 
-    Flex, 
-    Heading, 
-    Button, 
+    HoverCard,
+    Box,
+    Flex,
+    Heading,
+    Button,
     Link
 } from "@chakra-ui/react";
-import { TaxonomyInfo } from "taxonomy";
 
-export function FloodSelector() {
+interface FloodSelectorProps {
+    setActiveKeyword: (keyword: string | null) => void;
+}
+
+export function FloodSelector({ setActiveKeyword }: FloodSelectorProps) {
     const intl = useIntl();
     const { map } = useMapModel(MAP_ID);
-    const [activeKeyword, setActiveKeyword] = useState<string | null>(null); // Taxonomy
     const prepSrvc = useService<FloodHandler>("app.FloodHandler");
 
     const setFloodType = (option: string) => {
@@ -29,7 +30,6 @@ export function FloodSelector() {
     };
 
     return (
-        <>
         <Box
             backgroundColor={"white"}
             borderWidth="1px"
@@ -126,18 +126,6 @@ export function FloodSelector() {
                 alternativeText={false}
             ></Selector>
         </Box>
-            <MapAnchor position="bottom-right" horizontalGap={5} verticalGap={200}>
-                <Flex direction="column" gap={4}>
-                    {activeKeyword && (
-                        <Flex>
-                            <TaxonomyInfo
-                                keyword={activeKeyword}
-                                onClose={() => setActiveKeyword(null)} />
-                        </Flex>
-                    )}
-                </Flex>
-            </MapAnchor>
-        </>
     );
 }
         

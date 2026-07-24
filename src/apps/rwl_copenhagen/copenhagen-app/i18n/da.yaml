@@ -94,6 +94,7 @@ messages:
     keyword1: "skybrudsoversvømmelse"
     keyword2: "klimaforandringer"
   zoom_buttons:
+    title: "Zoom til"
     egedal: "Zoom til Egedal"
     frederikssund: "Zoom til Frederikssund"
     halsnaes: "Zoom til Halsnæs"

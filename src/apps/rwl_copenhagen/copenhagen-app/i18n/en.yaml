@@ -67,6 +67,7 @@ messages:
     keyword1: "pluvial flood"
     keyword2: "climate change"
   zoom_buttons:
+    title: "Zoom to"
     egedal: "Zoom to Egedal"
     frederikssund: "Zoom to Frederikssund"
     halsnaes: "Zoom to Halsnaes"

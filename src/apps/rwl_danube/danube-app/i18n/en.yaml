@@ -172,6 +172,7 @@ messages:
       appear after login (use the login button in the right top corner).
       Please note that the app is still work in progress."
   zoom_buttons:
+    title: "Zoom to"
     vienna: "Zoom to Vienna"
     zala: "Zoom to Zala"
   ariaLabel:

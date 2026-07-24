@@ -192,6 +192,7 @@ messages:
       További, hozzáféréssel korlátozott adatok a bejelentkezés után jelennek meg (használja a jobb felső sarokban található bejelentkezés gombot). 
       Felhívjuk figyelmét, hogy az alkalmazás még fejlesztés alatt áll."
   zoom_buttons:
+    title: "Nagyítás"
     vienna: "Nagyítás Bécsre"
     zala: "Nagyítás Zala vármegyére"
   ariaLabel:

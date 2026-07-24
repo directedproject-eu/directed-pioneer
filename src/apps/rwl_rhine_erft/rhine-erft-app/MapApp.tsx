@@ -178,7 +178,7 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={10}>
+                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <Flex direction="column" gap={4}>
                                 <Box
                                     backgroundColor="white"
@@ -322,8 +322,8 @@ export function MapApp() {
 
                         <MapAnchor
                             position="bottom-right"
-                            horizontalGap={10}
-                            verticalGap={30}
+                            horizontalGap={5}
+                            verticalGap={5}
                         >
                             <Flex
                                 aria-label={intl.formatMessage({

@@ -62,6 +62,7 @@ messages:
     keyword1: "Katastrophenrisiko"
     keyword2: "Klimawandel"
   zoom_buttons:
+    title: "Zoom auf"
     egedal: "Zoom auf Egedal"
     frederikssund: "Zoom auf Frederikssund"
     halsnaes: "Zoom auf Halsnæs"

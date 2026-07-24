@@ -2,7 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useEffect, useId, useState } from "react";
-import { PiRulerLight, PiChartLineDownLight, PiDownload } from "react-icons/pi";
+import {
+    PiRulerLight,
+    PiChartLineDownLight,
+    PiDownload,
+    PiCaretLeft,
+    PiCaretRight
+} from "react-icons/pi";
 import { GiCircleForest, GiWheat } from "react-icons/gi";
 import { EventsKey } from "ol/events";
 import { Group, Vector as VectorLayer } from "ol/layer.js";
@@ -18,7 +24,6 @@ import {
     Flex,
     Text,
     useDisclosure,
-    VStack,
     Dialog,
     NativeSelect,
     Field,
@@ -88,6 +93,7 @@ export function MapApp() {
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+    const [zoomMenuOpen, setZoomMenuOpen] = useState<boolean>(false);
 
     const [activeChart, setActiveChart] = useState<ActiveChartType>(null);
     const [forestryLocation, setForestryLocation] = useState<string>("keszthelyi_erdeszet_vallus");
@@ -374,31 +380,54 @@ export function MapApp() {
                                 {/* zoom to region and feature info */}
                                 <MapAnchor
                                     position="bottom-left"
-                                    horizontalGap={15}
-                                    verticalGap={60}
+                                    horizontalGap={5}
+                                    verticalGap={5}
                                 >
-                                    <VStack align="stretch" gap={2}>
+                                    <Flex direction="row" align="center" gap={2} flexWrap="wrap">
                                         <Button
                                             size="sm"
-                                            onClick={() =>
-                                                zoomService.zoomToVienna(mapModel.map!)
-                                            }
+                                            flexShrink={0}
+                                            onClick={() => setZoomMenuOpen(!zoomMenuOpen)}
+                                            aria-expanded={zoomMenuOpen}
                                         >
-                                            {intl.formatMessage({
-                                                id: "zoom_buttons.vienna"
-                                            })}
+                                            {zoomMenuOpen ? (
+                                                <PiCaretLeft />
+                                            ) : (
+                                                <>
+                                                    {intl.formatMessage({
+                                                        id: "zoom_buttons.title"
+                                                    })}
+                                                    <PiCaretRight />
+                                                </>
+                                            )}
                                         </Button>
-                                        <Button
-                                            size="sm"
-                                            onClick={() =>
-                                                zoomService.zoomToZala(mapModel.map!)
-                                            }
-                                        >
-                                            {intl.formatMessage({
-                                                id: "zoom_buttons.zala"
-                                            })}
-                                        </Button>
-                                    </VStack>
+                                        {zoomMenuOpen && (
+                                            <>
+                                                <Button
+                                                    size="sm"
+                                                    flexShrink={0}
+                                                    onClick={() =>
+                                                        zoomService.zoomToVienna(mapModel.map!)
+                                                    }
+                                                >
+                                                    {intl.formatMessage({
+                                                        id: "zoom_buttons.vienna"
+                                                    })}
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    flexShrink={0}
+                                                    onClick={() =>
+                                                        zoomService.zoomToZala(mapModel.map!)
+                                                    }
+                                                >
+                                                    {intl.formatMessage({
+                                                        id: "zoom_buttons.zala"
+                                                    })}
+                                                </Button>
+                                            </>
+                                        )}
+                                    </Flex>
 
                                     {mapModel && (
                                         <FeatureInfo
@@ -413,10 +442,12 @@ export function MapApp() {
                                 <MapAnchor
                                     position="top-right"
                                     horizontalGap={5}
-                                    verticalGap={10}
+                                    verticalGap={5}
                                 >
+                                    <style>{`@media (max-height: 768px) { .dnb-topright-box { max-height: calc(100vh - 250px) !important; overflow-y: auto; } }`}</style>
                                     <Flex direction="column" gap={4}>
                                         <Box
+                                            className="dnb-topright-box"
                                             backgroundColor="white"
                                             borderWidth="1px"
                                             borderRadius="lg"
@@ -566,8 +597,8 @@ export function MapApp() {
                                 {/* tool buttons */}
                                 <MapAnchor
                                     position="bottom-right"
-                                    horizontalGap={10}
-                                    verticalGap={30}
+                                    horizontalGap={5}
+                                    verticalGap={5}
                                 >
                                     <Flex
                                         role="menubar"
@@ -666,7 +697,9 @@ export function MapApp() {
                                             </Box>
                                         </Box>
                                     )}
+                                    <style>{`@media (max-height: 768px) { .dnb-toc-box { max-height: calc(100vh - 330px) !important; } }`}</style>
                                     <Box
+                                        className="dnb-toc-box"
                                         backgroundColor="white"
                                         borderWidth="1px"
                                         borderRadius="lg"
