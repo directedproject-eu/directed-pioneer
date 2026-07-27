@@ -458,7 +458,7 @@ export function MapApp() {
                                                 id: "ariaLabel.topRight"
                                             })}
                                             maxHeight={615}
-                                            maxWidth={430}
+                                            maxWidth="calc(30vw - 20px)"
                                             marginBottom={5}
                                         >
                                             <Box>
@@ -582,7 +582,7 @@ export function MapApp() {
                                         <Flex
                                             minWidth={250}
                                             overflow="hidden"
-                                            maxHeight="500px"
+                                            maxHeight="calc(100vh - 380px)"
                                             overflowY="auto"
                                             borderRadius="md"
                                             boxShadow="lg"
