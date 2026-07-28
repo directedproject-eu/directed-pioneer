@@ -94,6 +94,7 @@ messages:
   slider: 
     rainfallLevel: "Niederschlagsmenge (mm)"
     stormSurgeLevel: "Sturmfluthöhe (cm)"
+    damageLevel: "Für die Schadenskosten verwendete Sturmfluthöhe (cm)"
     selectedLevel: "Ausgewähltes Level:"
   map:
     download:

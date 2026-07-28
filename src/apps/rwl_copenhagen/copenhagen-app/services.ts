@@ -232,52 +232,6 @@ export class MainMapProvider implements MapConfigProvider {
             ]
         });
 
-        // const skadesokonomi = layerFactory.create({
-        //     type: SimpleLayer,
-        //     id: "damage cost",
-        //     title: "damage cost test",
-        //     description: "damage cost layer",
-        //     visible: false,
-        //     isBaseLayer: false,
-        //     olLayer: new WebGLTileLayer({
-        //         source: new GeoTIFF({
-        //             sources: [
-        //                 {
-        //                     url: "/cells_mean_170.tif"
-        //                 }
-        //             ]
-        //         })
-        //     })
-        // });
-
-        const skades_test = layerFactory.create({
-            type: SimpleLayer,
-            id: "rwl1_skadesokonomi_mean_170cm",
-            title: "Mean Flood Damage", 
-            description: "Mean Flood Damage",
-            visible: false,
-            olLayer: new TileLayer({
-                source: new TileWMS({
-                    url: "https://directed.dev.52north.org/geoserver/directed/wms", 
-                    params: {
-                        "LAYERS": "rwl1_skadesokonomi_mean_170cm"
-                    }
-                }),
-                properties: {
-                    // title: intl.formatMessage({ id: "layers.maxNearSurfaceToday_title" }),
-                    title: "Mean Flood Damage", 
-                    id: "rwl1_skadesokonomi_mean_170cm",
-                    type: "WMS_tiles"
-                },
-            }),
-            attributes: {
-                "legend": {
-                    Component: WmsLegend
-                }
-            },
-            isBaseLayer: false
-        });
-
         // Social Vulnerability Index
         const svi_group = layerFactory.create({
             type: GroupLayer,
@@ -355,9 +309,7 @@ export class MainMapProvider implements MapConfigProvider {
                 osm,
                 municipalityGroup, 
                 groundWaterGroup,
-                skades_test, 
                 svi_group
-                // skadesokonomi
             ]
         };
     }

@@ -99,6 +99,7 @@ messages:
   slider: 
     rainfallLevel: "Rainfall Level (mm)"
     stormSurgeLevel: "Storm Surge Level (cm)"
+    damageLevel: "Storm Surge Level used for Damage Cost (cm)"
     selectedLevel: "Selected Level:"
   map:
     download:

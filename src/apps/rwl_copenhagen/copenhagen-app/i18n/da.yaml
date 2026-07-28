@@ -126,6 +126,7 @@ messages:
   slider: 
     rainfallLevel: "Nedbørsniveau (mm)"
     stormSurgeLevel: "Stormflodsniveau (cm)"
+    damageLevel: "Stormflodsniveau, der anvendes til beregning af skadesomkostninger (cm)"
     selectedLevel: "Valgt niveau:"
   map:
     download:
