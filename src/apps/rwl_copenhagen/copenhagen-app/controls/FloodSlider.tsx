@@ -28,6 +28,12 @@ const SLIDER_CONFIG: Record<string, { min: number, max: number, unit: string, st
         max: 300, // Storm surge in cm (170-300)
         unit: "cm",
         step: 10 
+    }, 
+    "coastal damage": {
+        min: 170, 
+        max: 300, // Damage-cost storm surge layers in cm (170-300)
+        unit: "cm",
+        step: 10 
     }
 };
 
@@ -95,7 +101,9 @@ export const FloodSlider = () => {
     const levelUnit = config.unit;
     const levelTitle = floodType === "pluvial" 
         ? intl.formatMessage({ id: "slider.rainfallLevel", defaultMessage: "Rainfall Level (mm)"}) 
-        : intl.formatMessage({ id: "slider.stormSurgeLevel", defaultMessage: "Storm Surge Level (cm)"});
+        : floodType === "coastal"
+        ? intl.formatMessage({ id: "slider.stormSurgeLevel", defaultMessage: "Storm Surge Level (cm)"})
+        : intl.formatMessage({ id: "slider.damageLevel", defaultMessage: "Storm Surge Level used for Damage Cost (cm)"}); 
 
     if (!floodType || !currentModel) {
         return null;

@@ -6,19 +6,25 @@ import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { useIntl } from "open-pioneer:react-hooks";
 
 //water level colors
-const l_01 = "#ffffff";
-const l_02 = "#1a68ae";
-const l_03 = "#08306b";
-const l_04 = "#301934";
+const l_01 = "#B2241E";
+const l_02 = "#DE2D26";
+const l_03 = "#E55751";
+const l_04 = "#EB817D";
+const l_05 = "#F2ABA8";
+const l_06 = "#F8D5D4";
+const l_07 = "#FAFAFA";
 
 const colorMapping = [
-    { value: 0, color: l_01, label: "0" },
-    { value: 0.5, color: l_02, label: "0.5" },
-    { value: 1.0, color: l_03, label: "1.0" },
-    { value: 11.0, color: l_04, label: "11.0" }
+    { value: 200, color: l_01, label: ">200M" },
+    { value: 20-200, color: l_02, label: "20M-200M" },
+    { value: 10-20, color: l_03, label: "10M-20M" },
+    { value: 1-10, color: l_04, label: "1M-10M" },
+    { value: 500-1, color: l_05, label: "500k-1M" },
+    { value: 100-500, color: l_06, label: "100k-500k" },
+    { value: 100, color: l_07, label: "<100k" }
 ];
 
-export function WaterLevelLegend(props: LegendItemComponentProps) {
+export function DamageLegend(props: LegendItemComponentProps) {
     const intl = useIntl();
 
     return (
@@ -41,7 +47,7 @@ export function WaterLevelLegend(props: LegendItemComponentProps) {
                 {props.layer.title}{" "}
             </Text>
             <Text fontWeight="bold" fontSize={15} mb={2}>
-                {intl.formatMessage({ id: "legend.units" })} m
+                {intl.formatMessage({ id: "legend.units" })} DKK
             </Text>
             {colorMapping.map((item, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>

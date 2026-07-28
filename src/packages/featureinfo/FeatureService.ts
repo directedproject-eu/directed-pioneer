@@ -176,6 +176,15 @@ export function fetchFeatureInfo(
                                     unit: "m"
                                 };
                             }
+                             // SVI layers cphg
+                             else if (properties.Z_svi_wins !== undefined) {
+                                finalizedData = {
+                                    type: "single_value",
+                                    value: properties.Z_svi_wins as number,
+                                    label: "Value",
+                                    unit: "Z-Index"
+                                };
+                            }
                             // Fallback if layer has properties, but are not specific model indexes
                             else {
                                 finalizedData = json as unknown as Record<string, unknown>;

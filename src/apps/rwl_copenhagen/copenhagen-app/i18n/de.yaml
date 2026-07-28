@@ -83,9 +83,18 @@ messages:
   legend:
     title: "Legende"
     units: "Einheit"
+  sviLegend:
+    extremeHigh: "Extrem Hoch: 2,5 bis 100"
+    veryHigh: "Sehr Hoch: 1,5 bis 2,5"
+    relativelyHigh: "Relativ Hoch: 0,25 bis 1,5"
+    average: "Durchschnittlich: -0,25 bis 0,25"
+    relativelyLow: "Relativ Niedrig: -1,5 bis -0,25"
+    veryLow: "Sehr Niedrig: -2,5 bis -1,5"
+    extremelyLow: "Extrem Niedrig: -100 bis -2,5"
   slider: 
     rainfallLevel: "Niederschlagsmenge (mm)"
     stormSurgeLevel: "Sturmfluthöhe (cm)"
+    damageLevel: "Für die Schadenskosten verwendete Sturmfluthöhe (cm)"
     selectedLevel: "Ausgewähltes Level:"
   map:
     download:

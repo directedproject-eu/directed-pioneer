@@ -7,6 +7,7 @@ import { MapRegistry, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import { WaterLevelLegend } from "../Components/Legends/WaterLevelLegend";
+import { DamageLegend } from "../Components/Legends/DamageLegend";
 
 const layer_info = {
     "saferplaces": {
@@ -23,6 +24,10 @@ const layer_info = {
         "title": "SCALGO Model",
         "description": 
             "The Scalgo model is a high-resolution 3-dimensional flood model capable of global coverage. The Scalgo model is used in the Copenhagen RWL for data pertaining to flooding within the municipalities along the Roskilde Fjord. "
+    }, 
+    "skadesokonomi": {
+        "title": "Mean Flood Damage",
+        "description": "These damage-cost assessments were modeled with the DTU Damage-Cost Model. This model estimates and assesses the economic impacts of urban pluvial floods."
     }
 };
 
@@ -30,15 +35,23 @@ const modelLocationMap: Record<string, Record<string, string[]>> = {
     "saferplaces": {
         "pluvial": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
         "coastal": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
+        "coastal damage": [], 
     }, 
     "rim2d": {
         "pluvial": ["roskilde_fjord"], 
         "coastal": ["roskilde_fjord"], 
+        "coastal damage": [], 
     }, 
     "scalgo": {
         "pluvial": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
         "coastal": ["roskilde_fjord"], 
+        "coastal damage": [], 
     }, 
+    "skadesokonomi": {
+        "pluvial": [], 
+        "coastal": [], 
+        "coastal damage": ["Roskilde Fjord"],
+    }
 };
 
 const SLIDER_CONFIG: Record<string, { min: number, max: number, unit: string, step: number }> = {
@@ -53,6 +66,12 @@ const SLIDER_CONFIG: Record<string, { min: number, max: number, unit: string, st
         max: 300, // Storm surge in cm (170-300)
         unit: "cm",
         step: 10 
+    }, 
+    "coastal damage": {
+        min: 170, 
+        max: 300, 
+        unit: "cm", // Storm surge damage layers in cm (170-300)
+        step: 10
     }
 };
 
@@ -102,8 +121,9 @@ export class FloodHandlerImpl implements FloodHandler {
         const modelKey = modelId as keyof typeof modelLocationMap;
         const pluvial = modelLocationMap[modelKey]?.["pluvial"] || [];
         const coastal = modelLocationMap[modelKey]?.["coastal"] || [];
+        const damage = modelLocationMap[modelKey]?.["coastal damage"] || [];
         // Use Set to get unique locations from both pluvial and coastal lists
-        return Array.from(new Set([...pluvial, ...coastal]));
+        return Array.from(new Set([...pluvial, ...coastal, ...damage]));
     }
 
     constructor(options: ServiceOptions<References>) {
@@ -167,7 +187,7 @@ export class FloodHandlerImpl implements FloodHandler {
                     isBaseLayer: false,
                     attributes: {
                         "legend": {
-                            Component: WaterLevelLegend
+                            Component: modelKey === "skadesokonomi"? DamageLegend : WaterLevelLegend
                         }
                     },
                     visible: modelKey === this.#selectedModel.value,
@@ -244,6 +264,10 @@ export class FloodHandlerImpl implements FloodHandler {
     private buildLayerName(location: string, model: string): string {
         const level = this.#selectedFloodLevel.value;
         const floodType = this.#selectedFloodType.value;
+
+        if (floodType === "coastal damage"){
+            return `rwl1_skadesokonomi_mean_${level}cm`;
+        }
         
         const suffix = floodType === "pluvial" ? "mm" : "cm";
         const levelString = `${level}${suffix}`;

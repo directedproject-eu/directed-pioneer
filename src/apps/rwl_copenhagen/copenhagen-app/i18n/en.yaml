@@ -88,9 +88,18 @@ messages:
   legend:
     title: "Legend"
     units: "Units"
+  sviLegend: 
+    extremeHigh: "Extremely High: 2.5 to 100"
+    veryHigh: "Very High: 1.5 to 2.5"
+    relativelyHigh: "Relatively High: 0.25 to 1.5"
+    average: "Average: -0.25 to 0.25"
+    relativelyLow: "Relatively Low: -1.5 to -0.25"
+    veryLow: "Very Low: -2.5 to -1.5"
+    extremelyLow: "Extremeely Low: -100 to -2.5"
   slider: 
     rainfallLevel: "Rainfall Level (mm)"
     stormSurgeLevel: "Storm Surge Level (cm)"
+    damageLevel: "Storm Surge Level used for Damage Cost (cm)"
     selectedLevel: "Selected Level:"
   map:
     download:

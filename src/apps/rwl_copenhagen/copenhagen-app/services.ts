@@ -19,6 +19,7 @@ import { Vector as VectorSource } from "ol/source.js";
 import GeoJSON from "ol/format/GeoJSON.js";
 import { Stroke, Style } from "ol/style";
 import { WmsLegend } from "./Components/Legends/WmsLegend";
+import { SviLegend } from "./Components/Legends/SviLegend";
 import { Tile } from "ol";
 
 
@@ -67,7 +68,7 @@ export class MainMapProvider implements MapConfigProvider {
                         width: 3
                     })
                 }),
-                properties: { title: "GeoJSON Layer", type: "GeoJSON" }
+                properties: { title: "Municipality Layer", type: "GeoJSON" }
             }),
             isBaseLayer: false
         });
@@ -99,7 +100,7 @@ export class MainMapProvider implements MapConfigProvider {
             layers: municipalities.map(id => this.createMunicipalityLayer(layerFactory, id))
         });
 
-
+        // Groundwater Layers
         const groundWaterGroup = layerFactory.create({
             type: GroupLayer,
             id: "groundwater",
@@ -205,7 +206,7 @@ export class MainMapProvider implements MapConfigProvider {
                     description: "Minimum near-surface groundwater today. Data via Dataforsyningen.",
                     // title: intl.formatMessage({ id: "layers.minNearSurfaceToday_title" }),
                     // description: intl.formatMessage({ id: "layers.minNearSurfaceToday_desc" }),
-                    visible: false,
+                    visible: true,
                     olLayer: new TileLayer({
                         source: new TileWMS({
                             url: "https://api.dataforsyningen.dk/wms/hip_dtg_10m_100m", 
@@ -231,23 +232,71 @@ export class MainMapProvider implements MapConfigProvider {
             ]
         });
 
-        // const skadesokonomi = layerFactory.create({
-        //     type: SimpleLayer,
-        //     id: "damage cost",
-        //     title: "damage cost test",
-        //     description: "damage cost layer",
-        //     visible: false,
-        //     isBaseLayer: false,
-        //     olLayer: new WebGLTileLayer({
-        //         source: new GeoTIFF({
-        //             sources: [
-        //                 {
-        //                     url: "/cells_mean_170.tif"
-        //                 }
-        //             ]
-        //         })
-        //     })
-        // });
+        // Social Vulnerability Index
+        const svi_group = layerFactory.create({
+            type: GroupLayer,
+            id: "svi",
+            title: "Social Vulnerability Index",
+            description: "The Social Vulnerability Index (SVI) analyzes the socio-economic vulnerability of a given community to climate change. The tool does so by compiling census data for indicators such as housing quality, unemployment rate, and average education levels (amongst others) to conduct the analysis, and provides an index, or score, of socio-economic vulnerability for each census-defined area within a region of interest. See more at https://reachout-cities.eu/post_type_toolkit/social-vulnerability-tool/",
+            visible: false,
+            isBaseLayer: false,
+            layers: [
+                layerFactory.create({
+                    type: SimpleLayer,
+                    id: "frederiksssundSVI",
+                    title: "SVI Frederikssund Municipality", 
+                    description: "Social Vulnerability Index for Frederikssund Municipality",
+                    visible: false,
+                    olLayer: new TileLayer({
+                        source: new TileWMS({
+                            url: "https://directed.dev.52north.org/geoserver/directed/wms", 
+                            params: {
+                                "LAYERS": "frederikssundSVI"
+                            }
+                        }),
+                        properties: {
+                            title: "SVI Frederikssund Municipality",
+                            id: "frederiksssundSVI",
+                            description: "Social Vulnerability Index for Frederikssund Municipality",
+                            type: "WMS_tiles"
+                        },
+                    }),
+                    attributes: {
+                        "legend": {
+                            Component: SviLegend
+                        }
+                    },
+                    isBaseLayer: false
+                }),
+                layerFactory.create({
+                    type: SimpleLayer,
+                    id: "roskildeSVI",
+                    title: "SVI Roskilde Fjord", 
+                    description: "Social Vulnerability Index Roskilde Fjord",
+                    visible: true,
+                    olLayer: new TileLayer({
+                        source: new TileWMS({
+                            url: "https://directed.dev.52north.org/geoserver/directed/wms", 
+                            params: {
+                                "LAYERS": "roskildeSVI"
+                            }
+                        }),
+                        properties: {
+                            title: "SVI Roskilde Fjord",
+                            id: "roskildeSVI", 
+                            description: "Social Vulnerability Index Roskilde Fjord",
+                            type: "WMS_tiles"
+                        },
+                    }),
+                    attributes: {
+                        "legend": {
+                            Component: SviLegend
+                        }
+                    },
+                    isBaseLayer: false
+                })
+            ]
+        });
 
         return {
             initialView: {
@@ -260,7 +309,7 @@ export class MainMapProvider implements MapConfigProvider {
                 osm,
                 municipalityGroup, 
                 groundWaterGroup,
-                // skadesokonomi
+                svi_group
             ]
         };
     }

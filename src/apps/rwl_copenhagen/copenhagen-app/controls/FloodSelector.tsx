@@ -120,7 +120,7 @@ export function FloodSelector({ setActiveKeyword }: FloodSelectorProps) {
                 </HoverCard.Root>
             </Flex>
             <Selector
-                options={["pluvial", "coastal"]}
+                options={["pluvial", "coastal", "coastal damage"]}
                 setSelected={setFloodType}
                 marginBottom="1px"
                 alternativeText={false}

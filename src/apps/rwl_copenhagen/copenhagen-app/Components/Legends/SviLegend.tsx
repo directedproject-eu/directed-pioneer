@@ -5,21 +5,27 @@ import { Box, Text } from "@chakra-ui/react";
 import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { useIntl } from "open-pioneer:react-hooks";
 
-//water level colors
-const l_01 = "#ffffff";
-const l_02 = "#1a68ae";
-const l_03 = "#08306b";
-const l_04 = "#301934";
+// z-index colors
+const l_01 = "#8655ef";
+const l_02 = "#9f7ded";
+const l_03 = "#c1ade3";
+const l_04 = "#ffffff";
+const l_05 = "#97f7c5";
+const l_06 = "#56ec9c";
+const l_07 = "#33a02c";
 
-const colorMapping = [
-    { value: 0, color: l_01, label: "0" },
-    { value: 0.5, color: l_02, label: "0.5" },
-    { value: 1.0, color: l_03, label: "1.0" },
-    { value: 11.0, color: l_04, label: "11.0" }
-];
-
-export function WaterLevelLegend(props: LegendItemComponentProps) {
+export function SviLegend(props: LegendItemComponentProps) {
     const intl = useIntl();
+
+    const colorMapping = [
+        { value: 2.5-100, color: l_01, label: intl.formatMessage({ id: "sviLegend.extremeHigh"})},
+        { value: 1.5-2.5, color: l_02, label: intl.formatMessage({ id: "sviLegend.veryHigh"})},
+        { value: 0.25-1.5, color: l_03, label: intl.formatMessage({ id: "sviLegend.relativelyHigh"})},
+        { value: 0.25-(-0.25), color: l_04, label: intl.formatMessage({ id: "sviLegend.average"})},
+        { value: -0.25-(-1.5), color: l_05, label: intl.formatMessage({ id: "sviLegend.relativelyLow"})},
+        { value: -1.5-(-2.5), color: l_06, label: intl.formatMessage({ id: "sviLegend.veryLow"})},
+        { value: -2.5-(-100), color: l_07, label: intl.formatMessage({ id: "sviLegend.extremelyLow"})},
+    ];
 
     return (
         <Box
@@ -32,16 +38,12 @@ export function WaterLevelLegend(props: LegendItemComponentProps) {
             borderWidth={1}
             width="300px"
         >
-            {/* <Text fontWeight="bold" fontSize={20}>
-                {" "}
-                {intl.formatMessage({ id: "legend.title" })}{" "}
-            </Text> */}
             <Text fontWeight="bold" mb={2}>
                 {" "}
                 {props.layer.title}{" "}
             </Text>
             <Text fontWeight="bold" fontSize={15} mb={2}>
-                {intl.formatMessage({ id: "legend.units" })} m
+                {intl.formatMessage({ id: "legend.units" })} Z-Index
             </Text>
             {colorMapping.map((item, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>
