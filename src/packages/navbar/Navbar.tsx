@@ -144,16 +144,16 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                         alt="Directed Project Data Fabric"
                         height="60px"
                     />
-                    <Flex display={{ base: "none", md: "flex" }} ml={10}>
+                    <Flex display={{ base: "none", md: "flex" }} ml={{ base: 4, "2xl": 10 }}>
                         <DesktopNav items={navItems} />
                     </Flex>
                 </Flex>
-                <Box width="150px" mx={4}> 
+                <Box width={{ base: "120px", "2xl": "150px" }} mx={{ base: 2, "2xl": 4 }}>
                     <LocaleSwitcher/>
                 </Box>
                 {authService && authState?.kind === "authenticated" ? (
-                    <Flex flexDirection="row" align={"center"} ml={"auto"} gap="2em">
-                        <Text>
+                    <Flex flexDirection="row" align={"center"} ml={"auto"} gap={{ base: "1em", "2xl": "2em" }}>
+                        <Text fontSize={{ base: "sm", "2xl": "md" }} whiteSpace="nowrap">
                             {intl.formatMessage({ id: "navbar.loggedInAs" })}<br />{ authState.sessionInfo?.userName ?? "unknown" }
                         </Text>
                         <Button onClick={() => authService.logout()}>
@@ -161,18 +161,23 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                         </Button>
                     </Flex>
                 ) : authService ? (
-                    <Flex flexDirection="row" align="center" ml="auto" gap="2em">
+                    <Flex flexDirection="row" align="center" ml="auto" gap={{ base: "1em", "2xl": "2em" }}>
                         <Button onClick={() => authService.getLoginBehavior().login()}>
                             {intl.formatMessage({ id: "navbar.login" })}
                         </Button>
                     </Flex>
                 ) : null}
-                <div style={{ width: "350px", display: "flex", padding: "0px 20px" }}>
-                    <Text fontSize={14}>
+                <Flex
+                    width={{ base: "240px", "2xl": "350px" }}
+                    px={{ base: 2, "2xl": 5 }}
+                    align="center"
+                    flexShrink={0}
+                >
+                    <Text fontSize={{ base: 12, "2xl": 14 }}>
                         {intl.formatMessage({ id: "disclaimerContent.brief" })}
                     </Text>
                     <Disclaimer/>
-                </div>
+                </Flex>
             </Flex>
 
             <Collapsible.Root open={open}>
@@ -186,18 +191,20 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
 
 const DesktopNav = ({ items }: { items: Array<NavItem> }) => {
     return (
-        <Stack direction={"row"} gap={4}>
+        <Stack direction={"row"} gap={{ base: 1, "2xl": 4 }}>
             {items.map((navItem) => (
                 <Box key={navItem.label}>
                     <HoverCard.Root positioning={{placement:"bottom-start"}}>
                         <HoverCard.Trigger>
                             <Link
                                 as="a"
-                                p={2}
+                                px={{ base: 1, "2xl": 2 }}
+                                py={2}
                                 href={navItem.href ?? "#"}
-                                fontSize={"md"}
+                                fontSize={{ base: "sm", "2xl": "md" }}
                                 fontWeight={500}
                                 color={"#2e9ecc"}
+                                whiteSpace="nowrap"
                                 _hover={{ textDecoration: "none", color: "gray" }}
                             >
                                 {navItem.label}

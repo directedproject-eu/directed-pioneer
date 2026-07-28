@@ -651,6 +651,13 @@ export function MapApp() {
                                     horizontalGap={5}
                                     verticalGap={5}
                                 >
+                                    <Flex
+                                        direction="column"
+                                        maxHeight="calc(100vh - 200px)"
+                                        overflowY="auto"
+                                        overflowX="visible"
+                                        pr={1}
+                                    >
                                     <IsimipSelector />
 
                                     {authState.kind === "authenticated" && (
@@ -697,9 +704,7 @@ export function MapApp() {
                                             </Box>
                                         </Box>
                                     )}
-                                    <style>{`@media (max-height: 768px) { .dnb-toc-box { max-height: calc(100vh - 330px) !important; } }`}</style>
                                     <Box
-                                        className="dnb-toc-box"
                                         backgroundColor="white"
                                         borderWidth="1px"
                                         borderRadius="lg"
@@ -710,7 +715,7 @@ export function MapApp() {
                                             id: "ariaLabel.toc"
                                         })}
                                         marginBottom="10px"
-                                        maxHeight={500}
+                                        maxHeight="min(500px, calc(100vh - 330px))"
                                         overflow="auto"
                                     >
                                         <ChakraProvider value={system}>
@@ -745,6 +750,7 @@ export function MapApp() {
                                             onClose={() => setDownloadIsActive(false)}
                                         />
                                     )}
+                                    </Flex>
                                 </MapAnchor>
                             </MapContainer>
                         )}

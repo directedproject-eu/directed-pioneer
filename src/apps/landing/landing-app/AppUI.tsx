@@ -52,15 +52,19 @@ export function AppUI() {
                 <Box
                     position="absolute"
                     zIndex="1"
-                    top="60%" 
+                    top={{ base: "38%", md: "36%" }}
                     left="50%"
-                    transform="translate(-50%, -50%)"
+                    transform="translateX(-50%)"
                     width="100%"
-                    maxW="3000px" 
+                    maxW="1600px"
                     px={4}
                 >
-                    <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={1}>
-                        
+                    <Grid
+                        templateColumns="repeat(2, 1fr)"
+                        gap={{ base: 3, md: 6, "2xl": 10 }}
+                        justifyItems="center"
+                    >
+
                         {/* Card 1 */}
                         <Box
                             as="a"
@@ -69,14 +73,15 @@ export function AppUI() {
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
-                            height={180}
+                            width="100%"
+                            maxW={{ base: "240px", md: "400px", "2xl": "580px" }}
+                            height={{ base: 120, md: "min(200px, 26vh)", "2xl": "min(340px, 24vh)" }}
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            ml={40}
                             rounded={6}
                             transition="all 0.3s ease"
-                            _hover={{ 
+                            _hover={{
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
                             }}
@@ -91,16 +96,17 @@ export function AppUI() {
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
-                            height={180}
+                            width="100%"
+                            maxW={{ base: "240px", md: "400px", "2xl": "580px" }}
+                            height={{ base: 120, md: "min(200px, 26vh)", "2xl": "min(340px, 24vh)" }}
                             target="_blank"
                             rel="noopener noreferrer"
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            mr={40}
                             rounded={6}
                             transition="all 0.3s ease"
-                            _hover={{ 
+                            _hover={{
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
                             }}
@@ -115,15 +121,15 @@ export function AppUI() {
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
-                            height={180}
+                            width="100%"
+                            maxW={{ base: "240px", md: "400px", "2xl": "580px" }}
+                            height={{ base: 120, md: "min(200px, 26vh)", "2xl": "min(340px, 24vh)" }}
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            ml={40}
-                            mt={10}
                             rounded={6}
                             transition="all 0.3s ease"
-                            _hover={{ 
+                            _hover={{
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
                             }}
@@ -138,15 +144,15 @@ export function AppUI() {
                             backgroundSize="contain"
                             backgroundRepeat="no-repeat"
                             backgroundPosition="center"
-                            height={180}
+                            width="100%"
+                            maxW={{ base: "240px", md: "400px", "2xl": "580px" }}
+                            height={{ base: 120, md: "min(200px, 26vh)", "2xl": "min(340px, 24vh)" }}
                             display="flex"
                             flexDirection="column"
                             textDecoration="none"
-                            mr={40}
-                            mt={10}
                             rounded={6}
                             transition="all 0.3s ease"
-                            _hover={{ 
+                            _hover={{
                                 transform: "scale(1.05)",
                                 textDecoration: "none",
                             }}

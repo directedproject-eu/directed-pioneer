@@ -103,9 +103,7 @@ export function MapApp() {
 
                             <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
                                 <FloodSelector setActiveKeyword={setActiveKeyword} />
-                                <style>{`@media (max-height: 768px) { .cph-toc-box { max-height: calc(100vh - 420px) !important; } }`}</style>
                                 <Box
-                                    className="cph-toc-box"
                                     display="flex"
                                     flexDirection="column"
                                     backgroundColor="white"
@@ -115,7 +113,7 @@ export function MapApp() {
                                     boxShadow="lg"
                                     role="dialog"
                                     // aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                    maxHeight={500}
+                                    maxHeight="min(500px, calc(100vh - 420px))"
                                     overflowY="auto"
                                     overflowX="hidden"
                                     paddingTop={4}
