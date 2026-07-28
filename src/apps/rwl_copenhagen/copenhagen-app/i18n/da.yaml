@@ -115,6 +115,14 @@ messages:
   legend:
     title: "Tegnforklaring"
     units: "Enheder"
+  sviLegend:
+    extremeHigh: "Ekstremt høj: 2,5 til 100"
+    veryHigh: "Meget høj: 1,5 til 2,5"
+    relativelyHigh: "Relativt høj: 0,25 til 1,5"
+    average: "Gennemsnitlig: -0,25 til 0,25"
+    relativelyLow: "Relativt lav: -1,5 til -0,25"
+    veryLow: "Meget lav: -2,5 til -1,5"
+    extremelyLow: "Ekstremt lav: -100 til -2,5"
   slider: 
     rainfallLevel: "Nedbørsniveau (mm)"
     stormSurgeLevel: "Stormflodsniveau (cm)"
