@@ -50,8 +50,7 @@ export function WaterLevelLegend(props: LegendItemComponentProps) {
                         height="12px"
                         bg={item.color}
                         mr={2}
-                        border="2px"
-                        borderColor="black"
+                        border="1px solid black"
                     />
                     <Box>{item.label}</Box>
                 </Box>
