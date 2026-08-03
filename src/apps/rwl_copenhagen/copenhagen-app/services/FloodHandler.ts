@@ -13,17 +13,17 @@ const layer_info = {
     "saferplaces": {
         "title": "SaferPlaces Model",
         "description": 
-            "SaferPlaces is an advanced flood risk model which can be used to assess pluvial, fluvial and coastal flood hazards and risk in consideration of both historical, current and future climate scenarios to provide information about urban flood risks."
+            "SaferPlaces is an advanced flood risk model which can be used to assess pluvial, fluvial and coastal urban flood hazards and risks within historical, current and future climate scenarios. The model does not consider drainage by infiltration and sewer system."
     },
     "rim2d": {
         "title": "RIM2D Model",
         "description": 
-            "The RIM2D is an advanced hydraulic simulation tool, designed primarily for urban pluvial, fluvial and coastal flood risk assessments and forecasting."
+            "The RIM2D model is an advanced hydraulic simulation tool, designed primarily for urban pluvial, fluvial and coastal flood risk assessments and forecasting. The model considers drainage via infiltration on pervious ground and sewer drainage on impervious surfaces."
     }, 
     "scalgo": {
         "title": "SCALGO Model",
         "description": 
-            "The Scalgo model is a high-resolution 3-dimensional flood model capable of global coverage. The Scalgo model is used in the Copenhagen RWL for data pertaining to flooding within the municipalities along the Roskilde Fjord. "
+            "The Scalgo model is a high-resolution, 3-dimensional flood model capable of global coverage. The Scalgo model is used in the Copenhagen RWL for data pertaining to flooding within the municipalities along the Roskilde Fjord. The model does not consider drainage by infiltration and sewer system."
     }, 
     "skadesokonomi": {
         "title": "Mean Flood Damage",
