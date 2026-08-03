@@ -213,6 +213,18 @@ export class FloodHandlerImpl implements FloodHandler {
         const config = (SLIDER_CONFIG[newFloodType] || SLIDER_CONFIG["pluvial"])!;
         this.#selectedFloodType.value = newFloodType;
         this.#selectedFloodLevel.value = config.min;
+
+        // Enable damage-cost group to be on when selected
+        if (newFloodType === "coastal damage") {
+            this.#selectedModel.value = "skadesokonomi"; 
+            this.updateModelVisibility("skadesokonomi"); 
+        } else {
+            if (this.selectedModel.value === "skadesokonomi") {
+                this.selectedModel.value = DEFAULT_MODEL_ID;
+            }
+            this.updateModelVisibility(this.#selectedModel.value); 
+        }
+
         // Update sublayer visibility for all models based on the new flood type
         LAYER_IDS.forEach(modelId => {
             this.updateSublayerVisibility(modelId, newFloodType);
