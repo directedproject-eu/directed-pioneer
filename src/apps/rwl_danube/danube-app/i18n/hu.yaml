@@ -114,14 +114,17 @@ messages:
   heading: "RWL Duna régió"
   map:
     layer_select:
-      heading: "Az ISIMIP éghajlati előrejelzései"
-      info1: "Ez a komponens lehetővé teszi különböző"
+      heading: "Éghajlati előrejelzések"
+      info1: "Ezeket az éghajlati előrejelzéseket az ISIMIP (Inter-Sectoral Impact Model Intercomparison Project) modellel készítették. 
+              Ez a komponens lehetővé teszi különböző"
       keyword1: "klímamodell"
       info2: "előrejelzések megtekintését három"
       keyword2: "közös társadalmi-gazdasági pálya (SSP)"
       info3: "klímaváltozási kibocsátási forgatókönyv keretében."
       keyword3: "A változók"
-      info4: "ezen komponens alján választhatók ki, majd az Operatív rétegekben kapcsolhatók be."
+      info4: "ezen komponens alján választhatók ki, majd az Operatív rétegekben kapcsolhatók be.
+              Meg kell jegyezni, hogy a rövidebb visszatérési időszakok gyakrabban előforduló és 
+              súlyosabb árvizeket jeleznek."
       model: "Modell"
       scenario: "Forgatókönyv"
       variable: "Változó"

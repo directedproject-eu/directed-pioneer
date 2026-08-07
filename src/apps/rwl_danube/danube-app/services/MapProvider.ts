@@ -365,8 +365,8 @@ export class MainMapProvider implements MapConfigProvider {
                                 
                 new SimpleLayer({
                     id: "danube_basin_territorial_units",
-                    title: "Danube basin territorial units",
-                    description: "Danube basin territorial units. Click on a region to open the crop chart.",
+                    title: "Crop Yield Projections",
+                    description: "Crop yield projections per Danube basin territorial unit. Territorial units are defined according to NUTS2 regions. Click on a region to open the crop chart.",
                     visible: false,
                     olLayer: new VectorLayer({
                         source: new VectorSource({

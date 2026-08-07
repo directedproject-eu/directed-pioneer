@@ -89,14 +89,16 @@ messages:
   heading: "RWL Donau-Region"
   map:
     layer_select:
-      heading: "Layer auswählen"
-      info1: "Diese Komponente ermöglicht die Anzeige verschiedener"
+      heading: "Klimaprognosen"
+      info1: "Diese Klimaprognosen wurden mit dem ISIMIP-Modell (Inter-Sectoral Impact Model Intercomparison Project) erstellt. 
+              Diese Komponente ermöglicht die Anzeige verschiedener"
       keyword1: "Klimamodell"
       info2: "-Projektionen innerhalb von drei verschiedenen"
       keyword2: "Shared Socioeconomic Pathway (SSP)"
       info3: "-Emissionsszenarien des Klimawandels."
       keyword3: "Variablen"
-      info4: "können am unteren Rand dieser Komponente ausgewählt und dann in den Operational Layers umgeschaltet werden."
+      info4: "können am unteren Rand dieser Komponente ausgewählt und dann in den Operational Layers umgeschaltet werden.
+              Es ist zu beachten, dass kürzere Wiederkehrperioden auf häufigere und stärkere Überschwemmungen hindeuten."
       model: "Modell"
       scenario: "Szenario"
       variable: "Variable"

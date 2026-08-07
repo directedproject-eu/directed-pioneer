@@ -89,15 +89,17 @@ messages:
   heading: "RWL The Danube Region"
   map:
     layer_select:
-      heading: "Climate projections from ISIMIP"
-      info1: "This component enables the viewing of different"
+      heading: "Climate Projections"
+      info1: "These climate projections were run with the ISIMIP (Inter-Sectoral Impact Model Intercomparison Project) model. 
+              This component enables the viewing of different"
       keyword1: "climate model"
       info2: "projections within three"
       keyword2: "Shared Socioeconomic Pathway (SSP)"
       info3: "climate change emission scenarios."
       keyword3: "Variables"
       info4: "can be selected at the bottom of this 
-        component and then toggled within the Operational Layers."
+        component and then toggled within the Operational Layers. It should be noted 
+        that smaller return periods indicate more frequent and heavy flooding."
       model: "Model"
       scenario: "Scenario"
       variable: "Variable"
