@@ -65,7 +65,6 @@ export default defineBuildConfig({
     ui: {
         references: [
             "authentication.AuthService",
-            "http.HttpService",
             "app.GeosphereService",
             "app.GeosphereForecastService",
             "app.IsimipHandler",
@@ -74,8 +73,7 @@ export default defineBuildConfig({
             "app.StationSelector",
             "app.ForestrySelector",
             "app.NutsSelector",
-            "ogc-features.VectorSourceFactory",
-            "ogc-features.SearchSourceFactory"
+            "ogc-features.VectorSourceFactory"
         ]
     },
     properties: {
