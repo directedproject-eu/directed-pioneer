@@ -37,7 +37,8 @@ async function loadUserConfig() {
     try {
         const targetUrl = new URL("../../../public/config.json", import.meta.url);
         return await (await fetch(targetUrl)).json();
-    } catch {
+    } catch (error) {
+        console.warn("Failed to load config.json, using defaults:", error);
         return DEFAULT_USER_CONFIG;
     }
 }
