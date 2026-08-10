@@ -29,7 +29,8 @@ const element = createCustomElement({
                     }
                 }
             };
-        } catch {
+        } catch (error)   {
+            console.warn("Failed to load config.json, using defaults:", error);
             return {
                 properties: {
                     "copenhagen-app": {
