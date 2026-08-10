@@ -59,8 +59,11 @@ catalog:
   "@formatjs/intl": ^4.1.13
   chroma-js: ^3.1.2
   framer-motion: ^12.23.24
+  highcharts: ^12.1.2
+  highcharts-react-official: ^3.2.1
   ol: ^10.9.0
-  ol-ext: ^4.0.36
+  ol-ext: ^4.0.36  
+  papaparse: ^5.5.2
   react-dom: *react_version
   react-icons: ^5.6.0
   react-use: ^17.6.0

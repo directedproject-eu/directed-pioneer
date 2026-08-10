@@ -15,7 +15,7 @@ import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pio
 import { BuildingDamageLegend } from "../components/legends/BuildingDamageLegend";
 import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
 import { FluvialFloodReturnPeriodShiftLegend } from "../components/legends/FluvialFloodReturnPeriodShiftLegend";
-import { LidarLegend } from "../components/legends/LidarLegend ";
+import { LidarLegend } from "../components/legends/LidarLegend";
 import { WaterLevelLegend } from "../components/legends/WaterLevelLegend";
 
 interface Config {
