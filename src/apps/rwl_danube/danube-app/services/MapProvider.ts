@@ -3,14 +3,16 @@
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { fromLonLat } from "ol/proj";
-import { Circle as CircleStyle, Fill, Stroke, Style } from "ol/style"; // Zusammengefasster Import
+import { Circle as CircleStyle, Fill, Stroke, Style } from "ol/style";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 import GeoJSON from "ol/format/GeoJSON.js";
 import TileWMS from "ol/source/TileWMS";
+import { ComponentType } from "react";
 import { ServiceOptions } from "@open-pioneer/runtime";
+import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { GroupLayer, MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import { BuildingDamageLegend } from "../components/legends/BuildingDamageLegend";
 import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
@@ -20,6 +22,17 @@ import { WaterLevelLegend } from "../components/legends/WaterLevelLegend";
 
 interface Config {
     pygeoapiBaseUrl: string;
+}
+
+interface WmsLayerOptions {
+    /** Layer name on the geoserver; also used as the layer id. */
+    name: string;
+    title: string;
+    description: string;
+    /** Consumed by the feature info component, e.g. "WMS_tiles" or "WMS_features". */
+    type: string;
+    visible?: boolean;
+    legend?: ComponentType<LegendItemComponentProps>;
 }
 
 const wmsLayersHistoricalFlooding = [
@@ -262,34 +275,35 @@ export class MainMapProvider implements MapConfigProvider {
         return regionLayer;
     }
 
-    createWmsLayer(
-        layerName: string,
-        layerTitle: string,
-        layerDescription: string,
-        layerType: string,
-        visible: boolean = false
-    ) {
-        const wmsLayerContent = {
-            id: layerName,
-            title: layerTitle,
-            description: layerDescription,
+    createWmsLayer({
+        name,
+        title,
+        description,
+        type,
+        visible = false,
+        legend
+    }: WmsLayerOptions): SimpleLayer {
+        return new SimpleLayer({
+            id: name,
+            title: title,
+            description: description,
             visible: visible,
             olLayer: new TileLayer({
                 source: new TileWMS({
                     url: "https://directed.dev.52north.org/geoserver/directed/wms",
                     params: {
-                        LAYERS: layerName
+                        LAYERS: name
                     }
                 }),
                 properties: {
-                    title: layerTitle,
-                    id: layerName,
-                    type: layerType
+                    title: title,
+                    id: name,
+                    type: type
                 }
             }),
-            isBaseLayer: false
-        };
-        return wmsLayerContent;
+            isBaseLayer: false,
+            ...(legend && { attributes: { legend: { Component: legend } } })
+        });
     }
 
     createReturnPeriodShiftLayers(ssp: string) {
@@ -321,24 +335,13 @@ export class MainMapProvider implements MapConfigProvider {
             }
         ];
 
-        const layers = layerNames.map((layer) => {
-            const l = new SimpleLayer({
-                ...this.createWmsLayer(
-                    layer.name,
-                    layer.title,
-                    layer.description,
-                    "WMS_features",
-                    false
-                ),
-                attributes: {
-                    "legend": {
-                        Component: FluvialFloodReturnPeriodShiftLegend
-                    }
-                }
-            });
-            return l;
-        });
-        return layers;
+        return layerNames.map((layer) =>
+            this.createWmsLayer({
+                ...layer,
+                type: "WMS_features",
+                legend: FluvialFloodReturnPeriodShiftLegend
+            })
+        );
     }
 
     async getMapConfig(): Promise<MapConfig> {
@@ -409,16 +412,8 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "pluvial_flooding_historical",
                                     layers: [
-                                        ...wmsPluvialFloodingLayersRef.map(
-                                            ({ name, title, description }) =>
-                                                new SimpleLayer({
-                                                    ...this.createWmsLayer(
-                                                        name,
-                                                        title,
-                                                        description,
-                                                        "WMS_tiles"
-                                                    )
-                                                })
+                                        ...wmsPluvialFloodingLayersRef.map((layer) =>
+                                            this.createWmsLayer({ ...layer, type: "WMS_tiles" })
                                         )
                                     ],
                                     attributes: {
@@ -439,16 +434,11 @@ export class MainMapProvider implements MapConfigProvider {
                                             visible: false,
                                             id: "2050_ssp245",
                                             layers: [
-                                                ...wmsPluvialFloodingLayersSSP2452050.map(
-                                                    ({ name, title, description }) =>
-                                                        new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description,
-                                                                "WMS_tiles"
-                                                            )
-                                                        })
+                                                ...wmsPluvialFloodingLayersSSP2452050.map((layer) =>
+                                                    this.createWmsLayer({
+                                                        ...layer,
+                                                        type: "WMS_tiles"
+                                                    })
                                                 )
                                             ]
                                         }),
@@ -458,16 +448,11 @@ export class MainMapProvider implements MapConfigProvider {
                                             visible: false,
                                             id: "2050_ssp585",
                                             layers: [
-                                                ...wmsPluvialFloodingLayersSSP5852050.map(
-                                                    ({ name, title, description }) =>
-                                                        new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description,
-                                                                "WMS_tiles"
-                                                            )
-                                                        })
+                                                ...wmsPluvialFloodingLayersSSP5852050.map((layer) =>
+                                                    this.createWmsLayer({
+                                                        ...layer,
+                                                        type: "WMS_tiles"
+                                                    })
                                                 )
                                             ]
                                         })
@@ -490,16 +475,11 @@ export class MainMapProvider implements MapConfigProvider {
                                             visible: false,
                                             id: "2080_ssp245",
                                             layers: [
-                                                ...wmsPluvialFloodingLayersSSP2452080.map(
-                                                    ({ name, title, description }) =>
-                                                        new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description,
-                                                                "WMS_tiles"
-                                                            )
-                                                        })
+                                                ...wmsPluvialFloodingLayersSSP2452080.map((layer) =>
+                                                    this.createWmsLayer({
+                                                        ...layer,
+                                                        type: "WMS_tiles"
+                                                    })
                                                 )
                                             ]
                                         }),
@@ -509,16 +489,11 @@ export class MainMapProvider implements MapConfigProvider {
                                             visible: false,
                                             id: "2080_ssp585",
                                             layers: [
-                                                ...wmsPluvialFloodingLayersSSP5852080.map(
-                                                    ({ name, title, description }) =>
-                                                        new SimpleLayer({
-                                                            ...this.createWmsLayer(
-                                                                name,
-                                                                title,
-                                                                description,
-                                                                "WMS_tiles"
-                                                            )
-                                                        })
+                                                ...wmsPluvialFloodingLayersSSP5852080.map((layer) =>
+                                                    this.createWmsLayer({
+                                                        ...layer,
+                                                        type: "WMS_tiles"
+                                                    })
                                                 )
                                             ]
                                         })
@@ -535,42 +510,30 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "pluvial_flooding_base_data",
                                     layers: [
-                                        new SimpleLayer({
-                                            ...this.createWmsLayer(
-                                                "Vienna_lidar_2m_ViennaCenter_32633",
-                                                "Lidar",
-                                                "Lidar elevation map with 2 m resolution",
-                                                "WMS_tiles"
-                                            ),
-                                            attributes: {
-                                                "legend": {
-                                                    Component: LidarLegend
-                                                }
-                                            }
+                                        this.createWmsLayer({
+                                            name: "Vienna_lidar_2m_ViennaCenter_32633",
+                                            title: "Lidar",
+                                            description: "Lidar elevation map with 2 m resolution",
+                                            type: "WMS_tiles",
+                                            legend: LidarLegend
                                         }),
-                                        new SimpleLayer({
-                                            ...this.createWmsLayer(
-                                                "Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021",
-                                                "Soil Clay Content",
-                                                "Soil clay content",
-                                                "WMS_tiles"
-                                            )
+                                        this.createWmsLayer({
+                                            name: "Vienna_OpenLandMap_SOL_SOL_CLAY-WFRACTION_USDA-3A1A1A_M_v02_162021",
+                                            title: "Soil Clay Content",
+                                            description: "Soil clay content",
+                                            type: "WMS_tiles"
                                         }),
-                                        new SimpleLayer({
-                                            ...this.createWmsLayer(
-                                                "Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021",
-                                                "Soil Sand Content",
-                                                "Soil sand content",
-                                                "WMS_tiles"
-                                            )
+                                        this.createWmsLayer({
+                                            name: "Vienna_OpenLandMap_SOL_SOL_SAND-WFRACTION_USDA-3A1A1A_M_v02_162021",
+                                            title: "Soil Sand Content",
+                                            description: "Soil sand content",
+                                            type: "WMS_tiles"
                                         }),
-                                        new SimpleLayer({
-                                            ...this.createWmsLayer(
-                                                "osm_buildings_162014",
-                                                "OSM Buildings",
-                                                "OSM Buildings",
-                                                "WMS_tiles"
-                                            )
+                                        this.createWmsLayer({
+                                            name: "osm_buildings_162014",
+                                            title: "OSM Buildings",
+                                            description: "OSM Buildings",
+                                            type: "WMS_tiles"
                                         })
                                     ]
                                 })
@@ -588,16 +551,8 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "historical_flooding",
                                     layers: [
-                                        ...wmsLayersHistoricalFlooding.map(
-                                            ({ name, title, description }) =>
-                                                new SimpleLayer({
-                                                    ...this.createWmsLayer(
-                                                        name,
-                                                        title,
-                                                        description,
-                                                        "WMS_tiles"
-                                                    )
-                                                })
+                                        ...wmsLayersHistoricalFlooding.map((layer) =>
+                                            this.createWmsLayer({ ...layer, type: "WMS_tiles" })
                                         )
                                     ],
                                     attributes: {
@@ -611,16 +566,8 @@ export class MainMapProvider implements MapConfigProvider {
                                     visible: false,
                                     id: "historical_damage",
                                     layers: [
-                                        ...wmsLayersHistoricalDamage.map(
-                                            ({ name, title, description }) =>
-                                                new SimpleLayer({
-                                                    ...this.createWmsLayer(
-                                                        name,
-                                                        title,
-                                                        description,
-                                                        "WMS_tiles"
-                                                    )
-                                                })
+                                        ...wmsLayersHistoricalDamage.map((layer) =>
+                                            this.createWmsLayer({ ...layer, type: "WMS_tiles" })
                                         )
                                     ],
                                     attributes: {
@@ -659,29 +606,22 @@ export class MainMapProvider implements MapConfigProvider {
                                 })
                             ]
                         }),
-                        new SimpleLayer({
-                            ...this.createWmsLayer(
-                                "euh_danube_bigrivers_10",
-                                "10-Year Flood Depth",
+                        this.createWmsLayer({
+                            name: "euh_danube_bigrivers_10",
+                            title: "10-Year Flood Depth",
+                            description:
                                 "10-year flood depth from 1974 to 2023. The attribute 'b_flddph' denotes the flood depth in m. The flood depth is measured above the water level of the river which is filled to its natural banks (bankfull).",
-                                "WMS_features",
-                                true
-                            ),
-                            attributes: {
-                                "legend": {
-                                    Component: FluvialFloodLegend
-                                }
-                            }
+                            type: "WMS_features",
+                            visible: true,
+                            legend: FluvialFloodLegend
                         })
                     ]
                 }),
-                new SimpleLayer({
-                    ...this.createWmsLayer(
-                        "euh_danube_wsurf_gt1km2_c",
-                        "Reservoirs And Lakes",
-                        "Large reservoirs and lakes in the Danube region",
-                        "WMS_features"
-                    )
+                this.createWmsLayer({
+                    name: "euh_danube_wsurf_gt1km2_c",
+                    title: "Reservoirs And Lakes",
+                    description: "Large reservoirs and lakes in the Danube region",
+                    type: "WMS_features"
                 })
             ]
         };
