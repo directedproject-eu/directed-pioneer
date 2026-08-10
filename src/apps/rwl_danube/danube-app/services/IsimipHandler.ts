@@ -62,8 +62,9 @@ async function getRangeFromGeoTiff(url: string): Promise<number[]> {
 
         return [minValue, maxValue];
     } catch (error) {
-        console.error("Error reading GeoTIFF:", error);
-        return NaN;
+        // Rethrow rather than return a substitute: the caller keeps the previous range,
+        // which is wrong but usable, instead of feeding NaN into the colour scale.
+        throw new Error(`Failed to read the value range from ${url}`, { cause: error });
     }
 }
 
