@@ -166,7 +166,10 @@ export class MainMapProvider implements MapConfigProvider {
     pygeoapiBaseUrl: string;
 
     constructor(serviceOptions: ServiceOptions) {
-        const config = serviceOptions.properties.userConfig as Config;
+        const config = serviceOptions.properties.userConfig as Partial<Config> | undefined;
+        if (!config?.pygeoapiBaseUrl) {
+            throw new Error("MainMapProvider requires a 'pygeoapiBaseUrl' in userConfig");
+        }
         this.pygeoapiBaseUrl = config.pygeoapiBaseUrl;
     }
 
