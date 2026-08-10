@@ -63,7 +63,7 @@ catalog:
   highcharts: ^12.1.2
   highcharts-react-official: ^3.2.1
   ol: ^10.9.0
-  ol-ext: ^4.0.36  
+  ol-ext: ^4.0.36
   papaparse: ^5.5.2
   react-dom: *react_version
   react-icons: ^5.6.0
@@ -233,7 +233,7 @@ shamefullyHoist: true
 ignoreWorkspaceCycles: true
 
 allowBuilds:
-  '@parcel/watcher': true
-  '@swc/core': true
+  "@parcel/watcher": true
+  "@swc/core": true
   esbuild: true
   unrs-resolver: true

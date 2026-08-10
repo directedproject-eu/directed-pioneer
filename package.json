@@ -22,7 +22,6 @@
         "test": "vitest",
         "prepare": "husky && pnpm check-duplicates"
     },
-    
     "devDependencies": {
         "@open-pioneer/build-package-cli": "catalog:",
         "@open-pioneer/build-support": "catalog:",
