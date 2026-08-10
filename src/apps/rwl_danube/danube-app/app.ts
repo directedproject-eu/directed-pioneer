@@ -37,6 +37,25 @@ const KEYCLOAK_PROPERTIES = {
     }
 } satisfies KeycloakProperties;
 
+/**
+ * Reads the 'lang' parameter from the URL and, if it names a locale the app actually
+ * supports, uses it as the application's locale. Helpful during development, but optional.
+ */
+function getForcedLocale(): string | undefined {
+    const requested = new URLSearchParams(window.location.search).get("lang");
+    if (!requested) {
+        return undefined;
+    }
+    if (!appMetadata.locales?.includes(requested)) {
+        console.warn(
+            `Ignoring URL parameter 'lang=${requested}': supported locales are ` +
+                `${appMetadata.locales?.join(", ")}.`
+        );
+        return undefined;
+    }
+    return requested;
+}
+
 async function loadUserConfig(): Promise<UserConfig> {
     try {
         const targetUrl = new URL("../../../public/config.json", import.meta.url);
@@ -60,6 +79,9 @@ const element = createCustomElement({
     component: MapApp,
     chakraSystemConfig: themeConfig,
     appMetadata,
+    config: {
+        locale: getForcedLocale()
+    },
     async resolveConfig(): Promise<ApplicationConfig> {
         return {
             properties: {
