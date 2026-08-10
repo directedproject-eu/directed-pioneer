@@ -11,6 +11,20 @@ interface References {
 /** Requests below this url get the keycloak bearer token attached, nothing else does. */
 const PROTECTED_BASE_URL = new URL("https://directed.dev.52north.org/protected/");
 
+/**
+ * Attaches the keycloak access token to requests for the protected pygeoapi collections.
+ *
+ * Registered as `http.Interceptor` in `build.config.mjs`, which means the runtime calls
+ * it for every request that goes through `@open-pioneer/http` -- including the ones the
+ * `ogc-features` package makes internally, which is how the protected layers in
+ * `MapApp.tsx` get authorized without passing a token around themselves.
+ *
+ * Two consequences of sitting in that path: it runs for requests to any host, so it has
+ * to decide quickly that a request is none of its business; and anything it throws is
+ * re-thrown by the http service as "Interceptor '...' failed with an error", failing the
+ * request itself rather than just skipping the header. Hence the early returns -- a
+ * missing session is a normal state here, not an error.
+ */
 export class TokenInterceptor implements Interceptor {
     private authService: AuthService;
 
