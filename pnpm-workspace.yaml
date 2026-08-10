@@ -59,6 +59,7 @@ catalog:
   "@formatjs/intl": ^4.1.13
   chroma-js: ^3.1.2
   framer-motion: ^12.23.24
+  geotiff: ^3.0.5
   highcharts: ^12.1.2
   highcharts-react-official: ^3.2.1
   ol: ^10.9.0
