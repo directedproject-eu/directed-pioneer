@@ -174,6 +174,33 @@ const wmsPluvialFloodingLayersSSP5852080 = [
 ];
 
 export const MAP_ID = "main";
+
+/**
+ * Builds the initial layer tree of the map. The runtime asks for it once at startup via
+ * `map.MapConfigProvider` and hands the result to the `MapRegistry`; there is no way to
+ * change it from here afterwards.
+ *
+ * This file is not the whole map. Four other places add layers to the same model at
+ * runtime, and none of them appear below:
+ * - `IsimipHandler` adds and repeatedly retitles the "isimip" raster layer
+ * - `GeosphereService` and `GeosphereForecastService` add their own raster layers
+ * - `MapApp.tsx` adds the protected past-event layers, but only once a user is logged in
+ *
+ * Two data sources feed the layers here: WMS tiles from the geoserver, whose url is still
+ * hardcoded in {@link MainMapProvider.createWmsLayer}, and GeoJSON from pygeoapi, which
+ * follows the configured `pygeoapiBaseUrl`.
+ *
+ * Two conventions worth knowing before adding a layer:
+ * - `olLayer.properties.type` ("WMS_tiles", "WMS_features", "GeoJSON", ...) is what the
+ *   feature info component switches on -- get it wrong and clicking the layer does nothing.
+ * - `attributes.legend.Component` is picked up by `@open-pioneer/legend`. It works on
+ *   groups as well as on single layers; the pluvial flooding groups use that to share one
+ *   legend across all their members.
+ *
+ * All titles and descriptions are english literals, so they stay english in the german and
+ * hungarian builds. `ServiceOptions` carries an `intl` instance -- see the rhine-erft map
+ * provider for what using it looks like.
+ */
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
     pygeoapiBaseUrl: string;
