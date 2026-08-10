@@ -3,7 +3,7 @@
 import { ApplicationConfig, createCustomElement } from "@open-pioneer/runtime";
 import { KeycloakProperties } from "@open-pioneer/authentication-keycloak";
 import * as appMetadata from "open-pioneer:app";
-import {config as themeConfig} from "@open-pioneer/base-theme";
+import { config as themeConfig } from "@open-pioneer/base-theme";
 import { MapApp } from "./MapApp";
 
 const DEFAULT_USER_CONFIG = {
