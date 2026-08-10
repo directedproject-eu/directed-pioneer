@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@conterra/reactivity-core':
+      specifier: ^0.8.6
+      version: 0.8.6
     '@emotion/react':
       specifier: ^11.14.0
       version: 11.14.0
@@ -21,17 +24,20 @@ catalogs:
     '@open-pioneer/authentication-keycloak':
       specifier: ^4.6.0
       version: 4.6.0
+    '@open-pioneer/base-theme':
+      specifier: ^4.6.0
+      version: 4.6.0
     '@open-pioneer/basemap-switcher':
       specifier: ^1.3.0
       version: 1.3.0
     '@open-pioneer/build-package-cli':
-      specifier: ^3.1.0
+      specifier: ^3.2.0
       version: 3.2.0
     '@open-pioneer/build-support':
       specifier: ^3.1.0
       version: 3.1.1
     '@open-pioneer/check-pnpm-duplicates':
-      specifier: ^0.3.2
+      specifier: ^0.3.3
       version: 0.3.3
     '@open-pioneer/coordinate-viewer':
       specifier: ^1.3.0
@@ -63,6 +69,9 @@ catalogs:
     '@open-pioneer/overview-map':
       specifier: ^1.3.0
       version: 1.3.0
+    '@open-pioneer/react-utils':
+      specifier: ^4.6.0
+      version: 4.6.0
     '@open-pioneer/runtime':
       specifier: ^4.6.0
       version: 4.6.0
@@ -79,7 +88,7 @@ catalogs:
       specifier: ^1.3.0
       version: 1.3.0
     '@open-pioneer/vite-plugin-pioneer':
-      specifier: ^6.0.0
+      specifier: ^6.0.1
       version: 6.0.1
     '@testing-library/dom':
       specifier: ^10.4.1
@@ -156,6 +165,12 @@ catalogs:
     happy-dom:
       specifier: ^20.10.6
       version: 20.10.6
+    highcharts:
+      specifier: ^12.1.2
+      version: 12.6.0
+    highcharts-react-official:
+      specifier: ^3.2.1
+      version: 3.2.3
     husky:
       specifier: ^9.1.7
       version: 9.1.7
@@ -174,6 +189,9 @@ catalogs:
     ol-ext:
       specifier: ^4.0.36
       version: 4.0.38
+    papaparse:
+      specifier: ^5.5.2
+      version: 5.5.4
     prettier:
       specifier: ^3.8.3
       version: 3.9.5
@@ -400,15 +418,18 @@ importers:
       '@chakra-ui/react':
         specifier: 3.35.0
         version: 3.35.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@conterra/reactivity-core':
+        specifier: 'catalog:'
+        version: 0.8.6
       '@emotion/react':
         specifier: 'catalog:'
         version: 11.14.0(@types/react@19.2.17)(react@19.2.7)
       '@emotion/styled':
         specifier: 'catalog:'
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react@19.2.7)
-      '@open-pioneer-community/window':
+      '@open-pioneer/base-theme':
         specifier: 'catalog:'
-        version: 0.1.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))
+        version: 4.6.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@open-pioneer/basemap-switcher':
         specifier: 'catalog:'
         version: 1.3.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(geotiff@3.0.5)(react-dom@19.2.7(react@19.2.7))
@@ -430,15 +451,12 @@ importers:
       '@open-pioneer/map-ui-components':
         specifier: 'catalog:'
         version: 1.3.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))
-      '@open-pioneer/measurement':
-        specifier: 'catalog:'
-        version: 1.3.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(geotiff@3.0.5)(react-dom@19.2.7(react@19.2.7))
       '@open-pioneer/notifier':
         specifier: 'catalog:'
         version: 4.6.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))
-      '@open-pioneer/overview-map':
+      '@open-pioneer/react-utils':
         specifier: 'catalog:'
-        version: 1.3.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(geotiff@3.0.5)(react-dom@19.2.7(react@19.2.7))
+        version: 4.6.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))
       '@open-pioneer/runtime':
         specifier: 'catalog:'
         version: 4.6.0(@types/react@19.2.17)
@@ -454,6 +472,9 @@ importers:
       chroma-js:
         specifier: 'catalog:'
         version: 3.2.0
+      featureinfo:
+        specifier: workspace:^
+        version: link:../../../packages/featureinfo
       layerdownload:
         specifier: workspace:^
         version: link:../../../packages/layerdownload
@@ -466,9 +487,6 @@ importers:
       ol:
         specifier: 'catalog:'
         version: 10.9.0
-      ol-ext:
-        specifier: 'catalog:'
-        version: 4.0.38(ol@10.9.0)
       react:
         specifier: 'catalog:'
         version: 19.2.7
@@ -478,15 +496,15 @@ importers:
       react-icons:
         specifier: 'catalog:'
         version: 5.7.0(react@19.2.7)
-      react-use:
-        specifier: 'catalog:'
-        version: 17.6.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       saferplaces:
         specifier: workspace:^
         version: link:../../../packages/saferplaces
       taxonomy:
         specifier: workspace:^
         version: link:../../../packages/taxonomy
+      theme:
+        specifier: workspace:^
+        version: link:../../../packages/theme
 
   src/apps/rwl_danube/danube-app:
     dependencies:
@@ -598,12 +616,18 @@ importers:
 
   src/apps/rwl_rhine_erft/rhine-erft-app:
     dependencies:
+      '@chakra-ui/react':
+        specifier: 3.35.0
+        version: 3.35.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@emotion/react':
         specifier: 'catalog:'
         version: 11.14.0(@types/react@19.2.17)(react@19.2.7)
       '@emotion/styled':
         specifier: 'catalog:'
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react@19.2.7)
+      '@open-pioneer/base-theme':
+        specifier: 'catalog:'
+        version: 4.6.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@open-pioneer/basemap-switcher':
         specifier: 'catalog:'
         version: 1.3.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(geotiff@3.0.5)(react-dom@19.2.7(react@19.2.7))
@@ -631,9 +655,9 @@ importers:
       '@open-pioneer/notifier':
         specifier: 'catalog:'
         version: 4.6.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))
-      '@open-pioneer/overview-map':
+      '@open-pioneer/react-utils':
         specifier: 'catalog:'
-        version: 1.3.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(geotiff@3.0.5)(react-dom@19.2.7(react@19.2.7))
+        version: 4.6.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))
       '@open-pioneer/runtime':
         specifier: 'catalog:'
         version: 4.6.0(@types/react@19.2.17)
@@ -646,9 +670,18 @@ importers:
       '@open-pioneer/toc':
         specifier: 'catalog:'
         version: 1.3.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(geotiff@3.0.5)(react-dom@19.2.7(react@19.2.7))
+      chroma-js:
+        specifier: 'catalog:'
+        version: 3.2.0
       featureinfo:
         specifier: workspace:^
         version: link:../../../packages/featureinfo
+      highcharts:
+        specifier: 'catalog:'
+        version: 12.6.0
+      highcharts-react-official:
+        specifier: 'catalog:'
+        version: 3.2.3(highcharts@12.6.0)(react@19.2.7)
       layerdownload:
         specifier: workspace:^
         version: link:../../../packages/layerdownload
@@ -661,6 +694,9 @@ importers:
       ol-ext:
         specifier: 'catalog:'
         version: 4.0.38(ol@10.9.0)
+      papaparse:
+        specifier: 'catalog:'
+        version: 5.5.4
       react:
         specifier: 'catalog:'
         version: 19.2.7
@@ -670,9 +706,6 @@ importers:
       react-icons:
         specifier: 'catalog:'
         version: 5.7.0(react@19.2.7)
-      react-use:
-        specifier: 'catalog:'
-        version: 17.6.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       theme:
         specifier: workspace:^
         version: link:../../../packages/theme
