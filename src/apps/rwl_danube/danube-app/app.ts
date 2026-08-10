@@ -6,7 +6,11 @@ import * as appMetadata from "open-pioneer:app";
 import { config as themeConfig } from "@open-pioneer/base-theme";
 import { MapApp } from "./MapApp";
 
-const DEFAULT_USER_CONFIG = {
+interface UserConfig {
+    pygeoapiBaseUrl: string;
+}
+
+const DEFAULT_USER_CONFIG: UserConfig = {
     pygeoapiBaseUrl: "https://directed.dev.52north.org/api"
 };
 
@@ -33,10 +37,19 @@ const KEYCLOAK_PROPERTIES = {
     }
 } satisfies KeycloakProperties;
 
-async function loadUserConfig() {
+async function loadUserConfig(): Promise<UserConfig> {
     try {
         const targetUrl = new URL("../../../public/config.json", import.meta.url);
-        return await (await fetch(targetUrl)).json();
+        const response = await fetch(targetUrl);
+        if (!response.ok) {
+            throw new Error(`Request failed with status code ${response.status}.`);
+        }
+
+        const config = (await response.json()) as Partial<UserConfig>;
+        if (!config.pygeoapiBaseUrl) {
+            throw new Error("Property 'pygeoapiBaseUrl' is missing.");
+        }
+        return { ...DEFAULT_USER_CONFIG, ...config };
     } catch (error) {
         console.warn("Failed to load config.json, using defaults:", error);
         return DEFAULT_USER_CONFIG;
