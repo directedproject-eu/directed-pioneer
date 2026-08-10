@@ -7,11 +7,7 @@ export default defineBuildConfig({
     i18n: ["en", "de", "hu"],
     services: {
         MainMapProvider: {
-            provides: ["map.MapConfigProvider"],
-            references: {
-                vectorSourceFactory: "ogc-features.VectorSourceFactory",
-                authService: "authentication.AuthService"
-            }
+            provides: ["map.MapConfigProvider"]
         },
         IsimipHandlerImpl: {
             provides: ["app.IsimipHandler"],
