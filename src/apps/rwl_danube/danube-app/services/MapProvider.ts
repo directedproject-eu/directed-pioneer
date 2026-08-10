@@ -371,7 +371,7 @@ export class MainMapProvider implements MapConfigProvider {
                     visible: false,
                     olLayer: new VectorLayer({
                         source: new VectorSource({
-                            url: "https://directed.dev.52north.org/api/collections/danube_basin_territorial_units/items?f=json&limit=65",
+                            url: `${this.pygeoapiBaseUrl}/collections/danube_basin_territorial_units/items?f=json&limit=65`,
                             format: new GeoJSON()
                         }),
                         style: new Style({
