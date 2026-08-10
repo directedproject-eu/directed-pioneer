@@ -45,7 +45,6 @@ export default defineBuildConfig({
                 mapRegistry: "map.MapRegistry"
             }
         },
-
         LayerZoomImpl: {
             provides: ["app.LayerZoom"]
         },
