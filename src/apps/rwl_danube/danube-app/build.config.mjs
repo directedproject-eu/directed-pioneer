@@ -76,6 +76,10 @@ export default defineBuildConfig({
             "ogc-features.VectorSourceFactory"
         ]
     },
+    // Deliberately empty: resolveConfig() in app.ts fills this at startup from
+    // config.json and falls back to its own defaults if that fails. Putting a default
+    // here as well would give the app two sources of truth, and this one would sit
+    // apart from the validation and the warning that go with it.
     properties: {
         userConfig: {}
     }
