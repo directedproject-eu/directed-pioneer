@@ -6,14 +6,31 @@ import * as appMetadata from "open-pioneer:app";
 import { config as themeConfig } from "@open-pioneer/base-theme";
 import { MapApp } from "./MapApp";
 
+/**
+ * The properties this app reads from `src/public/config.json`.
+ *
+ * Deliberately narrow: the file also carries settings for other packages, e.g.
+ * `taxonomyBaseUrl`. Those are passed through untouched rather than declared here.
+ */
 interface UserConfig {
     pygeoapiBaseUrl: string;
 }
 
+/**
+ * Used when `config.json` is missing or unusable. Points at the default deployment so
+ * the app still starts instead of coming up without a data source.
+ */
 const DEFAULT_USER_CONFIG: UserConfig = {
     pygeoapiBaseUrl: "https://directed.dev.52north.org/api"
 };
 
+/**
+ * Configuration for `@open-pioneer/authentication-keycloak`.
+ *
+ * Note the mixed units: `interval` is in milliseconds, `timeLeft` in seconds -- it is
+ * handed to `keycloak.updateToken` as `minValidity`. So: check every 6 seconds, renew a
+ * token that expires within the next 70.
+ */
 const KEYCLOAK_PROPERTIES = {
     keycloakOptions: {
         refreshOptions: {
@@ -56,8 +73,17 @@ function getForcedLocale(): string | undefined {
     return requested;
 }
 
+/**
+ * Loads `config.json`, falling back to {@link DEFAULT_USER_CONFIG} on any problem.
+ *
+ * Both checks below matter: `fetch` resolves on HTTP error status, so an error page that
+ * happens to parse as JSON would otherwise reach the services, and a config without
+ * `pygeoapiBaseUrl` would leave the map layers requesting "undefined/collections/...".
+ */
 async function loadUserConfig(): Promise<UserConfig> {
     try {
+        // Vite rewrites this at build time; the path is relative to this module, not to
+        // the served document.
         const targetUrl = new URL("../../../public/config.json", import.meta.url);
         const response = await fetch(targetUrl);
         if (!response.ok) {
