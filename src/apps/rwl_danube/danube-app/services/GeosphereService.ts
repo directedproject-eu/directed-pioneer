@@ -8,6 +8,7 @@ import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
 import { PrecipitationLegend } from "../components/legends/PrecipitationLegend";
 import { MAP_ID } from "./MapProvider";
+import { DAILY_PRECIPITATION_STOPS } from "../config/precipitationScale";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -90,18 +91,9 @@ export class GeosphereServiceImpl implements GeosphereService {
         });
     }
 
-    private precipTotalColorMap = [
-        { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
-        { value: 25, color: "#af7ab3", label: "25" },
-        { value: 50, color: "#95649a", label: "50" },
-        { value: 100, color: "#885889", label: "100" },
-        { value: 200, color: "#674571", label: "200" },
-        { value: 300, color: "#503752", label: "300" }
-    ];
-
     private createColorGradient() {
-        const boundaries = this.precipTotalColorMap.map((item) => item.value);
-        const gradientColors = this.precipTotalColorMap.map((item) => item.color);
+        const boundaries = DAILY_PRECIPITATION_STOPS.map((item) => item.value);
+        const gradientColors = DAILY_PRECIPITATION_STOPS.map((item) => item.color);
 
         const colorScale = chroma.scale(gradientColors).domain(boundaries).mode("lab");
 

@@ -10,6 +10,7 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import chroma from "chroma-js";
 import PrecipitationForecastLegend from "../components/legends/PrecipitationForecastLegend";
 import { MAP_ID } from "./MapProvider";
+import { FORECAST_PRECIPITATION_COLORS } from "../config/precipitationScale";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -213,14 +214,6 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
         if (range[0] === range[1]) {
             return "#00000000";
         }
-        const tempColors = {
-            color1: "#00000000",
-            color2: "#af7ab3",
-            color3: "#95649a",
-            color4: "#885889",
-            color5: "#674571",
-            color6: "#503752"
-        };
         const increment = (range[1] - range[0]) / 5;
 
         const boundaries_temp = [
@@ -231,17 +224,8 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
             range[0] + 4 * increment,
             range[1]
         ];
-        const gradientColors_temp = [
-            tempColors.color1,
-            tempColors.color2,
-            tempColors.color3,
-            tempColors.color4,
-            tempColors.color5,
-            tempColors.color6
-        ];
-
         const colorScale_temp = chroma
-            .scale(gradientColors_temp)
+            .scale([...FORECAST_PRECIPITATION_COLORS])
             .domain(boundaries_temp)
             .mode("lab");
 
