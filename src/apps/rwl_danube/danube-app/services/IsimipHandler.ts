@@ -6,11 +6,11 @@ import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapModel, MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
-import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import Legend from "../components/legends/Legend";
 
 import chroma from "chroma-js";
 import { MAP_ID } from "./MapProvider";
+import { getRangeFromGeoTiff } from "./geotiffRange";
 
 const layer_info = {
     "hurs": {
@@ -57,45 +57,8 @@ function isIsimipVariable(value: string): value is IsimipVariable {
 /** Where the ISIMIP cloud-optimised geotiffs live. */
 const ISIMIP_COG_BASE_URL = "https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs";
 
-/** Pixels at or beyond this magnitude are fill values, not measurements. */
-const FILL_VALUE_THRESHOLD = 1e29;
-
 /** Slider drags fire one setter per step; collapse those bursts into one range request. */
 const STYLE_UPDATE_DELAY_MS = 250;
-
-async function getRangeFromGeoTiff(url: string): Promise<[number, number] | undefined> {
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-
-        const tiff = await GeoTIFFJS.fromArrayBuffer(arrayBuffer);
-        const image = await tiff.getImage();
-
-        const rasterData = await image.readRasters();
-        const bandData = rasterData[0]; // expecting only one band in the geotif
-        if (!bandData) {
-            throw new Error("The geotiff contains no raster band");
-        }
-
-        let min = Infinity;
-        let max = -Infinity;
-        for (const value of bandData) {
-            if (!Number.isFinite(value) || Math.abs(value) >= FILL_VALUE_THRESHOLD) {
-                continue;
-            }
-            if (value < min) min = value;
-            if (value > max) max = value;
-        }
-
-        // spei12 accumulates over twelve months, so its files for the first year consist
-        // entirely of fill values. Report "no usable range" instead of a degenerate one.
-        return min <= max ? [min, max] : undefined;
-    } catch (error) {
-        // Rethrow rather than return a substitute: the caller keeps the previous range,
-        // which is wrong but usable, instead of feeding NaN into the colour scale.
-        throw new Error(`Failed to read the value range from ${url}`, { cause: error });
-    }
-}
 
 interface References {
     mapRegistry: MapRegistry;

@@ -6,11 +6,11 @@ import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
-import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import chroma from "chroma-js";
 import PrecipitationForecastLegend from "../components/legends/PrecipitationForecastLegend";
 import { MAP_ID } from "./MapProvider";
 import { FORECAST_PRECIPITATION_COLORS } from "../config/precipitationScale";
+import { getRangeFromGeoTiff } from "./geotiffRange";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -26,43 +26,6 @@ export interface GeosphereForecastService extends DeclaredService<"app.Geosphere
 
 export interface LegendMetadata {
     range: [number, number];
-}
-
-/** Pixels at or beyond this magnitude are fill values, not measurements. */
-const FILL_VALUE_THRESHOLD = 1e29;
-
-async function getRangeFromGeoTiff(url: string): Promise<[number, number] | undefined> {
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-
-        const tiff = await GeoTIFFJS.fromArrayBuffer(arrayBuffer);
-        const image = await tiff.getImage();
-
-        const rasterData = await image.readRasters();
-        const bandData = rasterData[0]; // expecting only one band in the geotif
-        if (!bandData) {
-            throw new Error("The geotiff contains no raster band");
-        }
-
-        let min = Infinity;
-        let max = -Infinity;
-        for (const value of bandData) {
-            if (!Number.isFinite(value) || Math.abs(value) >= FILL_VALUE_THRESHOLD) {
-                continue;
-            }
-            if (value < min) min = value;
-            if (value > max) max = value;
-        }
-
-        // A forecast file can be entirely fill values; report "no usable range" rather
-        // than a degenerate one. Matches IsimipHandler.
-        return min <= max ? [min, max] : undefined;
-    } catch (error) {
-        // Rethrow rather than return a substitute: the caller keeps the previous range,
-        // which is wrong but usable, instead of feeding NaN into the colour scale.
-        throw new Error(`Failed to read the value range from ${url}`, { cause: error });
-    }
 }
 
 /**
