@@ -10,8 +10,6 @@ export interface LayerZoom extends DeclaredService<"app.LayerZoom"> {
 }
 
 export class LayerZoomImpl implements LayerZoom {
-    private MAP_ID = "main";
-
     zoomToVienna(mapModel: MapModel): void {
         this.zoomToLayer(mapModel, [16.37, 48.21], 12);
     }

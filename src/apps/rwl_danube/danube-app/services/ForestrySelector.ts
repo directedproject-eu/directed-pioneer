@@ -4,6 +4,7 @@
 import { MapRegistry } from "@open-pioneer/map";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { reactive, Reactive } from "@conterra/reactivity-core";
+import { MAP_ID } from "./MapProvider";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -19,7 +20,6 @@ export interface ForestrySelector extends DeclaredService<"app.ForestrySelector"
 }
 
 export class ForestrySelectorImpl implements ForestrySelector {
-    private MAP_ID = "main";
     private mapRegistry: MapRegistry;
 
     #forestryData: Reactive<ForestryState> = reactive({ id: null });
@@ -28,7 +28,7 @@ export class ForestrySelectorImpl implements ForestrySelector {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
 
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             const map = model?.olMap;
             if (!map) return;
 

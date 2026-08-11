@@ -9,6 +9,7 @@ import { GeoTIFF } from "ol/source";
 import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import chroma from "chroma-js";
 import PrecipitationForecastLegend from "../components/legends/PrecipitationForecastLegend";
+import { MAP_ID } from "./MapProvider";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -45,7 +46,6 @@ async function getRangeFromGeoTiff(url: string): Promise<number[]> {
 }
 
 export class GeosphereForecastServiceImpl implements GeosphereForecastService {
-    private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
 
@@ -54,7 +54,7 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
                 source: this.updateSource(""),
                 style: {
@@ -94,7 +94,7 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     }
 
     async getMapModel() {
-        return await this.mapRegistry.getMapModel(this.MAP_ID);
+        return await this.mapRegistry.getMapModel(MAP_ID);
     }
 
     setFileUrl(url: string): void {

@@ -7,6 +7,7 @@ import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
 import { PrecipitationLegend } from "../components/legends/PrecipitationLegend";
+import { MAP_ID } from "./MapProvider";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -18,14 +19,13 @@ export interface GeosphereService extends DeclaredService<"app.GeosphereService"
 }
 
 export class GeosphereServiceImpl implements GeosphereService {
-    private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
                 source: this.updateSource(
                     "https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/20240101T000000.tif"
@@ -67,7 +67,7 @@ export class GeosphereServiceImpl implements GeosphereService {
     }
 
     async getMapModel() {
-        return await this.mapRegistry.getMapModel(this.MAP_ID);
+        return await this.mapRegistry.getMapModel(MAP_ID);
     }
 
     setFileUrl(url: string): void {

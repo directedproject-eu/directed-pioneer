@@ -10,6 +10,7 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import Legend from "../components/legends/Legend";
 
 import chroma from "chroma-js";
+import { MAP_ID } from "./MapProvider";
 
 const layer_info = {
     "hurs": {
@@ -112,7 +113,6 @@ export interface IsimipHandler extends DeclaredService<"app.IsimipHandler"> {
 }
 
 export class IsimipHandlerImpl implements IsimipHandler {
-    private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
 
@@ -132,7 +132,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
         const info = layer_info[variable];
 
         this.mapRegistry = mapRegistry;
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
                 style: {
                     color: this.createColorGradiant([0, 100])
@@ -171,7 +171,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     }
 
     async getMapModel() {
-        return await this.mapRegistry.getMapModel(this.MAP_ID);
+        return await this.mapRegistry.getMapModel(MAP_ID);
     }
 
     setYear(newYear: number): void {
@@ -228,7 +228,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
         if (this.#selectedScenario.value == "ssp126") {
             this.layer?.setSource(null);
 
-            this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+            this.mapRegistry.getMapModel(MAP_ID).then((model) => {
                 model?.layers.getLayerById("isimip")?.setDescription("No map data available");
                 model?.layers.getLayerById("isimip")?.setVisible(false);
                 model?.layers.getLayerById("isimip")?.setTitle("No map data available");
@@ -339,7 +339,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     private changeLayerInfo() {
         const info = layer_info[this.#selectedVariable.value];
 
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             model?.layers.getLayerById("isimip")?.setTitle(info.title);
             model?.layers.getLayerById("isimip")?.setDescription(info.description);
         });

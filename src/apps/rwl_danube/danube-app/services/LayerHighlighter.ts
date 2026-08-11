@@ -4,6 +4,7 @@
 import { MapRegistry } from "@open-pioneer/map";
 import { reactive, Reactive } from "@conterra/reactivity-core";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
+import { MAP_ID } from "./MapProvider";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -16,7 +17,6 @@ export interface LayerHighlighter extends DeclaredService<"app.LayerHighlighter"
 }
 
 export class LayerHighlighterImpl implements LayerHighlighter {
-    private MAP_ID = "main";
     private mapRegistry: MapRegistry;
 
     #layers: Reactive<SimpleLayer[]> = reactive([]);
@@ -24,7 +24,7 @@ export class LayerHighlighterImpl implements LayerHighlighter {
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             this.#layers.value = model?.layers.getAllLayers();
         });
     }
@@ -36,7 +36,7 @@ export class LayerHighlighterImpl implements LayerHighlighter {
             "timber_cutting": "green",
             "forest_vegetation_fires": "red"
         };
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             const layer = model?.layers.getLayerById(layerId);
             layer.olLayer.setStyle({
                 "circle-radius": 10,
@@ -55,7 +55,7 @@ export class LayerHighlighterImpl implements LayerHighlighter {
             "forest_vegetation_fires": "red"
         };
 
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             const layer = model?.layers.getLayerById(layerId);
             layer.olLayer.setStyle({
                 "circle-radius": 8.0,
@@ -67,7 +67,7 @@ export class LayerHighlighterImpl implements LayerHighlighter {
         });
     }
     zoomTo = (layerId: string) => {
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             const layer = model?.layers.getLayerById(layerId);
             model?.olView.fit(layer?.olLayer.getSource().getExtent());
         });
