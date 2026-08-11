@@ -84,9 +84,9 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
                     color: this.createColorGradient([0, 100])
                 },
                 properties: {
-                    title: "Total rainfall amount",
+                    title: "Total Rainfall Amount Forecasts",
                     type: "GeoTIFF",
-                    id: "geosphere forecast service"
+                    id: "rain_acc_forecast"
                 }
             });
             model?.layers.addLayer(
@@ -123,7 +123,7 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     setFileUrl(url: string): void {
         if (this.layer) {
             // update the tile layer source with the new .tif file URL from the JSON
-            const newSource = this.updateSource(url);
+            const newSource = this.createSource(url);
             this.layer.setSource(newSource);
             this.updateStyle(url);
         }
@@ -133,7 +133,7 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
         return this.#legendMetadata.value;
     }
 
-    private updateSource(url: string): GeoTIFF {
+    private createSource(url: string): GeoTIFF {
         return new GeoTIFF({
             projection: "EPSG:4326",
             normalize: false,
