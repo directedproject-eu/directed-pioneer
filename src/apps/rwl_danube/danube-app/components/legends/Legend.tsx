@@ -7,13 +7,13 @@ import { LayerHighlighter } from "../../services/LayerHighlighter";
 import { IsimipHandler } from "../../services/IsimipHandler";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
-interface legendmetaData {
+interface LegendProps {
     range: number[];
     variable: string;
     isAuthenticated?: boolean;
 }
 
-const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }) => {
+const Legend: React.FC<LegendProps> = ({ range1, variable1, isAuthenticated }) => {
     const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const { legendMetadata } = useReactiveSnapshot(

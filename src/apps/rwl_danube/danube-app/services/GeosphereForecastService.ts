@@ -19,7 +19,7 @@ export interface GeosphereForecastService extends DeclaredService<"app.Geosphere
     getMapModel(): Promise<MapModel | undefined>;
 }
 
-interface legendMetadata {
+interface LegendMetadata {
     range: number[];
 }
 
@@ -49,7 +49,7 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
 
-    #legendMetadata: Reactive<legendMetadata> = reactive({ range: [0, 100] });
+    #legendMetadata: Reactive<LegendMetadata> = reactive({ range: [0, 100] });
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
@@ -106,7 +106,7 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
         }
     }
 
-    get legendMetadata(): legendMetadata {
+    get legendMetadata(): LegendMetadata {
         return this.#legendMetadata.value;
     }
 

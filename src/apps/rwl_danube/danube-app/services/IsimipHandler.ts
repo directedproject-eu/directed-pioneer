@@ -3,7 +3,7 @@
 
 import { reactive, Reactive } from "@conterra/reactivity-core";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, SimpleLayer } from "@open-pioneer/map";
+import { MapModel, MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import { GeoTIFF } from "ol/source";
 import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
@@ -90,17 +90,22 @@ interface References {
     mapRegistry: MapRegistry;
 }
 
-interface legendMetadata {
+export interface LegendMetadata {
     range: [number, number];
     variable: string;
 }
 
 export interface IsimipHandler extends DeclaredService<"app.IsimipHandler"> {
+    /** Range and variable the colour scale currently represents. Reactive. */
+    readonly legendMetadata: LegendMetadata;
+
     setYear(newYear: number): void;
     setMonth(newMonth: number): void;
     setScenario(newScenario: string): void;
     setVariable(newVariable: string): void;
     setModel(newModel: string): void;
+
+    getMapModel(): Promise<MapModel | undefined>;
 }
 
 export class IsimipHandlerImpl implements IsimipHandler {
@@ -113,7 +118,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     #selectedScenario: Reactive<string> = reactive("ssp585");
     #selectedModel: Reactive<string> = reactive("canesm5");
     #selectedVariable: Reactive<string> = reactive("hurs");
-    #legendMetadata: Reactive<legendMetadata> = reactive({ range: [0, 100], variable: "hurs" });
+    #legendMetadata: Reactive<LegendMetadata> = reactive({ range: [0, 100], variable: "hurs" });
     /** Identifies the most recent range request, so that stale answers can be dropped. */
     #styleRequestId = 0;
     #styleUpdateTimer: ReturnType<typeof setTimeout> | undefined;
@@ -195,24 +200,8 @@ export class IsimipHandlerImpl implements IsimipHandler {
         this.updateSource();
         this.scheduleStyleUpdate();
     }
-    get legendMetadata(): legendMetadata {
+    get legendMetadata(): LegendMetadata {
         return this.#legendMetadata.value;
-    }
-
-    get variable(): string {
-        return this.#selectedVariable.value;
-    }
-
-    get selectedModel(): string {
-        return this.#selectedModel.value;
-    }
-
-    get selectedScenario(): string {
-        return this.#selectedScenario.value;
-    }
-
-    get selectedYear(): number {
-        return this.#selectedYear.value;
     }
 
     private updateSource(): void {
