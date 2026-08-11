@@ -46,6 +46,9 @@ const layer_info = {
     }
 };
 
+/** Where the ISIMIP cloud-optimised geotiffs live. */
+const ISIMIP_COG_BASE_URL = "https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs";
+
 /** Pixels at or beyond this magnitude are fill values, not measurements. */
 const FILL_VALUE_THRESHOLD = 1e29;
 
@@ -204,6 +207,23 @@ export class IsimipHandlerImpl implements IsimipHandler {
         return this.#legendMetadata.value;
     }
 
+    /**
+     * Url of the geotiff for the current selection. Read fresh at each call: the source is
+     * swapped immediately while the style update is debounced, so the two legitimately
+     * resolve at different points in time.
+     */
+    private currentCogUrl(): string {
+        const scenario = this.#selectedScenario.value;
+        const model = this.#selectedModel.value;
+        const variable = this.#selectedVariable.value;
+        const year = this.#selectedYear.value;
+        const month = this.#selectedMonth.value;
+        return (
+            `${ISIMIP_COG_BASE_URL}/${scenario}/${model}/${variable}/` +
+            `${scenario}_${model}_${variable}_mon_${year}-${month}.tif`
+        );
+    }
+
     private updateSource(): void {
         if (this.#selectedScenario.value == "ssp126") {
             this.layer?.setSource(null);
@@ -220,7 +240,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
                 normalize: false,
                 sources: [
                     {
-                        url: `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`,
+                        url: this.currentCogUrl(),
                         nodata: -5.3e37
                     }
                 ]
@@ -239,7 +259,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     }
 
     private updateStyle() {
-        const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`;
+        const url = this.currentCogUrl();
         // Read at request time, not when the answer arrives: switching the variable in
         // between must not label this range with the name of another one.
         const variable = this.#selectedVariable.value;
