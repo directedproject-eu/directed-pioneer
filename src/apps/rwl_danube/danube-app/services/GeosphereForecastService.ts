@@ -16,15 +16,21 @@ interface References {
 }
 
 export interface GeosphereForecastService extends DeclaredService<"app.GeosphereForecastService"> {
+    /** Range the colour scale currently represents. Reactive. */
+    readonly legendMetadata: LegendMetadata;
+
     setFileUrl(url: string): void;
     getMapModel(): Promise<MapModel | undefined>;
 }
 
-interface LegendMetadata {
-    range: number[];
+export interface LegendMetadata {
+    range: [number, number];
 }
 
-async function getRangeFromGeoTiff(url: string): Promise<number[]> {
+/** Pixels at or beyond this magnitude are fill values, not measurements. */
+const FILL_VALUE_THRESHOLD = 1e29;
+
+async function getRangeFromGeoTiff(url: string): Promise<[number, number] | undefined> {
     try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
@@ -34,14 +40,27 @@ async function getRangeFromGeoTiff(url: string): Promise<number[]> {
 
         const rasterData = await image.readRasters();
         const bandData = rasterData[0]; // expecting only one band in the geotif
+        if (!bandData) {
+            throw new Error("The geotiff contains no raster band");
+        }
 
-        const maxValue = Math.max(...bandData);
-        const minValue = Math.min(...bandData);
+        let min = Infinity;
+        let max = -Infinity;
+        for (const value of bandData) {
+            if (!Number.isFinite(value) || Math.abs(value) >= FILL_VALUE_THRESHOLD) {
+                continue;
+            }
+            if (value < min) min = value;
+            if (value > max) max = value;
+        }
 
-        return [minValue, maxValue];
+        // A forecast file can be entirely fill values; report "no usable range" rather
+        // than a degenerate one. Matches IsimipHandler.
+        return min <= max ? [min, max] : undefined;
     } catch (error) {
-        console.error("Error reading GeoTIFF:", error);
-        return NaN;
+        // Rethrow rather than return a substitute: the caller keeps the previous range,
+        // which is wrong but usable, instead of feeding NaN into the colour scale.
+        throw new Error(`Failed to read the value range from ${url}`, { cause: error });
     }
 }
 
@@ -50,6 +69,8 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     private layer: WebGLTileLayer | undefined;
 
     #legendMetadata: Reactive<LegendMetadata> = reactive({ range: [0, 100] });
+    /** Identifies the most recent range request, so that stale answers can be dropped. */
+    #styleRequestId = 0;
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
@@ -124,19 +145,31 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     }
 
     private updateStyle(url: string) {
+        const requestId = ++this.#styleRequestId;
+
         getRangeFromGeoTiff(url)
             .then((range) => {
-                this.#legendMetadata.value = {
-                    range: range
-                };
+                // A newer forecast was selected meanwhile -- that one decides the style.
+                if (requestId !== this.#styleRequestId) {
+                    return;
+                }
+                if (!range) {
+                    // Nothing but fill values in this file; keep the previous scale.
+                    return;
+                }
+                this.#legendMetadata.value = { range: range };
                 this.layer?.setStyle({
-                    color: this.createColorGradient([range[0], range[1]])
+                    color: this.createColorGradient(range)
                 });
             })
-            .catch((error) => console.error("Error fetching max value:", error));
+            .catch((error) => {
+                if (requestId === this.#styleRequestId) {
+                    console.error("Error fetching the value range:", error);
+                }
+            });
     }
 
-    private createColorGradient(range: number[]) {
+    private createColorGradient(range: [number, number]) {
         if (range[0] === range[1]) {
             return "#00000000";
         }
