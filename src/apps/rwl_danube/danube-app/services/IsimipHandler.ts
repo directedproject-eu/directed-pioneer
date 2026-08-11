@@ -119,6 +119,28 @@ export interface IsimipHandler extends DeclaredService<"app.IsimipHandler"> {
     getMapModel(): Promise<MapModel | undefined>;
 }
 
+/**
+ * Owns the "isimip" climate raster layer: which file it shows and how it is coloured.
+ *
+ * The layer is not declared in `MapProvider`. This service creates it in its constructor
+ * and adds it to the map model, which is why it can keep a direct reference and retitle it
+ * as the selection changes. Its id is "isimip"; `Legend.tsx` and `LayerSelector.tsx` reach
+ * back in through `legendMetadata` and `getMapModel()`.
+ *
+ * One selection -- scenario, model, variable, year, month -- addresses exactly one geotiff
+ * (see {@link IsimipHandlerImpl.currentCogUrl}), and each setter triggers two things:
+ *
+ * - `updateSource()` immediately, swapping the raster OpenLayers displays
+ * - `scheduleStyleUpdate()` debounced, which reads the file a second time to derive the
+ *   value range for the colour scale and the legend
+ *
+ * That second read is the awkward part: the files carry no statistics in their header and
+ * no overviews, so min and max can only be had by decoding the whole raster. At 126x76
+ * pixels and ~50 KB that is affordable, but it means the scale is recomputed per frame --
+ * so the same colour means different values in different months, and the warming trend the
+ * viewer exists to show is normalised away. See BACKLOG.md; fixing it properly means fixed
+ * ranges per variable, which would make most of this machinery unnecessary.
+ */
 export class IsimipHandlerImpl implements IsimipHandler {
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
@@ -153,12 +175,6 @@ export class IsimipHandlerImpl implements IsimipHandler {
             });
             this.updateSource();
             model?.layers.addLayer(
-                // new GroupLayer({
-                //     title: "Isimip Data",
-                //     visible: true,
-                //     id: "isimip",
-                //     layers: []
-                // }),
                 new SimpleLayer({
                     id: "isimip",
                     description: info.description,
@@ -238,6 +254,13 @@ export class IsimipHandlerImpl implements IsimipHandler {
         );
     }
 
+    /**
+     * Points the layer at the geotiff for the current selection.
+     *
+     * ssp126 is offered in the selector but has no files, so it is caught here and the
+     * layer is emptied and renamed. That the list of scenarios with data lives in this
+     * condition rather than next to the selector is a wart -- see BACKLOG.md.
+     */
     private updateSource(): void {
         if (this.#selectedScenario.value == "ssp126") {
             this.layer?.setSource(null);
@@ -272,6 +295,12 @@ export class IsimipHandlerImpl implements IsimipHandler {
         this.#styleUpdateTimer = setTimeout(() => this.updateStyle(), STYLE_UPDATE_DELAY_MS);
     }
 
+    /**
+     * Recomputes the colour scale from the values actually present in the current file.
+     *
+     * Never call this directly from a setter -- go through {@link scheduleStyleUpdate}, or
+     * a slider drag issues one request per step.
+     */
     private updateStyle() {
         const url = this.currentCogUrl();
         // Read at request time, not when the answer arrives: switching the variable in
@@ -300,6 +329,14 @@ export class IsimipHandlerImpl implements IsimipHandler {
                 }
             });
     }
+    /**
+     * Builds the WebGL colour expression: nine colours spread evenly across `range`.
+     *
+     * The result is an OpenLayers style expression, not a chroma scale -- chroma only
+     * mixes the nine stop colours in Lab space, then the stops are handed to WebGL as
+     * value/colour pairs so the interpolation happens on the GPU. The alpha suffix "BC" on
+     * every colour is ~74% opacity, which is what lets the basemap show through.
+     */
     private createColorGradiant(range: [number, number]) {
         const tempColors = {
             black: "#00000000",
