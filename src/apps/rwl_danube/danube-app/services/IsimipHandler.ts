@@ -47,6 +47,13 @@ const layer_info = {
     }
 };
 
+/** The variables `layer_info` knows about, and therefore the only ones that can be shown. */
+type IsimipVariable = keyof typeof layer_info;
+
+function isIsimipVariable(value: string): value is IsimipVariable {
+    return value in layer_info;
+}
+
 /** Where the ISIMIP cloud-optimised geotiffs live. */
 const ISIMIP_COG_BASE_URL = "https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs";
 
@@ -120,7 +127,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     #selectedMonth: Reactive<number> = reactive(1);
     #selectedScenario: Reactive<string> = reactive("ssp585");
     #selectedModel: Reactive<string> = reactive("canesm5");
-    #selectedVariable: Reactive<string> = reactive("hurs");
+    #selectedVariable: Reactive<IsimipVariable> = reactive("hurs");
     #legendMetadata: Reactive<LegendMetadata> = reactive({ range: [0, 100], variable: "hurs" });
     /** Identifies the most recent range request, so that stale answers can be dropped. */
     #styleRequestId = 0;
@@ -193,6 +200,13 @@ export class IsimipHandlerImpl implements IsimipHandler {
     }
 
     setVariable(newVariable: string): void {
+        if (!isIsimipVariable(newVariable)) {
+            console.warn(
+                `Ignoring unknown isimip variable '${newVariable}'; known variables are ` +
+                    `${Object.keys(layer_info).join(", ")}.`
+            );
+            return;
+        }
         this.#selectedVariable.value = newVariable;
         this.updateSource();
         this.scheduleStyleUpdate();
