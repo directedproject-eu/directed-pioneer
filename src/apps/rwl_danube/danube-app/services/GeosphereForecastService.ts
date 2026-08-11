@@ -5,12 +5,11 @@ import { reactive, Reactive } from "@conterra/reactivity-core";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
 import PrecipitationForecastLegend from "../components/legends/PrecipitationForecastLegend";
 import { MAP_ID } from "./MapProvider";
 import { FORECAST_PRECIPITATION_COLORS } from "../config/precipitationScale";
-import { getRangeFromGeoTiff } from "./geotiffRange";
+import { createGeoTiffSource, getRangeFromGeoTiff } from "./geotiff";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -116,27 +115,13 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
      */
     setFileUrl(url: string): void {
         if (this.layer) {
-            const newSource = this.createSource(url);
-            this.layer.setSource(newSource);
+            this.layer.setSource(createGeoTiffSource(url));
             this.updateStyle(url);
         }
     }
 
     get legendMetadata(): LegendMetadata {
         return this.#legendMetadata.value;
-    }
-
-    private createSource(url: string): GeoTIFF {
-        return new GeoTIFF({
-            projection: "EPSG:4326",
-            normalize: false,
-            sources: [
-                {
-                    url: url,
-                    nodata: -5.3e37
-                }
-            ]
-        });
     }
 
     private updateStyle(url: string) {

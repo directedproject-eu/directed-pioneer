@@ -5,12 +5,11 @@ import { reactive, Reactive } from "@conterra/reactivity-core";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapModel, MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
 import Legend from "../components/legends/Legend";
 
 import chroma from "chroma-js";
 import { MAP_ID } from "./MapProvider";
-import { getRangeFromGeoTiff } from "./geotiffRange";
+import { createGeoTiffSource, getRangeFromGeoTiff } from "./geotiff";
 
 const layer_info = {
     "hurs": {
@@ -235,17 +234,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
             });
         } else {
             this.changeLayerInfo();
-            const newSource = new GeoTIFF({
-                projection: "EPSG:4326",
-                normalize: false,
-                sources: [
-                    {
-                        url: this.currentCogUrl(),
-                        nodata: -5.3e37
-                    }
-                ]
-            });
-            this.layer?.setSource(newSource);
+            this.layer?.setSource(createGeoTiffSource(this.currentCogUrl()));
         }
     }
 

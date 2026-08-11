@@ -4,11 +4,11 @@
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
 import chroma from "chroma-js";
 import { PrecipitationLegend } from "../components/legends/PrecipitationLegend";
 import { MAP_ID } from "./MapProvider";
 import { DAILY_PRECIPITATION_STOPS } from "../config/precipitationScale";
+import { createGeoTiffSource } from "./geotiff";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -28,7 +28,7 @@ export class GeosphereServiceImpl implements GeosphereService {
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                source: this.updateSource(
+                source: createGeoTiffSource(
                     "https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/20240101T000000.tif"
                 ),
                 style: {
@@ -73,22 +73,8 @@ export class GeosphereServiceImpl implements GeosphereService {
 
     setFileUrl(url: string): void {
         if (this.layer) {
-            const newSource = this.updateSource(url);
-            this.layer.setSource(newSource);
+            this.layer.setSource(createGeoTiffSource(url));
         }
-    }
-
-    private updateSource(url: string): GeoTIFF {
-        return new GeoTIFF({
-            projection: "EPSG:4326",
-            normalize: false,
-            sources: [
-                {
-                    url: url,
-                    nodata: -5.3e37
-                }
-            ]
-        });
     }
 
     private createColorGradient() {

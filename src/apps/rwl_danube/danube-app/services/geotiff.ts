@@ -2,6 +2,36 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
+import { GeoTIFF } from "ol/source";
+
+/**
+ * Value OpenLayers is told to treat as "no data".
+ *
+ * Known to be wrong: the files actually use 1e30, measured against the bucket, so these
+ * pixels are not masked at all. Kept as it was rather than changed silently -- but kept in
+ * one place, so correcting it is a one-line change instead of three. See BACKLOG.md.
+ */
+const NODATA_VALUE = -5.3e37;
+
+/**
+ * A source for one of the isimip or geosphere rasters.
+ *
+ * Both collections are unprojected geographic geotiffs, and `normalize: false` is required
+ * rather than preferred: the colour scales work in the data's own units -- millimetres,
+ * degrees, an index -- so the values must not be rescaled to 0..1 on the way in.
+ */
+export function createGeoTiffSource(url: string): GeoTIFF {
+    return new GeoTIFF({
+        projection: "EPSG:4326",
+        normalize: false,
+        sources: [
+            {
+                url: url,
+                nodata: NODATA_VALUE
+            }
+        ]
+    });
+}
 
 /**
  * Pixels at or beyond this magnitude are fill values, not measurements.
