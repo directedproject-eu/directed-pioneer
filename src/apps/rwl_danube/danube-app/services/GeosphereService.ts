@@ -4,11 +4,11 @@
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import chroma from "chroma-js";
 import { PrecipitationLegend } from "../components/legends/PrecipitationLegend";
 import { MAP_ID } from "./MapProvider";
 import { DAILY_PRECIPITATION_STOPS } from "../config/precipitationScale";
 import { createGeoTiffSource } from "./geotiff";
+import { toColorExpression } from "../config/colorScale";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -78,16 +78,9 @@ export class GeosphereServiceImpl implements GeosphereService {
     }
 
     private createColorGradient() {
-        const boundaries = DAILY_PRECIPITATION_STOPS.map((item) => item.value);
-        const gradientColors = DAILY_PRECIPITATION_STOPS.map((item) => item.color);
-
-        const colorScale = chroma.scale(gradientColors).domain(boundaries).mode("lab");
-
-        return [
-            "interpolate",
-            ["linear"],
-            ["band", 1],
-            ...boundaries.flatMap((boundary) => [boundary, colorScale(boundary).hex()])
-        ];
+        return toColorExpression(
+            DAILY_PRECIPITATION_STOPS.map((stop) => stop.color),
+            DAILY_PRECIPITATION_STOPS.map((stop) => stop.value)
+        );
     }
 }

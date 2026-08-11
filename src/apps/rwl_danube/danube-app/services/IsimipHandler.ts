@@ -7,9 +7,10 @@ import { MapModel, MapRegistry, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import Legend from "../components/legends/Legend";
 
-import chroma from "chroma-js";
 import { MAP_ID } from "./MapProvider";
 import { createGeoTiffSource, getRangeFromGeoTiff } from "./geotiff";
+import { evenBoundaries, toColorExpression } from "../config/colorScale";
+import { ISIMIP_COLORS } from "../config/isimipScale";
 
 const layer_info = {
     "hurs": {
@@ -290,54 +291,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
      * every colour is ~74% opacity, which is what lets the basemap show through.
      */
     private createColorGradiant(range: [number, number]) {
-        const tempColors = {
-            black: "#00000000",
-            pink: "#eb7fe9BC",
-            cold_blue: "#4f59cdBC",
-            ice_blue: "#1ceae1BC",
-            green: "#5fdf65BC",
-            yellow: "#eade57BC",
-            orange: "#ec8647BC",
-            red: "#832525BC",
-            dark_red: "#53050aBC" //rgba(83,5,10,0.74)
-        };
-        const increment = (range[1] - range[0]) / 8;
-
-        const boundaries_temp = [
-            range[0],
-            range[0] + increment,
-            range[0] + 2 * increment,
-            range[0] + 3 * increment,
-            range[0] + 4 * increment,
-            range[0] + 5 * increment,
-            range[0] + 6 * increment,
-            range[0] + 7 * increment,
-            range[1]
-        ];
-        const gradientColors_temp = [
-            tempColors.black,
-            tempColors.pink,
-            tempColors.cold_blue,
-            tempColors.ice_blue,
-            tempColors.green,
-            tempColors.yellow,
-            tempColors.orange,
-            tempColors.red,
-            tempColors.dark_red
-        ];
-
-        const colorScale_temp = chroma
-            .scale(gradientColors_temp)
-            .domain(boundaries_temp)
-            .mode("lab");
-
-        const tempColorGradient = [
-            "interpolate",
-            ["linear"], // Specify the interpolation type
-            ["band", 1], // The data band
-            ...boundaries_temp.flatMap((boundary) => [boundary, colorScale_temp(boundary).hex()])
-        ];
-        return tempColorGradient;
+        return toColorExpression(ISIMIP_COLORS, evenBoundaries(range, ISIMIP_COLORS.length));
     }
     private changeLayerInfo() {
         const info = layer_info[this.#selectedVariable.value];

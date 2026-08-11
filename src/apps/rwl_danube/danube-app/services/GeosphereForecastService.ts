@@ -5,10 +5,10 @@ import { reactive, Reactive } from "@conterra/reactivity-core";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import chroma from "chroma-js";
 import PrecipitationForecastLegend from "../components/legends/PrecipitationForecastLegend";
 import { MAP_ID } from "./MapProvider";
 import { FORECAST_PRECIPITATION_COLORS } from "../config/precipitationScale";
+import { evenBoundaries, toColorExpression } from "../config/colorScale";
 import { createGeoTiffSource, getRangeFromGeoTiff } from "./geotiff";
 
 interface References {
@@ -162,27 +162,9 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
         if (range[0] === range[1]) {
             return "#00000000";
         }
-        const increment = (range[1] - range[0]) / 5;
-
-        const boundaries_temp = [
-            range[0],
-            range[0] + increment,
-            range[0] + 2 * increment,
-            range[0] + 3 * increment,
-            range[0] + 4 * increment,
-            range[1]
-        ];
-        const colorScale_temp = chroma
-            .scale([...FORECAST_PRECIPITATION_COLORS])
-            .domain(boundaries_temp)
-            .mode("lab");
-
-        const tempColorGradient = [
-            "interpolate",
-            ["linear"], // Specify the interpolation type
-            ["band", 1], // The data band
-            ...boundaries_temp.flatMap((boundary) => [boundary, colorScale_temp(boundary).hex()])
-        ];
-        return tempColorGradient;
+        return toColorExpression(
+            FORECAST_PRECIPITATION_COLORS,
+            evenBoundaries(range, FORECAST_PRECIPITATION_COLORS.length)
+        );
     }
 }
