@@ -64,6 +64,32 @@ async function getRangeFromGeoTiff(url: string): Promise<[number, number] | unde
     }
 }
 
+/**
+ * Owns the "rain_acc_forecast" raster: GeoSphere's AROME forecast of accumulated rainfall,
+ * 60 hours at hourly steps.
+ *
+ * The layer is not declared in `MapProvider`. This service creates it here, wrapped in the
+ * "geosphere_forecasts" group, and keeps a reference so it can swap the raster as the user
+ * moves through time.
+ *
+ * The url is not built here. `GeosphereForecasts.tsx` fetches a manifest that maps
+ * timestamps to geotiff urls and hands the chosen one to {@link setFileUrl} -- so this
+ * service never learns which hour it is showing, only which file.
+ *
+ * Every call re-reads that file a second time to derive the value range for the colour
+ * scale, because the geotiffs carry no statistics in their header. Two consequences worth
+ * knowing:
+ *
+ * - The scale is recomputed per forecast step, so the same colour stands for different
+ *   rainfall amounts at different hours. Same defect as IsimipHandler; see BACKLOG.md.
+ * - Unlike IsimipHandler this is not debounced, and the control is a slider. Dragging it
+ *   across the 60 steps issues one read per step. The request id keeps the result correct,
+ *   but the requests are made.
+ *
+ * This file and IsimipHandler are near-copies of each other, down to variable names. The
+ * duplication is deliberate for now: GeosphereService.ts holds a third variant, and merging
+ * them is worth doing once, with all three in view.
+ */
 export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
@@ -120,9 +146,12 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
         return await this.mapRegistry.getMapModel(MAP_ID);
     }
 
+    /**
+     * Shows the geotiff at `url`. Silently does nothing before the layer exists -- the
+     * constructor builds it inside a promise, so early calls can arrive first.
+     */
     setFileUrl(url: string): void {
         if (this.layer) {
-            // update the tile layer source with the new .tif file URL from the JSON
             const newSource = this.createSource(url);
             this.layer.setSource(newSource);
             this.updateStyle(url);
@@ -171,6 +200,15 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
             });
     }
 
+    /**
+     * Builds the WebGL colour expression: six violet stops across `range`, mixed in Lab
+     * space by chroma and then handed to the GPU as value/colour pairs.
+     *
+     * A flat raster -- every pixel the same, which for accumulated rainfall usually means
+     * "no rain yet" -- would divide by a zero span, so it returns plain transparent
+     * instead. Note that IsimipHandler answers the same question differently, by keeping
+     * the previous scale; worth unifying when the services are merged.
+     */
     private createColorGradient(range: [number, number]) {
         if (range[0] === range[1]) {
             return "#00000000";
