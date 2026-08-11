@@ -46,7 +46,10 @@ const layer_info = {
     }
 };
 
-async function getRangeFromGeoTiff(url: string): Promise<number[]> {
+/** Pixels at or beyond this magnitude are fill values, not measurements. */
+const FILL_VALUE_THRESHOLD = 1e29;
+
+async function getRangeFromGeoTiff(url: string): Promise<[number, number] | undefined> {
     try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
@@ -56,11 +59,23 @@ async function getRangeFromGeoTiff(url: string): Promise<number[]> {
 
         const rasterData = await image.readRasters();
         const bandData = rasterData[0]; // expecting only one band in the geotif
+        if (!bandData) {
+            throw new Error("The geotiff contains no raster band");
+        }
 
-        const maxValue = Math.max(...bandData);
-        const minValue = Math.min(...bandData);
+        let min = Infinity;
+        let max = -Infinity;
+        for (const value of bandData) {
+            if (!Number.isFinite(value) || Math.abs(value) >= FILL_VALUE_THRESHOLD) {
+                continue;
+            }
+            if (value < min) min = value;
+            if (value > max) max = value;
+        }
 
-        return [minValue, maxValue];
+        // spei12 accumulates over twelve months, so its files for the first year consist
+        // entirely of fill values. Report "no usable range" instead of a degenerate one.
+        return min <= max ? [min, max] : undefined;
     } catch (error) {
         // Rethrow rather than return a substitute: the caller keeps the previous range,
         // which is wrong but usable, instead of feeding NaN into the colour scale.
@@ -73,7 +88,7 @@ interface References {
 }
 
 interface legendMetadata {
-    range: number[];
+    range: [number, number];
     variable: string;
 }
 
@@ -96,6 +111,8 @@ export class IsimipHandlerImpl implements IsimipHandler {
     #selectedModel: Reactive<string> = reactive("canesm5");
     #selectedVariable: Reactive<string> = reactive("hurs");
     #legendMetadata: Reactive<legendMetadata> = reactive({ range: [0, 100], variable: "hurs" });
+    /** Identifies the most recent range request, so that stale answers can be dropped. */
+    #styleRequestId = 0;
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
@@ -221,19 +238,33 @@ export class IsimipHandlerImpl implements IsimipHandler {
 
     private updateStyle() {
         const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs/${this.#selectedScenario.value}/${this.#selectedModel.value}/${this.#selectedVariable.value}/${this.#selectedScenario.value}_${this.#selectedModel.value}_${this.#selectedVariable.value}_mon_${this.#selectedYear.value}-${this.#selectedMonth.value}.tif`;
+        // Read at request time, not when the answer arrives: switching the variable in
+        // between must not label this range with the name of another one.
+        const variable = this.#selectedVariable.value;
+        const requestId = ++this.#styleRequestId;
+
         getRangeFromGeoTiff(url)
             .then((range) => {
-                this.#legendMetadata.value = {
-                    range: range,
-                    variable: this.#selectedVariable.value
-                };
+                // A newer request was started meanwhile -- that one decides the style.
+                if (requestId !== this.#styleRequestId) {
+                    return;
+                }
+                if (!range) {
+                    // Nothing but fill values in this file; keep the previous scale.
+                    return;
+                }
+                this.#legendMetadata.value = { range: range, variable: variable };
                 this.layer?.setStyle({
-                    color: this.createColorGradiant([range[0], range[1]])
+                    color: this.createColorGradiant(range)
                 });
             })
-            .catch((error) => console.error("Error fetching max value:", error));
+            .catch((error) => {
+                if (requestId === this.#styleRequestId) {
+                    console.error("Error fetching the value range:", error);
+                }
+            });
     }
-    private createColorGradiant(range: number[]) {
+    private createColorGradiant(range: [number, number]) {
         const tempColors = {
             black: "#00000000",
             pink: "#eb7fe9BC",
