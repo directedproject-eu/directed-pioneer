@@ -39,7 +39,11 @@ export class StationSelectorImpl implements StationSelector {
             map.on("click", (event) => {
                 const result = map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
                     if (layer !== model.layers.getLayerById("isimip")) {
-                        return [feature, layer.style_["circle-fill-color"], layer.getProperties().title];
+                        return [
+                            feature,
+                            layer.style_["circle-fill-color"],
+                            layer.getProperties().title
+                        ];
                     }
                 });
 
@@ -49,8 +53,7 @@ export class StationSelectorImpl implements StationSelector {
                     if (this.selectedFeature) {
                         this.selectedFeature.setStyle(null);
                     }
-                    if(title == "Nuts regions") {
-
+                    if (title == "Nuts regions") {
                         feature.setStyle(
                             new Style({
                                 fill: new Fill({
@@ -60,10 +63,9 @@ export class StationSelectorImpl implements StationSelector {
                                     color: "black",
                                     width: 3
                                 })
-                            }),
+                            })
                         );
-                    }                    
-                    else {
+                    } else {
                         feature.setStyle(
                             new Style({
                                 image: new Circle({

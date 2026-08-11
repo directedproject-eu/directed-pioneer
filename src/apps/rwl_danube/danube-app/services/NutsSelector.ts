@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-
 import { MapRegistry } from "@open-pioneer/map";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { reactive, Reactive } from "@conterra/reactivity-core"; 
+import { reactive, Reactive } from "@conterra/reactivity-core";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -38,9 +37,8 @@ export class NutsSelectorImpl implements NutsSelector {
 
                 map.forEachFeatureAtPixel(event.pixel, (feature) => {
                     const nutsId = feature.get("NUTS_ID");
-                    
-                    if (nutsId) {
 
+                    if (nutsId) {
                         foundId = nutsId as string;
                         return true;
                     }

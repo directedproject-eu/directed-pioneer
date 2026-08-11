@@ -33,7 +33,11 @@ export class GeosphereServiceImpl implements GeosphereService {
                 style: {
                     color: this.createColorGradient()
                 },
-                properties: { title: "GeoSphere daily precipitation sum", type: "GeoTIFF", id: "geosphere service" }
+                properties: {
+                    title: "GeoSphere daily precipitation sum",
+                    type: "GeoTIFF",
+                    id: "geosphere service"
+                }
             });
             model?.layers.addLayer(
                 new GroupLayer({
