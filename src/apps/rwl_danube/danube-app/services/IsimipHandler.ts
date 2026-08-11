@@ -49,6 +49,9 @@ const layer_info = {
 /** Pixels at or beyond this magnitude are fill values, not measurements. */
 const FILL_VALUE_THRESHOLD = 1e29;
 
+/** Slider drags fire one setter per step; collapse those bursts into one range request. */
+const STYLE_UPDATE_DELAY_MS = 250;
+
 async function getRangeFromGeoTiff(url: string): Promise<[number, number] | undefined> {
     try {
         const response = await fetch(url);
@@ -113,6 +116,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     #legendMetadata: Reactive<legendMetadata> = reactive({ range: [0, 100], variable: "hurs" });
     /** Identifies the most recent range request, so that stale answers can be dropped. */
     #styleRequestId = 0;
+    #styleUpdateTimer: ReturnType<typeof setTimeout> | undefined;
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
@@ -165,31 +169,31 @@ export class IsimipHandlerImpl implements IsimipHandler {
     setYear(newYear: number): void {
         this.#selectedYear.value = newYear;
         this.updateSource();
-        this.updateStyle();
+        this.scheduleStyleUpdate();
     }
 
     setMonth(newMonth: number): void {
         this.#selectedMonth.value = newMonth;
         this.updateSource();
-        this.updateStyle();
+        this.scheduleStyleUpdate();
     }
 
     setScenario(newScenario: string): void {
         this.#selectedScenario.value = newScenario;
         this.updateSource();
-        this.updateStyle();
+        this.scheduleStyleUpdate();
     }
 
     setVariable(newVariable: string): void {
         this.#selectedVariable.value = newVariable;
         this.updateSource();
-        this.updateStyle();
+        this.scheduleStyleUpdate();
         this.changeLayerInfo();
     }
     setModel(newModel: string): void {
         this.#selectedModel.value = newModel;
         this.updateSource();
-        this.updateStyle();
+        this.scheduleStyleUpdate();
     }
     get legendMetadata(): legendMetadata {
         return this.#legendMetadata.value;
@@ -234,6 +238,15 @@ export class IsimipHandlerImpl implements IsimipHandler {
             });
             this.layer?.setSource(newSource);
         }
+    }
+
+    /**
+     * Defers {@link updateStyle}. Only the colour scale and the legend wait -- the raster
+     * source is swapped right away, so the map itself still follows the slider without lag.
+     */
+    private scheduleStyleUpdate(): void {
+        clearTimeout(this.#styleUpdateTimer);
+        this.#styleUpdateTimer = setTimeout(() => this.updateStyle(), STYLE_UPDATE_DELAY_MS);
     }
 
     private updateStyle() {
