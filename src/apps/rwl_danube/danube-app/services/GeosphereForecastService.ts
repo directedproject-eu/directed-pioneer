@@ -10,22 +10,18 @@ import * as GeoTIFFJS from "geotiff"; // geotiff.js for reading values
 import chroma from "chroma-js";
 import PrecipitationForecastLegend from "../components/legends/PrecipitationForecastLegend";
 
-
 interface References {
     mapRegistry: MapRegistry;
 }
-
 
 export interface GeosphereForecastService extends DeclaredService<"app.GeosphereForecastService"> {
     setFileUrl(url: string): void;
     getMapModel(): Promise<MapModel | undefined>;
 }
 
-
 interface legendMetadata {
     range: number[];
 }
-
 
 async function getRangeFromGeoTiff(url: string): Promise<number[]> {
     try {
@@ -48,7 +44,6 @@ async function getRangeFromGeoTiff(url: string): Promise<number[]> {
     }
 }
 
-
 export class GeosphereForecastServiceImpl implements GeosphereForecastService {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
@@ -65,7 +60,11 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
                 style: {
                     color: this.createColorGradient([0, 100])
                 },
-                properties: { title: "Total rainfall amount", type: "GeoTIFF", id: "geosphere forecast service" }
+                properties: {
+                    title: "Total rainfall amount",
+                    type: "GeoTIFF",
+                    id: "geosphere forecast service"
+                }
             });
             model?.layers.addLayer(
                 new GroupLayer({
