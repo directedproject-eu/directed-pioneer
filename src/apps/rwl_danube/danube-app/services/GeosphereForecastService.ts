@@ -76,8 +76,10 @@ export class GeosphereForecastServiceImpl implements GeosphereForecastService {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(MAP_ID).then((model) => {
+            // Deliberately created without a source: there is no forecast to show until
+            // setFileUrl supplies one. An empty url would resolve against the document and
+            // hand the geotiff decoder a page of html.
             this.layer = new WebGLTileLayer({
-                source: this.updateSource(""),
                 style: {
                     color: this.createColorGradient([0, 100])
                 },
