@@ -2,13 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useEffect, useId, useState } from "react";
-import {
-    PiRulerLight,
-    PiChartLineDownLight,
-    PiDownload,
-    PiCaretLeft,
-    PiCaretRight
-} from "react-icons/pi";
+import { PiRulerLight, PiDownload, PiCaretLeft, PiCaretRight } from "react-icons/pi";
 import { GiCircleForest, GiWheat } from "react-icons/gi";
 import { EventsKey } from "ol/events";
 import { Group, Vector as VectorLayer } from "ol/layer.js";
@@ -20,14 +14,12 @@ import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import {
     Box,
     Button,
-    Container,
     Flex,
     Text,
     useDisclosure,
     Dialog,
     NativeSelect,
     Field,
-    defaultSystem,
     HoverCard
 } from "@chakra-ui/react";
 import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
@@ -57,7 +49,6 @@ import { MAP_ID } from "./services/MapProvider";
 import { FeatureInfo } from "featureinfo";
 import { Navbar } from "navbar";
 import { IsimipSelector } from "./controls/IsimipSelector";
-import { IsimipHandler } from "./services/IsimipHandler";
 import { StationSelector } from "./services/StationSelector";
 import { LayerZoom } from "./services/LayerZoom";
 import { LayerSelector } from "./controls/LayerSelector";
@@ -200,14 +191,12 @@ export function MapApp() {
         setDownloadIsActive(!downloadIsActive);
     }
 
-    const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
-
     const stationService = useService<StationSelector>("app.StationSelector");
     const { stationData } = useReactiveSnapshot(
         () => ({
             stationData: stationService.stationData
         }),
-        [prepSrvc]
+        [stationService]
     );
     const { open, onClose } = useDisclosure({ defaultOpen: true });
 
