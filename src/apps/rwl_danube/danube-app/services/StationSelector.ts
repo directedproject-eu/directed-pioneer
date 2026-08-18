@@ -1,15 +1,44 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { MapRegistry } from "@open-pioneer/map";
+import { isLayer, MapRegistry } from "@open-pioneer/map";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { reactive, Reactive } from "@conterra/reactivity-core";
 import { Circle, Fill, Stroke, Style } from "ol/style";
-import type Feature from "ol/Feature";
+import Feature from "ol/Feature";
 import { MAP_ID } from "./MapProvider";
 
 interface References {
     mapRegistry: MapRegistry;
+}
+
+/**
+ * The NUTS regions are highlighted as an area rather than a point.
+ *
+ * Matched by id, not by title: the title is user-facing and translated, and the two do not
+ * even agree today -- the pioneer layer is called "Crop Yield Projections" while its
+ * OpenLayers properties still say "Nuts regions".
+ */
+const NUTS_LAYER_ID = "danube_basin_territorial_units";
+
+const REGION_HIGHLIGHT_STYLE = new Style({
+    fill: new Fill({ color: "rgba(255, 51, 0, 0.5)" }),
+    stroke: new Stroke({ color: "black", width: 3 })
+});
+
+/**
+ * Enlarged dot in the layer's own colour. `color` is undefined for layers that carry no
+ * `eventColor` attribute -- the forestry stations, for one -- and OpenLayers then falls
+ * back to its default fill.
+ */
+function createPointHighlight(color: string | undefined): Style {
+    return new Style({
+        image: new Circle({
+            radius: 10,
+            fill: new Fill({ color: color }),
+            stroke: new Stroke({ color: "lightblue", width: 2 })
+        })
+    });
 }
 /**
  * One clicked event, mapped from the hungarian field names the Zala collections use.
@@ -52,53 +81,36 @@ export class StationSelectorImpl implements StationSelector {
             }
 
             map.on("click", (event) => {
-                const result = map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
-                    if (layer !== model.layers.getLayerById("isimip")) {
-                        return [
-                            feature,
-                            layer.style_["circle-fill-color"],
-                            layer.getProperties().title
-                        ];
+                const hit = map.forEachFeatureAtPixel(event.pixel, (feature, olLayer) => {
+                    // Render features cannot carry an individual style, so they cannot be
+                    // highlighted -- skip them and let the search continue.
+                    if (!(feature instanceof Feature)) {
+                        return;
                     }
+                    // OpenLayers reports its own layer; the colour and the id live on the
+                    // pioneer layer wrapping it.
+                    const layer = model.layers
+                        .getRecursiveLayers()
+                        .find((candidate) => isLayer(candidate) && candidate.olLayer === olLayer);
+                    return { feature, layer };
                 });
 
-                if (result) {
-                    const [feature, color, title] = result;
-                    this.setStationData(feature.getProperties());
-                    if (this.selectedFeature) {
-                        this.selectedFeature.setStyle(undefined);
-                    }
-                    if (title == "Nuts regions") {
-                        feature.setStyle(
-                            new Style({
-                                fill: new Fill({
-                                    color: "rgba(255, 51, 0, 0.5)"
-                                }),
-                                stroke: new Stroke({
-                                    color: "black",
-                                    width: 3
-                                })
-                            })
-                        );
-                    } else {
-                        feature.setStyle(
-                            new Style({
-                                image: new Circle({
-                                    radius: 10,
-                                    fill: new Fill({ color: color }),
-                                    stroke: new Stroke({ color: "lightblue", width: 2 })
-                                })
-                            })
-                        );
-                    }
-                    this.selectedFeature = feature;
-                } else {
+                this.selectedFeature?.setStyle(undefined);
+
+                if (!hit) {
                     this.#stationData.value = {};
-                    if (this.selectedFeature) {
-                        this.selectedFeature.setStyle(undefined);
-                    }
                     this.selectedFeature = undefined;
+                    return;
                 }
+
+                const { feature, layer } = hit;
+                this.setStationData(feature.getProperties());
+                feature.setStyle(
+                    layer?.id === NUTS_LAYER_ID
+                        ? REGION_HIGHLIGHT_STYLE
+                        : createPointHighlight(layer?.attributes?.eventColor as string | undefined)
+                );
+                this.selectedFeature = feature;
             });
         });
     }
