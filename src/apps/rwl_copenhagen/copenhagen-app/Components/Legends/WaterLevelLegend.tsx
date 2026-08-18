@@ -6,16 +6,19 @@ import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { useIntl } from "open-pioneer:react-hooks";
 
 //water level colors
-const l_01 = "#ffffff";
-const l_02 = "#1a68ae";
-const l_03 = "#08306b";
-const l_04 = "#301934";
+// const l_01 = "#ffffff";
+// const l_02 = "#1a68ae";
+// const l_03 = "#08306b";
+// const l_04 = "#301934";
 
 const colorMapping = [
-    { value: 0, color: l_01, label: "0" },
-    { value: 0.5, color: l_02, label: "0.5" },
-    { value: 1.0, color: l_03, label: "1.0" },
-    { value: 11.0, color: l_04, label: "11.0" }
+    { value: 0.0,  color: "#f7fbff", label: "0" },
+    { value: 0.1,  color: "#c6dbef", label: "0.01 – 0.1 m" },
+    { value: 0.25, color: "#6baed6", label: "0.10 – 0.25 m" },
+    { value: 0.5,  color: "#2171b5", label: "0.25 – 0.50 m" },
+    { value: 1.0,  color: "#08306b", label: "0.50 – 1.00 m" },
+    { value: 2.0,  color: "#4a148c", label: "1.00 – 2.00 m" },
+    { value: 11.0, color: "#1a0033", label: "> 2.00 m" }
 ];
 
 export function WaterLevelLegend(props: LegendItemComponentProps) {
