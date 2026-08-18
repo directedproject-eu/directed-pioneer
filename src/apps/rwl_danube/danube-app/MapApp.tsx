@@ -159,6 +159,29 @@ function createPastEventLayer(
     });
 }
 
+/**
+ * The whole Danube application: one map, everything placed around it.
+ *
+ * The layout is built from `MapAnchor`s, one per corner. Each is absolutely positioned by
+ * the map package from its `position` and gaps alone, so anchors do not flow around each
+ * other -- two at the same position land on top of one another, and dom order decides what
+ * wins. There are two at top-right on purpose; the note there explains why.
+ *
+ *   top-left      isimip selection, station info, measurement tools, toc, download
+ *   top-right     layer selector and the two time sliders (see note)
+ *   top-right     layer swipe and legend
+ *   bottom-left   zoom shortcuts and feature info
+ *   bottom-right  tool buttons and map navigation
+ *
+ * Not all layers of the map are declared in `MapProvider`: the past-event layers are added
+ * here, because they exist only for authenticated users, and three services add raster
+ * layers of their own.
+ *
+ * Two pieces of state deserve attention. The layer swipe effect registers listeners on
+ * every layer and rebuilds the ol-ext control whenever the selection changes. And the
+ * effect adding the past-event layers removes them again on cleanup, which is what makes it
+ * safe to re-run -- see the comment there.
+ */
 export function MapApp() {
     const mapModel = useMapModel(MAP_ID);
     const zoomService = useService<LayerZoom>("app.LayerZoom");
@@ -691,6 +714,7 @@ export function MapApp() {
                                             <ZoomOut map={mapModel.map} />
                                         </Flex>
                                     </MapAnchor>
+                                    {/* isimip selection, station info, measurement, toc */}
                                     <MapAnchor
                                         position="top-left"
                                         horizontalGap={5}
