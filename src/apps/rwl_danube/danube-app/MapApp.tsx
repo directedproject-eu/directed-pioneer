@@ -391,8 +391,17 @@ export function MapApp() {
                                 >
                                     {/* Deliberately a separate anchor from the one holding the
                                         layer swipe and the legend below, even though both sit
-                                        at top-right. Merging them into one anchor with a flex
-                                        column was tried and rendered worse. */}
+                                        at top-right and therefore get identical coordinates.
+
+                                        TimeSlider and GeosphereForecasts place themselves with
+                                        width: 40vw and margin: 0 30vw, so they demand the full
+                                        window width and push their own content to the middle.
+                                        This anchor is therefore nearly as wide as the map, and
+                                        only overlaps the one below with empty margin.
+
+                                        Merging the two into one flex column was tried and
+                                        reverted: that width would size the column and drag the
+                                        swipe box and the legend away from the right edge. */}
                                     <MapAnchor
                                         position="top-right"
                                         horizontalGap={5}
