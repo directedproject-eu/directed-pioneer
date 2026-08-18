@@ -389,15 +389,6 @@ export function MapApp() {
                                     role="main"
                                     aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                                 >
-                                    <MapAnchor
-                                        position="top-right"
-                                        horizontalGap={5}
-                                        verticalGap={5}
-                                    >
-                                        <LayerSelector />
-                                        <TimeSlider />
-                                        <GeosphereForecasts />
-                                    </MapAnchor>
                                     {/* zoom to region and feature info */}
                                     <MapAnchor
                                         position="bottom-left"
@@ -464,16 +455,26 @@ export function MapApp() {
                                         )}
                                     </MapAnchor>
 
-                                    {/* layerswipe and legend */}
+                                    {/* controls, layer swipe and legend */}
                                     <MapAnchor
                                         position="top-right"
                                         horizontalGap={5}
                                         verticalGap={5}
                                     >
-                                        <style>{`@media (max-height: 768px) { .dnb-topright-box { max-height: calc(100vh - 250px) !important; overflow-y: auto; } }`}</style>
-                                        <Flex direction="column" gap={4}>
+                                        {/* One column, one scroll container: these used to be
+                                            two anchors at the same position, which the map
+                                            places at identical coordinates -- they overlapped,
+                                            and which one won was decided by dom order. */}
+                                        <Flex
+                                            direction="column"
+                                            gap={4}
+                                            maxHeight="100%"
+                                            overflowY="auto"
+                                        >
+                                            <LayerSelector />
+                                            <TimeSlider />
+                                            <GeosphereForecasts />
                                             <Box
-                                                className="dnb-topright-box"
                                                 backgroundColor="white"
                                                 borderWidth="1px"
                                                 borderRadius="lg"
@@ -483,9 +484,7 @@ export function MapApp() {
                                                 aria-label={intl.formatMessage({
                                                     id: "ariaLabel.topRight"
                                                 })}
-                                                maxHeight={615}
                                                 maxWidth="calc(30vw - 20px)"
-                                                marginBottom={5}
                                             >
                                                 <Box>
                                                     <Box maxHeight={300} overflow="auto">
@@ -610,12 +609,8 @@ export function MapApp() {
                                             </Box>
                                             <Flex
                                                 minWidth={250}
-                                                overflow="hidden"
-                                                maxHeight="calc(100vh - 380px)"
-                                                overflowY="auto"
                                                 borderRadius="md"
                                                 boxShadow="lg"
-                                                // marginLeft="auto"
                                                 alignSelf="flex-end"
                                             >
                                                 <PioneerLegend map={mapModel.map} />
