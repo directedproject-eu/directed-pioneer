@@ -62,6 +62,20 @@ export interface StationSelector extends DeclaredService<"app.StationSelector"> 
     readonly stationData: StationData;
 }
 
+/**
+ * Turns a click on the map into the "station information" panel, and marks what was hit.
+ *
+ * Despite the name it is not limited to stations: the handler is attached to the map, not
+ * to a layer, so it answers for whatever feature lies under the pointer -- an event point
+ * from the Zala collections, a forestry station, a NUTS region. What the panel shows comes
+ * from {@link setStationData}, which only knows the hungarian field names of the Zala data;
+ * clicking anything else publishes an object of undefined values, and the panel renders the
+ * labels with nothing behind them.
+ *
+ * Only one feature is highlighted at a time. The previous one is reset by dropping its
+ * individual style, which lets the layer style take over again -- so the highlight must
+ * never be the layer style itself.
+ */
 export class StationSelectorImpl implements StationSelector {
     private mapRegistry: MapRegistry;
 
@@ -118,6 +132,14 @@ export class StationSelectorImpl implements StationSelector {
         return this.#stationData.value;
     }
 
+    /**
+     * Maps a feature's raw properties onto {@link StationData}.
+     *
+     * The keys are the column names of the Zala fire brigade records, in hungarian, exactly
+     * as the pygeoapi collections deliver them -- "Beavatkozás típusa" is the type of
+     * intervention, "Káreset fajtája" the kind of damage. They are not translated anywhere;
+     * renaming a column upstream silently turns the corresponding field undefined.
+     */
     private setStationData(properties: Record<string, string>): void {
         this.#stationData.value = {
             type: properties["Beavatkozás típusa"],
