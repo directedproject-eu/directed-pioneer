@@ -19,6 +19,28 @@ export interface GeosphereService extends DeclaredService<"app.GeosphereService"
     getMapModel(): Promise<MapModel | undefined>;
 }
 
+/**
+ * Owns the "daily_precipitation_sum" raster: GeoSphere's measured daily rainfall totals
+ * for Austria in 2024, one file per day.
+ *
+ * The layer is not declared in `MapProvider`. This service creates it here inside the
+ * "geosphere_historical" group and keeps a reference so it can swap the raster as the user
+ * moves through the year.
+ *
+ * Worth reading before the other two raster services, because this one is the simpler
+ * design and arguably the right one: its colour scale is **fixed**
+ * ({@link DAILY_PRECIPITATION_STOPS}, 0-300 mm in six classes). It therefore needs no
+ * value-range read, no request id, no debouncing -- and a colour means the same amount of
+ * rain on every day of the year, which is what makes the animation comparable.
+ * IsimipHandler and GeosphereForecastService derive their scale per frame instead; see
+ * BACKLOG.md for that discussion.
+ *
+ * The url is not built here. `TimeSlider.tsx` turns a slider position into a file name and
+ * passes it to {@link setFileUrl}. The one url that *is* written out below, as the initial
+ * source, is that function's output for position 0 -- the same knowledge in two places, in
+ * two directories. Note also that the slider derives the file name in local time, which
+ * produces a nonexistent url on the day of a midnight dst transition; see BACKLOG.md.
+ */
 export class GeosphereServiceImpl implements GeosphereService {
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
