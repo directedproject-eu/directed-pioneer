@@ -5,7 +5,7 @@ import { MapRegistry } from "@open-pioneer/map";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { reactive, Reactive } from "@conterra/reactivity-core";
 import { Circle, Fill, Stroke, Style } from "ol/style";
-import { FeatureLike } from "ol/Feature";
+import type Feature from "ol/Feature";
 import { MAP_ID } from "./MapProvider";
 
 interface References {
@@ -38,13 +38,19 @@ export class StationSelectorImpl implements StationSelector {
 
     #stationData: Reactive<StationData> = reactive({});
 
-    private selectedFeature: FeatureLike = null; // Store the previously selected feature
+    /** The feature currently drawn in the highlight style, so it can be reset on the next click. */
+    private selectedFeature: Feature | undefined;
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             const map = model?.olMap;
+            if (!model || !map) {
+                console.warn("StationSelector found no map; clicks will not be handled.");
+                return;
+            }
+
             map.on("click", (event) => {
                 const result = map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
                     if (layer !== model.layers.getLayerById("isimip")) {
@@ -60,7 +66,7 @@ export class StationSelectorImpl implements StationSelector {
                     const [feature, color, title] = result;
                     this.setStationData(feature.getProperties());
                     if (this.selectedFeature) {
-                        this.selectedFeature.setStyle(null);
+                        this.selectedFeature.setStyle(undefined);
                     }
                     if (title == "Nuts regions") {
                         feature.setStyle(
@@ -89,9 +95,9 @@ export class StationSelectorImpl implements StationSelector {
                 } else {
                     this.#stationData.value = {};
                     if (this.selectedFeature) {
-                        this.selectedFeature.setStyle(null);
+                        this.selectedFeature.setStyle(undefined);
                     }
-                    this.selectedFeature = null;
+                    this.selectedFeature = undefined;
                 }
             });
         });
