@@ -22,7 +22,6 @@
         "test": "vitest",
         "prepare": "husky && pnpm check-duplicates"
     },
-    
     "devDependencies": {
         "@open-pioneer/build-package-cli": "catalog:",
         "@open-pioneer/build-support": "catalog:",
@@ -32,8 +31,10 @@
         "@testing-library/jest-dom": "catalog:",
         "@testing-library/react": "catalog:",
         "@testing-library/user-event": "catalog:",
+        "@types/chroma-js": "catalog:",
         "@types/js-yaml": "catalog:",
         "@types/node": "catalog:",
+        "@types/papaparse": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "@typescript-eslint/eslint-plugin": "catalog:",

@@ -6,6 +6,7 @@ import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { reactive, Reactive } from "@conterra/reactivity-core";
 import { Circle, Fill, Stroke, Style } from "ol/style";
 import { FeatureLike } from "ol/Feature";
+import { MAP_ID } from "./MapProvider";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -24,7 +25,6 @@ interface StationData {
 export interface StationSelector extends DeclaredService<"app.StationSelector"> {}
 
 export class StationSelectorImpl implements StationSelector {
-    private MAP_ID = "main";
     private mapRegistry: MapRegistry;
 
     #stationData: Reactive<StationData> = reactive({});
@@ -34,12 +34,16 @@ export class StationSelectorImpl implements StationSelector {
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             const map = model?.olMap;
             map.on("click", (event) => {
                 const result = map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
                     if (layer !== model.layers.getLayerById("isimip")) {
-                        return [feature, layer.style_["circle-fill-color"], layer.getProperties().title];
+                        return [
+                            feature,
+                            layer.style_["circle-fill-color"],
+                            layer.getProperties().title
+                        ];
                     }
                 });
 
@@ -49,8 +53,7 @@ export class StationSelectorImpl implements StationSelector {
                     if (this.selectedFeature) {
                         this.selectedFeature.setStyle(null);
                     }
-                    if(title == "Nuts regions") {
-
+                    if (title == "Nuts regions") {
                         feature.setStyle(
                             new Style({
                                 fill: new Fill({
@@ -60,10 +63,9 @@ export class StationSelectorImpl implements StationSelector {
                                     color: "black",
                                     width: 3
                                 })
-                            }),
+                            })
                         );
-                    }                    
-                    else {
+                    } else {
                         feature.setStyle(
                             new Style({
                                 image: new Circle({

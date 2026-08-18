@@ -7,15 +7,13 @@ import { LayerHighlighter } from "../../services/LayerHighlighter";
 import { IsimipHandler } from "../../services/IsimipHandler";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 
-
-interface legendmetaData {
+interface LegendProps {
     range: number[];
     variable: string;
     isAuthenticated?: boolean;
 }
 
-
-const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }) => {
+const Legend: React.FC<LegendProps> = ({ range1, variable1, isAuthenticated }) => {
     const prepSrvc = useService<IsimipHandler>("app.IsimipHandler");
 
     const { legendMetadata } = useReactiveSnapshot(
@@ -24,8 +22,8 @@ const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }
         }),
         [prepSrvc]
     );
-    const range = legendMetadata.range; 
-    const variable = legendMetadata.variable; 
+    const range = legendMetadata.range;
+    const variable = legendMetadata.variable;
     const highlightService = useService<LayerHighlighter>("app.LayerHighlighter");
     const intl = useIntl();
     const to_display_circles = [
@@ -68,8 +66,7 @@ const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }
                                     display="flex"
                                     alignItems="center"
                                     mb={1}
-                                    onClick={() => {
-                                    }}
+                                    onClick={() => {}}
                                     // Add these styles to ensure it's clickable
                                     cursor="pointer"
                                     zIndex="2" // Ensures it's on top of other elements
@@ -146,7 +143,13 @@ const Legend: React.FC<legendmetaData> = ({ range1, variable1, isAuthenticated }
                 <div style={{ marginRight: "3em" }}>
                     {to_display.map((item, index) => (
                         <Box key={index} display="flex" mb={1}>
-                            <Box width="12px" height="12px" bg={item.color} mr={2}  border={"2px solid black"} />
+                            <Box
+                                width="12px"
+                                height="12px"
+                                bg={item.color}
+                                mr={2}
+                                border={"2px solid black"}
+                            />
                             <Box>{item.label}</Box>
                         </Box>
                     ))}
