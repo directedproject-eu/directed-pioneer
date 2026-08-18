@@ -1,22 +1,16 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-interface StationData {
-    settlement: string;
-    adress: string;
-    type: string;
-    eventType: string;
-    locationType: string;
-    date: string;
-    damageType: string;
-    county: string;
+import { useIntl } from "open-pioneer:react-hooks";
+import { StationData } from "../services/StationSelector";
+
+interface StationInformationProps {
+    /** Empty while nothing is selected; the component then shows the hint text instead. */
+    data: StationData;
 }
 
-import { useIntl } from "open-pioneer:react-hooks";
-
-const StationInformation = (data: StationData) => {
+const StationInformation = ({ data: stationData }: StationInformationProps) => {
     const intl = useIntl();
-    const stationData: StationData = data.data;
     if (Object.keys(stationData).length == 0) {
         return <>{intl.formatRichMessage({ id: "map.station_information.description" })}</>;
     }
@@ -24,7 +18,7 @@ const StationInformation = (data: StationData) => {
         <>
             <div>
                 {intl.formatMessage({ id: "map.station_information.attributes.address" })}:{" "}
-                {stationData.adress}
+                {stationData.address}
             </div>
             <div>
                 {intl.formatMessage({ id: "map.station_information.attributes.settlement" })}:{" "}

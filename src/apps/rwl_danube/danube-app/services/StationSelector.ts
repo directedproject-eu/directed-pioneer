@@ -11,9 +11,15 @@ import { MAP_ID } from "./MapProvider";
 interface References {
     mapRegistry: MapRegistry;
 }
-interface StationData {
+/**
+ * One clicked event, mapped from the hungarian field names the Zala collections use.
+ *
+ * Every field is optional: a feature may carry any subset of them, and the empty object
+ * means "nothing selected".
+ */
+export interface StationData {
     settlement?: string;
-    adress?: string;
+    address?: string;
     type?: string;
     eventType?: string;
     locationType?: string;
@@ -22,7 +28,10 @@ interface StationData {
     county?: string;
 }
 
-export interface StationSelector extends DeclaredService<"app.StationSelector"> {}
+export interface StationSelector extends DeclaredService<"app.StationSelector"> {
+    /** Properties of the feature the user last clicked, or `{}` if none. Reactive. */
+    readonly stationData: StationData;
+}
 
 export class StationSelectorImpl implements StationSelector {
     private mapRegistry: MapRegistry;
@@ -94,7 +103,7 @@ export class StationSelectorImpl implements StationSelector {
     private setStationData(properties: Record<string, string>): void {
         this.#stationData.value = {
             type: properties["Beavatkozás típusa"],
-            adress: properties["Cím"],
+            address: properties["Cím"],
             eventType: properties["Esemény típus"],
             locationType: properties["Helyszín típusa"],
             date: properties["Jelzés dátuma"],
