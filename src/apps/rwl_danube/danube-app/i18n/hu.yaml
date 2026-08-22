@@ -81,7 +81,7 @@ overrides:
       prev: "Előző"
     password-input:
       triggerAriaLabel: "Jelszó láthatóságának átváltása"
-      
+
 messages:
   basemapLabel: "Alap térkép kiválasztása"
   auth-error: "Hiba történt a hitelesítés során."
@@ -115,16 +115,17 @@ messages:
   map:
     layer_select:
       heading: "Éghajlati előrejelzések"
-      info1: "Ezeket az éghajlati előrejelzéseket az ISIMIP (Inter-Sectoral Impact Model Intercomparison Project) modellel készítették. 
-              Ez a komponens lehetővé teszi különböző"
+      info1:
+        "Ezeket az éghajlati előrejelzéseket az ISIMIP (Inter-Sectoral Impact Model Intercomparison Project) modellel készítették.
+        Ez a komponens lehetővé teszi különböző"
       keyword1: "klímamodell"
       info2: "előrejelzések megtekintését három"
       keyword2: "közös társadalmi-gazdasági pálya (SSP)"
       info3: "klímaváltozási kibocsátási forgatókönyv keretében."
       keyword3: "A változók"
       info4: "ezen komponens alján választhatók ki, majd az Operatív rétegekben kapcsolhatók be.
-              Meg kell jegyezni, hogy a rövidebb visszatérési időszakok gyakrabban előforduló és 
-              súlyosabb árvizeket jeleznek."
+        Meg kell jegyezni, hogy a rövidebb visszatérési időszakok gyakrabban előforduló és
+        súlyosabb árvizeket jeleznek."
       model: "Modell"
       scenario: "Forgatókönyv"
       variable: "Változó"
@@ -191,10 +192,10 @@ messages:
   welcome_window:
     header: "Üdvözöljük a DIRECTED Data Fabric Duna-alkalmazásában!"
     body:
-      "A Duna alkalmazás az EU által finanszírozott DIRECTED projekt keretében fejlesztett Data Fabric része. 
-      Az alkalmazás célja, hogy támogassa a a különböző érdekcsoportokat a katasztrófakockázat-csökkentés és az 
-      éghajlatváltozáshoz való alkalmazkodás terén. Az alkalmazás mindenki számára elérhető nyilvános adatokat tartalmaz. 
-      További, hozzáféréssel korlátozott adatok a bejelentkezés után jelennek meg (használja a jobb felső sarokban található bejelentkezés gombot). 
+      "A Duna alkalmazás az EU által finanszírozott DIRECTED projekt keretében fejlesztett Data Fabric része.
+      Az alkalmazás célja, hogy támogassa a a különböző érdekcsoportokat a katasztrófakockázat-csökkentés és az
+      éghajlatváltozáshoz való alkalmazkodás terén. Az alkalmazás mindenki számára elérhető nyilvános adatokat tartalmaz.
+      További, hozzáféréssel korlátozott adatok a bejelentkezés után jelennek meg (használja a jobb felső sarokban található bejelentkezés gombot).
       Felhívjuk figyelmét, hogy az alkalmazás még fejlesztés alatt áll."
   zoom_buttons:
     title: "Nagyítás"
@@ -214,7 +215,7 @@ messages:
     description: "Csak azok a rétegek láthatók az összehasonlításhoz, amelyeket az Operatív rétegek között kijelöltek."
     left: "Válassza ki a bal oldali réteget"
     right: "Válassza ki a megfelelő réteget"
-  crops: 
+  crops:
     ALFA: "Lucerna"
     CORN: "Szemes kukorica"
     GMAI: "Silókukorica"
@@ -222,9 +223,9 @@ messages:
     SBAR: "Tavaszi árpa"
     SOYB: "Szójabab"
     SUNF: "Napraforgó"
-    TRIT: "Tritikálé"  
-    WBAR: "Őszi árpa"  
-    WRAP: "Őszi repce"  
+    TRIT: "Tritikálé"
+    WBAR: "Őszi árpa"
+    WRAP: "Őszi repce"
     WRYE: "Rozs és kétszeres"
     WWHT: "Őszi búza"
     OATS: "Zab"

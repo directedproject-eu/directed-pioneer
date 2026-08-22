@@ -90,15 +90,17 @@ messages:
   map:
     layer_select:
       heading: "Klimaprognosen"
-      info1: "Diese Klimaprognosen wurden mit dem ISIMIP-Modell (Inter-Sectoral Impact Model Intercomparison Project) erstellt. 
-              Diese Komponente ermöglicht die Anzeige verschiedener"
+      info1:
+        "Diese Klimaprognosen wurden mit dem ISIMIP-Modell (Inter-Sectoral Impact Model Intercomparison Project) erstellt.
+        Diese Komponente ermöglicht die Anzeige verschiedener"
       keyword1: "Klimamodell"
       info2: "-Projektionen innerhalb von drei verschiedenen"
       keyword2: "Shared Socioeconomic Pathway (SSP)"
       info3: "-Emissionsszenarien des Klimawandels."
       keyword3: "Variablen"
-      info4: "können am unteren Rand dieser Komponente ausgewählt und dann in den Operational Layers umgeschaltet werden.
-              Es ist zu beachten, dass kürzere Wiederkehrperioden auf häufigere und stärkere Überschwemmungen hindeuten."
+      info4:
+        "können am unteren Rand dieser Komponente ausgewählt und dann in den Operational Layers umgeschaltet werden.
+        Es ist zu beachten, dass kürzere Wiederkehrperioden auf häufigere und stärkere Überschwemmungen hindeuten."
       model: "Modell"
       scenario: "Szenario"
       variable: "Variable"
@@ -186,7 +188,7 @@ messages:
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
     left: "Linken Layer auswählen"
     right: "Rechten Layer auswählen"
-  crops: 
+  crops:
     ALFA: "Luzerne"
     CORN: "Körnermais"
     GMAI: "Grünmais"
@@ -194,10 +196,10 @@ messages:
     SBAR: "Sommergerste"
     SOYB: "Sojabohnen"
     SUNF: "Sonnenblumen"
-    TRIT: "Triticale"  
-    WBAR: "Wintergerste"  
-    WRAP: "Winterraps"  
-    WRYE: "Roggen und Menggetreide" 
+    TRIT: "Triticale"
+    WBAR: "Wintergerste"
+    WRAP: "Winterraps"
+    WRYE: "Roggen und Menggetreide"
     WWHT: "Winterweizen"
     OATS: "Hafer"
     SUGB: "Zuckerrüben"
