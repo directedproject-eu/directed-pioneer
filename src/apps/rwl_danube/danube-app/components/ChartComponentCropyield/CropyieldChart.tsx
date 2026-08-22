@@ -26,7 +26,7 @@ type ChartProps = {
     isLoading: boolean;
 };
 
-const LineChart: React.FC<ChartProps> = ({
+const CropyieldChart: React.FC<ChartProps> = ({
     regionName,
     selectedCrops,
     selectedScenario,
@@ -86,6 +86,7 @@ const LineChart: React.FC<ChartProps> = ({
                         alignItems: "center"
                     }}
                 >
+                    {/* The `spin` keyframes live in app.css. */}
                     <div
                         style={{
                             width: "40px",
@@ -96,7 +97,6 @@ const LineChart: React.FC<ChartProps> = ({
                             animation: "spin 1s linear infinite"
                         }}
                     />
-                    <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
                 </div>
             )}
 
@@ -124,4 +124,4 @@ const LineChart: React.FC<ChartProps> = ({
     );
 };
 
-export default LineChart;
+export default CropyieldChart;

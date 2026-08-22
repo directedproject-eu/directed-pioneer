@@ -44,21 +44,19 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
         <>
             <Flex justifyContent="center" mb={6} direction="column" alignItems="center" gap={4}>
                 <Box width="300px">
-                    <Box width="300px">
-                        <NativeSelect.Root>
-                            <NativeSelect.Field
-                                value={selectedLocation}
-                                onChange={(e) => setSelectedLocation(e.target.value)}
-                            >
-                                {locations.map((id) => (
-                                    <option key={id} value={id}>
-                                        {nutsRegionLabel(id)}
-                                    </option>
-                                ))}
-                            </NativeSelect.Field>
-                            <NativeSelect.Indicator />
-                        </NativeSelect.Root>
-                    </Box>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field
+                            value={selectedLocation}
+                            onChange={(e) => setSelectedLocation(e.target.value)}
+                        >
+                            {locations.map((id) => (
+                                <option key={id} value={id}>
+                                    {nutsRegionLabel(id)}
+                                </option>
+                            ))}
+                        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
                 </Box>
 
                 <Flex gap={4}>
