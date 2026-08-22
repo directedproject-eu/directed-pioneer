@@ -12,6 +12,12 @@ type ForestryProps = {
     locationName: string;
 };
 
+/** One measurement as the forestry json delivers it. */
+interface ForestryReading {
+    time: string;
+    val: number;
+}
+
 type SeriesData = {
     id: string;
     name: string;
@@ -35,6 +41,21 @@ const getUnit = (variable: string) => {
     return "";
 };
 
+/**
+ * Time series for one forestry station, with up to two variables on separate y axes.
+ *
+ * Each variable is one json file per station under `data/forestry/<station>/<variable>.json`,
+ * fetched independently -- so one failing leaves the other on screen rather than emptying
+ * the chart. `"none"` is a valid variable and simply yields no series, which is how the
+ * caller switches an axis off.
+ *
+ * Readings are filtered before plotting: soil moisture outside 0-100 is dropped as a
+ * sensor artefact, everything else only has to be a number. Highcharts then groups the
+ * points by average, so what is drawn at low zoom is not the raw series.
+ *
+ * Titles, axis labels and the range selector are hardcoded english; this component predates
+ * the i18n setup used elsewhere in the app.
+ */
 const ForestryChart: React.FC<ForestryProps> = ({
     leftVariable,
     rightVariable,
@@ -80,16 +101,15 @@ const ForestryChart: React.FC<ForestryProps> = ({
 
                 if (!Array.isArray(data)) throw new Error("Data is not an array");
 
+                // The tuple annotation matters: as a plain number[] the pair loses its
+                // shape, and every index access below would be possibly undefined.
                 const formattedData = data
-                    .map((item: { time: string; val: number }) => [
+                    .map((item: ForestryReading): [number, number] => [
                         new Date(item.time).getTime(),
                         item.val
                     ])
-                    .filter(
-                        (point: number[]) =>
-                            !isNaN(point[0]) && isValidDataPoint(variable, point[1])
-                    )
-                    .sort((a: number[], b: number[]) => a[0] - b[0]);
+                    .filter(([time, value]) => !isNaN(time) && isValidDataPoint(variable, value))
+                    .sort((a, b) => a[0] - b[0]);
 
                 return {
                     id: `series-${axisIndex}`,
