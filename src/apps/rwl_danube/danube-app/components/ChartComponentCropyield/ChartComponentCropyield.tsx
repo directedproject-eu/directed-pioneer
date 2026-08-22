@@ -22,6 +22,22 @@ interface Props {
     nutsId?: string;
 }
 
+/**
+ * The crop yield dialog: region, emission scenario and crops on top, the chart below, the
+ * explanatory text underneath.
+ *
+ * All state lives in {@link useCropYieldData}; this component only renders it. `nutsId` is
+ * the region the user clicked on the map, passed through as a starting value.
+ *
+ * The crop checkboxes are built from what the hook found to exist for the current region,
+ * not from the full list -- so they change when the region changes, and the selection can
+ * shrink with them.
+ *
+ * The explanation is one paragraph assembled from six translated fragments with three
+ * clickable keywords in between, each opening a {@link TaxonomyInfo} panel. The keyword
+ * arguments are the taxonomy's own english terms and are deliberately not translated;
+ * only the visible link text is.
+ */
 const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
     const intl = useIntl();
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null);

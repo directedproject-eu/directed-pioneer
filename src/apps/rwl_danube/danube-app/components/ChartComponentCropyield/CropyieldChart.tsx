@@ -26,6 +26,22 @@ type ChartProps = {
     isLoading: boolean;
 };
 
+/**
+ * Draws the crop yield series. Presentation only -- it fetches nothing and holds no state.
+ *
+ * Each crop arrives as two series from {@link fetchAndProcessCropData}: an `arearange`
+ * band for the 20th-80th percentile and a `line` for the median, sharing one colour. The
+ * band is drawn first and without a legend entry, so the legend lists one item per crop
+ * rather than two.
+ *
+ * A stock chart is used for the datetime axis, but its navigator, scrollbar and range
+ * selector are switched off -- the series are annual values from a fixed period, so there
+ * is nothing to scroll through.
+ *
+ * Three states are rendered: loading, data, and "nothing found for this selection". The
+ * last one only appears once crops are actually selected; with none picked the chart area
+ * stays empty on purpose.
+ */
 const CropyieldChart: React.FC<ChartProps> = ({
     regionName,
     selectedCrops,

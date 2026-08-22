@@ -243,9 +243,11 @@ export const fetchAndProcessCropData = async (
                         return;
                     }
 
-                    // GET TRANSLATIONS HERE
+                    // Translated while the series is built, not when it is drawn -- which is
+                    // why the hook lists intl as a dependency and refetches on a language
+                    // switch. A missing key surfaces as the key itself in the legend; there
+                    // is no fallback.
                     const cropName = intl.formatMessage({ id: `crops.${cropCode}` });
-                    // Provide fallback strings just in case the YAML is missing these keys
                     const percentileText = intl.formatMessage({ id: "charts.percentile" });
                     const medianText = intl.formatMessage({ id: "charts.median" });
 
