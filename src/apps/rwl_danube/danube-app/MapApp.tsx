@@ -720,6 +720,12 @@ export function MapApp() {
                                         horizontalGap={5}
                                         verticalGap={5}
                                     >
+                                        {/* The children carry `flexShrink={0}` on purpose. Flex
+                                            items shrink by default, so on a short screen the
+                                            browser would squeeze them into this max height
+                                            instead of letting the column overflow -- `overflowY`
+                                            would then have nothing to scroll, and the squeezed
+                                            boxes would clip their own content. */}
                                         <Flex
                                             direction="column"
                                             maxHeight="calc(100vh - 200px)"
@@ -750,6 +756,7 @@ export function MapApp() {
                                                     aria-label={intl.formatMessage({
                                                         id: "ariaLabel.topLeft"
                                                     })}
+                                                    flexShrink={0}
                                                 >
                                                     <Box
                                                         role="dialog"
@@ -786,6 +793,7 @@ export function MapApp() {
                                                 marginBottom="10px"
                                                 maxHeight="min(500px, calc(100vh - 330px))"
                                                 overflow="auto"
+                                                flexShrink={0}
                                             >
                                                 <ChakraProvider value={system}>
                                                     <Toc
