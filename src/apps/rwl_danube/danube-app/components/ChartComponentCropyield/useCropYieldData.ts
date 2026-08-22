@@ -6,6 +6,25 @@ import { SeriesData } from "./CropyieldChart";
 import { checkCropAvailability, fetchAndProcessCropData, seriesColor } from "./utils";
 import { useIntl } from "open-pioneer:react-hooks";
 
+/**
+ * Owns the entire state of the crop yield chart: which region, scenario and crops are
+ * selected, which crops exist at all, and the series built from them.
+ *
+ * Three effects run in sequence, each feeding the next:
+ *
+ * 1. `initialNutsId` -- the region the user clicked on the map -- is adopted into state.
+ * 2. A change of region probes which crops have data there and prunes the selection to
+ *    what survives. This is why picking a new region can silently change the chosen crops.
+ * 3. Any change of region, scenario or crop selection loads the matching csv files and
+ *    turns them into highcharts series.
+ *
+ * Two loading flags rather than one, because the two questions are answered at different
+ * times: `isAvailabilityLoading` covers step 2, `isChartLoading` step 3. The latter is
+ * deliberately not raised for every change -- see the note at its assignment.
+ *
+ * `initialNutsId` is a starting value, not a binding: once adopted, the dropdown can move
+ * the selection elsewhere and the prop does not pull it back until the map sends a new one.
+ */
 export function useCropYieldData(initialNutsId?: string) {
     const [selectedLocation, setSelectedLocation] = useState<string>(initialNutsId || "RO11");
     const [selectedScenario, setSelectedScenario] = useState("ssp585");
