@@ -169,6 +169,8 @@ messages:
         end_date: "Előrejelzés vége:"
         selected_date: "Kiválasztott dátum:"
   charts:
+    median: "medián"
+    percentile: "percentilis"
     zala_crop:
       button_title: "Terménytáblázat"
       title_chart1: "Növénykultúrák Zala megyében "
@@ -205,6 +207,7 @@ messages:
     topLeft: "Mérés"
     topRight: "Áttekintő térkép és alap térkép váltó"
     bottomRight: "Térképezési eszközök"
+    toc: "Rétegek"
   measurementTitle: "Mérés"
   layer_swipe:
     title: "Válassza ki az összehasonlítandó rétegeket"

@@ -144,6 +144,8 @@ messages:
         end_date: "Forecast End Date:"
         selected_date: "Selected Date:"
   charts:
+    median: "median"
+    percentile: "percentile"
     zala_crop:
       button_title: "Crop chart"
       title_chart1: "Crops in Zala region for "
@@ -184,6 +186,7 @@ messages:
     topLeft: "Measurement"
     topRight: "Overview map and basemap switcher"
     bottomRight: "Maptools"
+    toc: "Layers"
   measurementTitle: "Measurement"
   layer_swipe:
     title: "Select Layers for Comparison"

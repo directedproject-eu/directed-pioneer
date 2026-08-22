@@ -143,6 +143,8 @@ messages:
         end_date: "Vorhersage Enddatum:"
         selected_date: "Ausgewähltes Datum:"
   charts:
+    median: "Median"
+    percentile: "Perzentil"
     zala_crop:
       button_title: "Erntediagramm"
       title_chart1: "Anbauflächen in der Region Zala für "
@@ -177,6 +179,7 @@ messages:
     topLeft: "Messung"
     topRight: "Übersichtskarte und Grundkartenauswahl"
     bottomRight: "Werkzeuge"
+    toc: "Ebenen"
   measurementTitle: "Messung"
   layer_swipe:
     title: "Layer zum Vergleichen auswählen"
