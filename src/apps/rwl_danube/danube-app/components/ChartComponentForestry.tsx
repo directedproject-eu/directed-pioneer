@@ -17,6 +17,18 @@ interface Props {
     initialLocation?: string;
 }
 
+/**
+ * The forestry dialog: pick a station and two variables, {@link ForestryChart} draws them.
+ *
+ * This component owns only the selection; loading and plotting happen in the chart. The
+ * station list and the variables come from `config/forestry.ts`, shared with the map --
+ * clicking a station there opens this dialog with `initialLocation` set.
+ *
+ * Like {@link useCropYieldData}, that prop is a starting value rather than a binding: once
+ * adopted, the dropdown owns the selection until the map sends a new station. Unlike the
+ * crop chart, every station offers every variable, so there is no availability check and no
+ * pruning of the selection.
+ */
 const ChartComponentForestry: React.FC<Props> = ({ initialLocation }) => {
     const intl = useIntl();
 
