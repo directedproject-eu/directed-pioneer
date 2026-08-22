@@ -77,22 +77,10 @@ export const NUTS_REGIONS: Record<string, string> = {
 
 export const locations = Object.keys(NUTS_REGIONS);
 
-// export const CODE_TO_DISPLAY_NAME: Record<string, string> = {
-//     "ALFA": "Lucerne",
-//     "CORN": "Corn maize",
-//     "GMAI": "Green maize",
-//     "POTA": "Potatoes",
-//     "SBAR": "Spring barley",
-//     "SOYB": "Soya beans",
-//     "SUNF": "Sunflowers",
-//     "TRIT": "Triticale",
-//     "WBAR": "Winter barley",
-//     "WRAP": "Winter rape",
-//     "WRYE": "Rye and maslin",
-//     "WWHT": "Winter wheat"
-// };
-
-// export const ALL_CROP_CODES = Object.keys(CODE_TO_DISPLAY_NAME);
+/**
+ * Every crop the dataset may contain. Not every region has all of them -- see
+ * {@link checkCropAvailability}. Display names come from i18n under `crops.<code>`.
+ */
 export const ALL_CROP_CODES = [
     "ALFA",
     "CORN",
@@ -121,15 +109,34 @@ export const distinctColors = [
     "#469990"
 ];
 
+/** Where the crop yield projections live, one csv per region, scenario and crop. */
+const CROP_YIELD_BASE_URL = "https://52n-directed.obs.eu-de.otc.t-systems.com/data/crop_yield";
+
+function cropDataUrl(location: string, scenario: string, cropCode: string): string {
+    return `${CROP_YIELD_BASE_URL}/${location}/${scenario}/${cropCode}.csv`;
+}
+
+/**
+ * The crops that actually have data for `location`, probed with twelve parallel HEAD
+ * requests.
+ *
+ * A crop that cannot be reached is reported as unavailable, so a network failure and a
+ * genuinely missing dataset look the same to the caller -- the user simply sees a shorter
+ * list. The warning below is the only trace. Telling the two apart would mean changing what
+ * this function promises; see BACKLOG.md.
+ */
 export const checkCropAvailability = async (location: string): Promise<string[]> => {
+    // Availability is assumed to be the same across scenarios, so one is enough to probe.
     const checkScenario = "SSP585";
-    const baseUrl = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/crop_yield/${location}/${checkScenario}`;
 
     const availabilityChecks = ALL_CROP_CODES.map(async (cropCode) => {
         try {
-            const response = await fetch(`${baseUrl}/${cropCode}.csv`, { method: "HEAD" });
+            const response = await fetch(cropDataUrl(location, checkScenario, cropCode), {
+                method: "HEAD"
+            });
             return response.ok ? cropCode : null;
         } catch (error) {
+            console.warn(`Could not check whether ${cropCode} exists for ${location}:`, error);
             return null;
         }
     });
@@ -157,7 +164,7 @@ export const fetchAndProcessCropData = async (
     color: string,
     intl: PackageIntl
 ): Promise<SeriesData[] | null> => {
-    const url = `https://52n-directed.obs.eu-de.otc.t-systems.com/data/crop_yield/${location}/${scenario}/${cropCode}.csv`;
+    const url = cropDataUrl(location, scenario, cropCode);
 
     try {
         const res = await fetch(url);
