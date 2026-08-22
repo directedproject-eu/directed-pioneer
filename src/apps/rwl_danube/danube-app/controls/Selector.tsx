@@ -4,6 +4,7 @@
 import { Box, Heading } from "@chakra-ui/react";
 import { useState } from "react";
 import SelectorItem from "./SelectorItem";
+import { ISIMIP_VARIABLES, isIsimipVariable } from "../config/isimipVariables";
 
 interface SelectorProps {
     options: string[];
@@ -12,17 +13,6 @@ interface SelectorProps {
     title?: string;
     alternativeText: boolean;
 }
-
-const option_text_mapping = {
-    "hurs": "Relative Humidity",
-    "pr": "Precipitation",
-    "rsds": "Shortwave Radiation",
-    "sfcwind": "Wind Speed",
-    "spei12": "SPEI drought index",
-    "tas": "Air Temperature",
-    "tasmax": "Daily Maximum Air Temperature",
-    "tasmin": "Daily Minimum Air Temperature"
-};
 
 const Selector: React.FC<SelectorProps> = ({
     options,
@@ -43,17 +33,20 @@ const Selector: React.FC<SelectorProps> = ({
             <Heading marginLeft="1em" fontSize={"1.2em"}>
                 {title}
             </Heading>
-            {options.map((option, index) => (
+            {options.map((option) => (
                 <SelectorItem
-                    key={index}
+                    key={option}
                     selected={currentSelected == option}
                     onClick={() => {
                         setSelected(option);
                         setCurrentSelected(option);
                     }}
                 >
-                    {alternativeText && option_text_mapping[option]}
-                    {!alternativeText && option}
+                    {/* This component also lists scenarios and models, which have no entry
+                        in the variable table -- those fall back to the raw option. */}
+                    {alternativeText && isIsimipVariable(option)
+                        ? ISIMIP_VARIABLES[option].shortName
+                        : option}
                 </SelectorItem>
             ))}
         </Box>

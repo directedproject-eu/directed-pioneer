@@ -9,50 +9,14 @@ import Legend from "../components/legends/Legend";
 
 import { MAP_ID } from "./MapProvider";
 import { createGeoTiffSource, getRangeFromGeoTiff } from "./geotiff";
+import {
+    ISIMIP_VARIABLES,
+    isIsimipVariable,
+    isimipVariableLabel,
+    type IsimipVariable
+} from "../config/isimipVariables";
 import { evenBoundaries, toColorExpression } from "../config/colorScale";
 import { ISIMIP_COLORS } from "../config/isimipScale";
-
-const layer_info = {
-    "hurs": {
-        "title": "Near-Surface Relative Humidity",
-        "description": "Near-Surface Relative Humidity in %"
-    },
-    "pr": {
-        "title": "Precipitation",
-        "description": "Precipitation in kg·m⁻²·s⁻¹"
-    },
-    "rsds": {
-        "title": "Surface Downwelling Shortwave Radiation",
-        "description": "Surface Downwelling Shortwave Radiation in W/m²"
-    },
-    "sfcwind": {
-        "title": "Near-Surface Wind Speed",
-        "description": "Near-Surface Wind Speed in m/s"
-    },
-    "spei12": {
-        "title": "SPEI drought index",
-        "description": "SPEI drought index"
-    },
-    "tas": {
-        "title": "Near-Surface Air Temperature",
-        "description": "Near-Surface Air Temperature in K"
-    },
-    "tasmax": {
-        "title": "Daily Maximum Near-Surface Air Temperature",
-        "description": "Daily Maximum Near-Surface Air Temperature in K"
-    },
-    "tasmin": {
-        "title": "Daily Minimum Near-Surface Air Temperature",
-        "description": "Daily Minimum Near-Surface Air Temperature in K"
-    }
-};
-
-/** The variables `layer_info` knows about, and therefore the only ones that can be shown. */
-type IsimipVariable = keyof typeof layer_info;
-
-function isIsimipVariable(value: string): value is IsimipVariable {
-    return value in layer_info;
-}
 
 /** Where the ISIMIP cloud-optimised geotiffs live. */
 const ISIMIP_COG_BASE_URL = "https://52n-directed.obs.eu-de.otc.t-systems.com/data/isimip/cogs";
@@ -121,7 +85,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         const variable = this.#selectedVariable.value;
-        const info = layer_info[variable];
+        const info = ISIMIP_VARIABLES[variable];
 
         this.mapRegistry = mapRegistry;
         this.mapRegistry.getMapModel(MAP_ID).then((model) => {
@@ -140,7 +104,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
             model?.layers.addLayer(
                 new SimpleLayer({
                     id: "isimip",
-                    description: info.description,
+                    description: isimipVariableLabel(variable),
                     title: info.title,
                     isBaseLayer: false,
                     olLayer: this.layer,
@@ -182,7 +146,7 @@ export class IsimipHandlerImpl implements IsimipHandler {
         if (!isIsimipVariable(newVariable)) {
             console.warn(
                 `Ignoring unknown isimip variable '${newVariable}'; known variables are ` +
-                    `${Object.keys(layer_info).join(", ")}.`
+                    `${Object.keys(ISIMIP_VARIABLES).join(", ")}.`
             );
             return;
         }
@@ -294,17 +258,18 @@ export class IsimipHandlerImpl implements IsimipHandler {
         return toColorExpression(ISIMIP_COLORS, evenBoundaries(range, ISIMIP_COLORS.length));
     }
     private changeLayerInfo() {
-        const info = layer_info[this.#selectedVariable.value];
+        const variable = this.#selectedVariable.value;
+        const info = ISIMIP_VARIABLES[variable];
 
         this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             model?.layers.getLayerById("isimip")?.setTitle(info.title);
-            model?.layers.getLayerById("isimip")?.setDescription(info.description);
+            model?.layers.getLayerById("isimip")?.setDescription(isimipVariableLabel(variable));
         });
 
         if (this.layer) {
             this.layer.setProperties({
                 title: info.title,
-                description: info.description
+                description: isimipVariableLabel(variable)
             });
         }
     }

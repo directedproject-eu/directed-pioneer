@@ -6,6 +6,7 @@ import { useService } from "open-pioneer:react-hooks";
 import { IsimipHandler } from "../../services/IsimipHandler";
 import { useReactiveSnapshot } from "@open-pioneer/reactivity";
 import { ISIMIP_COLORS } from "../../config/isimipScale";
+import { isIsimipVariable, isimipVariableLabel } from "../../config/isimipVariables";
 
 /**
  * Legend for the "isimip" climate raster: the colour ramp and what its classes mean.
@@ -36,17 +37,6 @@ const Legend: React.FC = () => {
         );
     }
 
-    const legend_text: Record<string, string> = {
-        hurs: "Near-Surface Relative Humidity in %",
-        pr: "Precipitation in kg·m⁻²·s⁻¹",
-        rsds: "Surface Downwelling Shortwave Radiation in W/m²",
-        sfcwind: "Near-Surface Wind Speed in m/s",
-        spei12: "SPEI drought index",
-        tas: "Near-Surface Air Temperature in K",
-        tasmax: "Daily Maximum Near-Surface Air Temperature in K",
-        tasmin: "Daily Minimum Near-Surface Air Temperature in K"
-    };
-
     // Same ramp the service paints the raster with; the labels follow the value range of
     // the file currently shown, so they are computed rather than fixed.
     const increment = (range[1] - range[0]) / (ISIMIP_COLORS.length - 1);
@@ -58,7 +48,7 @@ const Legend: React.FC = () => {
     return (
         <Box bg={"white"} p={2} borderRadius="md" boxShadow="md" mt="1em">
             <Text fontWeight="bold" mb={0}>
-                {legend_text[variable]}
+                {isIsimipVariable(variable) ? isimipVariableLabel(variable) : variable}
             </Text>
             <Box display="flex">
                 <div style={{ marginRight: "3em" }}>
