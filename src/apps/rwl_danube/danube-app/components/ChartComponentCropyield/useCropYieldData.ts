@@ -3,18 +3,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { SeriesData } from "./CropyieldChart";
-import { 
-    checkCropAvailability, 
-    fetchAndProcessCropData, 
-    distinctColors 
-} from "./utils";
+import { checkCropAvailability, fetchAndProcessCropData, distinctColors } from "./utils";
 import { useIntl } from "open-pioneer:react-hooks";
 
 export function useCropYieldData(initialNutsId?: string) {
     const [selectedLocation, setSelectedLocation] = useState<string>(initialNutsId || "RO11");
     const [selectedScenario, setSelectedScenario] = useState("ssp585");
     const [selectedCrops, setSelectedCrops] = useState<string[]>(["POTA"]);
-    
+
     const [availableCrops, setAvailableCrops] = useState<string[]>([]);
     const [isAvailabilityLoading, setIsAvailabilityLoading] = useState<boolean>(true);
 
@@ -35,13 +31,13 @@ export function useCropYieldData(initialNutsId?: string) {
         const verifyAvailability = async () => {
             setIsAvailabilityLoading(true);
             const validCrops = await checkCropAvailability(selectedLocation);
-            
+
             setAvailableCrops(validCrops);
 
-            setSelectedCrops(prev => {
-                const validSelections = prev.filter(c => validCrops.includes(c));
+            setSelectedCrops((prev) => {
+                const validSelections = prev.filter((c) => validCrops.includes(c));
                 if (validSelections.length === 0 && validCrops.length > 0) {
-                    return [validCrops[0]]; 
+                    return [validCrops[0]];
                 }
                 return validSelections;
             });
@@ -68,11 +64,11 @@ export function useCropYieldData(initialNutsId?: string) {
         const scenarioUpper = selectedScenario.toUpperCase();
 
         Promise.all(
-            selectedCrops.map((crop, index) => 
+            selectedCrops.map((crop, index) =>
                 fetchAndProcessCropData(
-                    selectedLocation, 
-                    scenarioUpper, 
-                    crop, 
+                    selectedLocation,
+                    scenarioUpper,
+                    crop,
                     distinctColors[index % distinctColors.length],
                     intl
                 )
@@ -85,14 +81,11 @@ export function useCropYieldData(initialNutsId?: string) {
             .finally(() => {
                 setIsChartLoading(false);
             });
-
     }, [selectedCrops, selectedScenario, selectedLocation]);
 
     const toggleCropSelection = (cropCode: string) => {
-        setSelectedCrops((prev) => 
-            prev.includes(cropCode) 
-                ? prev.filter((id) => id !== cropCode) 
-                : [...prev, cropCode]
+        setSelectedCrops((prev) =>
+            prev.includes(cropCode) ? prev.filter((id) => id !== cropCode) : [...prev, cropCode]
         );
     };
 
