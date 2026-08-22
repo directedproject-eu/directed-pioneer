@@ -4,6 +4,7 @@
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { useEffect, useState, useRef } from "react";
+import { forestryVariable, NO_VARIABLE } from "../config/forestry";
 
 type ForestryProps = {
     leftVariable: string;
@@ -30,23 +31,16 @@ type SeriesData = {
     dataGrouping: { enabled: boolean; approximation: string };
 };
 
-const formatLabel = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, " ");
-};
-
-const getUnit = (variable: string) => {
-    if (variable === "temperature") return "°C";
-    if (variable === "wind_speed") return "m/s";
-    if (variable.includes("soil_moisture")) return "%";
-    return "";
-};
+/** Label and unit for a variable id, falling back to the id itself if it is unknown. */
+const labelOf = (variable: string) => forestryVariable(variable)?.name ?? variable;
+const unitOf = (variable: string) => forestryVariable(variable)?.unit ?? "";
 
 /**
  * Time series for one forestry station, with up to two variables on separate y axes.
  *
  * Each variable is one json file per station under `data/forestry/<station>/<variable>.json`,
  * fetched independently -- so one failing leaves the other on screen rather than emptying
- * the chart. `"none"` is a valid variable and simply yields no series, which is how the
+ * the chart. {@link NO_VARIABLE} is accepted and simply yields no series, which is how the
  * caller switches an axis off.
  *
  * Readings are filtered before plotting: soil moisture outside 0-100 is dropped as a
@@ -79,7 +73,7 @@ const ForestryChart: React.FC<ForestryProps> = ({
             axisIndex: number,
             color: string
         ): Promise<SeriesData | null> => {
-            if (variable === "none") return null;
+            if (variable === NO_VARIABLE) return null;
 
             const isValidDataPoint = (varName: string, value: number | null) => {
                 if (value === null || isNaN(value)) return false;
@@ -113,13 +107,13 @@ const ForestryChart: React.FC<ForestryProps> = ({
 
                 return {
                     id: `series-${axisIndex}`,
-                    name: formatLabel(variable),
+                    name: labelOf(variable),
                     data: formattedData,
                     type: "line",
                     color: color,
                     yAxis: axisIndex,
                     marker: { enabled: false },
-                    tooltip: { valueSuffix: ` ${getUnit(variable)}` },
+                    tooltip: { valueSuffix: ` ${unitOf(variable)}` },
                     dataGrouping: {
                         enabled: true,
                         approximation: "average"
@@ -183,24 +177,24 @@ const ForestryChart: React.FC<ForestryProps> = ({
             {
                 title: {
                     text:
-                        leftVariable !== "none"
-                            ? `${formatLabel(leftVariable)} (${getUnit(leftVariable)})`
+                        leftVariable !== NO_VARIABLE
+                            ? `${labelOf(leftVariable)} (${unitOf(leftVariable)})`
                             : ""
                 },
-                labels: { format: `{value} ${getUnit(leftVariable)}` },
+                labels: { format: `{value} ${unitOf(leftVariable)}` },
                 opposite: false,
-                visible: leftVariable !== "none"
+                visible: leftVariable !== NO_VARIABLE
             },
             {
                 title: {
                     text:
-                        rightVariable !== "none"
-                            ? `${formatLabel(rightVariable)} (${getUnit(rightVariable)})`
+                        rightVariable !== NO_VARIABLE
+                            ? `${labelOf(rightVariable)} (${unitOf(rightVariable)})`
                             : ""
                 },
-                labels: { format: `{value} ${getUnit(rightVariable)}` },
+                labels: { format: `{value} ${unitOf(rightVariable)}` },
                 opposite: true,
-                visible: rightVariable !== "none"
+                visible: rightVariable !== NO_VARIABLE
             }
         ],
         tooltip: {
