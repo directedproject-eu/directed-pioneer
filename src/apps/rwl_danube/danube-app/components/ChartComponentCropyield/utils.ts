@@ -78,6 +78,17 @@ export const NUTS_REGIONS: Record<string, string> = {
 export const locations = Object.keys(NUTS_REGIONS);
 
 /**
+ * Label for a NUTS id, as "Burgenland (AT11)".
+ *
+ * Falls back to the bare id, and that is reachable: the map hands over whatever `NUTS_ID`
+ * the pygeoapi collection carries, which need not be one of the regions listed above.
+ */
+export function nutsRegionLabel(nutsId: string): string {
+    const name = NUTS_REGIONS[nutsId];
+    return name ? `${name} (${nutsId})` : nutsId;
+}
+
+/**
  * Every crop the dataset may contain. Not every region has all of them -- see
  * {@link checkCropAvailability}. Display names come from i18n under `crops.<code>`.
  */

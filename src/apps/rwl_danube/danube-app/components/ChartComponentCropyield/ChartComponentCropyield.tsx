@@ -17,7 +17,7 @@ import { useIntl } from "open-pioneer:react-hooks";
 import CropyieldChart from "./CropyieldChart";
 import { TaxonomyInfo } from "taxonomy";
 import { useCropYieldData } from "./useCropYieldData";
-import { NUTS_REGIONS } from "./utils";
+import { NUTS_REGIONS, nutsRegionLabel } from "./utils";
 interface Props {
     nutsId?: string;
 }
@@ -75,7 +75,7 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
             </Flex>
 
             <CropyieldChart
-                regionName={selectedLocation}
+                regionName={nutsRegionLabel(selectedLocation)}
                 selectedScenario={selectedScenario}
                 selectedCrops={selectedCrops}
                 seriesData={seriesData}
