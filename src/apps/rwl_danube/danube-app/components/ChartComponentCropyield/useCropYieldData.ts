@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { SeriesData } from "./CropyieldChart";
-import { checkCropAvailability, fetchAndProcessCropData, distinctColors } from "./utils";
+import { checkCropAvailability, fetchAndProcessCropData, seriesColor } from "./utils";
 import { useIntl } from "open-pioneer:react-hooks";
 
 export function useCropYieldData(initialNutsId?: string) {
@@ -36,10 +36,13 @@ export function useCropYieldData(initialNutsId?: string) {
 
             setSelectedCrops((prev) => {
                 const validSelections = prev.filter((c) => validCrops.includes(c));
-                if (validSelections.length === 0 && validCrops.length > 0) {
-                    return [validCrops[0]];
+                if (validSelections.length > 0) {
+                    return validSelections;
                 }
-                return validSelections;
+                // Nothing the user had picked exists here. Fall back to the first crop
+                // that does, or leave the chart empty if the region has none at all.
+                const [firstCrop] = validCrops;
+                return firstCrop ? [firstCrop] : [];
             });
 
             setIsAvailabilityLoading(false);
@@ -56,6 +59,9 @@ export function useCropYieldData(initialNutsId?: string) {
             return;
         }
 
+        // Only a change of region shows the loading state. Switching scenario or crop keeps
+        // the previous series on screen until the new one arrives -- deliberate, so the
+        // chart does not flicker empty on every checkbox click.
         if (prevLocation.current !== selectedLocation) {
             setIsChartLoading(true);
             prevLocation.current = selectedLocation;
@@ -69,13 +75,15 @@ export function useCropYieldData(initialNutsId?: string) {
                     selectedLocation,
                     scenarioUpper,
                     crop,
-                    distinctColors[index % distinctColors.length],
+                    seriesColor(index),
                     intl
                 )
             )
         )
             .then((results) => {
-                const validSeries = results.filter((res) => res !== null).flat() as SeriesData[];
+                const validSeries = results
+                    .filter((res): res is SeriesData[] => res !== null)
+                    .flat();
                 setSeriesData(validSeries);
             })
             .finally(() => {

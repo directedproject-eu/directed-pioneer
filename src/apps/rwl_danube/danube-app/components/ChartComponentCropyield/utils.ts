@@ -96,7 +96,9 @@ export const ALL_CROP_CODES = [
     "WWHT"
 ];
 
-export const distinctColors = [
+const FALLBACK_SERIES_COLOR = "#000000";
+
+const distinctColors = [
     "#E6194B",
     "#3CB44B",
     "#FFE119",
@@ -108,6 +110,16 @@ export const distinctColors = [
     "#BFEF45",
     "#469990"
 ];
+
+/**
+ * Colour for the n-th series, cycling through the palette.
+ *
+ * The modulo keeps the index in range; the fallback exists only because TypeScript cannot
+ * see that and would otherwise call the result possibly undefined.
+ */
+export function seriesColor(index: number): string {
+    return distinctColors[index % distinctColors.length] ?? FALLBACK_SERIES_COLOR;
+}
 
 /** Where the crop yield projections live, one csv per region, scenario and crop. */
 const CROP_YIELD_BASE_URL = "https://52n-directed.obs.eu-de.otc.t-systems.com/data/crop_yield";
