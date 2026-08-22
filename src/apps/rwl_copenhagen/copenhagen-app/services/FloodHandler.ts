@@ -8,26 +8,31 @@ import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import { WaterLevelLegend } from "../Components/Legends/WaterLevelLegend";
 import { DamageLegend } from "../Components/Legends/DamageLegend";
+import { CertaintyLegend } from "../Components/Legends/CertaintyLegend";
 
 const layer_info = {
     "saferplaces": {
-        "title": "SaferPlaces Model",
+        "title": "SaferPlaces Flood Model",
         "description": 
             "SaferPlaces is an advanced flood risk model which can be used to assess pluvial, fluvial and coastal urban flood hazards and risks within historical, current and future climate scenarios. The model does not consider drainage by infiltration and sewer system."
     },
     "rim2d": {
-        "title": "RIM2D Model",
+        "title": "RIM2D Flood Model",
         "description": 
             "The RIM2D model is an advanced hydraulic simulation tool, designed primarily for urban pluvial, fluvial and coastal flood risk assessments and forecasting. The model considers drainage via infiltration on pervious ground and sewer drainage on impervious surfaces."
     }, 
     "scalgo": {
-        "title": "SCALGO Model",
+        "title": "SCALGO Flood Model",
         "description": 
             "The Scalgo model is a high-resolution, 3-dimensional flood model capable of global coverage. The Scalgo model is used in the Copenhagen RWL for data pertaining to flooding within the municipalities along the Roskilde Fjord. The model does not consider drainage by infiltration and sewer system."
     }, 
     "skadesokonomi": {
-        "title": "Mean Flood Damage",
-        "description": "These damage-cost assessments were modeled with the DTU Damage-Cost Model. This model estimates and assesses the economic impacts of urban pluvial floods."
+        "title": "Skadesøkonomi Flood Damage",
+        "description": "These damage-cost assessments show mean damage-cost that could potentially be incurred per level of coastal flooding. They were modeled with the DTU Damage-Cost (Skadesokønomi) Model. This model estimates and assesses the economic impacts of urban pluvial floods."
+    }, 
+    "certainty": {
+        "title": "Flood Damage Certainty",
+        "description": "The Flood Damage Certainty layers show the estimated certainty that an area will receive damages from a coastal flooding event. Estimates were calculated based on three flood models: SaferPlaces, RIM2D, and SCALGO. The threshold for certainty calculation was 5%."
     }
 };
 
@@ -48,6 +53,11 @@ const modelLocationMap: Record<string, Record<string, string[]>> = {
         "coastal damage": [], 
     }, 
     "skadesokonomi": {
+        "pluvial": [], 
+        "coastal": [], 
+        "coastal damage": ["Roskilde Fjord"],
+    }, 
+    "certainty": {
         "pluvial": [], 
         "coastal": [], 
         "coastal damage": ["Roskilde Fjord"],
@@ -162,7 +172,7 @@ export class FloodHandlerImpl implements FloodHandler {
                             id: subLayerId
                         },
                         extent: [-2782996, 4000985, 4254277, 11753013],
-                        visible: true, 
+                        visible: true
                     });
                     
                     locationLayers[locationId] = layer;
@@ -174,7 +184,12 @@ export class FloodHandlerImpl implements FloodHandler {
                             title: `${capitalizedLocation} ${modelTitle}`,
                             isBaseLayer: false,
                             olLayer: layer,
-                            visible: true, 
+                            visible: true,
+                            // attributes: { // uncomment this to optionally hide all sublayers
+                            //     toc: {
+                            //         listMode: "hide"
+                            //     }
+                            // }
                         })
                     );
                 });
@@ -187,7 +202,11 @@ export class FloodHandlerImpl implements FloodHandler {
                     isBaseLayer: false,
                     attributes: {
                         "legend": {
-                            Component: modelKey === "skadesokonomi"? DamageLegend : WaterLevelLegend
+                            Component: modelKey === "skadesokonomi" 
+                                ? DamageLegend 
+                                : modelKey === "certainty" 
+                                    ? CertaintyLegend 
+                                    : WaterLevelLegend
                         }
                     },
                     visible: modelKey === this.#selectedModel.value,
@@ -219,7 +238,7 @@ export class FloodHandlerImpl implements FloodHandler {
             this.#selectedModel.value = "skadesokonomi"; 
             this.updateModelVisibility("skadesokonomi"); 
         } else {
-            if (this.selectedModel.value === "skadesokonomi") {
+            if (this.selectedModel.value === "skadesokonomi" && "certainty") {
                 this.selectedModel.value = DEFAULT_MODEL_ID;
             }
             this.updateModelVisibility(this.#selectedModel.value); 
@@ -278,7 +297,12 @@ export class FloodHandlerImpl implements FloodHandler {
         const floodType = this.#selectedFloodType.value;
 
         if (floodType === "coastal damage"){
-            return `rwl1_skadesokonomi_mean_${level}cm`;
+            if (model === "skadesokonomi") {
+                return `rwl1_skadesokonomi_mean_${level}cm`;
+            }
+            if (model === "certainty") {
+                return `rwl1_mean_uncertainty_${level}cm`;
+            }
         }
         
         const suffix = floodType === "pluvial" ? "mm" : "cm";
@@ -367,11 +391,17 @@ export class FloodHandlerImpl implements FloodHandler {
     }
 
     private updateModelVisibility(newModelId: string): void {
+        const floodType = this.#selectedFloodType.value;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             LAYER_IDS.forEach(id => {
                 const groupLayer = model?.layers.getLayerById(id);
                 if (groupLayer) {
-                    groupLayer.setVisible(id === newModelId);
+                    if (floodType === "coastal damage"){
+                        const isDamageorCertainty = id === "skadesokonomi" || id === "certainty";
+                        groupLayer.setVisible(isDamageorCertainty);
+                    } else {
+                        groupLayer.setVisible(id === newModelId);
+                    }
                 }
             });
         });
