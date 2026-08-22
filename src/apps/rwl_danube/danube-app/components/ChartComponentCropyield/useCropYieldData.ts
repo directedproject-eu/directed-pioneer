@@ -19,9 +19,11 @@ export function useCropYieldData(initialNutsId?: string) {
 
     const prevLocation = useRef<string | null>(null);
     const intl = useIntl();
-    // Sync initial NUTS ID
+    // Adopt the region the map passes in. Runs only when that prop changes, so it does not
+    // fight the dropdown -- and setting the same value again is a no-op in React, which is
+    // why no comparison against the current selection is needed.
     useEffect(() => {
-        if (initialNutsId && initialNutsId !== selectedLocation) {
+        if (initialNutsId) {
             setSelectedLocation(initialNutsId);
         }
     }, [initialNutsId]);
@@ -89,7 +91,10 @@ export function useCropYieldData(initialNutsId?: string) {
             .finally(() => {
                 setIsChartLoading(false);
             });
-    }, [selectedCrops, selectedScenario, selectedLocation]);
+        // intl is a dependency because the series names are translated while the data is
+        // built. A language switch therefore refetches -- cheap, the csv files are small and
+        // the browser has them cached.
+    }, [selectedCrops, selectedScenario, selectedLocation, intl]);
 
     const toggleCropSelection = (cropCode: string) => {
         setSelectedCrops((prev) =>
