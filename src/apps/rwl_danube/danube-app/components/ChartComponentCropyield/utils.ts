@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Papa from "papaparse";
+import type { PackageIntl } from "@open-pioneer/runtime";
 import { SeriesData } from "./CropyieldChart";
 
 export const NUTS_REGIONS: Record<string, string> = {
@@ -137,6 +138,18 @@ export const checkCropAvailability = async (location: string): Promise<string[]>
     return results.filter((crop): crop is string => crop !== null);
 };
 
+/**
+ * Value at `fraction` through the sorted array, rounded down to two decimals.
+ *
+ * The index is clamped to the last element, so a short series yields its highest value
+ * rather than running off the end -- with a single realisation all three percentiles
+ * collapse onto the same number, which is correct.
+ */
+function percentile(sortedValues: number[], fraction: number): number {
+    const index = Math.min(Math.floor(sortedValues.length * fraction), sortedValues.length - 1);
+    return Math.floor((sortedValues[index] ?? NaN) * 100) / 100;
+}
+
 export const fetchAndProcessCropData = async (
     location: string,
     scenario: string,
@@ -153,16 +166,15 @@ export const fetchAndProcessCropData = async (
         const csvText = await res.text();
 
         return new Promise((resolve) => {
-            Papa.parse(csvText, {
+            Papa.parse<Record<string, string>>(csvText, {
                 header: true,
                 skipEmptyLines: true,
                 complete: (results) => {
                     const yearlyGroups: Record<number, number[]> = {};
 
-                    // ... keep your math and sorting logic exactly the same ...
-                    results.data.forEach((row: Record<string, string>) => {
+                    results.data.forEach((row) => {
                         const year = Number(row.Year);
-                        const yieldPredn = parseFloat(row["Yield.Predn"]);
+                        const yieldPredn = parseFloat(row["Yield.Predn"] ?? "");
 
                         if (!isNaN(year) && !isNaN(yieldPredn)) {
                             const timestamp = new Date(year, 0, 1).getTime();
@@ -181,23 +193,19 @@ export const fetchAndProcessCropData = async (
 
                     timestamps.forEach((timestamp) => {
                         const values = yearlyGroups[timestamp];
-                        if (values.length > 0) {
-                            const sortedValues = values.sort((a, b) => a - b);
-
-                            const medianIndex = Math.floor(sortedValues.length * 0.5);
-                            const lowerIndex = Math.floor(sortedValues.length * 0.2);
-                            const upperIndex = Math.floor(sortedValues.length * 0.8);
-
-                            const safeLower = Math.min(lowerIndex, sortedValues.length - 1);
-                            const safeUpper = Math.min(upperIndex, sortedValues.length - 1);
-
-                            const median = Math.floor(sortedValues[medianIndex] * 100) / 100;
-                            const lower20 = Math.floor(sortedValues[safeLower] * 100) / 100;
-                            const upper80 = Math.floor(sortedValues[safeUpper] * 100) / 100;
-
-                            medianData.push([timestamp, median]);
-                            rangeData.push([timestamp, lower20, upper80]);
+                        if (!values || values.length === 0) {
+                            return;
                         }
+                        // Copy before sorting: sort works in place, and `values` is the
+                        // array still held by yearlyGroups.
+                        const sortedValues = [...values].sort((a, b) => a - b);
+
+                        medianData.push([timestamp, percentile(sortedValues, 0.5)]);
+                        rangeData.push([
+                            timestamp,
+                            percentile(sortedValues, 0.2),
+                            percentile(sortedValues, 0.8)
+                        ]);
                     });
 
                     if (medianData.length === 0) {
