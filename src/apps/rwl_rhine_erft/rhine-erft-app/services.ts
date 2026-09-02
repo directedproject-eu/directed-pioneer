@@ -8,6 +8,8 @@ import { WmsLegend } from "./Components/Legends/WMSLegend";
 import { ServiceOptions } from "@open-pioneer/runtime";
 
 export const MAP_ID = "main";
+export { TokenInterceptor } from "./services/TokenInterceptor";
+
 
 
 export interface WmsLayerOptions {

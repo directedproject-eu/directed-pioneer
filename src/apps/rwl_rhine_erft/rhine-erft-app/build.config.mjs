@@ -8,6 +8,18 @@ export default defineBuildConfig({
     services: {
         MainMapProvider: {
             provides: ["map.MapConfigProvider"]
-        }
+        }, 
+        TokenInterceptor: {
+            provides: ["http.Interceptor"],
+            references: {
+                authService: "authentication.AuthService"
+            }
+        },
+    }, 
+    ui: {
+        references: [
+            "authentication.AuthService",
+            "ogc-features.VectorSourceFactory"
+        ]
     }
 });

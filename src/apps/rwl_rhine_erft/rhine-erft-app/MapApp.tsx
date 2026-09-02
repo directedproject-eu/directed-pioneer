@@ -48,6 +48,100 @@ import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 import { system } from "theme";
+import { useService } from "open-pioneer:react-hooks";
+import { Vector as VectorLayer } from "ol/layer.js";
+import type { PackageIntl } from "@open-pioneer/runtime";
+import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
+import { AuthService, useAuthState } from "@open-pioneer/authentication";
+
+interface PastEventLayerConfig {
+    /** Collection below the protected pygeoapi endpoint. */
+    collectionId: string;
+    id: string;
+    /** Suffix of the i18n key under `map.legend.event_variables`. */
+    titleKey: string;
+    description: string;
+    color: string;
+}
+
+/**
+ * Recorded events in the Zala region. Only available to authenticated users, which is why
+ * these layers are added at runtime rather than declared in `MapProvider`.
+ */
+const PAST_EVENT_LAYERS: PastEventLayerConfig[] = [
+    {
+        collectionId: "zala/events/damage/storm",
+        id: "storm_damage",
+        titleKey: "storm_damage",
+        description: "Storm damage",
+        color: "black"
+    },
+    {
+        collectionId: "zala/events/damage/water",
+        id: "water_damage",
+        titleKey: "water_damage",
+        description: "Water damage",
+        color: "blue"
+    },
+    {
+        collectionId: "zala/events/fires/forest_vegetation",
+        id: "forest_vegetation_fires",
+        titleKey: "forest_and_vegetation_fire",
+        description: "Forest and vegetation fires",
+        color: "red"
+    },
+    {
+        collectionId: "zala/events/timber_cutting",
+        id: "timber_cutting",
+        titleKey: "tree_clearing",
+        description: "Tree clearing",
+        color: "green"
+    }
+];
+
+/**
+ * Builds one past-event layer.
+ *
+ * Lives outside the component on purpose: as a function declared in the body it would be
+ * recreated on every render, and could therefore never appear in the dependencies of the
+ * effect that uses it.
+ */
+function createPastEventLayer(
+    config: PastEventLayerConfig,
+    intl: PackageIntl,
+    vectorSourceFactory: OgcFeaturesVectorSourceFactory
+): SimpleLayer {
+    return new SimpleLayer({
+        id: config.id,
+        title: intl.formatMessage({ id: `map.legend.event_variables.${config.titleKey}` }),
+        description: config.description,
+        visible: true,
+        olLayer: new VectorLayer({
+            source: vectorSourceFactory.createVectorSource({
+                baseUrl: "https://directed.dev.52north.org/protected",
+                collectionId: config.collectionId,
+                crs: "http://www.opengis.net/def/crs/EPSG/0/3857",
+                limit: 5000,
+                additionalOptions: {}
+            }),
+            style: {
+                "circle-radius": 8.0,
+                "circle-fill-color": config.color,
+                "circle-stroke-color": "white",
+                "circle-stroke-width": 0.5
+            },
+            properties: { title: "GeoJSON Layer" }
+        }),
+        // `color` is the single definition of this event's colour: it styles the points
+        // here, EventLayerLegend paints its dot from it, and LayerHighlighter restores
+        // it when the pointer leaves the legend entry.
+        attributes: {
+            // legend: { Component: EventLayerLegend },
+            eventColor: config.color
+        },
+        isBaseLayer: false
+    });
+}
 
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
@@ -59,6 +153,13 @@ export function MapApp() {
 
     const [measurementIsActive, setMeasurementIsActive] = useState<boolean>(false);
     const [downloadIsActive, setDownloadIsActive] = useState<boolean>(false);
+    const vectorSourceFactory = useService<OgcFeaturesVectorSourceFactory>(
+        "ogc-features.VectorSourceFactory"
+    );
+
+    // Authentication 
+    const authService = useService<AuthService>("authentication.AuthService");
+    const authState = useAuthState(authService);
 
     useEffect(() => {
         document.title = intl.formatMessage({ id: "title" });
@@ -71,6 +172,25 @@ export function MapApp() {
     function toggleDownload() {
         setDownloadIsActive(!downloadIsActive);
     }
+
+    useEffect(() => {
+        const map = mapModel?.map;
+        if (authState.kind !== "authenticated" || !map) {
+            return;
+        }
+
+        const layers = PAST_EVENT_LAYERS.map((config) =>
+            createPastEventLayer(config, intl, vectorSourceFactory)
+        );
+        layers.forEach((layer) => map.layers.addLayer(layer));
+
+        // Not for unmount -- MapApp is the root component and never unmounts on its own.
+        // This runs when a dependency changes, and removing what this run added is what
+        // keeps the next one from hitting "Layer id 'storm_damage' is not unique".
+        return () => {
+            layers.forEach((layer) => map.layers.removeLayer(layer));
+        };
+    }, [authState.kind, mapModel, intl, vectorSourceFactory]);
 
     //////////////////
     /// LayerSwipe ///
@@ -168,11 +288,13 @@ export function MapApp() {
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
-            <Navbar />
-            <Notifier position="bottom" />
+            <Navbar authService={authService}></Navbar>
+            {/* <Notifier position="bottom" /> */}
+            <Notifier/>
             {mapModel.map && (
                 <DefaultMapProvider map={mapModel.map}>
                 <Flex flex="1" direction="column" position="relative">
+                {authState.kind !== "pending" && (
                     <MapContainer
                         map={mapModel.map}
                         role="main"
@@ -434,6 +556,7 @@ export function MapApp() {
                             )}
                         </MapAnchor>
                     </MapContainer>
+                )}
                 </Flex>
                 <Flex
                     role="region"
