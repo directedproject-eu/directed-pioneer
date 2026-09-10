@@ -1,23 +1,25 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
+import { DeclaredService, PackageIntl, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
 import proj4 from "proj4";
 import { register } from "ol/proj/proj4";
 import { WaterDepthLegend } from "../Components/Legends/WaterDepthLegend";
-import { buildUrl, FIRST_TIME, NODATA, SOURCE_PROJECTION, waterDepthColorMap } from "../config/floodDepth";
+import { buildUrl, FIRST_TIME, SOURCE_PROJECTION, waterDepthColorMap } from "../config/floodDepth";
 import { buildColorGradient } from "../config/geotiffStyle";
+import { NotificationService } from "@open-pioneer/notifier";
+import { createGeoTiffSource } from "./geotiff";
 
 interface References {
     mapRegistry: MapRegistry;
+    notificationService: NotificationService;
 }
 
-// UTM 32N (EPSG:25832) in OpenLayers registrieren, damit die GeoTIFF-Quelle korrekt
-// nach EPSG:3857 (Kartenprojektion) reprojiziert wird. Muss vor der Source-Erzeugung
-// laufen – daher auf Modulebene (analog zum saferplaces-FloodMapService).
+// Register UTM 32N (EPSG:25832) with OpenLayers so the geotiff source is reprojected
+// correctly to EPSG:3857, the map projection. Has to run before any source is built --
+// hence at module level, the same as the saferplaces FloodMapService.
 proj4.defs(
     SOURCE_PROJECTION,
     "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
@@ -30,23 +32,29 @@ export interface FloodDepthService extends DeclaredService<"app.FloodDepthServic
 }
 
 /**
- * Verwaltet einen zeitvariablen Wassertiefe-GeoTIFF-Layer (HRB Eicherscheid).
- * Der Timeslider ruft `setFileUrl(url)`, wodurch die GeoTIFF-Quelle des Layers
- * gegen den GeoTIFF des gewählten Zeitpunkts getauscht wird.
+ * Manages a time-varying water depth geotiff layer (HRB Eicherscheid).
+ * The time slider calls `setFileUrl(url)`, which swaps the layer's geotiff source for the
+ * geotiff of the selected time.
  */
 export class FloodDepthServiceImpl implements FloodDepthService {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
+    private notificationService: NotificationService;
+    private intl: PackageIntl;
     private layer: WebGLTileLayer | undefined;
+    /** Message of the error already reported, or undefined while the layer loads fine. */
+    private reportedError: string | undefined;
 
     constructor(options: ServiceOptions<References>) {
-        const { mapRegistry } = options.references;
+        const { mapRegistry, notificationService } = options.references;
         const intl = options.intl;
         this.mapRegistry = mapRegistry;
+        this.notificationService = notificationService;
+        this.intl = intl;
 
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                source: this.updateSource(buildUrl(FIRST_TIME)),
+                source: this.createSource(buildUrl(FIRST_TIME)),
                 style: {
                     color: buildColorGradient(waterDepthColorMap)
                 },
@@ -81,20 +89,28 @@ export class FloodDepthServiceImpl implements FloodDepthService {
 
     setFileUrl(url: string): void {
         if (this.layer) {
-            this.layer.setSource(this.updateSource(url));
+            this.layer.setSource(this.createSource(url));
         }
     }
 
-    private updateSource(url: string): GeoTIFF {
-        return new GeoTIFF({
-            projection: SOURCE_PROJECTION,
-            normalize: false,
-            sources: [
-                {
-                    url: url,
-                    nodata: NODATA
-                }
-            ]
+    private createSource(url: string) {
+        return createGeoTiffSource(
+            url,
+            (error) => this.reportError(error),
+            () => (this.reportedError = undefined)
+        );
+    }
+
+    /** Reports a load failure once, until the layer has loaded successfully again. */
+    private reportError(error: Error | null): void {
+        const message = error?.message ?? "";
+        if (this.reportedError === message) {
+            return;
+        }
+        this.reportedError = message;
+        this.notificationService.error({
+            title: this.intl.formatMessage({ id: "flood_depth.load_error" }),
+            message: message
         });
     }
 }

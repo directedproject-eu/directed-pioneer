@@ -1,23 +1,25 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
+import { DeclaredService, PackageIntl, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
 import proj4 from "proj4";
 import { register } from "ol/proj/proj4";
 import { FlowVelocityLegend } from "../Components/Legends/FlowVelocityLegend";
-import { FIRST_TIME, NODATA, SOURCE_PROJECTION } from "../config/floodDepth";
+import { FIRST_TIME, SOURCE_PROJECTION } from "../config/floodDepth";
 import { buildVelocityUrl, flowVelocityColorMap } from "../config/flowVelocity";
 import { buildColorGradient } from "../config/geotiffStyle";
+import { NotificationService } from "@open-pioneer/notifier";
+import { createGeoTiffSource } from "./geotiff";
 
 interface References {
     mapRegistry: MapRegistry;
+    notificationService: NotificationService;
 }
 
-// UTM 32N (EPSG:25832) in OpenLayers registrieren, damit die GeoTIFF-Quelle korrekt
-// nach EPSG:3857 reprojiziert wird. Idempotent – der Wassertiefe-Service tut dasselbe.
+// Register UTM 32N (EPSG:25832) with OpenLayers so the geotiff source is reprojected
+// correctly to EPSG:3857. Idempotent -- the water depth service does the same.
 proj4.defs(
     SOURCE_PROJECTION,
     "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
@@ -30,23 +32,29 @@ export interface FlowVelocityService extends DeclaredService<"app.FlowVelocitySe
 }
 
 /**
- * Verwaltet einen zeitvariablen Fließgeschwindigkeit-GeoTIFF-Layer (HRB Eicherscheid).
- * Aufbau analog zum {@link FloodDepthService}; der gemeinsame Timeslider ruft
- * `setFileUrl(url)`, wodurch die GeoTIFF-Quelle gegen den gewählten Zeitpunkt getauscht wird.
+ * Manages a time-varying flow velocity geotiff layer (HRB Eicherscheid).
+ * Built like {@link FloodDepthService}; the shared time slider calls `setFileUrl(url)`,
+ * which swaps the geotiff source for the one of the selected time.
  */
 export class FlowVelocityServiceImpl implements FlowVelocityService {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
+    private notificationService: NotificationService;
+    private intl: PackageIntl;
     private layer: WebGLTileLayer | undefined;
+    /** Message of the error already reported, or undefined while the layer loads fine. */
+    private reportedError: string | undefined;
 
     constructor(options: ServiceOptions<References>) {
-        const { mapRegistry } = options.references;
+        const { mapRegistry, notificationService } = options.references;
         const intl = options.intl;
         this.mapRegistry = mapRegistry;
+        this.notificationService = notificationService;
+        this.intl = intl;
 
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                source: this.updateSource(buildVelocityUrl(FIRST_TIME)),
+                source: this.createSource(buildVelocityUrl(FIRST_TIME)),
                 style: {
                     color: buildColorGradient(flowVelocityColorMap)
                 },
@@ -71,7 +79,7 @@ export class FlowVelocityServiceImpl implements FlowVelocityService {
                     visible: false
                 })
             );
-            // Über dem Wassertiefe-Layer (zIndex 5), falls beide aktiv sind.
+            // Above the water depth layer (zIndex 5) when both are active.
             this.layer.setZIndex(6);
         });
     }
@@ -82,20 +90,28 @@ export class FlowVelocityServiceImpl implements FlowVelocityService {
 
     setFileUrl(url: string): void {
         if (this.layer) {
-            this.layer.setSource(this.updateSource(url));
+            this.layer.setSource(this.createSource(url));
         }
     }
 
-    private updateSource(url: string): GeoTIFF {
-        return new GeoTIFF({
-            projection: SOURCE_PROJECTION,
-            normalize: false,
-            sources: [
-                {
-                    url: url,
-                    nodata: NODATA
-                }
-            ]
+    private createSource(url: string) {
+        return createGeoTiffSource(
+            url,
+            (error) => this.reportError(error),
+            () => (this.reportedError = undefined)
+        );
+    }
+
+    /** Reports a load failure once, until the layer has loaded successfully again. */
+    private reportError(error: Error | null): void {
+        const message = error?.message ?? "";
+        if (this.reportedError === message) {
+            return;
+        }
+        this.reportedError = message;
+        this.notificationService.error({
+            title: this.intl.formatMessage({ id: "flow_velocity.load_error" }),
+            message: message
         });
     }
 }

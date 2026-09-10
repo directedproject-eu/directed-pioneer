@@ -38,9 +38,11 @@ messages:
   flood_depth:
     layer_title: "HRB Eicherscheid – Wassertiefe (Zeitreihe)"
     layer_description: "Simuliertes Überflutungsszenario (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid. Die dargestellte Wassertiefe [m] entspricht dem über den Zeitslider gewählten Zeitpunkt."
+    load_error: "Wassertiefe konnte nicht geladen werden"
   flow_velocity:
     layer_title: "HRB Eicherscheid – Fließgeschwindigkeit (Zeitreihe)"
     layer_description: "Simuliertes Überflutungsszenario (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid. Die dargestellte Fließgeschwindigkeit [m/s] entspricht dem über den Zeitslider gewählten Zeitpunkt."
+    load_error: "Fließgeschwindigkeit konnte nicht geladen werden"
   flood_depth_max:
     layer_title: "HRB Eicherscheid – maximale Wassertiefe"
     layer_description: "Maximale simulierte Wassertiefe [m] über den gesamten Simulationszeitraum (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid."

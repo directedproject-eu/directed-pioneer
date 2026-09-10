@@ -12,13 +12,15 @@ export default defineBuildConfig({
         FloodDepthServiceImpl: {
             provides: ["app.FloodDepthService"],
             references: {
-                mapRegistry: "map.MapRegistry"
+                mapRegistry: "map.MapRegistry",
+                notificationService: "notifier.NotificationService"
             }
         },
         FlowVelocityServiceImpl: {
             provides: ["app.FlowVelocityService"],
             references: {
-                mapRegistry: "map.MapRegistry"
+                mapRegistry: "map.MapRegistry",
+                notificationService: "notifier.NotificationService"
             }
         }
     },
