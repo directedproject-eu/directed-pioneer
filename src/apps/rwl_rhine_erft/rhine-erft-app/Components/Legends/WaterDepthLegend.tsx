@@ -7,9 +7,9 @@ import { useIntl } from "open-pioneer:react-hooks";
 import { waterDepthColorMap } from "../../config/floodDepth";
 
 /**
- * Statische Legende für den Wassertiefe-GeoTIFF-Layer.
- * Liest die Farbstufen aus der geteilten Config (`waterDepthColorMap`), damit
- * Legende und Layer-Farbskala nicht auseinanderdriften.
+ * Static legend for the water depth geotiff layer.
+ * Reads its colour stops from the shared config (`waterDepthColorMap`) so the legend and
+ * the layer's colour scale cannot drift apart.
  */
 export function WaterDepthLegend(props: LegendItemComponentProps) {
     const intl = useIntl();

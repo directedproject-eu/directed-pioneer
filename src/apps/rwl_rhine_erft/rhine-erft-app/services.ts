@@ -23,16 +23,16 @@ import {
 } from "./config/floodDepth";
 import { flowVelocityColorMap, buildVelocityMaxUrl } from "./config/flowVelocity";
 
-// EPSG:25832 (UTM 32N) registrieren, damit die statischen GeoTIFF-Max-Layer korrekt
-// nach EPSG:3857 reprojiziert werden (idempotent; die GeoTIFF-Services tun dasselbe).
+// Register EPSG:25832 (UTM 32N) so the static maximum geotiff layers are reprojected
+// correctly to EPSG:3857 (idempotent; the geotiff services do the same).
 proj4.defs(
     SOURCE_PROJECTION,
     "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 );
 register(proj4);
 
-// Service-Implementierungen, die in build.config.mjs registriert sind, müssen aus
-// dieser zentralen services.ts (re-)exportiert werden, damit der Pioneer-Build sie findet.
+// Service implementations declared in build.config.mjs have to be (re-)exported from
+// this central services.ts; that is how the pioneer build resolves them.
 export { FloodDepthServiceImpl } from "./services/FloodDepthService";
 export { FlowVelocityServiceImpl } from "./services/FlowVelocityService";
 
@@ -50,7 +50,7 @@ export interface WmsLayerOptions {
     visible?: boolean;
 }
 
-/** Konfiguration eines statischen GeoTIFF-Layers (z.B. maximale Wassertiefe/Geschwindigkeit). */
+/** Configuration of a static geotiff layer (e.g. maximum water depth or velocity). */
 export interface GeoTiffLayerConfig {
     id: string;
     title: string;
@@ -212,8 +212,8 @@ export class MainMapProvider implements MapConfigProvider {
             }
         ];
 
-        // Statische GeoTIFF-Layer: Maximum über den gesamten Simulationszeitraum
-        // (unabhängig vom Timeslider). Teilen Farbskala und Legende mit der jeweiligen Zeitreihe.
+        // Static geotiff layers: the maximum over the whole simulation period, independent
+        // of the time slider. They share colour scale and legend with their time series.
         this.geoTiffLayers = [
             {
                 id: "flood_depth_max",

@@ -11,11 +11,10 @@ import { TIMESTEPS, FIRST_TIME, LAST_TIME, buildUrl, formatSeconds } from "../co
 import { buildVelocityUrl } from "../config/flowVelocity";
 
 /**
- * Gemeinsamer Timeslider für die beiden zeitvariablen GeoTIFF-Layer (HRB Eicherscheid):
- * Wassertiefe und Fließgeschwindigkeit teilen sich dieselbe Zeitachse ({@link TIMESTEPS}).
- * Bei jeder Änderung wird die GeoTIFF-Quelle *beider* Layer auf den gewählten Zeitpunkt
- * getauscht, damit sie synchron bleiben. Der Slider wird angezeigt, sobald mindestens
- * einer der beiden Layer sichtbar ist.
+ * Shared time slider for the two time-varying geotiff layers (HRB Eicherscheid): water
+ * depth and flow velocity run on the same time axis ({@link TIMESTEPS}). Every change
+ * swaps the geotiff source of *both* layers to the selected time so they stay in sync.
+ * The slider is shown as soon as at least one of the two layers is visible.
  */
 export const FloodTimeSlider = () => {
     const intl = useIntl();
@@ -53,7 +52,7 @@ export const FloodTimeSlider = () => {
         setSliderValue(val);
         const timeValue = TIMESTEPS[val];
         if (timeValue !== undefined) {
-            // Beide Layer synchron halten (auch den gerade unsichtbaren).
+            // Keep both layers in sync, including the one currently hidden.
             depthSrvc.setFileUrl(buildUrl(timeValue));
             velocitySrvc.setFileUrl(buildVelocityUrl(timeValue));
         }

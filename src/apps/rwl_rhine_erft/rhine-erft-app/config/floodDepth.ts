@@ -17,7 +17,7 @@ export function buildUrl(timeValue: number): string {
     return `${GEOTIFF_BASE_URL}${FILE_PREFIX}${timeValue}.tif`;
 }
 
-/** URL des statischen Maximum-Rasters (…_wd_max.tif): maximale Wassertiefe über die Zeit. */
+/** URL of the static maximum raster (…_wd_max.tif): highest water depth over time. */
 export function buildMaxUrl(): string {
     return `${GEOTIFF_BASE_URL}${FILE_PREFIX}max.tif`;
 }
@@ -40,7 +40,7 @@ export const TIMESTEPS: number[] = [
 export const FIRST_TIME: number = TIMESTEPS[0] ?? 60;
 export const LAST_TIME: number = TIMESTEPS[TIMESTEPS.length - 1] ?? 108000;
 
-/** Sekunden → "H:MM h" (z.B. 2700 → "0:45 h", 108000 → "30:00 h"). */
+/** Seconds → "H:MM h" (e.g. 2700 → "0:45 h", 108000 → "30:00 h"). */
 export function formatSeconds(totalSeconds: number): string {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -48,7 +48,7 @@ export function formatSeconds(totalSeconds: number): string {
 }
 
 export interface WaterDepthColorStop {
-    value: number; // Wassertiefe in Metern
+    value: number; // water depth in metres
     color: string;
     label: string;
 }

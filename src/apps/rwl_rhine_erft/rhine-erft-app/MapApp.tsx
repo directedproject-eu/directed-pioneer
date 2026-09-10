@@ -179,7 +179,7 @@ export function MapApp() {
                         role="main"
                         aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                     >
-                        {/* Zentrierter Timeslider, sichtbar nur wenn der Wassertiefe-Layer aktiv ist */}
+                        {/* Centred time slider; shows itself while either flood layer is visible */}
                         <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
                             <FloodTimeSlider />
                         </MapAnchor>

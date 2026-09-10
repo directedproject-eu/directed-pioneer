@@ -7,9 +7,9 @@ import { useIntl } from "open-pioneer:react-hooks";
 import { flowVelocityColorMap } from "../../config/flowVelocity";
 
 /**
- * Statische Legende für den Fließgeschwindigkeit-GeoTIFF-Layer.
- * Liest die Farbstufen aus der geteilten Config (`flowVelocityColorMap`), damit
- * Legende und Layer-Farbskala nicht auseinanderdriften.
+ * Static legend for the flow velocity geotiff layer.
+ * Reads its colour stops from the shared config (`flowVelocityColorMap`) so the legend
+ * and the layer's colour scale cannot drift apart.
  */
 export function FlowVelocityLegend(props: LegendItemComponentProps) {
     const intl = useIntl();
