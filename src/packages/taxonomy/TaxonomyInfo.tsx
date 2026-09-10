@@ -18,14 +18,11 @@ import { LuExternalLink } from "react-icons/lu";
 
 interface TaxonomyInfoProps {
     keyword: string;
-}
-
-interface TaxonomyInfoProps {
-    keyword: string;
     onClose?: () => void;
+    maxWidth?: number | string;
 }
 
-export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
+export function TaxonomyInfo({ keyword, onClose, maxWidth = 430 }: TaxonomyInfoProps) {
     const taxonomyService = useService<TaxonomyService>("app.TaxonomyService");
     const [info, setInfo] = useState<KeywordInfo | null>(null);
     // const [showPopup, setShowPopup] = useState(false);
@@ -73,7 +70,7 @@ export function TaxonomyInfo({ keyword, onClose }: TaxonomyInfoProps) {
         <Box
             bg="white"
             maxHeight={275}
-            maxWidth={430}
+            maxWidth={maxWidth}
             overflowY="auto"
             borderWidth="1px"
             borderRadius="md"

@@ -46,7 +46,7 @@ messages:
     infoButtonRain: "hu: Total accumulated rainwater for a rainfall event. 
                     The simulation routes the water instantaneously throughout the domain, 
                     thus no explicit time period has to be specified."
-     infoButtonRainGeosphere: 
+    infoButtonRainGeosphere: 
                     "hu: Select a date and time from the available rainfall forecasts to 
                     run the model simulation. Rainfall is the accumulated total amount of 
                     rainfall since the start of the forecast, based on GeoSphere's forecast 

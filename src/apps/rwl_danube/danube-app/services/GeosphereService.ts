@@ -4,9 +4,11 @@
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
 import { MapRegistry, MapModel, SimpleLayer, GroupLayer } from "@open-pioneer/map";
 import WebGLTileLayer from "ol/layer/WebGLTile";
-import { GeoTIFF } from "ol/source";
-import chroma from "chroma-js";
 import { PrecipitationLegend } from "../components/legends/PrecipitationLegend";
+import { MAP_ID } from "./MapProvider";
+import { DAILY_PRECIPITATION_STOPS } from "../config/precipitationScale";
+import { createGeoTiffSource } from "./geotiff";
+import { toColorExpression } from "../config/colorScale";
 
 interface References {
     mapRegistry: MapRegistry;
@@ -17,23 +19,48 @@ export interface GeosphereService extends DeclaredService<"app.GeosphereService"
     getMapModel(): Promise<MapModel | undefined>;
 }
 
+/**
+ * Owns the "daily_precipitation_sum" raster: GeoSphere's measured daily rainfall totals
+ * for Austria in 2024, one file per day.
+ *
+ * The layer is not declared in `MapProvider`. This service creates it here inside the
+ * "geosphere_historical" group and keeps a reference so it can swap the raster as the user
+ * moves through the year.
+ *
+ * Worth reading before the other two raster services, because this one is the simpler
+ * design and arguably the right one: its colour scale is **fixed**
+ * ({@link DAILY_PRECIPITATION_STOPS}, 0-300 mm in six classes). It therefore needs no
+ * value-range read, no request id, no debouncing -- and a colour means the same amount of
+ * rain on every day of the year, which is what makes the animation comparable.
+ * IsimipHandler and GeosphereForecastService derive their scale per frame instead; see
+ * BACKLOG.md for that discussion.
+ *
+ * The url is not built here. `TimeSlider.tsx` turns a slider position into a file name and
+ * passes it to {@link setFileUrl}. The one url that *is* written out below, as the initial
+ * source, is that function's output for position 0 -- the same knowledge in two places, in
+ * two directories. Note also that the slider derives the file name in local time, which
+ * produces a nonexistent url on the day of a midnight dst transition; see BACKLOG.md.
+ */
 export class GeosphereServiceImpl implements GeosphereService {
-    private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private layer: WebGLTileLayer | undefined;
 
     constructor(options: ServiceOptions<References>) {
         const { mapRegistry } = options.references;
         this.mapRegistry = mapRegistry;
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
+        this.mapRegistry.getMapModel(MAP_ID).then((model) => {
             this.layer = new WebGLTileLayer({
-                source: this.updateSource(
+                source: createGeoTiffSource(
                     "https://52n-directed.obs.eu-de.otc.t-systems.com/data/geosphere/historical/daily_precipitation_sum/20240101T000000.tif"
                 ),
                 style: {
                     color: this.createColorGradient()
                 },
-                properties: { title: "GeoSphere daily precipitation sum", type: "GeoTIFF", id: "geosphere service" }
+                properties: {
+                    title: "GeoSphere daily precipitation sum",
+                    type: "GeoTIFF",
+                    id: "geosphere service"
+                }
             });
             model?.layers.addLayer(
                 new GroupLayer({
@@ -63,49 +90,19 @@ export class GeosphereServiceImpl implements GeosphereService {
     }
 
     async getMapModel() {
-        return await this.mapRegistry.getMapModel(this.MAP_ID);
+        return await this.mapRegistry.getMapModel(MAP_ID);
     }
 
     setFileUrl(url: string): void {
         if (this.layer) {
-            const newSource = this.updateSource(url);
-            this.layer.setSource(newSource);
+            this.layer.setSource(createGeoTiffSource(url));
         }
     }
 
-    private updateSource(url: string): GeoTIFF {
-        return new GeoTIFF({
-            projection: "EPSG:4326",
-            normalize: false,
-            sources: [
-                {
-                    url: url,
-                    nodata: -5.3e37
-                }
-            ]
-        });
-    }
-
-    private precipTotalColorMap = [
-        { value: 0, color: "rgba(255, 255, 255, 0)", label: "0" },
-        { value: 25, color: "#af7ab3", label: "25" },
-        { value: 50, color: "#95649a", label: "50" },
-        { value: 100, color: "#885889", label: "100" },
-        { value: 200, color: "#674571", label: "200" },
-        { value: 300, color: "#503752", label: "300" }
-    ];
-
     private createColorGradient() {
-        const boundaries = this.precipTotalColorMap.map((item) => item.value);
-        const gradientColors = this.precipTotalColorMap.map((item) => item.color);
-
-        const colorScale = chroma.scale(gradientColors).domain(boundaries).mode("lab");
-
-        return [
-            "interpolate",
-            ["linear"],
-            ["band", 1],
-            ...boundaries.flatMap((boundary) => [boundary, colorScale(boundary).hex()])
-        ];
+        return toColorExpression(
+            DAILY_PRECIPITATION_STOPS.map((stop) => stop.color),
+            DAILY_PRECIPITATION_STOPS.map((stop) => stop.value)
+        );
     }
 }

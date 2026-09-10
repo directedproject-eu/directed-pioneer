@@ -79,9 +79,9 @@ export const TimeSlider = () => {
             {totalPrecipLayerVisible && (
                 <div
                     style={{
-                        width: window.innerWidth * 0.4,
-                        marginLeft: window.innerWidth * 0.3,
-                        marginRight: window.innerWidth * 0.3,
+                        width: "40vw",
+                        marginLeft: "30vw",
+                        marginRight: "30vw",
                         borderRadius: "10px",
                         backgroundColor: "rgba(255, 255, 255, 0.5)",
                         marginTop: "5px"

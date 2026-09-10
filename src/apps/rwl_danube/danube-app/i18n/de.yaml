@@ -89,14 +89,18 @@ messages:
   heading: "RWL Donau-Region"
   map:
     layer_select:
-      heading: "Layer auswählen"
-      info1: "Diese Komponente ermöglicht die Anzeige verschiedener"
+      heading: "Klimaprognosen"
+      info1:
+        "Diese Klimaprognosen wurden mit dem ISIMIP-Modell (Inter-Sectoral Impact Model Intercomparison Project) erstellt.
+        Diese Komponente ermöglicht die Anzeige verschiedener"
       keyword1: "Klimamodell"
       info2: "-Projektionen innerhalb von drei verschiedenen"
       keyword2: "Shared Socioeconomic Pathway (SSP)"
       info3: "-Emissionsszenarien des Klimawandels."
       keyword3: "Variablen"
-      info4: "können am unteren Rand dieser Komponente ausgewählt und dann in den Operational Layers umgeschaltet werden."
+      info4:
+        "können am unteren Rand dieser Komponente ausgewählt und dann in den Operational Layers umgeschaltet werden.
+        Es ist zu beachten, dass kürzere Wiederkehrperioden auf häufigere und stärkere Überschwemmungen hindeuten."
       model: "Modell"
       scenario: "Szenario"
       variable: "Variable"
@@ -141,6 +145,8 @@ messages:
         end_date: "Vorhersage Enddatum:"
         selected_date: "Ausgewähltes Datum:"
   charts:
+    median: "Median"
+    percentile: "Perzentil"
     zala_crop:
       button_title: "Erntediagramm"
       title_chart1: "Anbauflächen in der Region Zala für "
@@ -165,6 +171,7 @@ messages:
       Ziel ist die Unterstützung Interessenvertreters bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel.
       Bitte beachten Sie, dass die App noch in der Entwicklung ist."
   zoom_buttons:
+    title: "Zoom auf"
     vienna: "Zoom auf Wien"
     zala: "Zoom auf Zala"
   ariaLabel:
@@ -174,13 +181,14 @@ messages:
     topLeft: "Messung"
     topRight: "Übersichtskarte und Grundkartenauswahl"
     bottomRight: "Werkzeuge"
+    toc: "Ebenen"
   measurementTitle: "Messung"
   layer_swipe:
     title: "Layer zum Vergleichen auswählen"
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
     left: "Linken Layer auswählen"
     right: "Rechten Layer auswählen"
-  crops: 
+  crops:
     ALFA: "Luzerne"
     CORN: "Körnermais"
     GMAI: "Grünmais"
@@ -188,10 +196,10 @@ messages:
     SBAR: "Sommergerste"
     SOYB: "Sojabohnen"
     SUNF: "Sonnenblumen"
-    TRIT: "Triticale"  
-    WBAR: "Wintergerste"  
-    WRAP: "Winterraps"  
-    WRYE: "Roggen und Menggetreide" 
+    TRIT: "Triticale"
+    WBAR: "Wintergerste"
+    WRAP: "Winterraps"
+    WRYE: "Roggen und Menggetreide"
     WWHT: "Winterweizen"
     OATS: "Hafer"
     SUGB: "Zuckerrüben"

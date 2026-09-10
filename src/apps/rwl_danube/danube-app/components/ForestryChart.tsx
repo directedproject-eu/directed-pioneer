@@ -4,6 +4,7 @@
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import { useEffect, useState, useRef } from "react";
+import { forestryVariable, NO_VARIABLE } from "../config/forestry";
 
 type ForestryProps = {
     leftVariable: string;
@@ -11,6 +12,12 @@ type ForestryProps = {
     selectedLocation: string;
     locationName: string;
 };
+
+/** One measurement as the forestry json delivers it. */
+interface ForestryReading {
+    time: string;
+    val: number;
+}
 
 type SeriesData = {
     id: string;
@@ -24,17 +31,25 @@ type SeriesData = {
     dataGrouping: { enabled: boolean; approximation: string };
 };
 
-const formatLabel = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, " ");
-};
+/** Label and unit for a variable id, falling back to the id itself if it is unknown. */
+const labelOf = (variable: string) => forestryVariable(variable)?.name ?? variable;
+const unitOf = (variable: string) => forestryVariable(variable)?.unit ?? "";
 
-const getUnit = (variable: string) => {
-    if (variable === "temperature") return "°C";
-    if (variable === "wind_speed") return "m/s";
-    if (variable.includes("soil_moisture")) return "%";
-    return "";
-};
-
+/**
+ * Time series for one forestry station, with up to two variables on separate y axes.
+ *
+ * Each variable is one json file per station under `data/forestry/<station>/<variable>.json`,
+ * fetched independently -- so one failing leaves the other on screen rather than emptying
+ * the chart. {@link NO_VARIABLE} is accepted and simply yields no series, which is how the
+ * caller switches an axis off.
+ *
+ * Readings are filtered before plotting: soil moisture outside 0-100 is dropped as a
+ * sensor artefact, everything else only has to be a number. Highcharts then groups the
+ * points by average, so what is drawn at low zoom is not the raw series.
+ *
+ * Titles, axis labels and the range selector are hardcoded english; this component predates
+ * the i18n setup used elsewhere in the app.
+ */
 const ForestryChart: React.FC<ForestryProps> = ({
     leftVariable,
     rightVariable,
@@ -58,7 +73,7 @@ const ForestryChart: React.FC<ForestryProps> = ({
             axisIndex: number,
             color: string
         ): Promise<SeriesData | null> => {
-            if (variable === "none") return null;
+            if (variable === NO_VARIABLE) return null;
 
             const isValidDataPoint = (varName: string, value: number | null) => {
                 if (value === null || isNaN(value)) return false;
@@ -80,26 +95,25 @@ const ForestryChart: React.FC<ForestryProps> = ({
 
                 if (!Array.isArray(data)) throw new Error("Data is not an array");
 
+                // The tuple annotation matters: as a plain number[] the pair loses its
+                // shape, and every index access below would be possibly undefined.
                 const formattedData = data
-                    .map((item: { time: string; val: number }) => [
+                    .map((item: ForestryReading): [number, number] => [
                         new Date(item.time).getTime(),
                         item.val
                     ])
-                    .filter(
-                        (point: number[]) =>
-                            !isNaN(point[0]) && isValidDataPoint(variable, point[1])
-                    )
-                    .sort((a: number[], b: number[]) => a[0] - b[0]);
+                    .filter(([time, value]) => !isNaN(time) && isValidDataPoint(variable, value))
+                    .sort((a, b) => a[0] - b[0]);
 
                 return {
                     id: `series-${axisIndex}`,
-                    name: formatLabel(variable),
+                    name: labelOf(variable),
                     data: formattedData,
                     type: "line",
                     color: color,
                     yAxis: axisIndex,
                     marker: { enabled: false },
-                    tooltip: { valueSuffix: ` ${getUnit(variable)}` },
+                    tooltip: { valueSuffix: ` ${unitOf(variable)}` },
                     dataGrouping: {
                         enabled: true,
                         approximation: "average"
@@ -163,24 +177,24 @@ const ForestryChart: React.FC<ForestryProps> = ({
             {
                 title: {
                     text:
-                        leftVariable !== "none"
-                            ? `${formatLabel(leftVariable)} (${getUnit(leftVariable)})`
+                        leftVariable !== NO_VARIABLE
+                            ? `${labelOf(leftVariable)} (${unitOf(leftVariable)})`
                             : ""
                 },
-                labels: { format: `{value} ${getUnit(leftVariable)}` },
+                labels: { format: `{value} ${unitOf(leftVariable)}` },
                 opposite: false,
-                visible: leftVariable !== "none"
+                visible: leftVariable !== NO_VARIABLE
             },
             {
                 title: {
                     text:
-                        rightVariable !== "none"
-                            ? `${formatLabel(rightVariable)} (${getUnit(rightVariable)})`
+                        rightVariable !== NO_VARIABLE
+                            ? `${labelOf(rightVariable)} (${unitOf(rightVariable)})`
                             : ""
                 },
-                labels: { format: `{value} ${getUnit(rightVariable)}` },
+                labels: { format: `{value} ${unitOf(rightVariable)}` },
                 opposite: true,
-                visible: rightVariable !== "none"
+                visible: rightVariable !== NO_VARIABLE
             }
         ],
         tooltip: {

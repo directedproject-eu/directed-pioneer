@@ -31,10 +31,9 @@ export default tseslint.config(
             jsxA11y.flatConfigs.recommended,
             react.configs.flat.recommended,
             react.configs.flat["jsx-runtime"],
-            reactHooks.configs["recommended-latest"],
             eslintConfigPrettier
         ],
-        plugins: { "unused-imports": unusedImports, headers },
+        plugins: { "unused-imports": unusedImports, headers, "react-hooks": reactHooks }, 
         languageOptions: {
             parser: tsParser
         },
@@ -98,6 +97,8 @@ export default tseslint.config(
                     allowTernary: true
                 }
             ],
+           
+            "react-hooks/rules-of-hooks": "error",  
             "react-hooks/exhaustive-deps": [
                 "warn",
                 {

@@ -17,11 +17,27 @@ import { useIntl } from "open-pioneer:react-hooks";
 import CropyieldChart from "./CropyieldChart";
 import { TaxonomyInfo } from "taxonomy";
 import { useCropYieldData } from "./useCropYieldData";
-import { NUTS_REGIONS } from "./utils";
+import { locations, nutsRegionLabel } from "./utils";
 interface Props {
     nutsId?: string;
 }
 
+/**
+ * The crop yield dialog: region, emission scenario and crops on top, the chart below, the
+ * explanatory text underneath.
+ *
+ * All state lives in {@link useCropYieldData}; this component only renders it. `nutsId` is
+ * the region the user clicked on the map, passed through as a starting value.
+ *
+ * The crop checkboxes are built from what the hook found to exist for the current region,
+ * not from the full list -- so they change when the region changes, and the selection can
+ * shrink with them.
+ *
+ * The explanation is one paragraph assembled from six translated fragments with three
+ * clickable keywords in between, each opening a {@link TaxonomyInfo} panel. The keyword
+ * arguments are the taxonomy's own english terms and are deliberately not translated;
+ * only the visible link text is.
+ */
 const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
     const intl = useIntl();
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null);
@@ -44,21 +60,19 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
         <>
             <Flex justifyContent="center" mb={6} direction="column" alignItems="center" gap={4}>
                 <Box width="300px">
-                    <Box width="300px">
-                        <NativeSelect.Root>
-                            <NativeSelect.Field
-                                value={selectedLocation}
-                                onChange={(e) => setSelectedLocation(e.target.value)}
-                            >
-                                {Object.entries(NUTS_REGIONS).map(([id, name]) => (
-                                    <option key={id} value={id}>
-                                        {id} ({name})
-                                    </option>
-                                ))}
-                            </NativeSelect.Field>
-                            <NativeSelect.Indicator />
-                        </NativeSelect.Root>
-                    </Box>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field
+                            value={selectedLocation}
+                            onChange={(e) => setSelectedLocation(e.target.value)}
+                        >
+                            {locations.map((id) => (
+                                <option key={id} value={id}>
+                                    {nutsRegionLabel(id)}
+                                </option>
+                            ))}
+                        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
                 </Box>
 
                 <Flex gap={4}>
@@ -75,7 +89,7 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
             </Flex>
 
             <CropyieldChart
-                regionName={selectedLocation}
+                regionName={nutsRegionLabel(selectedLocation)}
                 selectedScenario={selectedScenario}
                 selectedCrops={selectedCrops}
                 seriesData={seriesData}
@@ -131,8 +145,7 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
             </Center>
 
             <Text mt={"2em"} textStyle={"2em"}>
-                {intl.formatMessage({ id: "charts.zala_crop.explanation1" })}
-                {" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation1" })}{" "}
                 <Text
                     as="span"
                     color={"#49b7e6"}
@@ -140,10 +153,8 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                     onClick={() => setActiveKeyword("agriculture")}
                 >
                     {intl.formatMessage({ id: "charts.zala_crop.keyword1" })}
-                </Text>
-                {" "}
-                {intl.formatMessage({ id: "charts.zala_crop.explanation2" })}
-                {" "}
+                </Text>{" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation2" })}{" "}
                 <Text
                     as="span"
                     color="#49b7e6"
@@ -151,12 +162,9 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                     onClick={() => setActiveKeyword("Shared socio-economic pathways (SSPs)")}
                 >
                     {intl.formatMessage({ id: "charts.zala_crop.keyword2" })}
-                </Text>
-                {" "}
-                {intl.formatMessage({ id: "charts.zala_crop.explanation3" })}
-                {" "}
-                {intl.formatMessage({ id: "charts.zala_crop.explanation4" })}
-                {" "}
+                </Text>{" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation3" })}{" "}
+                {intl.formatMessage({ id: "charts.zala_crop.explanation4" })}{" "}
                 <Text
                     as="span"
                     color="#49b7e6"
@@ -166,7 +174,7 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
                     {intl.formatMessage({ id: "charts.zala_crop.keyword3" })}
                 </Text>
                 {intl.formatMessage({ id: "charts.zala_crop.explanation5" })}
-            </Text >
+            </Text>
 
             <Flex alignItems="center" mt={4}>
                 <Text>{intl.formatMessage({ id: "charts.zala_crop.explanation6" })}</Text>
@@ -174,13 +182,11 @@ const ChartComponentCropyield: React.FC<Props> = ({ nutsId }) => {
 
             <Box padding="15px" />
 
-            {
-                activeKeyword && (
-                    <Flex>
-                        <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
-                    </Flex>
-                )
-            }
+            {activeKeyword && (
+                <Flex>
+                    <TaxonomyInfo keyword={activeKeyword} onClose={() => setActiveKeyword(null)} />
+                </Flex>
+            )}
         </>
     );
 };

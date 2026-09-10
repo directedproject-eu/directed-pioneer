@@ -28,6 +28,9 @@ node_modules
 *.sw?
 *.local
 
-# Local environment variables 
+# Local environment variables
 
 .env.local
+
+# Review notes (per-app, not part of the delivered source)
+BACKLOG.md

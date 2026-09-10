@@ -67,6 +67,7 @@ messages:
     keyword1: "pluvial flood"
     keyword2: "climate change"
   zoom_buttons:
+    title: "Zoom to"
     egedal: "Zoom to Egedal"
     frederikssund: "Zoom to Frederikssund"
     halsnaes: "Zoom to Halsnaes"
@@ -87,9 +88,18 @@ messages:
   legend:
     title: "Legend"
     units: "Units"
+  sviLegend: 
+    extremeHigh: "Extremely High: 2.5 to 100"
+    veryHigh: "Very High: 1.5 to 2.5"
+    relativelyHigh: "Relatively High: 0.25 to 1.5"
+    average: "Average: -0.25 to 0.25"
+    relativelyLow: "Relatively Low: -1.5 to -0.25"
+    veryLow: "Very Low: -2.5 to -1.5"
+    extremelyLow: "Extremeely Low: -100 to -2.5"
   slider: 
     rainfallLevel: "Rainfall Level (mm)"
     stormSurgeLevel: "Storm Surge Level (cm)"
+    damageLevel: "Storm Surge Level used for Damage Cost (cm)"
     selectedLevel: "Selected Level:"
   map:
     download:
@@ -107,6 +117,17 @@ messages:
       keyword2: "coastal"
       description2: "flood model outputs. To view these layers in the map, make sure the checkmark next to the desired model is 
                       visible in the Operational Layers."
+  # layers: 
+  #   groundwater: 
+  #     meanChangeNearSurface2071-2100_desc: "Mean change in near-surface groundwater in the future for the period 2071-2100. Data via Dataforsyningen",
+  #     meanChangeNearSurface2071-2100_title: "Mean Change Near-Surface Groundwater 2071-2100",                               
+  #     meanChangeNearSurface2041-2070_desc: "Mean change in near-surface groundwater in the future for the period 2041-2070. 
+  #                                           Data via Dataforsyningen",
+  #     meanChangeNearSurface2041-2070_title: "Mean Change Near-Surface Groundwater 2041-2070",
+  #     maxNearSurfaceToday_title:  "Maximum Near-Surface Groundwater Today",
+  #     maxNearSurfaceToday_desc:  "Maximum near-surface groundwater today. Data via Dataforsyningen.",
+  #     minNearSurfaceToday_title: "Minimum Near-Surface Groundwater Today",
+  #     minNearSurfaceToday_desc:  "Minimum near-surface groundwater today. Data via Dataforsyningen.",                        
   ariaLabel:
     header: "Header bar"
     footer: "Base bar with scale information, spatial reference system and coordinate display"

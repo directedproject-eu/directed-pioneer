@@ -89,15 +89,18 @@ messages:
   heading: "RWL The Danube Region"
   map:
     layer_select:
-      heading: "Climate projections from ISIMIP"
-      info1: "This component enables the viewing of different"
+      heading: "Climate Projections"
+      info1:
+        "These climate projections were run with the ISIMIP (Inter-Sectoral Impact Model Intercomparison Project) model.
+        This component enables the viewing of different"
       keyword1: "climate model"
       info2: "projections within three"
       keyword2: "Shared Socioeconomic Pathway (SSP)"
       info3: "climate change emission scenarios."
       keyword3: "Variables"
-      info4: "can be selected at the bottom of this 
-        component and then toggled within the Operational Layers."
+      info4: "can be selected at the bottom of this
+        component and then toggled within the Operational Layers. It should be noted
+        that smaller return periods indicate more frequent and heavy flooding."
       model: "Model"
       scenario: "Scenario"
       variable: "Variable"
@@ -142,10 +145,13 @@ messages:
         end_date: "Forecast End Date:"
         selected_date: "Selected Date:"
   charts:
+    median: "median"
+    percentile: "percentile"
     zala_crop:
       button_title: "Crop chart"
       title_chart1: "Crops in Zala region for "
-      explanation1: "This graph displays the average value, as well as the 20th to 80th percentile, of 
+      explanation1:
+        "This graph displays the average value, as well as the 20th to 80th percentile, of
         predicted"
       keyword1: "agricultural"
       explanation2: "crop yields across all models in the Danube region under three different"
@@ -172,6 +178,7 @@ messages:
       appear after login (use the login button in the right top corner).
       Please note that the app is still work in progress."
   zoom_buttons:
+    title: "Zoom to"
     vienna: "Zoom to Vienna"
     zala: "Zoom to Zala"
   ariaLabel:
@@ -181,13 +188,14 @@ messages:
     topLeft: "Measurement"
     topRight: "Overview map and basemap switcher"
     bottomRight: "Maptools"
+    toc: "Layers"
   measurementTitle: "Measurement"
   layer_swipe:
     title: "Select Layers for Comparison"
     description: "Only layers which have been selected in the Operational Layers are viewable for comparison."
     left: "Select Left Layer"
     right: "Select Right Layer"
-  crops: 
+  crops:
     ALFA: "Lucerne"
     CORN: "Corn maize"
     GMAI: "Green maize"
@@ -195,8 +203,8 @@ messages:
     SBAR: "Spring barley"
     SOYB: "Soya beans"
     SUNF: "Sunflowers"
-    TRIT: "Triticale"  
-    WBAR: "Winter barley"  
+    TRIT: "Triticale"
+    WBAR: "Winter barley"
     WRAP: "Winter rape"
-    WRYE: "Rye and maslin" 
+    WRYE: "Rye and maslin"
     WWHT: "Winter wheat"

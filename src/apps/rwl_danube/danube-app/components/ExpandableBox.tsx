@@ -29,6 +29,11 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({
             p={4}
             boxShadow="md"
             marginBottom={marginBottom}
+            // Every caller places this box in a flex column of limited height. Without
+            // this, the box would shrink instead -- and since `overflow: hidden` drops
+            // its automatic minimum size, it would shrink past its content and clip the
+            // bottom of the scroll area below, with no way to bring it back into view.
+            flexShrink={0}
         >
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Text fontWeight="bold">{title}</Text>
@@ -40,7 +45,7 @@ const ExpandableBox: React.FC<ExpandableBoxProps> = ({
                 <Collapsible.Content>
                     <Box maxHeight={"15em"} overflow={overflowY} mt={4}>
                         {children}
-                    </Box>                
+                    </Box>
                 </Collapsible.Content>
             </Collapsible.Root>
         </Box>

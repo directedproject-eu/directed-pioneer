@@ -6,16 +6,16 @@ import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { useIntl } from "open-pioneer:react-hooks";
 
 // water level colors
-const l_01 = "#F7E225";
-const l_02 = "#FEB92C";
-const l_03 = "#F89440";
-const l_04 = "#E97357";
-const l_05 = "#D6556C";
-const l_06 = "#BE3884";
-const l_07 = "#A11B9A";
-const l_08 = "#7D03A8";
-const l_09 = "#5601A4";
-const l_10 = "#2B0593";
+const l_01 = "#2B0593";
+const l_02 = "#5601A4";
+const l_03 = "#7D03A8";
+const l_04 = "#A11B9A";
+const l_05 = "#BE3884";
+const l_06 = "#D6556C";
+const l_07 = "#E97357";
+const l_08 = "#F89440";
+const l_09 = "#FEB92C";
+const l_10 = "#F7E225";
 
 const colorMapping = [
     { color: l_01, label: "0 - 1 m" },

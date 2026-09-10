@@ -1,44 +1,67 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
+import React from "react";
 import { reactive, Reactive } from "@conterra/reactivity-core";
 import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, SimpleLayer, GroupLayer } from "@open-pioneer/map";
+import { MapRegistry, SimpleLayer, GroupLayer, AnyLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import { WaterLevelLegend } from "../Components/Legends/WaterLevelLegend";
+import { DamageLegend } from "../Components/Legends/DamageLegend";
+import { CertaintyLegend } from "../Components/Legends/CertaintyLegend";
+
+interface CustomLegendProps {
+    layer: AnyLayer;
+    [key: string]: unknown;
+}
+
 
 const layer_info = {
     "saferplaces": {
-        "title": "SaferPlaces Model",
+        "title": "SaferPlaces Flood Model",
         "description": 
-            "SaferPlaces is an advanced flood risk model which can be used to assess pluvial, fluvial and coastal flood hazards and risk in consideration of both historical, current and future climate scenarios to provide information about urban flood risks."
+            "SaferPlaces is an advanced flood risk model which can be used to assess pluvial, fluvial and coastal urban flood hazards and risks within historical, current and future climate scenarios. The model does not consider drainage by infiltration and sewer system."
     },
     "rim2d": {
-        "title": "RIM2D Model",
+        "title": "RIM2D Flood Model",
         "description": 
-            "The RIM2D is an advanced hydraulic simulation tool, designed primarily for urban pluvial, fluvial and coastal flood risk assessments and forecasting."
+            "The RIM2D model is an advanced hydraulic simulation tool, designed primarily for urban pluvial, fluvial and coastal flood risk assessments and forecasting. The model considers drainage via infiltration on pervious ground and sewer drainage on impervious surfaces."
     }, 
     "scalgo": {
-        "title": "SCALGO Model",
+        "title": "SCALGO Flood Model",
         "description": 
-            "The Scalgo model is a high-resolution 3-dimensional flood model capable of global coverage. The Scalgo model is used in the Copenhagen RWL for data pertaining to flooding within the municipalities along the Roskilde Fjord. "
-    }
+            "The Scalgo model is a high-resolution, 3-dimensional flood model capable of global coverage. The Scalgo model is used in the Copenhagen RWL for data pertaining to flooding within the municipalities along the Roskilde Fjord. The model does not consider drainage by infiltration and sewer system."
+    }, 
+    "skadesokonomi": {
+        "title": "Skadesøkonomi Flood Damage",
+        "description": "The layers contained in this group show potential damage incurred at the selected coastal flood level, along with the certainty that those damages could be realized.",
+        "damage_description": "These damage-cost assessments show mean damage-cost that could potentially be incurred per level of coastal flooding. They were modeled with the DTU Damage-Cost (Skadesokønomi) Model. This model estimates and assesses the economic impacts of urban pluvial floods.",
+        "certainty_description": "The Flood Damage Certainty layer shows areas where flood damage estimates are relatively consistent across the three flood models: SaferPlaces, RIM2D, and SCALGO. Certainty is assessed using the coefficient of variation (CV), calculated as the standard deviation divided by the mean estimated damage. Areas with a CV below 0.5 are shown, indicating low to moderate variability and therefore greater agreement between the modelled damage estimates."
+    }, 
 };
 
 const modelLocationMap: Record<string, Record<string, string[]>> = {
     "saferplaces": {
         "pluvial": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
         "coastal": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
+        "coastal damage": [], 
     }, 
     "rim2d": {
         "pluvial": ["roskilde_fjord"], 
         "coastal": ["roskilde_fjord"], 
+        "coastal damage": [], 
     }, 
     "scalgo": {
         "pluvial": ["frederiksvaerk", "halsnaes", "frederikssund", "jyllinge", "roskilde"], 
         "coastal": ["roskilde_fjord"], 
+        "coastal damage": [], 
     }, 
+    "skadesokonomi": {
+        "pluvial": [], 
+        "coastal": [], 
+        "coastal damage": ["Roskilde Fjord", "certainty_Roskilde Fjord"],
+    }
 };
 
 const SLIDER_CONFIG: Record<string, { min: number, max: number, unit: string, step: number }> = {
@@ -53,6 +76,12 @@ const SLIDER_CONFIG: Record<string, { min: number, max: number, unit: string, st
         max: 300, // Storm surge in cm (170-300)
         unit: "cm",
         step: 10 
+    }, 
+    "coastal damage": {
+        min: 170, 
+        max: 300, 
+        unit: "cm", // Storm surge damage layers in cm (170-300)
+        step: 10
     }
 };
 
@@ -102,8 +131,9 @@ export class FloodHandlerImpl implements FloodHandler {
         const modelKey = modelId as keyof typeof modelLocationMap;
         const pluvial = modelLocationMap[modelKey]?.["pluvial"] || [];
         const coastal = modelLocationMap[modelKey]?.["coastal"] || [];
+        const damage = modelLocationMap[modelKey]?.["coastal damage"] || [];
         // Use Set to get unique locations from both pluvial and coastal lists
-        return Array.from(new Set([...pluvial, ...coastal]));
+        return Array.from(new Set([...pluvial, ...coastal, ...damage]));
     }
 
     constructor(options: ServiceOptions<References>) {
@@ -118,8 +148,8 @@ export class FloodHandlerImpl implements FloodHandler {
             LAYER_IDS.forEach((modelId) => {
                 const modelKey = modelId as keyof typeof layer_info; 
                 const locationLayers: Record<string, TileLayer> = (this.modelLayers[modelId] = {} as Record<string, TileLayer>);
-                const locations = modelLocationMap[modelKey]!["pluvial"];
-                if (!locations) { return; }
+                // const locations = modelLocationMap[modelKey]!["pluvial"];
+                // if (!locations) { return; }
 
                 // Get every unique location fro both pluvial and coastal
                 const allLocations = this.getModelAllLocations(modelId); 
@@ -132,34 +162,64 @@ export class FloodHandlerImpl implements FloodHandler {
                 // So they exist in the map registry
                 allLocations.forEach((locationId) => {
                     const subLayerId = `${modelKey}-${locationId}`;
-                    const capitalizedLocation = locationId.charAt(0).toUpperCase() + locationId.slice(1); // Add caps
-                    const modelTitle = layer_info[modelKey]["title"].replace(" Model", ""); // Trim "model" out of layer title
+                    
+                    // Format title cleanly for the TOC
+                    const isCertainty = locationId.startsWith("certainty_");
+                    const rawLocation = isCertainty ? locationId.replace("certainty_", "") : locationId;
+                    const capitalizedLocation = rawLocation.charAt(0).toUpperCase() + rawLocation.slice(1);
+                    
+                    const title = isCertainty 
+                        ? `${capitalizedLocation} Flood Damage Certainty`
+                        : `${capitalizedLocation} ${layer_info[modelKey]["title"]}`;
+
+                    const sublayerDescription = modelKey === "skadesokonomi"
+                        ? (isCertainty 
+                            ? layer_info["skadesokonomi"]["certainty_description"]
+                            : layer_info["skadesokonomi"]["damage_description"])
+                        : layer_info[modelKey]["description"];
+                
                     const layer = new TileLayer({
                         properties: { 
-                            title: `${capitalizedLocation} ${modelTitle}`,
+                            title: title,
                             type: "WMS_tiles",
-                            // type: "WMS", 
                             id: subLayerId
                         },
                         extent: [-2782996, 4000985, 4254277, 11753013],
-                        visible: true, 
+                        visible: true
                     });
                     
                     locationLayers[locationId] = layer;
+
+                    const legendComponent = isCertainty 
+                        ? CertaintyLegend 
+                        : modelKey === "skadesokonomi" 
+                            ? DamageLegend 
+                            : WaterLevelLegend;
 
                     // Push the new SimpleLayer instance into the array
                     simpleLayers.push(
                         new SimpleLayer({
                             id: subLayerId,
-                            title: `${capitalizedLocation} ${modelTitle}`,
+                            title: title,
+                            description: sublayerDescription,
                             isBaseLayer: false,
                             olLayer: layer,
-                            visible: true, 
+                            visible: true,
+                            attributes: {
+                                "description": sublayerDescription,
+                                "legend": {
+                                    Component: legendComponent
+                                }
+                            }
+                            // attributes: { // uncomment this to optionally hide all sublayers
+                            //     toc: {
+                            //         listMode: "hide"
+                            //     }
+                            // }
                         })
                     );
                 });
 
-                // Create grouplayer using the collected layers array
                 const modelGroup = new GroupLayer({
                     id: modelKey,
                     description: layer_info[modelKey]["description"],
@@ -167,7 +227,14 @@ export class FloodHandlerImpl implements FloodHandler {
                     isBaseLayer: false,
                     attributes: {
                         "legend": {
-                            Component: WaterLevelLegend
+                            Component: modelKey === "skadesokonomi" 
+                                ? (props: CustomLegendProps) => React.createElement(
+                                    React.Fragment, 
+                                    null, 
+                                    React.createElement(DamageLegend, props as React.ComponentProps<typeof DamageLegend>), 
+                                    React.createElement(CertaintyLegend, props as React.ComponentProps<typeof CertaintyLegend>)
+                                  )
+                                : WaterLevelLegend
                         }
                     },
                     visible: modelKey === this.#selectedModel.value,
@@ -193,6 +260,18 @@ export class FloodHandlerImpl implements FloodHandler {
         const config = (SLIDER_CONFIG[newFloodType] || SLIDER_CONFIG["pluvial"])!;
         this.#selectedFloodType.value = newFloodType;
         this.#selectedFloodLevel.value = config.min;
+
+        // Enable damage-cost group to be on when selected
+        if (newFloodType === "coastal damage") {
+            this.#selectedModel.value = "skadesokonomi"; 
+            this.updateModelVisibility("skadesokonomi"); 
+        } else {
+            if (this.selectedModel.value === "skadesokonomi") {
+                this.selectedModel.value = DEFAULT_MODEL_ID;
+            }
+            this.updateModelVisibility(this.#selectedModel.value); 
+        }
+
         // Update sublayer visibility for all models based on the new flood type
         LAYER_IDS.forEach(modelId => {
             this.updateSublayerVisibility(modelId, newFloodType);
@@ -244,11 +323,17 @@ export class FloodHandlerImpl implements FloodHandler {
     private buildLayerName(location: string, model: string): string {
         const level = this.#selectedFloodLevel.value;
         const floodType = this.#selectedFloodType.value;
+    
+        if (floodType === "coastal damage"){
+            if (location.startsWith("certainty_")) {
+                return `rwl1_mean_uncertainty_${level}cm`;
+            }
+            return `rwl1_skadesokonomi_mean_${level}cm`;
+        }
         
         const suffix = floodType === "pluvial" ? "mm" : "cm";
         const levelString = `${level}${suffix}`;
         
-        // Layer name format: rwl1_[model]_[floodtype]_[location]_[level]
         const fileLocation = location.toLowerCase(); 
         return `rwl1_${model}_${floodType}_${fileLocation}_${levelString}`; 
     }
@@ -265,12 +350,21 @@ export class FloodHandlerImpl implements FloodHandler {
             const modelKey = modelId as keyof typeof modelLocationMap;
             const typeKey = floodType as keyof typeof modelLocationMap[typeof modelKey];
             
+            // Get the sources for locations defined in active flood type
             const activeLocations = modelLocationMap[modelKey]?.[typeKey] || [];
 
-            // Locations for the currently selected flood type 
-            activeLocations.forEach(locationId => {
-                const layer = modelLayerMap[locationId];
-                if (!layer) return; 
+            // Loop over all possible layers for this model
+            Object.entries(modelLayerMap).forEach(([locationId, layer]) => {
+                if (!activeLocations.includes(locationId)) {
+                    // Clear source for layers not active in selected flood type 
+                    layer.setSource(null); 
+                    return;
+                }
+
+                // Locations for the currently selected flood type 
+                // activeLocations.forEach(locationId => {
+                //     const layer = modelLayerMap[locationId];
+                //     if (!layer) return; 
 
                 // Pass the current modelId to buildLayerName
                 const layerName = this.buildLayerName(locationId, modelId); 
@@ -331,11 +425,16 @@ export class FloodHandlerImpl implements FloodHandler {
     }
 
     private updateModelVisibility(newModelId: string): void {
+        const floodType = this.#selectedFloodType.value;
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
             LAYER_IDS.forEach(id => {
                 const groupLayer = model?.layers.getLayerById(id);
                 if (groupLayer) {
-                    groupLayer.setVisible(id === newModelId);
+                    if (floodType === "coastal damage"){
+                        groupLayer.setVisible(id === "skadesokonomi");
+                    } else {
+                        groupLayer.setVisible(id === newModelId);
+                    }
                 }
             });
         });
