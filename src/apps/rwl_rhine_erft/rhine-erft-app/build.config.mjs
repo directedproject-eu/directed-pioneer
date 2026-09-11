@@ -25,6 +25,10 @@ export default defineBuildConfig({
         }
     },
     ui: {
-        references: ["app.FloodDepthService", "app.FlowVelocityService"]
+        references: [
+            "authentication.AuthService",
+            "app.FloodDepthService",
+            "app.FlowVelocityService"
+        ]
     }
 });

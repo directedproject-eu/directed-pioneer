@@ -21,7 +21,7 @@ import {
 } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
-import { useIntl } from "open-pioneer:react-hooks";
+import { useIntl, useService } from "open-pioneer:react-hooks";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { ToolButton } from "@open-pioneer/map-ui-components";
@@ -38,6 +38,7 @@ import { GiWheat } from "react-icons/gi";
 import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
+import { AuthService } from "@open-pioneer/authentication";
 import { FeatureInfo } from "featureinfo";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
@@ -53,6 +54,7 @@ import { FloodTimeSlider } from "./controls/FloodTimeSlider";
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
+    const authService = useService<AuthService>("authentication.AuthService");
     const intl = useIntl();
     const measurementTitleId = useId();
     const mapModel = useMapModel(MAP_ID);
@@ -169,7 +171,7 @@ export function MapApp() {
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
-            <Navbar />
+            <Navbar authService={authService} />
             <Notifier position="bottom" />
             {mapModel.map && (
                 <DefaultMapProvider map={mapModel.map}>

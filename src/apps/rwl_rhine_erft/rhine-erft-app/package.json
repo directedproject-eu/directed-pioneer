@@ -6,6 +6,8 @@
         "@emotion/react": "catalog:",
         "@emotion/styled": "catalog:",
         "@open-pioneer/base-theme": "catalog:",
+        "@open-pioneer/authentication": "catalog:",
+        "@open-pioneer/authentication-keycloak": "catalog:",
         "@open-pioneer/basemap-switcher": "catalog:",
         "@open-pioneer/coordinate-viewer": "catalog:",
         "@open-pioneer/geolocation": "catalog:",
