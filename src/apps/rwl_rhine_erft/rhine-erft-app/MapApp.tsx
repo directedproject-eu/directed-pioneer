@@ -53,51 +53,52 @@ import { Vector as VectorLayer } from "ol/layer.js";
 import type { PackageIntl } from "@open-pioneer/runtime";
 import { OgcFeaturesVectorSourceFactory } from "@open-pioneer/ogc-features";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
+import TileWMS from "ol/source/TileWMS";
 
-interface PastEventLayerConfig {
-    /** Collection below the protected pygeoapi endpoint. */
-    collectionId: string;
-    id: string;
-    /** Suffix of the i18n key under `map.legend.event_variables`. */
-    titleKey: string;
-    description: string;
-    color: string;
-}
+// interface PastEventLayerConfig {
+//     /** Collection below the protected pygeoapi endpoint. */
+//     collectionId: string;
+//     id: string;
+//     /** Suffix of the i18n key under `map.legend.event_variables`. */
+//     titleKey: string;
+//     description: string;
+//     color: string;
+// }
 
 /**
  * Recorded events in the Zala region. Only available to authenticated users, which is why
  * these layers are added at runtime rather than declared in `MapProvider`.
  */
-const PAST_EVENT_LAYERS: PastEventLayerConfig[] = [
-    {
-        collectionId: "zala/events/damage/storm",
-        id: "storm_damage",
-        titleKey: "storm_damage",
-        description: "Storm damage",
-        color: "black"
-    },
-    {
-        collectionId: "zala/events/damage/water",
-        id: "water_damage",
-        titleKey: "water_damage",
-        description: "Water damage",
-        color: "blue"
-    },
-    {
-        collectionId: "zala/events/fires/forest_vegetation",
-        id: "forest_vegetation_fires",
-        titleKey: "forest_and_vegetation_fire",
-        description: "Forest and vegetation fires",
-        color: "red"
-    },
-    {
-        collectionId: "zala/events/timber_cutting",
-        id: "timber_cutting",
-        titleKey: "tree_clearing",
-        description: "Tree clearing",
-        color: "green"
-    }
-];
+// const PAST_EVENT_LAYERS: PastEventLayerConfig[] = [
+//     {
+//         collectionId: "zala/events/damage/storm",
+//         id: "storm_damage",
+//         titleKey: "storm_damage",
+//         description: "Storm damage",
+//         color: "black"
+//     },
+//     {
+//         collectionId: "zala/events/damage/water",
+//         id: "water_damage",
+//         titleKey: "water_damage",
+//         description: "Water damage",
+//         color: "blue"
+//     },
+//     {
+//         collectionId: "zala/events/fires/forest_vegetation",
+//         id: "forest_vegetation_fires",
+//         titleKey: "forest_and_vegetation_fire",
+//         description: "Forest and vegetation fires",
+//         color: "red"
+//     },
+//     {
+//         collectionId: "zala/events/timber_cutting",
+//         id: "timber_cutting",
+//         titleKey: "tree_clearing",
+//         description: "Tree clearing",
+//         color: "green"
+//     }
+// ];
 
 /**
  * Builds one past-event layer.
@@ -106,43 +107,48 @@ const PAST_EVENT_LAYERS: PastEventLayerConfig[] = [
  * recreated on every render, and could therefore never appear in the dependencies of the
  * effect that uses it.
  */
-function createPastEventLayer(
-    config: PastEventLayerConfig,
-    intl: PackageIntl,
-    vectorSourceFactory: OgcFeaturesVectorSourceFactory
+
+interface GeoServerLayerConfig {
+    id: string;
+    title: string;
+    description: string,
+    layerName: string; 
+}
+
+/**
+ * Single test layer configuration for the protected GeoServer instance
+ */
+const GEOSERVER_TEST_LAYER: GeoServerLayerConfig = {
+    id: "Coastal_100yPresent_wd_max",
+    title: "Coastal_100yPresent_wd_max",
+    description: "test layer for geoserver protected instance",
+    layerName: "directed:Band1"
+};
+
+function createGeoServerLayer(
+    config: GeoServerLayerConfig,
+    baseUrl: string
 ): SimpleLayer {
     return new SimpleLayer({
         id: config.id,
-        title: intl.formatMessage({ id: `map.legend.event_variables.${config.titleKey}` }),
-        description: config.description,
+        title: config.title,
         visible: true,
-        olLayer: new VectorLayer({
-            source: vectorSourceFactory.createVectorSource({
-                baseUrl: "https://directed.dev.52north.org/protected",
-                collectionId: config.collectionId,
-                crs: "http://www.opengis.net/def/crs/EPSG/0/3857",
-                limit: 5000,
-                additionalOptions: {}
+        olLayer: new TileLayer({
+            source: new TileWMS({
+                url: `${baseUrl}/wms`,
+                params: {
+                    "LAYERS": config.layerName,
+                    "TILED": true,
+                    "VERSION": "1.1.1"
+                },
+                serverType: "geoserver"
             }),
-            style: {
-                "circle-radius": 8.0,
-                "circle-fill-color": config.color,
-                "circle-stroke-color": "white",
-                "circle-stroke-width": 0.5
-            },
-            properties: { title: "GeoJSON Layer" }
         }),
-        // `color` is the single definition of this event's colour: it styles the points
-        // here, EventLayerLegend paints its dot from it, and LayerHighlighter restores
-        // it when the pointer leaves the legend entry.
-        attributes: {
-            // legend: { Component: EventLayerLegend },
-            eventColor: config.color
-        },
         isBaseLayer: false
     });
 }
 
+    
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
@@ -160,6 +166,7 @@ export function MapApp() {
     // Authentication 
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
+    const geoserverBaseUrl = "https://directed.dev.52north.org/secure/geoserver";
 
     useEffect(() => {
         document.title = intl.formatMessage({ id: "title" });
@@ -179,18 +186,17 @@ export function MapApp() {
             return;
         }
 
-        const layers = PAST_EVENT_LAYERS.map((config) =>
-            createPastEventLayer(config, intl, vectorSourceFactory)
+        const testLayer = createGeoServerLayer(
+            GEOSERVER_TEST_LAYER,
+            geoserverBaseUrl
         );
-        layers.forEach((layer) => map.layers.addLayer(layer));
 
-        // Not for unmount -- MapApp is the root component and never unmounts on its own.
-        // This runs when a dependency changes, and removing what this run added is what
-        // keeps the next one from hitting "Layer id 'storm_damage' is not unique".
+        map.layers.addLayer(testLayer);
+
         return () => {
-            layers.forEach((layer) => map.layers.removeLayer(layer));
+            map.layers.removeLayer(testLayer);
         };
-    }, [authState.kind, mapModel, intl, vectorSourceFactory]);
+    }, [authState.kind, mapModel]);
 
     //////////////////
     /// LayerSwipe ///
