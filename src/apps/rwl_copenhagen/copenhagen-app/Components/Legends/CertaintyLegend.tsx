@@ -3,8 +3,10 @@
 
 import { Box, Text } from "@chakra-ui/react";
 import { LegendItemComponentProps } from "@open-pioneer/legend";
+import { useIntl } from "open-pioneer:react-hooks";
 
 export function CertaintyLegend(props: LegendItemComponentProps) {
+    const intl = useIntl();
     return (
         <Box
             position="relative"
@@ -28,7 +30,9 @@ export function CertaintyLegend(props: LegendItemComponentProps) {
                     // -45deg creates diagonal lines 
                     background="repeating-linear-gradient(-45deg, #000 0px, #000 1.5px, transparent 1.5px, transparent 5px)"
                 />
-                <Text fontSize="14px">High Damage Certainty</Text>
+                <Text fontSize="14px">
+                    {intl.formatMessage({ id: "legend.certaintyLegend" })}
+                </Text>
             </Box>
         </Box>
     );

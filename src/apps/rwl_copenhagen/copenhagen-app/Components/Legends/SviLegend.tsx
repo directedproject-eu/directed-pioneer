@@ -43,7 +43,7 @@ export function SviLegend(props: LegendItemComponentProps) {
                 {props.layer.title}{" "}
             </Text>
             <Text fontWeight="bold" fontSize={15} mb={2}>
-                {intl.formatMessage({ id: "legend.units" })} Z-Index
+                {intl.formatMessage({ id: "legend.units" })} {intl.formatMessage({ id: "legend.sviLegend" })}
             </Text>
             {colorMapping.map((item, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>

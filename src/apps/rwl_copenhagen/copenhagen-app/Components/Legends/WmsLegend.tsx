@@ -6,10 +6,13 @@ import { SimpleLayer } from "@open-pioneer/map";
 import React, { useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
+import { useIntl } from "open-pioneer:react-hooks";
+
 
 export const WmsLegend: React.FC<LegendItemComponentProps> = ({ layer }) => {
     const [legendUrl, setLegendUrl] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const intl = useIntl();
 
     useEffect(() => {
         const optlayer = layer as SimpleLayer;
@@ -56,7 +59,7 @@ export const WmsLegend: React.FC<LegendItemComponentProps> = ({ layer }) => {
                 {layer.title}
             </Text>
             <Text fontWeight="bold" fontSize={14} mb={1}>
-                Legend
+                {intl.formatMessage({ id: "legend.wmsLegend.title" })}
             </Text>
             {error && <Text color="red.500">{error}</Text>}
             {legendUrl && (
@@ -64,7 +67,7 @@ export const WmsLegend: React.FC<LegendItemComponentProps> = ({ layer }) => {
                     <img src={legendUrl} alt={`${layer.title} Legend`} />
                 </Box>
             )}
-            {!legendUrl && !error && <Text color="gray.500">Loading legend...</Text>}
+            {!legendUrl && !error && <Text color="gray.500">{intl.formatMessage({ id: "legend.wmsLegend.loading" })}</Text>}
         </Box>
     );
 };

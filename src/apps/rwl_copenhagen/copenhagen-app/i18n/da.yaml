@@ -115,6 +115,11 @@ messages:
   legend:
     title: "Tegnforklaring"
     units: "Enheder"
+    certaintyLegend: "Høj sandsynlighed for skader"
+    sviLegend: "Z-Indeks"
+    wmsLegend: 
+      title: "Tegnforklaring"
+      loading: "Indlæsning af billedtekst ..."
   sviLegend:
     extremeHigh: "Ekstremt høj: 2,5 til 100"
     veryHigh: "Meget høj: 1,5 til 2,5"

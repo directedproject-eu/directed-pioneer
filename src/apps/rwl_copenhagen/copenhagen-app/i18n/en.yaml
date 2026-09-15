@@ -88,6 +88,11 @@ messages:
   legend:
     title: "Legend"
     units: "Units"
+    certaintyLegend: "High Damage Certainty"
+    sviLegend: "Z-Index"
+    wmsLegend: 
+      title: "Legend"
+      loading: "Legend Loading..."
   sviLegend: 
     extremeHigh: "Extremely High: 2.5 to 100"
     veryHigh: "Very High: 1.5 to 2.5"
