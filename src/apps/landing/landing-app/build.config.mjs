@@ -3,5 +3,5 @@
 import { defineBuildConfig } from "@open-pioneer/build-support";
 
 export default defineBuildConfig({
-    i18n: ["en"]
+    i18n: ["en", "de", "hu", "da"]
 });

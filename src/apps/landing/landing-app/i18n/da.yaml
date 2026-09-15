@@ -1,0 +1,10 @@
+messages:
+  ariaLabel:
+    header: "da: Header bar"
+    footer: "da: Base bar with scale information, spatial reference system and coordinate display"
+    map: "da: Map. Use the arrow keys to move the map. Zoom in with the plus button and zoom out with the minus button."
+    topLeft: "da: Measurement"
+    topRight: "da: Overview map and basemap switcher"
+    bottomRight: "da: Maptools"
+  basemapLabel: "da: Select basemap"
+  measurementTitle: "da: Measurement"
