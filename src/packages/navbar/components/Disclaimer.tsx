@@ -17,7 +17,6 @@ const Disclaimer: React.FC<Props> = ({ children }) => {
                 <Button
                     size="sm" variant="ghost" color="black" borderRadius="full"
                     p={0} minW="30px" h="30px" transition="all 0.2s ease"
-                    paddingTop={8}
                     _hover={{ transform: "scale(1.05)", bg: "rgba(0, 0, 0, 0.05)" }}
                 >
                     <Box

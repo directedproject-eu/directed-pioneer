@@ -203,6 +203,8 @@ const Navbar: React.FC<NavbarProps> = ({ children, authService }) => {
                     width={{ base: "240px", "2xl": "350px" }}
                     px={{ base: 2, "2xl": 5 }}
                     align="center"
+                    justifyContent="center"
+                    gap={2}
                     flexShrink={0}
                 >
                     <Text fontSize={{ base: 12, "2xl": 14 }}>
