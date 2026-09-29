@@ -5,7 +5,6 @@ import TileLayer from "ol/layer/Tile";
 import WebGLTileLayer from "ol/layer/WebGLTile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
-import { GeoTIFF } from "ol/source";
 import proj4 from "proj4";
 import { register } from "ol/proj/proj4";
 import { FunctionComponent } from "react";
@@ -14,14 +13,15 @@ import { WmsLegend } from "./Components/Legends/WMSLegend";
 import { WaterDepthLegend } from "./Components/Legends/WaterDepthLegend";
 import { FlowVelocityLegend } from "./Components/Legends/FlowVelocityLegend";
 import { ServiceOptions } from "@open-pioneer/runtime";
+import { HttpService } from "@open-pioneer/http";
 import { buildColorGradient, GeoTiffColorStop } from "./config/geotiffStyle";
 import {
     SOURCE_PROJECTION,
-    NODATA,
     waterDepthColorMap,
     buildMaxUrl as buildDepthMaxUrl
 } from "./config/floodDepth";
 import { flowVelocityColorMap, buildVelocityMaxUrl } from "./config/flowVelocity";
+import { createGeoTiffSource } from "./services/geotiff";
 
 // Register EPSG:25832 (UTM 32N) so the static maximum geotiff layers are reprojected
 // correctly to EPSG:3857 (idempotent; the geotiff services do the same).
@@ -119,13 +119,19 @@ export interface GeoTiffLayerConfig {
 /// MAP_ID ///
 /////////////
 
+interface References {
+    httpService: HttpService;
+}
+
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
     layerConfigs: WmsLayerOptions[];
     geoTiffLayers: GeoTiffLayerConfig[];
+    private httpService: HttpService;
 
-    constructor(options: ServiceOptions) {
+    constructor(options: ServiceOptions<References>) {
         const intl = options.intl;
+        this.httpService = options.references.httpService;
 
         this.layerConfigs = [
             {
@@ -286,10 +292,8 @@ export class MainMapProvider implements MapConfigProvider {
             visible: false,
             isBaseLayer: false,
             olLayer: new WebGLTileLayer({
-                source: new GeoTIFF({
-                    projection: SOURCE_PROJECTION,
-                    normalize: false,
-                    sources: [{ url: url, nodata: NODATA }]
+                source: createGeoTiffSource(url, this.httpService, () => {
+                    // Not reported to the user, as before: OpenLayers logs it to the console.
                 }),
                 style: {
                     color: buildColorGradient(colorMap)

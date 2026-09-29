@@ -7,7 +7,10 @@ export default defineBuildConfig({
     i18n: ["en", "de"],
     services: {
         MainMapProvider: {
-            provides: ["map.MapConfigProvider"]
+            provides: ["map.MapConfigProvider"],
+            references: {
+                httpService: "http.HttpService"
+            }
         },
         FloodDepthServiceImpl: {
             provides: ["app.FloodDepthService"],
