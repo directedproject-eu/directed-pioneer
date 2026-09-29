@@ -13,14 +13,16 @@ export default defineBuildConfig({
             provides: ["app.FloodDepthService"],
             references: {
                 mapRegistry: "map.MapRegistry",
-                notificationService: "notifier.NotificationService"
+                notificationService: "notifier.NotificationService",
+                httpService: "http.HttpService"
             }
         },
         FlowVelocityServiceImpl: {
             provides: ["app.FlowVelocityService"],
             references: {
                 mapRegistry: "map.MapRegistry",
-                notificationService: "notifier.NotificationService"
+                notificationService: "notifier.NotificationService",
+                httpService: "http.HttpService"
             }
         },
         TokenInterceptor: {

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { GeoTIFF } from "ol/source";
+import { HttpService } from "@open-pioneer/http";
 import { NODATA, SOURCE_PROJECTION } from "../config/floodDepth";
 
 /** Called when the source could not be loaded. */
@@ -15,6 +16,11 @@ export type GeoTiffErrorHandler = (error: Error | null, url: string) => void;
  * way in. Projection and nodata are the same for water depth and flow velocity; both come
  * out of the same simulation.
  *
+ * Requests go through `httpService` instead of geotiff.js's own `fetch`, so that http
+ * interceptors see them; that is how the TokenInterceptor attaches the keycloak token.
+ * geotiff.js reads the file in byte ranges, one request per block: the loader runs many
+ * times per source, and the `Range` header it gets in `headers` must be passed on as is.
+ *
  * The source loads headers and metadata asynchronously and has no error event: when that
  * fails -- server unreachable, CORS, missing authorisation -- it switches to state "error"
  * and emits "change". OpenLayers logs it to the console, but without this listener nothing
@@ -25,13 +31,21 @@ export type GeoTiffErrorHandler = (error: Error | null, url: string) => void;
  */
 export function createGeoTiffSource(
     url: string,
+    httpService: HttpService,
     onError: GeoTiffErrorHandler,
     onReady?: () => void
 ): GeoTIFF {
     const source = new GeoTIFF({
         projection: SOURCE_PROJECTION,
         normalize: false,
-        sources: [{ url: url, nodata: NODATA }]
+        sources: [
+            {
+                url: url,
+                nodata: NODATA,
+                loader: (requestUrl, headers, signal) =>
+                    httpService.fetch(requestUrl, { headers, signal })
+            }
+        ]
     });
 
     source.on("change", () => {

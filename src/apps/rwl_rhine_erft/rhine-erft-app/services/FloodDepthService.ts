@@ -10,11 +10,13 @@ import { WaterDepthLegend } from "../Components/Legends/WaterDepthLegend";
 import { buildUrl, FIRST_TIME, SOURCE_PROJECTION, waterDepthColorMap } from "../config/floodDepth";
 import { buildColorGradient } from "../config/geotiffStyle";
 import { NotificationService } from "@open-pioneer/notifier";
+import { HttpService } from "@open-pioneer/http";
 import { createGeoTiffSource } from "./geotiff";
 
 interface References {
     mapRegistry: MapRegistry;
     notificationService: NotificationService;
+    httpService: HttpService;
 }
 
 // Register UTM 32N (EPSG:25832) with OpenLayers so the geotiff source is reprojected
@@ -40,16 +42,18 @@ export class FloodDepthServiceImpl implements FloodDepthService {
     private MAP_ID = "main";
     private mapRegistry: MapRegistry;
     private notificationService: NotificationService;
+    private httpService: HttpService;
     private intl: PackageIntl;
     private layer: WebGLTileLayer | undefined;
     /** Message of the error already reported, or undefined while the layer loads fine. */
     private reportedError: string | undefined;
 
     constructor(options: ServiceOptions<References>) {
-        const { mapRegistry, notificationService } = options.references;
+        const { mapRegistry, notificationService, httpService } = options.references;
         const intl = options.intl;
         this.mapRegistry = mapRegistry;
         this.notificationService = notificationService;
+        this.httpService = httpService;
         this.intl = intl;
 
         this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
@@ -96,6 +100,7 @@ export class FloodDepthServiceImpl implements FloodDepthService {
     private createSource(url: string) {
         return createGeoTiffSource(
             url,
+            this.httpService,
             (error) => this.reportError(error),
             () => (this.reportedError = undefined)
         );
