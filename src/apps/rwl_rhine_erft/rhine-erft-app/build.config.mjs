@@ -22,6 +22,12 @@ export default defineBuildConfig({
                 mapRegistry: "map.MapRegistry",
                 notificationService: "notifier.NotificationService"
             }
+        },
+        TokenInterceptor: {
+            provides: ["http.Interceptor"],
+            references: {
+                authService: "authentication.AuthService"
+            }
         }
     },
     ui: {

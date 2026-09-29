@@ -35,6 +35,7 @@ register(proj4);
 // this central services.ts; that is how the pioneer build resolves them.
 export { FloodDepthServiceImpl } from "./services/FloodDepthService";
 export { FlowVelocityServiceImpl } from "./services/FlowVelocityService";
+export { TokenInterceptor } from "./services/TokenInterceptor";
 
 export const MAP_ID = "main";
 
