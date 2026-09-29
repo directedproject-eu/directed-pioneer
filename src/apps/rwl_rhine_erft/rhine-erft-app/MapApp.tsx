@@ -17,7 +17,8 @@ import {
     MapContainer,
     useMapModel,
     SimpleLayer,
-    DefaultMapProvider
+    DefaultMapProvider,
+    WMSLayer
 } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
@@ -38,7 +39,7 @@ import { GiWheat } from "react-icons/gi";
 import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
-import { AuthService } from "@open-pioneer/authentication";
+import { AuthService, useAuthState } from "@open-pioneer/authentication";
 import { FeatureInfo } from "featureinfo";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
@@ -55,6 +56,7 @@ export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
     const authService = useService<AuthService>("authentication.AuthService");
+    const authState = useAuthState(authService);
     const intl = useIntl();
     const measurementTitleId = useId();
     const mapModel = useMapModel(MAP_ID);
@@ -66,6 +68,31 @@ export function MapApp() {
     useEffect(() => {
         document.title = intl.formatMessage({ id: "title" });
     }, [intl]);
+
+    // TEST ONLY -- remove before merging to main. Shows `directed:Band1` from the protected
+    // GeoServer to check the token chain end to end: login, TokenInterceptor, server. Has to
+    // be a WMSLayer: it loads through the http service, a plain TileWMS would bypass the
+    // interceptor. Added only while someone is logged in; without a token there is nothing
+    // to test.
+    useEffect(() => {
+        const map = mapModel.map;
+        if (authState.kind !== "authenticated" || !map) {
+            return;
+        }
+        const testLayer = new WMSLayer({
+            id: "protected_geoserver_test",
+            title: "Test: protected GeoServer (Band1)",
+            url: "https://directed.dev.52north.org/secure/geoserver/wms",
+            sublayers: [{ title: "Band1", name: "directed:Band1" }],
+            visible: true
+        });
+        map.layers.addLayer(testLayer);
+        // Removing what this run added keeps the next run (log out, log in again) from
+        // hitting a duplicate layer id.
+        return () => {
+            map.layers.removeLayer(testLayer);
+        };
+    }, [authState.kind, mapModel]);
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
