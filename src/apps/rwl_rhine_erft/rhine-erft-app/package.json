@@ -11,6 +11,7 @@
         "@open-pioneer/basemap-switcher": "catalog:",
         "@open-pioneer/coordinate-viewer": "catalog:",
         "@open-pioneer/geolocation": "catalog:",
+        "@open-pioneer/http": "catalog:",
         "@open-pioneer/legend": "catalog:",
         "@open-pioneer/map": "catalog:",
         "@open-pioneer/map-navigation": "catalog:",
