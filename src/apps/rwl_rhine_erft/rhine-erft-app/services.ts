@@ -38,7 +38,6 @@ export { FlowVelocityServiceImpl } from "./services/FlowVelocityService";
 
 export const MAP_ID = "main";
 
-
 export interface WmsLayerOptions {
     title: string;
     layerName: string;
@@ -148,7 +147,7 @@ export class MainMapProvider implements MapConfigProvider {
             },
             {
                 title: intl.formatMessage({ id: "legends.water_depth.extreme" }),
-                visible: true, 
+                visible: true,
                 description: intl.formatMessage({ id: "legends.descriptions.bkg" }),
                 url: "https://sgx.geodatenzentrum.de/wms_starkregen",
                 layerName: "nw_tiefe_extrem",
@@ -234,7 +233,16 @@ export class MainMapProvider implements MapConfigProvider {
         ];
     }
 
-    createWmsLayer({title,layerName,propertyTitle,id,url,description,sourceDomain,visible = false}: WmsLayerOptions): SimpleLayer { 
+    createWmsLayer({
+        title,
+        layerName,
+        propertyTitle,
+        id,
+        url,
+        description,
+        sourceDomain,
+        visible = false
+    }: WmsLayerOptions): SimpleLayer {
         return new SimpleLayer({
             title: title,
             visible: visible,
@@ -316,8 +324,8 @@ export class MainMapProvider implements MapConfigProvider {
                     }),
                     isBaseLayer: true
                 }),
-                ...this.layerConfigs.map(config => this.createWmsLayer(config)),
-                ...this.geoTiffLayers.map(config => this.createGeoTiffLayer(config))
+                ...this.layerConfigs.map((config) => this.createWmsLayer(config)),
+                ...this.geoTiffLayers.map((config) => this.createGeoTiffLayer(config))
             ]
         };
     }
