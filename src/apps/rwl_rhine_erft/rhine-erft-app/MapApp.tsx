@@ -82,7 +82,7 @@ export function MapApp() {
         const testLayer = new WMSLayer({
             id: "protected_geoserver_test",
             title: "Test: protected GeoServer (Band1)",
-            url: "https://directed.dev.52north.org/secure/geoserver/wms",
+            url: "https://directed.dev.52north.org/secure/geoserver/directed/wms",
             sublayers: [{ title: "Band1", name: "directed:Band1" }],
             visible: true
         });
