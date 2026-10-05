@@ -3,18 +3,26 @@
 
 import { useEffect, useState } from "react";
 import { Box, Slider, Text } from "@chakra-ui/react";
-import { SimpleLayer } from "@open-pioneer/map";
+import { unByKey } from "ol/Observable";
 import { useService, useIntl } from "open-pioneer:react-hooks";
 import { FloodDepthService } from "../services/FloodDepthService";
 import { FlowVelocityService } from "../services/FlowVelocityService";
-import { TIMESTEPS, FIRST_TIME, LAST_TIME, buildUrl, formatSeconds } from "../config/floodDepth";
-import { buildVelocityUrl } from "../config/flowVelocity";
+import { DamBreakService } from "../services/DamBreakService";
+import {
+    TIMESTEPS,
+    FIRST_TIME,
+    LAST_TIME,
+    buildLayerName,
+    formatSeconds
+} from "../config/floodDepth";
+import { buildVelocityLayerName } from "../config/flowVelocity";
 
 /**
- * Shared time slider for the two time-varying geotiff layers (HRB Eicherscheid): water
+ * Shared time slider for the two time-varying WMS layers (HRB Eicherscheid): water
  * depth and flow velocity run on the same time axis ({@link TIMESTEPS}). Every change
- * swaps the geotiff source of *both* layers to the selected time so they stay in sync.
- * The slider is shown as soon as at least one of the two layers is visible.
+ * points *both* layers at the WMS layer of the selected time so they stay in sync.
+ * The slider is shown as soon as at least one of the two layers is visible. MapApp renders
+ * it only while the user is logged in, i.e. while the Eicherscheid group is on the map.
  */
 export const FloodTimeSlider = () => {
     const intl = useIntl();
@@ -24,37 +32,47 @@ export const FloodTimeSlider = () => {
 
     const depthSrvc = useService<FloodDepthService>("app.FloodDepthService");
     const velocitySrvc = useService<FlowVelocityService>("app.FlowVelocityService");
+    const damBreakSrvc = useService<DamBreakService>("app.DamBreakService");
 
     useEffect(() => {
-        const init = async () => {
-            const model = await depthSrvc.getMapModel();
-            const bindVisibility = (
-                layerId: string,
-                setVisible: (visible: boolean) => void
-            ) => {
-                const layer = model?.layers.getLayerById(layerId) as SimpleLayer | undefined;
-                if (layer) {
-                    setVisible(layer.olLayer.getVisible());
-                    layer.olLayer.on("change:visible", () =>
-                        setVisible(layer.olLayer.getVisible())
-                    );
-                }
-            };
-            bindVisibility("flood_depth", setDepthVisible);
-            bindVisibility("flow_velocity", setVelocityVisible);
+        const group = damBreakSrvc.getGroupLayer().olLayer;
+        const depth = depthSrvc.getLayer().olLayer;
+        const velocity = velocitySrvc.getLayer().olLayer;
+        // A layer counts as visible only while its group is visible too.
+        const updateVisibility = () => {
+            const groupVisible = group.getVisible();
+            setDepthVisible(groupVisible && depth.getVisible());
+            setVelocityVisible(groupVisible && velocity.getVisible());
         };
-        init();
-    }, [depthSrvc]);
+        updateVisibility();
+        const keys = [group, depth, velocity].map((layer) =>
+            layer.on("change:visible", updateVisibility)
+        );
 
+        // The slider starts at FIRST_TIME on every mount (e.g. after logging in again),
+        // while the layers keep the time of the last session; put them back in line.
+        depthSrvc.setLayerName(buildLayerName(FIRST_TIME));
+        velocitySrvc.setLayerName(buildVelocityLayerName(FIRST_TIME));
+
+        return () => unByKey(keys);
+    }, [depthSrvc, velocitySrvc, damBreakSrvc]);
+
+    // While dragging only the thumb and the time label follow; the layers are updated once
+    // the slider stops (onChangeEnd), so dragging does not fire a WMS request per step.
     const onChange = (details: { value: number[] }) => {
         const val = details.value[0];
         if (val === undefined) return;
         setSliderValue(val);
+    };
+
+    const onChangeEnd = (details: { value: number[] }) => {
+        const val = details.value[0];
+        if (val === undefined) return;
         const timeValue = TIMESTEPS[val];
         if (timeValue !== undefined) {
             // Keep both layers in sync, including the one currently hidden.
-            depthSrvc.setFileUrl(buildUrl(timeValue));
-            velocitySrvc.setFileUrl(buildVelocityUrl(timeValue));
+            depthSrvc.setLayerName(buildLayerName(timeValue));
+            velocitySrvc.setLayerName(buildVelocityLayerName(timeValue));
         }
     };
 
@@ -65,9 +83,9 @@ export const FloodTimeSlider = () => {
     return (
         <div
             style={{
-                width: window.innerWidth * 0.4,
-                marginLeft: window.innerWidth * 0.3,
-                marginRight: window.innerWidth * 0.3,
+                // Centred by its top-center MapAnchor; no side margins, which would widen
+                // the anchor across the whole map and swallow clicks there.
+                width: "40vw",
                 borderRadius: "10px",
                 backgroundColor: "rgba(255, 255, 255, 0.8)",
                 marginTop: "5px"
@@ -100,6 +118,7 @@ export const FloodTimeSlider = () => {
                     max={TIMESTEPS.length - 1}
                     value={[sliderValue]}
                     onValueChange={onChange}
+                    onValueChangeEnd={onChangeEnd}
                     step={1}
                 >
                     <Slider.Control>

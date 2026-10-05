@@ -2,31 +2,39 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * Configuration for the time-varying flow velocity geotiffs
+ * Configuration for the time-varying flow velocity WMS layers
  * (HRB Eicherscheid -- base breach scenario, HQ100).
  *
- * Server url, CRS, nodata and the time axis (TIMESTEPS) are identical to water depth
- * (same simulation) and are reused from {@link ./floodDepth}. Only the file name prefix
+ * WMS url, workspace and the time axis (TIMESTEPS) are identical to water depth
+ * (same simulation) and are reused from {@link ./floodDepth}. Only the layer name prefix
  * (`_vel_`) and the colour scale differ here.
  */
-import { GEOTIFF_BASE_URL } from "./floodDepth";
+import { WMS_WORKSPACE } from "./floodDepth";
 
 /**
- * Fixed file name prefix; only the time value at the end (…_vel_<t>.tif) varies.
+ * Fixed file name prefix; only the time value at the end (…_vel_<t>) varies.
  * Variable: `vel` = flow velocity.
- * Example: HRB_Eicherscheid_..._vel_2700.tif
+ * Example: hrb_eicherscheid_vel_2700
  */
-const FILE_PREFIX =
-    "HRB_Eicherscheid_base_breach_scenario_IWD339m_HQ100_flowcorrected_roughinterp_alpha0.4_theta0.85_vel_";
+const FILE_PREFIX = "hrb_eicherscheid_vel_";
 
-/** Builds the full geotiff url for a time value (in seconds). */
-export function buildVelocityUrl(timeValue: number): string {
-    return `${GEOTIFF_BASE_URL}${FILE_PREFIX}${timeValue}.tif`;
+/** Velocity layers start at 60 s; at t = 0 the water is at rest and there is no layer. */
+export const FIRST_VELOCITY_TIME = 60;
+
+/**
+ * Name of the WMS layer for a time value (in seconds), e.g. `directed:hrb_eicherscheid_vel_2700`.
+ * Undefined before {@link FIRST_VELOCITY_TIME}, where no velocity layer exists.
+ */
+export function buildVelocityLayerName(timeValue: number): string | undefined {
+    if (timeValue < FIRST_VELOCITY_TIME) {
+        return undefined;
+    }
+    return `${WMS_WORKSPACE}:${FILE_PREFIX}${timeValue}`;
 }
 
-/** URL of the static maximum raster (…_vel_max.tif): highest flow velocity over time. */
-export function buildVelocityMaxUrl(): string {
-    return `${GEOTIFF_BASE_URL}${FILE_PREFIX}max.tif`;
+/** Name of the static maximum WMS layer (…_vel_max): highest flow velocity over time. */
+export function buildVelocityMaxLayerName(): string {
+    return `${WMS_WORKSPACE}:${FILE_PREFIX}max`;
 }
 
 /** One colour stop of the flow velocity scale. */

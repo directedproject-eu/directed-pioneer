@@ -1,40 +1,36 @@
-
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-export const GEOTIFF_BASE_URL: string =
-    import.meta.env.VITE_FLOOD_GEOTIFF_BASE_URL ?? "http://localhost:8000/";
+const FILE_PREFIX = "hrb_eicherscheid_wd_";
 
-export const SOURCE_PROJECTION = "EPSG:25832";
+/** WMS endpoint serving one layer per timestep (water depth and flow velocity). */
+export const WMS_URL: string =
+    import.meta.env.VITE_FLOOD_WMS_URL ??
+    "https://directed.dev.52north.org/secure/geoserver/directed/wms";
 
-export const NODATA = -9999;
+export const WMS_WORKSPACE = "directed";
 
-
-const FILE_PREFIX =
-    "HRB_Eicherscheid_base_breach_scenario_IWD339m_HQ100_flowcorrected_roughinterp_alpha0.4_theta0.85_wd_";
-
-export function buildUrl(timeValue: number): string {
-    return `${GEOTIFF_BASE_URL}${FILE_PREFIX}${timeValue}.tif`;
+/** Name of the WMS layer for a time value (in seconds), e.g. `directed:hrb_eicherscheid_wd_2700`. */
+export function buildLayerName(timeValue: number): string {
+    return `${WMS_WORKSPACE}:${FILE_PREFIX}${timeValue}`;
 }
 
-/** URL of the static maximum raster (…_wd_max.tif): highest water depth over time. */
-export function buildMaxUrl(): string {
-    return `${GEOTIFF_BASE_URL}${FILE_PREFIX}max.tif`;
+/** Name of the static maximum WMS layer (…_wd_max): highest water depth over time. */
+export function buildMaxLayerName(): string {
+    return `${WMS_WORKSPACE}:${FILE_PREFIX}max`;
 }
-
 
 export const TIMESTEPS: number[] = [
-    60, 120, 300, 600, 900, 1800, 2700, 3600, 4500, 5400, 6300, 7200, 8100, 9000, 9900,
-    10800, 11700, 12600, 13500, 14400, 15300, 16200, 17100, 18000, 18900, 19800, 20700,
-    21600, 22500, 23400, 24300, 25200, 26100, 27000, 27900, 28800, 29700, 30600, 31500,
-    32400, 33300, 34200, 35100, 36000, 36900, 37800, 38700, 39600, 40500, 41400, 42300,
-    43200, 44100, 45000, 45900, 46800, 47700, 48600, 49500, 50400, 51300, 52200, 53100,
-    54000, 54900, 55800, 56700, 57600, 58500, 59400, 60300, 61200, 62100, 63000, 63900,
-    64800, 65700, 66600, 67500, 68400, 69300, 70200, 71100, 72000, 72900, 73800, 74700,
-    75600, 76500, 77400, 78300, 79200, 80100, 81000, 81900, 82800, 83700, 84600, 85500,
-    86400, 87300, 88200, 89100, 90000, 90900, 91800, 92700, 93600, 94500, 95400, 96300,
-    97200, 98100, 99000, 99900, 100800, 101700, 102600, 103500, 104400, 105300, 106200,
-    107100, 108000
+    0, 60, 120, 300, 600, 900, 1800, 2700, 3600, 4500, 5400, 6300, 7200, 8100, 9000, 9900, 10800,
+    11700, 12600, 13500, 14400, 15300, 16200, 17100, 18000, 18900, 19800, 20700, 21600, 22500,
+    23400, 24300, 25200, 26100, 27000, 27900, 28800, 29700, 30600, 31500, 32400, 33300, 34200,
+    35100, 36000, 36900, 37800, 38700, 39600, 40500, 41400, 42300, 43200, 44100, 45000, 45900,
+    46800, 47700, 48600, 49500, 50400, 51300, 52200, 53100, 54000, 54900, 55800, 56700, 57600,
+    58500, 59400, 60300, 61200, 62100, 63000, 63900, 64800, 65700, 66600, 67500, 68400, 69300,
+    70200, 71100, 72000, 72900, 73800, 74700, 75600, 76500, 77400, 78300, 79200, 80100, 81000,
+    81900, 82800, 83700, 84600, 85500, 86400, 87300, 88200, 89100, 90000, 90900, 91800, 92700,
+    93600, 94500, 95400, 96300, 97200, 98100, 99000, 99900, 100800, 101700, 102600, 103500, 104400,
+    105300, 106200, 107100, 108000
 ];
 
 export const FIRST_TIME: number = TIMESTEPS[0] ?? 60;
@@ -52,7 +48,6 @@ export interface WaterDepthColorStop {
     color: string;
     label: string;
 }
-
 
 export const waterDepthColorMap: WaterDepthColorStop[] = [
     { value: 0, color: "rgba(255,255,255,0)", label: "0" },

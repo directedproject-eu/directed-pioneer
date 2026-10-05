@@ -7,25 +7,19 @@ export default defineBuildConfig({
     i18n: ["en", "de"],
     services: {
         MainMapProvider: {
-            provides: ["map.MapConfigProvider"],
-            references: {
-                httpService: "http.HttpService"
-            }
+            provides: ["map.MapConfigProvider"]
         },
         FloodDepthServiceImpl: {
-            provides: ["app.FloodDepthService"],
-            references: {
-                mapRegistry: "map.MapRegistry",
-                notificationService: "notifier.NotificationService",
-                httpService: "http.HttpService"
-            }
+            provides: ["app.FloodDepthService"]
         },
         FlowVelocityServiceImpl: {
-            provides: ["app.FlowVelocityService"],
+            provides: ["app.FlowVelocityService"]
+        },
+        DamBreakServiceImpl: {
+            provides: ["app.DamBreakService"],
             references: {
-                mapRegistry: "map.MapRegistry",
-                notificationService: "notifier.NotificationService",
-                httpService: "http.HttpService"
+                floodDepthService: "app.FloodDepthService",
+                flowVelocityService: "app.FlowVelocityService"
             }
         },
         TokenInterceptor: {
@@ -39,7 +33,8 @@ export default defineBuildConfig({
         references: [
             "authentication.AuthService",
             "app.FloodDepthService",
-            "app.FlowVelocityService"
+            "app.FlowVelocityService",
+            "app.DamBreakService"
         ]
     }
 });

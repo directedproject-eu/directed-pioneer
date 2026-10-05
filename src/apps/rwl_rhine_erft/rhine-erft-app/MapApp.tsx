@@ -17,8 +17,7 @@ import {
     MapContainer,
     useMapModel,
     SimpleLayer,
-    DefaultMapProvider,
-    WMSLayer
+    DefaultMapProvider
 } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
@@ -51,12 +50,14 @@ import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 import { system } from "theme";
 import { FloodTimeSlider } from "./controls/FloodTimeSlider";
+import { DamBreakService } from "./services/DamBreakService";
 
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
+    const damBreakSrvc = useService<DamBreakService>("app.DamBreakService");
     const intl = useIntl();
     const measurementTitleId = useId();
     const mapModel = useMapModel(MAP_ID);
@@ -69,30 +70,20 @@ export function MapApp() {
         document.title = intl.formatMessage({ id: "title" });
     }, [intl]);
 
-    // TEST ONLY -- remove before merging to main. Shows `directed:Band1` from the protected
-    // GeoServer to check the token chain end to end: login, TokenInterceptor, server. Has to
-    // be a WMSLayer: it loads through the http service, a plain TileWMS would bypass the
-    // interceptor. Added only while someone is logged in; without a token there is nothing
-    // to test.
+    // The HRB Eicherscheid layers come from the protected GeoServer, so the group is on the
+    // map only while someone is logged in. Removing does not destroy it: the service keeps
+    // the group and the next login adds the same instance again.
     useEffect(() => {
         const map = mapModel.map;
         if (authState.kind !== "authenticated" || !map) {
             return;
         }
-        const testLayer = new WMSLayer({
-            id: "protected_geoserver_test",
-            title: "Test: protected GeoServer (Band1)",
-            url: "https://directed.dev.52north.org/secure/geoserver/directed/wms",
-            sublayers: [{ title: "Band1", name: "directed:Band1" }],
-            visible: true
-        });
-        map.layers.addLayer(testLayer);
-        // Removing what this run added keeps the next run (log out, log in again) from
-        // hitting a duplicate layer id.
+        const group = damBreakSrvc.getGroupLayer();
+        map.layers.addLayer(group);
         return () => {
-            map.layers.removeLayer(testLayer);
+            map.layers.removeLayer(group);
         };
-    }, [authState.kind, mapModel]);
+    }, [authState.kind, mapModel, damBreakSrvc]);
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
@@ -186,7 +177,9 @@ export function MapApp() {
             eventKeys.forEach(unByKey);
             removeSwipe();
         };
-    }, [mapModel, selectedLeftLayer, selectedRightLayer]);
+        // authState.kind: re-read the layers when login adds or logout removes the
+        // Eicherscheid group (that effect is declared above, so it has already run).
+    }, [mapModel, selectedLeftLayer, selectedRightLayer, authState.kind]);
 
     const overviewMapLayer = useMemo(
         () =>
@@ -208,9 +201,11 @@ export function MapApp() {
                             role="main"
                             aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
                         >
-                            {/* Centred time slider; shows itself while either flood layer is visible */}
-                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                                <FloodTimeSlider />
+                            {/* Centred time slider; shows itself while either flood layer is visible.
+                                The anchor stays mounted even when logged out: anchors stack in mount
+                                order, and a slider anchor mounted after login would cover the Toc. */}
+                            <MapAnchor position="top-center" verticalGap={5}>
+                                {authState.kind === "authenticated" && <FloodTimeSlider />}
                             </MapAnchor>
 
                             <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>

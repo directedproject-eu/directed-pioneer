@@ -35,6 +35,8 @@ messages:
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."
     left: "Linken Layer auswählen"
     right: "Rechten Layer auswählen"
+  eicherscheid:
+    group_title: "HRB Eicherscheid – Dammbruchszenario"
   flood_depth:
     layer_title: "HRB Eicherscheid – Wassertiefe (Zeitreihe)"
     layer_description: "Simuliertes Überflutungsszenario (base breach, HQ100) für das Hochwasserrückhaltebecken Eicherscheid. Die dargestellte Wassertiefe [m] entspricht dem über den Zeitslider gewählten Zeitpunkt."

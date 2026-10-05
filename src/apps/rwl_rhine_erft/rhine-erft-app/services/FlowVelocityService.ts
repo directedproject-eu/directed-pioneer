@@ -1,122 +1,81 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeclaredService, PackageIntl, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
-import WebGLTileLayer from "ol/layer/WebGLTile";
-import proj4 from "proj4";
-import { register } from "ol/proj/proj4";
-import { FlowVelocityLegend } from "../Components/Legends/FlowVelocityLegend";
-import { FIRST_TIME, SOURCE_PROJECTION } from "../config/floodDepth";
-import { buildVelocityUrl, flowVelocityColorMap } from "../config/flowVelocity";
-import { buildColorGradient } from "../config/geotiffStyle";
-import { NotificationService } from "@open-pioneer/notifier";
-import { HttpService } from "@open-pioneer/http";
-import { createGeoTiffSource } from "./geotiff";
-
-interface References {
-    mapRegistry: MapRegistry;
-    notificationService: NotificationService;
-    httpService: HttpService;
-}
-
-// Register UTM 32N (EPSG:25832) with OpenLayers so the geotiff source is reprojected
-// correctly to EPSG:3857. Idempotent -- the water depth service does the same.
-proj4.defs(
-    SOURCE_PROJECTION,
-    "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
-);
-register(proj4);
+import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
+import { WMSLayer } from "@open-pioneer/map";
+import ImageLayer from "ol/layer/Image";
+import ImageWMS from "ol/source/ImageWMS";
+import { WmsLegend } from "../Components/Legends/WMSLegend";
+import { FIRST_TIME, WMS_URL } from "../config/floodDepth";
+import { buildVelocityLayerName, FIRST_VELOCITY_TIME } from "../config/flowVelocity";
 
 export interface FlowVelocityService extends DeclaredService<"app.FlowVelocityService"> {
-    setFileUrl(url: string): void;
-    getMapModel(): Promise<MapModel | undefined>;
+    /** Shows the given WMS layer; `undefined` (no layer for that time) shows nothing. */
+    setLayerName(name: string | undefined): void;
+    /** The layer is not added to the map here; see {@link DamBreakService}. */
+    getLayer(): WMSLayer;
 }
 
 /**
- * Manages a time-varying flow velocity geotiff layer (HRB Eicherscheid).
- * Built like {@link FloodDepthService}; the shared time slider calls `setFileUrl(url)`,
- * which swaps the geotiff source for the one of the selected time.
+ * Manages a time-varying flow velocity WMS layer (HRB Eicherscheid).
+ * Built like {@link FloodDepthService}; the shared time slider calls `setLayerName(name)`,
+ * which points the layer's `LAYERS` param at the layer of the selected time. The single
+ * sublayer is internal for the same reason as there: it keeps the Toc from toggling it,
+ * which would make WMSLayer overwrite the param.
+ *
+ * Times without a velocity layer (t = 0) detach the source from the OpenLayers layer, the
+ * same thing WMSLayer does when no sublayer is visible. WMSLayer only redoes that when the
+ * sublayer visibility changes, which the internal sublayer never does.
  */
 export class FlowVelocityServiceImpl implements FlowVelocityService {
-    private MAP_ID = "main";
-    private mapRegistry: MapRegistry;
-    private notificationService: NotificationService;
-    private httpService: HttpService;
-    private intl: PackageIntl;
-    private layer: WebGLTileLayer | undefined;
-    /** Message of the error already reported, or undefined while the layer loads fine. */
-    private reportedError: string | undefined;
+    private layer: WMSLayer;
 
-    constructor(options: ServiceOptions<References>) {
-        const { mapRegistry, notificationService, httpService } = options.references;
+    constructor(options: ServiceOptions) {
         const intl = options.intl;
-        this.mapRegistry = mapRegistry;
-        this.notificationService = notificationService;
-        this.httpService = httpService;
-        this.intl = intl;
 
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            this.layer = new WebGLTileLayer({
-                source: this.createSource(buildVelocityUrl(FIRST_TIME)),
-                style: {
-                    color: buildColorGradient(flowVelocityColorMap)
-                },
-                properties: {
+        this.layer = new WMSLayer({
+            id: "flow_velocity",
+            title: intl.formatMessage({ id: "flow_velocity.layer_title" }),
+            description: intl.formatMessage({ id: "flow_velocity.layer_description" }),
+            url: WMS_URL,
+            sublayers: [
+                {
+                    // An existing layer; the real start time is applied below.
+                    name: buildVelocityLayerName(FIRST_VELOCITY_TIME),
                     title: intl.formatMessage({ id: "flow_velocity.layer_title" }),
-                    type: "GeoTIFF",
-                    id: "flow_velocity"
+                    internal: true
                 }
-            });
-            model?.layers.addLayer(
-                new SimpleLayer({
-                    id: "flow_velocity",
-                    title: intl.formatMessage({ id: "flow_velocity.layer_title" }),
-                    description: intl.formatMessage({ id: "flow_velocity.layer_description" }),
-                    olLayer: this.layer,
-                    attributes: {
-                        "legend": {
-                            Component: FlowVelocityLegend
-                        }
-                    },
-                    isBaseLayer: false,
-                    visible: false
-                })
-            );
-            // Above the water depth layer (zIndex 5) when both are active.
-            this.layer.setZIndex(6);
+            ],
+            // The legend comes from FlowVelocityLegend; see FloodDepthService.
+            fetchCapabilities: false,
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false,
+            visible: false
         });
+        // Above the water depth layer (zIndex 5) when both are active.
+        this.layer.olLayer.setZIndex(6);
+        this.setLayerName(buildVelocityLayerName(FIRST_TIME));
     }
 
-    async getMapModel() {
-        return await this.mapRegistry.getMapModel(this.MAP_ID);
+    getLayer(): WMSLayer {
+        return this.layer;
     }
 
-    setFileUrl(url: string): void {
-        if (this.layer) {
-            this.layer.setSource(this.createSource(url));
-        }
-    }
-
-    private createSource(url: string) {
-        return createGeoTiffSource(
-            url,
-            this.httpService,
-            (error) => this.reportError(error),
-            () => (this.reportedError = undefined)
-        );
-    }
-
-    /** Reports a load failure once, until the layer has loaded successfully again. */
-    private reportError(error: Error | null): void {
-        const message = error?.message ?? "";
-        if (this.reportedError === message) {
+    setLayerName(name: string | undefined): void {
+        const source = this.layer.olSource;
+        if (!source) {
             return;
         }
-        this.reportedError = message;
-        this.notificationService.error({
-            title: this.intl.formatMessage({ id: "flow_velocity.load_error" }),
-            message: message
-        });
+        const olLayer = this.layer.olLayer as ImageLayer<ImageWMS>;
+        if (name) {
+            source.updateParams({ LAYERS: name });
+            olLayer.setSource(source);
+        } else {
+            olLayer.setSource(null);
+        }
     }
 }

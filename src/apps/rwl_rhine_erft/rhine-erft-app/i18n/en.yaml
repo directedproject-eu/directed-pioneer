@@ -36,6 +36,8 @@ messages:
     description: "Only layers which have been selected in the Operational Layers are viewable for comparison."
     left: "Select Left Layer"
     right: "Select Right Layer"
+  eicherscheid:
+    group_title: "HRB Eicherscheid – dam break scenario"
   flood_depth:
     layer_title: "HRB Eicherscheid – water depth (time series)"
     layer_description: "Simulated flood scenario (base breach, HQ100) for the Eicherscheid flood retention basin. The displayed water depth [m] corresponds to the time selected via the time slider."

@@ -1,121 +1,63 @@
 // SPDX-FileCopyrightText: 2023-2025 Open Pioneer project (https://github.com/open-pioneer)
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeclaredService, PackageIntl, ServiceOptions } from "@open-pioneer/runtime";
-import { MapRegistry, MapModel, SimpleLayer } from "@open-pioneer/map";
-import WebGLTileLayer from "ol/layer/WebGLTile";
-import proj4 from "proj4";
-import { register } from "ol/proj/proj4";
-import { WaterDepthLegend } from "../Components/Legends/WaterDepthLegend";
-import { buildUrl, FIRST_TIME, SOURCE_PROJECTION, waterDepthColorMap } from "../config/floodDepth";
-import { buildColorGradient } from "../config/geotiffStyle";
-import { NotificationService } from "@open-pioneer/notifier";
-import { HttpService } from "@open-pioneer/http";
-import { createGeoTiffSource } from "./geotiff";
-
-interface References {
-    mapRegistry: MapRegistry;
-    notificationService: NotificationService;
-    httpService: HttpService;
-}
-
-// Register UTM 32N (EPSG:25832) with OpenLayers so the geotiff source is reprojected
-// correctly to EPSG:3857, the map projection. Has to run before any source is built --
-// hence at module level, the same as the saferplaces FloodMapService.
-proj4.defs(
-    SOURCE_PROJECTION,
-    "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
-);
-register(proj4);
+import { DeclaredService, ServiceOptions } from "@open-pioneer/runtime";
+import { WMSLayer } from "@open-pioneer/map";
+import { WmsLegend } from "../Components/Legends/WMSLegend";
+import { buildLayerName, FIRST_TIME, WMS_URL } from "../config/floodDepth";
 
 export interface FloodDepthService extends DeclaredService<"app.FloodDepthService"> {
-    setFileUrl(url: string): void;
-    getMapModel(): Promise<MapModel | undefined>;
+    setLayerName(name: string): void;
+    /** The layer is not added to the map here; see {@link DamBreakService}. */
+    getLayer(): WMSLayer;
 }
 
 /**
- * Manages a time-varying water depth geotiff layer (HRB Eicherscheid).
- * The time slider calls `setFileUrl(url)`, which swaps the layer's geotiff source for the
- * geotiff of the selected time.
+ * Manages a time-varying water depth WMS layer (HRB Eicherscheid).
+ * GeoServer publishes one layer per timestep. The time slider calls `setLayerName(name)`,
+ * which points the layer's `LAYERS` param at the layer of the selected time.
+ *
+ * WMSLayer derives `LAYERS` from its visible sublayers and rewrites it whenever their
+ * visibility changes. The single sublayer is therefore internal: the Toc does not show it,
+ * so its visibility never changes and the param set here is not overwritten.
  */
 export class FloodDepthServiceImpl implements FloodDepthService {
-    private MAP_ID = "main";
-    private mapRegistry: MapRegistry;
-    private notificationService: NotificationService;
-    private httpService: HttpService;
-    private intl: PackageIntl;
-    private layer: WebGLTileLayer | undefined;
-    /** Message of the error already reported, or undefined while the layer loads fine. */
-    private reportedError: string | undefined;
+    private layer: WMSLayer;
 
-    constructor(options: ServiceOptions<References>) {
-        const { mapRegistry, notificationService, httpService } = options.references;
+    constructor(options: ServiceOptions) {
         const intl = options.intl;
-        this.mapRegistry = mapRegistry;
-        this.notificationService = notificationService;
-        this.httpService = httpService;
-        this.intl = intl;
 
-        this.mapRegistry.getMapModel(this.MAP_ID).then((model) => {
-            this.layer = new WebGLTileLayer({
-                source: this.createSource(buildUrl(FIRST_TIME)),
-                style: {
-                    color: buildColorGradient(waterDepthColorMap)
-                },
-                properties: {
+        this.layer = new WMSLayer({
+            id: "flood_depth",
+            title: intl.formatMessage({ id: "flood_depth.layer_title" }),
+            description: intl.formatMessage({ id: "flood_depth.layer_description" }),
+            url: WMS_URL,
+            sublayers: [
+                {
+                    name: buildLayerName(FIRST_TIME),
                     title: intl.formatMessage({ id: "flood_depth.layer_title" }),
-                    type: "GeoTIFF",
-                    id: "flood_depth"
+                    internal: true
                 }
-            });
-            model?.layers.addLayer(
-                new SimpleLayer({
-                    id: "flood_depth",
-                    title: intl.formatMessage({ id: "flood_depth.layer_title" }),
-                    description: intl.formatMessage({ id: "flood_depth.layer_description" }),
-                    olLayer: this.layer,
-                    attributes: {
-                        "legend": {
-                            Component: WaterDepthLegend
-                        }
-                    },
-                    isBaseLayer: false,
-                    visible: false
-                })
-            );
-            this.layer.setZIndex(5);
+            ],
+            // The legend comes from WmsLegend; skipping capabilities also avoids
+            // fetching a document that lists every timestep layer.
+            fetchCapabilities: false,
+            attributes: {
+                "legend": {
+                    Component: WmsLegend
+                }
+            },
+            isBaseLayer: false,
+            visible: false
         });
+        this.layer.olLayer.setZIndex(5);
     }
 
-    async getMapModel() {
-        return await this.mapRegistry.getMapModel(this.MAP_ID);
+    getLayer(): WMSLayer {
+        return this.layer;
     }
 
-    setFileUrl(url: string): void {
-        if (this.layer) {
-            this.layer.setSource(this.createSource(url));
-        }
-    }
-
-    private createSource(url: string) {
-        return createGeoTiffSource(
-            url,
-            this.httpService,
-            (error) => this.reportError(error),
-            () => (this.reportedError = undefined)
-        );
-    }
-
-    /** Reports a load failure once, until the layer has loaded successfully again. */
-    private reportError(error: Error | null): void {
-        const message = error?.message ?? "";
-        if (this.reportedError === message) {
-            return;
-        }
-        this.reportedError = message;
-        this.notificationService.error({
-            title: this.intl.formatMessage({ id: "flood_depth.load_error" }),
-            message: message
-        });
+    setLayerName(name: string): void {
+        this.layer.olSource?.updateParams({ LAYERS: name });
     }
 }

@@ -2,39 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MapConfig, MapConfigProvider, SimpleLayer } from "@open-pioneer/map";
 import TileLayer from "ol/layer/Tile";
-import WebGLTileLayer from "ol/layer/WebGLTile";
 import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
-import proj4 from "proj4";
-import { register } from "ol/proj/proj4";
-import { FunctionComponent } from "react";
-import { LegendItemComponentProps } from "@open-pioneer/legend";
 import { WmsLegend } from "./Components/Legends/WMSLegend";
-import { WaterDepthLegend } from "./Components/Legends/WaterDepthLegend";
-import { FlowVelocityLegend } from "./Components/Legends/FlowVelocityLegend";
 import { ServiceOptions } from "@open-pioneer/runtime";
-import { HttpService } from "@open-pioneer/http";
-import { buildColorGradient, GeoTiffColorStop } from "./config/geotiffStyle";
-import {
-    SOURCE_PROJECTION,
-    waterDepthColorMap,
-    buildMaxUrl as buildDepthMaxUrl
-} from "./config/floodDepth";
-import { flowVelocityColorMap, buildVelocityMaxUrl } from "./config/flowVelocity";
-import { createGeoTiffSource } from "./services/geotiff";
-
-// Register EPSG:25832 (UTM 32N) so the static maximum geotiff layers are reprojected
-// correctly to EPSG:3857 (idempotent; the geotiff services do the same).
-proj4.defs(
-    SOURCE_PROJECTION,
-    "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
-);
-register(proj4);
 
 // Service implementations declared in build.config.mjs have to be (re-)exported from
 // this central services.ts; that is how the pioneer build resolves them.
 export { FloodDepthServiceImpl } from "./services/FloodDepthService";
 export { FlowVelocityServiceImpl } from "./services/FlowVelocityService";
+export { DamBreakServiceImpl } from "./services/DamBreakService";
 export { TokenInterceptor } from "./services/TokenInterceptor";
 
 export const MAP_ID = "main";
@@ -48,16 +25,6 @@ export interface WmsLayerOptions {
     description: string;
     sourceDomain: string;
     visible?: boolean;
-}
-
-/** Configuration of a static geotiff layer (e.g. maximum water depth or velocity). */
-export interface GeoTiffLayerConfig {
-    id: string;
-    title: string;
-    description: string;
-    url: string;
-    colorMap: GeoTiffColorStop[];
-    LegendComponent: FunctionComponent<LegendItemComponentProps>;
 }
 
 ///////////////////
@@ -119,19 +86,12 @@ export interface GeoTiffLayerConfig {
 /// MAP_ID ///
 /////////////
 
-interface References {
-    httpService: HttpService;
-}
-
 export class MainMapProvider implements MapConfigProvider {
     mapId = MAP_ID;
     layerConfigs: WmsLayerOptions[];
-    geoTiffLayers: GeoTiffLayerConfig[];
-    private httpService: HttpService;
 
-    constructor(options: ServiceOptions<References>) {
+    constructor(options: ServiceOptions) {
         const intl = options.intl;
-        this.httpService = options.references.httpService;
 
         this.layerConfigs = [
             {
@@ -217,27 +177,6 @@ export class MainMapProvider implements MapConfigProvider {
                 sourceDomain: "wms.nrw"
             }
         ];
-
-        // Static geotiff layers: the maximum over the whole simulation period, independent
-        // of the time slider. They share colour scale and legend with their time series.
-        this.geoTiffLayers = [
-            {
-                id: "flood_depth_max",
-                title: intl.formatMessage({ id: "flood_depth_max.layer_title" }),
-                description: intl.formatMessage({ id: "flood_depth_max.layer_description" }),
-                url: buildDepthMaxUrl(),
-                colorMap: waterDepthColorMap,
-                LegendComponent: WaterDepthLegend
-            },
-            {
-                id: "flow_velocity_max",
-                title: intl.formatMessage({ id: "flow_velocity_max.layer_title" }),
-                description: intl.formatMessage({ id: "flow_velocity_max.layer_description" }),
-                url: buildVelocityMaxUrl(),
-                colorMap: flowVelocityColorMap,
-                LegendComponent: FlowVelocityLegend
-            }
-        ];
     }
 
     createWmsLayer({
@@ -277,41 +216,6 @@ export class MainMapProvider implements MapConfigProvider {
         });
     }
 
-    createGeoTiffLayer({
-        id,
-        title,
-        description,
-        url,
-        colorMap,
-        LegendComponent
-    }: GeoTiffLayerConfig): SimpleLayer {
-        return new SimpleLayer({
-            id: id,
-            title: title,
-            description: description,
-            visible: false,
-            isBaseLayer: false,
-            olLayer: new WebGLTileLayer({
-                source: createGeoTiffSource(url, this.httpService, () => {
-                    // Not reported to the user, as before: OpenLayers logs it to the console.
-                }),
-                style: {
-                    color: buildColorGradient(colorMap)
-                },
-                properties: {
-                    title: title,
-                    id: id,
-                    type: "GeoTIFF"
-                }
-            }),
-            attributes: {
-                "legend": {
-                    Component: LegendComponent
-                }
-            }
-        });
-    }
-
     async getMapConfig(): Promise<MapConfig> {
         return {
             initialView: {
@@ -329,8 +233,9 @@ export class MainMapProvider implements MapConfigProvider {
                     }),
                     isBaseLayer: true
                 }),
-                ...this.layerConfigs.map((config) => this.createWmsLayer(config)),
-                ...this.geoTiffLayers.map((config) => this.createGeoTiffLayer(config))
+                // The HRB Eicherscheid layers are not configured here: they are added as a
+                // group once the user is logged in (DamBreakService, MapApp).
+                ...this.layerConfigs.map((config) => this.createWmsLayer(config))
             ]
         };
     }
