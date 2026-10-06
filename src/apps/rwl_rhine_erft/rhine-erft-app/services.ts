@@ -7,18 +7,24 @@ import OSM from "ol/source/OSM";
 import { WmsLegend } from "./Components/Legends/WMSLegend";
 import { ServiceOptions } from "@open-pioneer/runtime";
 
-export const MAP_ID = "main";
+// Service implementations declared in build.config.mjs have to be (re-)exported from
+// this central services.ts; that is how the pioneer build resolves them.
+export { FloodDepthServiceImpl } from "./services/FloodDepthService";
+export { FlowVelocityServiceImpl } from "./services/FlowVelocityService";
+export { DamBreakServiceImpl } from "./services/DamBreakService";
+export { TokenInterceptor } from "./services/TokenInterceptor";
 
+export const MAP_ID = "main";
 
 export interface WmsLayerOptions {
     title: string;
-    layerName: string;      
-    propertyTitle: string;   
+    layerName: string;
+    propertyTitle: string;
     id: string;
     url: string;
-    description: string;     
+    description: string;
     sourceDomain: string;
-    visible?: boolean;      
+    visible?: boolean;
 }
 
 ///////////////////
@@ -108,7 +114,7 @@ export class MainMapProvider implements MapConfigProvider {
             },
             {
                 title: intl.formatMessage({ id: "legends.water_depth.extreme" }),
-                visible: true, 
+                visible: true,
                 description: intl.formatMessage({ id: "legends.descriptions.bkg" }),
                 url: "https://sgx.geodatenzentrum.de/wms_starkregen",
                 layerName: "nw_tiefe_extrem",
@@ -173,7 +179,16 @@ export class MainMapProvider implements MapConfigProvider {
         ];
     }
 
-    createWmsLayer({title,layerName,propertyTitle,id,url,description,sourceDomain,visible = false}: WmsLayerOptions): SimpleLayer { 
+    createWmsLayer({
+        title,
+        layerName,
+        propertyTitle,
+        id,
+        url,
+        description,
+        sourceDomain,
+        visible = false
+    }: WmsLayerOptions): SimpleLayer {
         return new SimpleLayer({
             title: title,
             visible: visible,
@@ -218,7 +233,9 @@ export class MainMapProvider implements MapConfigProvider {
                     }),
                     isBaseLayer: true
                 }),
-                ...this.layerConfigs.map(config => this.createWmsLayer(config))
+                // The HRB Eicherscheid layers are not configured here: they are added as a
+                // group once the user is logged in (DamBreakService, MapApp).
+                ...this.layerConfigs.map((config) => this.createWmsLayer(config))
             ]
         };
     }

@@ -8,6 +8,34 @@ export default defineBuildConfig({
     services: {
         MainMapProvider: {
             provides: ["map.MapConfigProvider"]
+        },
+        FloodDepthServiceImpl: {
+            provides: ["app.FloodDepthService"]
+        },
+        FlowVelocityServiceImpl: {
+            provides: ["app.FlowVelocityService"]
+        },
+        DamBreakServiceImpl: {
+            provides: ["app.DamBreakService"],
+            references: {
+                floodDepthService: "app.FloodDepthService",
+                flowVelocityService: "app.FlowVelocityService"
+            }
+        },
+        TokenInterceptor: {
+            provides: ["http.Interceptor"],
+            references: {
+                authService: "authentication.AuthService"
+            }
         }
+    },
+    ui: {
+        references: [
+            "authentication.AuthService",
+            "http.HttpService",
+            "app.FloodDepthService",
+            "app.FlowVelocityService",
+            "app.DamBreakService"
+        ]
     }
 });

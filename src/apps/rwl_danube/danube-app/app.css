@@ -156,3 +156,14 @@
 .custom-basemap-switcher {
     width: 100%;
 }
+
+/* Spinner shown while the crop yield chart loads. Lives here rather than in a <style>
+   element inside the component, which would be re-inserted on every render. */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

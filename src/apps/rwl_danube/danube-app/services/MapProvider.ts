@@ -19,6 +19,7 @@ import { FluvialFloodLegend } from "../components/legends/FluvialFloodLegend";
 import { FluvialFloodReturnPeriodShiftLegend } from "../components/legends/FluvialFloodReturnPeriodShiftLegend";
 import { LidarLegend } from "../components/legends/LidarLegend";
 import { WaterLevelLegend } from "../components/legends/WaterLevelLegend";
+import { FORESTRY_STATIONS } from "../config/forestry";
 
 interface Config {
     pygeoapiBaseUrl: string;
@@ -214,36 +215,7 @@ export class MainMapProvider implements MapConfigProvider {
     }
 
     createForestryLayer() {
-        const stationData = [
-            { id: "bakonybel_2_ti5", lon: 17.7245, lat: 47.2501, name: "Bakonybél (2 TI5)" },
-            {
-                id: "bakonyszentlaszlo_erdeszet_hodo",
-                lon: 17.8003,
-                lat: 47.35,
-                name: "Bakonyszentlászló (Hódo)"
-            },
-            { id: "csehbanya_20ep", lon: 17.6833, lat: 47.1833, name: "Csehbánya (20ÉP)" },
-            { id: "devecser_59_d", lon: 17.4367, lat: 47.1064, name: "Devecser (59 D)" },
-            {
-                id: "devecseri_edeszet_sarosfo",
-                lon: 17.3848,
-                lat: 47.0554,
-                name: "Sárosfő (Devecseri Erdészet)"
-            },
-            { id: "dorgicse_18_ey", lon: 17.7219, lat: 46.917, name: "Dörgicse (18 EY)" },
-            {
-                id: "keszthelyi_erdeszet_vallus",
-                lon: 17.3092,
-                lat: 46.8412,
-                name: "Vállus (Keszthelyi Erdészet)"
-            },
-            { id: "kup_24_ti", lon: 17.4635, lat: 47.2477, name: "Kup (24 TI)" },
-            { id: "saska_61_vf", lon: 17.4789, lat: 46.9358, name: "Sáska (61 VF)" },
-            { id: "tuskevar_36_c", lon: 17.3167, lat: 47.1167, name: "Tüskevár (36 C)" },
-            { id: "zalaerdod_29_a", lon: 17.1392, lat: 47.0564, name: "Zalaerdőd (29 A)" }
-        ];
-
-        const features = stationData.map((station) => {
+        const features = FORESTRY_STATIONS.map((station) => {
             const feature = new Feature({
                 geometry: new Point(fromLonLat([station.lon, station.lat]))
             });

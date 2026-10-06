@@ -21,7 +21,7 @@ import {
 } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
-import { useIntl } from "open-pioneer:react-hooks";
+import { useIntl, useService } from "open-pioneer:react-hooks";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { ToolButton } from "@open-pioneer/map-ui-components";
@@ -30,7 +30,7 @@ import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services";
-import { useId, useMemo, useState, useEffect } from "react";
+import { useCallback, useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
@@ -38,6 +38,8 @@ import { GiWheat } from "react-icons/gi";
 import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
+import { AuthService, useAuthState } from "@open-pioneer/authentication";
+import { HttpService } from "@open-pioneer/http";
 import { FeatureInfo } from "featureinfo";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
@@ -48,10 +50,19 @@ import ChartComponentRhineErft from "./Components/ChartComponentRhineErft";
 import { Group } from "ol/layer";
 import { LayerDownload } from "layerdownload";
 import { system } from "theme";
+import { FloodTimeSlider } from "./controls/FloodTimeSlider";
+import { DamBreakService } from "./services/DamBreakService";
 
 export function MapApp() {
     const { open: isOpenChart, onClose: onCloseChart, onOpen: onOpenChart } = useDisclosure();
 
+    const authService = useService<AuthService>("authentication.AuthService");
+    const authState = useAuthState(authService);
+    const damBreakSrvc = useService<DamBreakService>("app.DamBreakService");
+    const httpService = useService<HttpService>("http.HttpService");
+    // Through the http service, so the TokenInterceptor authenticates feature info requests
+    // to the protected GeoServer (HRB Eicherscheid layers).
+    const featureInfoFetch = useCallback((url: string) => httpService.fetch(url), [httpService]);
     const intl = useIntl();
     const measurementTitleId = useId();
     const mapModel = useMapModel(MAP_ID);
@@ -63,6 +74,21 @@ export function MapApp() {
     useEffect(() => {
         document.title = intl.formatMessage({ id: "title" });
     }, [intl]);
+
+    // The HRB Eicherscheid layers come from the protected GeoServer, so the group is on the
+    // map only while someone is logged in. Removing does not destroy it: the service keeps
+    // the group and the next login adds the same instance again.
+    useEffect(() => {
+        const map = mapModel.map;
+        if (authState.kind !== "authenticated" || !map) {
+            return;
+        }
+        const group = damBreakSrvc.getGroupLayer();
+        map.layers.addLayer(group);
+        return () => {
+            map.layers.removeLayer(group);
+        };
+    }, [authState.kind, mapModel, damBreakSrvc]);
 
     function toggleMeasurement() {
         setMeasurementIsActive(!measurementIsActive);
@@ -156,7 +182,9 @@ export function MapApp() {
             eventKeys.forEach(unByKey);
             removeSwipe();
         };
-    }, [mapModel, selectedLeftLayer, selectedRightLayer]);
+        // authState.kind: re-read the layers when login adds or logout removes the
+        // Eicherscheid group (that effect is declared above, so it has already run).
+    }, [mapModel, selectedLeftLayer, selectedRightLayer, authState.kind]);
 
     const overviewMapLayer = useMemo(
         () =>
@@ -168,284 +196,286 @@ export function MapApp() {
 
     return (
         <Flex height="100%" direction="column" overflow="hidden">
-            <Navbar />
+            <Navbar authService={authService} />
             <Notifier position="bottom" />
             {mapModel.map && (
                 <DefaultMapProvider map={mapModel.map}>
-                <Flex flex="1" direction="column" position="relative">
-                    <MapContainer
-                        map={mapModel.map}
-                        role="main"
-                        aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
-                    >
-                        <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
-                            <Flex direction="column" gap={4}>
-                                <Box
-                                    backgroundColor="white"
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    padding={2}
-                                    boxShadow="lg"
-                                    aria-label={intl.formatMessage({
-                                        id: "ariaLabel.topRight"
-                                    })}
-                                    maxHeight={615}
-                                    maxWidth={430}
-                                    overflow="hidden"
-                                    marginBottom={5}
-                                >
-                                    <Box>
-                                        <Box maxHeight={300} overflow="auto">
-                                            <Flex
-                                                alignItems="center"
-                                                flexDirection={"row"}
-                                            >
-                                                <HoverCard.Root openDelay={250} closeDelay={100} positioning={{ placement: "bottom" }}>
-                                                    <HoverCard.Trigger asChild>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            color="black"
-                                                            borderRadius="full"
-                                                            paddingRight={2}
-                                                            _hover={{
-                                                                transform: "scale(1.05)",
-                                                                bg: "rgba(0, 0, 0, 0.05)",
-                                                            }}
-                                                            transition="all 0.2s ease"
-                                                        >
-                                                            <Box
-                                                                as="span"
-                                                                display="inline-flex"
-                                                                alignItems="center"
-                                                                justifyContent="center"
-                                                                width="20px"
-                                                                height="20px"
-                                                                borderRadius="50%"
-                                                                border="1.5px solid currentColor"
-                                                                fontFamily="serif"
-                                                                fontWeight="bold"
-                                                                fontSize="12px"
-                                                                lineHeight="1"
-                                                                pb="1px"
+                    <Flex flex="1" direction="column" position="relative">
+                        <MapContainer
+                            map={mapModel.map}
+                            role="main"
+                            aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
+                        >
+                            {/* Centred time slider; shows itself while either flood layer is visible.
+                                The anchor stays mounted even when logged out: anchors stack in mount
+                                order, and a slider anchor mounted after login would cover the Toc. */}
+                            <MapAnchor position="top-center" verticalGap={5}>
+                                {authState.kind === "authenticated" && <FloodTimeSlider />}
+                            </MapAnchor>
+
+                            <MapAnchor position="top-right" horizontalGap={5} verticalGap={5}>
+                                <Flex direction="column" gap={4}>
+                                    <Box
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.topRight"
+                                        })}
+                                        maxHeight={615}
+                                        maxWidth={430}
+                                        overflow="hidden"
+                                        marginBottom={5}
+                                    >
+                                        <Box>
+                                            <Box maxHeight={300} overflow="auto">
+                                                <Flex alignItems="center" flexDirection={"row"}>
+                                                    <HoverCard.Root
+                                                        openDelay={250}
+                                                        closeDelay={100}
+                                                        positioning={{ placement: "bottom" }}
+                                                    >
+                                                        <HoverCard.Trigger asChild>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                color="black"
+                                                                borderRadius="full"
+                                                                paddingRight={2}
+                                                                _hover={{
+                                                                    transform: "scale(1.05)",
+                                                                    bg: "rgba(0, 0, 0, 0.05)"
+                                                                }}
+                                                                transition="all 0.2s ease"
                                                             >
-                                                                i
-                                                            </Box>
-                                                        </Button>
-                                                    </HoverCard.Trigger>
-                                                    <HoverCard.Positioner>
-                                                        <HoverCard.Content>
-                                                            {intl.formatMessage({
-                                                                id: "layer_swipe.description"
+                                                                <Box
+                                                                    as="span"
+                                                                    display="inline-flex"
+                                                                    alignItems="center"
+                                                                    justifyContent="center"
+                                                                    width="20px"
+                                                                    height="20px"
+                                                                    borderRadius="50%"
+                                                                    border="1.5px solid currentColor"
+                                                                    fontFamily="serif"
+                                                                    fontWeight="bold"
+                                                                    fontSize="12px"
+                                                                    lineHeight="1"
+                                                                    pb="1px"
+                                                                >
+                                                                    i
+                                                                </Box>
+                                                            </Button>
+                                                        </HoverCard.Trigger>
+                                                        <HoverCard.Positioner>
+                                                            <HoverCard.Content>
+                                                                {intl.formatMessage({
+                                                                    id: "layer_swipe.description"
+                                                                })}
+                                                            </HoverCard.Content>
+                                                        </HoverCard.Positioner>
+                                                    </HoverCard.Root>
+                                                    <Text fontWeight="bold">
+                                                        {intl.formatMessage({
+                                                            id: "layer_swipe.title"
+                                                        })}
+                                                    </Text>
+                                                </Flex>
+                                                <Flex direction="row" gap={4} p={4}>
+                                                    <NativeSelect.Root>
+                                                        <NativeSelect.Field
+                                                            placeholder={intl.formatMessage({
+                                                                id: "layer_swipe.left"
                                                             })}
-                                                        </HoverCard.Content>
-                                                    </HoverCard.Positioner>
-                                                </HoverCard.Root>
-                                                <Text fontWeight="bold">
-                                                    {intl.formatMessage({
-                                                        id: "layer_swipe.title"
-                                                    })}
-                                                </Text>
-                                            </Flex>
-                                            <Flex direction="row" gap={4} p={4}>
-                                                <NativeSelect.Root>
-                                                    <NativeSelect.Field
-                                                        placeholder={intl.formatMessage({ id: "layer_swipe.left" })}
-                                                        value={selectedLeftLayer ?? ""}
-                                                        onChange={(e) =>
-                                                            setSelectedLeftLayer(
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    >
-                                                        {visibleAvailableLayers.map(
-                                                            (layer) => (
+                                                            value={selectedLeftLayer ?? ""}
+                                                            onChange={(e) =>
+                                                                setSelectedLeftLayer(e.target.value)
+                                                            }
+                                                        >
+                                                            {visibleAvailableLayers.map((layer) => (
                                                                 <option
                                                                     key={layer.id}
                                                                     value={layer.id}
                                                                 >
-                                                                    {layer.title ||
-                                                                        layer.id}
+                                                                    {layer.title || layer.id}
                                                                 </option>
-                                                            )
-                                                        )}
-                                                    </NativeSelect.Field>
-                                                    <NativeSelect.Indicator />
-                                                </NativeSelect.Root>
-                                                <NativeSelect.Root>
-                                                    <NativeSelect.Field
-                                                        placeholder={intl.formatMessage({ id: "layer_swipe.right" })}
-                                                        value={selectedRightLayer ?? ""}
-                                                        onChange={(e) =>
-                                                            setSelectedRightLayer(
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    >
-                                                        {visibleAvailableLayers.map(
-                                                            (layer) => (
+                                                            ))}
+                                                        </NativeSelect.Field>
+                                                        <NativeSelect.Indicator />
+                                                    </NativeSelect.Root>
+                                                    <NativeSelect.Root>
+                                                        <NativeSelect.Field
+                                                            placeholder={intl.formatMessage({
+                                                                id: "layer_swipe.right"
+                                                            })}
+                                                            value={selectedRightLayer ?? ""}
+                                                            onChange={(e) =>
+                                                                setSelectedRightLayer(
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        >
+                                                            {visibleAvailableLayers.map((layer) => (
                                                                 <option
                                                                     key={layer.id}
                                                                     value={layer.id}
                                                                 >
-                                                                    {layer.title ||
-                                                                        layer.id}
+                                                                    {layer.title || layer.id}
                                                                 </option>
-                                                            )
-                                                        )}
-                                                    </NativeSelect.Field>
-                                                    <NativeSelect.Indicator />
-                                                </NativeSelect.Root>
-                                            </Flex>
+                                                            ))}
+                                                        </NativeSelect.Field>
+                                                        <NativeSelect.Indicator />
+                                                    </NativeSelect.Root>
+                                                </Flex>
+                                            </Box>
                                         </Box>
                                     </Box>
-                                </Box>
-                                <Flex
-                                    maxHeight={400}
-                                    maxWidth={250}
-                                    overflow="auto"
-                                    borderRadius="md"
-                                    boxShadow="lg"
-                                    alignSelf="flex-end"
-                                >
-                                    <Legend map={mapModel.map} />
+                                    <Flex
+                                        maxHeight={400}
+                                        maxWidth={250}
+                                        overflow="auto"
+                                        borderRadius="md"
+                                        boxShadow="lg"
+                                        alignSelf="flex-end"
+                                    >
+                                        <Legend map={mapModel.map} />
+                                    </Flex>
                                 </Flex>
-                            </Flex>
-                            {mapModel && (
-                                <FeatureInfo
-                                    mapModel={mapModel.map!}
-                                    projection="EPSG:3857"
-                                    layerId={""}
-                                />
-                            )}
-                        </MapAnchor>
+                                {mapModel && (
+                                    <FeatureInfo
+                                        mapModel={mapModel.map!}
+                                        projection="EPSG:3857"
+                                        layerId={""}
+                                        fetchFn={featureInfoFetch}
+                                    />
+                                )}
+                            </MapAnchor>
 
-                        <MapAnchor
-                            position="bottom-right"
-                            horizontalGap={5}
-                            verticalGap={5}
-                        >
-                            <Flex
-                                aria-label={intl.formatMessage({
-                                    id: "ariaLabel.bottomRight"
-                                })}
-                                direction="row"
-                                gap={1}
-                                padding={1}
-                            >
-                                <ToolButton
-                                    label={intl.formatMessage({
-                                        id: "charts.button_title"
+                            <MapAnchor position="bottom-right" horizontalGap={5} verticalGap={5}>
+                                <Flex
+                                    aria-label={intl.formatMessage({
+                                        id: "ariaLabel.bottomRight"
                                     })}
-                                    icon={<GiWheat />}
-                                    onClick={onOpenChart}
-                                />
-                                <ToolButton
-                                    label={intl.formatMessage({
-                                        id: "map.download.button"
-                                    })}
-                                    icon={<PiDownload />}
-                                    active={downloadIsActive}
-                                    onClick={toggleDownload}
-                                />
-                                <ToolButton
-                                    label={intl.formatMessage({ id: "measurementTitle" })}
-                                    icon={<PiRulerLight />}
-                                    active={measurementIsActive}
-                                    onClick={toggleMeasurement}
-                                />
-                                <Geolocation map={mapModel.map} />
-                                <InitialExtent map={mapModel.map} />
-                                <ZoomIn map={mapModel.map} />
-                                <ZoomOut map={mapModel.map} />
-                            </Flex>
-                        </MapAnchor>
+                                    direction="row"
+                                    gap={1}
+                                    padding={1}
+                                >
+                                    <ToolButton
+                                        label={intl.formatMessage({
+                                            id: "charts.button_title"
+                                        })}
+                                        icon={<GiWheat />}
+                                        onClick={onOpenChart}
+                                    />
+                                    <ToolButton
+                                        label={intl.formatMessage({
+                                            id: "map.download.button"
+                                        })}
+                                        icon={<PiDownload />}
+                                        active={downloadIsActive}
+                                        onClick={toggleDownload}
+                                    />
+                                    <ToolButton
+                                        label={intl.formatMessage({ id: "measurementTitle" })}
+                                        icon={<PiRulerLight />}
+                                        active={measurementIsActive}
+                                        onClick={toggleMeasurement}
+                                    />
+                                    <Geolocation map={mapModel.map} />
+                                    <InitialExtent map={mapModel.map} />
+                                    <ZoomIn map={mapModel.map} />
+                                    <ZoomOut map={mapModel.map} />
+                                </Flex>
+                            </MapAnchor>
 
-                        <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
-                            {measurementIsActive && (
+                            <MapAnchor position="top-left" horizontalGap={5} verticalGap={5}>
+                                {measurementIsActive && (
+                                    <Box
+                                        marginBottom={2}
+                                        backgroundColor="white"
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        padding={2}
+                                        boxShadow="lg"
+                                        aria-label={intl.formatMessage({
+                                            id: "ariaLabel.topLeft"
+                                        })}
+                                    >
+                                        <Box role="dialog" aria-labelledby={measurementTitleId}>
+                                            <TitledSection
+                                                title={
+                                                    <SectionHeading
+                                                        id={measurementTitleId}
+                                                        size="md"
+                                                        mb={2}
+                                                    >
+                                                        {intl.formatMessage({
+                                                            id: "measurementTitle"
+                                                        })}
+                                                    </SectionHeading>
+                                                }
+                                            >
+                                                <Measurement map={mapModel.map} />
+                                            </TitledSection>
+                                        </Box>
+                                    </Box>
+                                )}
                                 <Box
-                                    marginBottom={2}
                                     backgroundColor="white"
                                     borderWidth="1px"
                                     borderRadius="lg"
                                     padding={2}
                                     boxShadow="lg"
-                                    aria-label={intl.formatMessage({
-                                        id: "ariaLabel.topLeft"
-                                    })}
+                                    role="dialog"
+                                    aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
+                                    maxHeight={500}
+                                    overflow="auto"
                                 >
-                                    <Box role="dialog" aria-labelledby={measurementTitleId}>
-                                        <TitledSection
-                                            title={
-                                                <SectionHeading
-                                                    id={measurementTitleId}
-                                                    size="md"
-                                                    mb={2}
-                                                >
-                                                    {intl.formatMessage({
-                                                        id: "measurementTitle"
-                                                    })}
-                                                </SectionHeading>
-                                            }
-                                        >
-                                            <Measurement map={mapModel.map} />
-                                        </TitledSection>
-                                    </Box>
+                                    <ChakraProvider value={system}>
+                                        <Toc
+                                            map={mapModel.map}
+                                            showBasemapSwitcher={false}
+                                            showTools={true}
+                                            collapsibleGroups={true}
+                                        />
+                                    </ChakraProvider>
+                                    <Field.Root>
+                                        <Field.Label mt={2}>
+                                            <Text as="b">
+                                                {intl.formatMessage({ id: "basemapLabel" })}
+                                            </Text>
+                                        </Field.Label>
+                                        <BasemapSwitcher
+                                            map={mapModel.map}
+                                            allowSelectingEmptyBasemap={true}
+                                            className="custom-basemap-switcher"
+                                        />
+                                    </Field.Root>
                                 </Box>
-                            )}
-                            <Box
-                                backgroundColor="white"
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                padding={2}
-                                boxShadow="lg"
-                                role="dialog"
-                                aria-label={intl.formatMessage({ id: "ariaLabel.toc" })}
-                                maxHeight={500}
-                                overflow="auto"
-                            >
-                                <ChakraProvider value={system}>
-                                    <Toc
-                                        map={mapModel.map}
-                                        showBasemapSwitcher={false}
-                                        showTools={true}
+                                {downloadIsActive && (
+                                    <LayerDownload
+                                        mapID={MAP_ID}
+                                        intl={intl}
+                                        isOpen={downloadIsActive}
+                                        onClose={() => setDownloadIsActive(false)}
                                     />
-                                </ChakraProvider>
-                                <Field.Root>
-                                    <Field.Label mt={2}>
-                                        <Text as="b">
-                                            {intl.formatMessage({ id: "basemapLabel" })}
-                                        </Text>
-                                    </Field.Label>
-                                    <BasemapSwitcher
-                                        map={mapModel.map}
-                                        allowSelectingEmptyBasemap={true}
-                                        className="custom-basemap-switcher"
-                                    />
-                                </Field.Root>
-                            </Box>
-                            {downloadIsActive && (
-                                <LayerDownload
-                                    mapID={MAP_ID}
-                                    intl={intl}
-                                    isOpen={downloadIsActive}
-                                    onClose={() => setDownloadIsActive(false)}
-                                />
-                            )}
-                        </MapAnchor>
-                    </MapContainer>
-                </Flex>
-                <Flex
-                    role="region"
-                    aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
-                    gap={3}
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <CoordinateViewer map={mapModel.map} precision={2} />
-                    <ScaleBar map={mapModel.map} />
-                    <ScaleViewer map={mapModel.map} />
-                </Flex>
+                                )}
+                            </MapAnchor>
+                        </MapContainer>
+                    </Flex>
+                    <Flex
+                        role="region"
+                        aria-label={intl.formatMessage({ id: "ariaLabel.footer" })}
+                        gap={3}
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <CoordinateViewer map={mapModel.map} precision={2} />
+                        <ScaleBar map={mapModel.map} />
+                        <ScaleViewer map={mapModel.map} />
+                    </Flex>
                 </DefaultMapProvider>
             )}
 
@@ -455,7 +485,7 @@ export function MapApp() {
                     <Dialog.Content w="80vw" maxW="80vw">
                         <Dialog.Header>
                             <Dialog.Title>
-                            {intl.formatMessage({ id: "charts.chart_title" })}
+                                {intl.formatMessage({ id: "charts.chart_title" })}
                             </Dialog.Title>
                         </Dialog.Header>
                         <Dialog.CloseTrigger />
