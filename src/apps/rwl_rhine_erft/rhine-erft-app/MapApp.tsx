@@ -30,7 +30,7 @@ import { Geolocation } from "@open-pioneer/geolocation";
 import { Notifier } from "@open-pioneer/notifier";
 import { Toc } from "@open-pioneer/toc";
 import { MAP_ID } from "./services";
-import { useId, useMemo, useState, useEffect } from "react";
+import { useCallback, useId, useMemo, useState, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
 import { Measurement } from "@open-pioneer/measurement";
 import OSM from "ol/source/OSM";
@@ -39,6 +39,7 @@ import { PiRulerLight, PiDownload } from "react-icons/pi";
 import { BasemapSwitcher } from "@open-pioneer/basemap-switcher";
 import { Navbar } from "navbar";
 import { AuthService, useAuthState } from "@open-pioneer/authentication";
+import { HttpService } from "@open-pioneer/http";
 import { FeatureInfo } from "featureinfo";
 import { EventsKey } from "ol/events";
 import { unByKey } from "ol/Observable";
@@ -58,6 +59,10 @@ export function MapApp() {
     const authService = useService<AuthService>("authentication.AuthService");
     const authState = useAuthState(authService);
     const damBreakSrvc = useService<DamBreakService>("app.DamBreakService");
+    const httpService = useService<HttpService>("http.HttpService");
+    // Through the http service, so the TokenInterceptor authenticates feature info requests
+    // to the protected GeoServer (HRB Eicherscheid layers).
+    const featureInfoFetch = useCallback((url: string) => httpService.fetch(url), [httpService]);
     const intl = useIntl();
     const measurementTitleId = useId();
     const mapModel = useMapModel(MAP_ID);
@@ -343,6 +348,7 @@ export function MapApp() {
                                         mapModel={mapModel.map!}
                                         projection="EPSG:3857"
                                         layerId={""}
+                                        fetchFn={featureInfoFetch}
                                     />
                                 )}
                             </MapAnchor>
@@ -432,6 +438,7 @@ export function MapApp() {
                                             map={mapModel.map}
                                             showBasemapSwitcher={false}
                                             showTools={true}
+                                            collapsibleGroups={true}
                                         />
                                     </ChakraProvider>
                                     <Field.Root>

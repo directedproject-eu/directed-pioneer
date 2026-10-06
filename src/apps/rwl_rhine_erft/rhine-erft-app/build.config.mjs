@@ -32,6 +32,7 @@ export default defineBuildConfig({
     ui: {
         references: [
             "authentication.AuthService",
+            "http.HttpService",
             "app.FloodDepthService",
             "app.FlowVelocityService",
             "app.DamBreakService"
