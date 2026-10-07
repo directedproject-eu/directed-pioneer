@@ -69,6 +69,7 @@ export class DamBreakServiceImpl implements DamBreakService {
         this.group = new GroupLayer({
             id: "eicherscheid",
             title: intl.formatMessage({ id: "eicherscheid.group_title" }),
+            description: intl.formatMessage({ id: "eicherscheid.group_description" }),
             visible: true,
             layers: [...maxLayers, floodDepthService.getLayer(), flowVelocityService.getLayer()]
         });

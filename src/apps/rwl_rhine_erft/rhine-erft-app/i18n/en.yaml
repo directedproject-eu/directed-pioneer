@@ -38,20 +38,21 @@ messages:
     right: "Select Right Layer"
   eicherscheid:
     group_title: "HRB Eicherscheid – dam break scenario"
+    group_description: "Simulated flooding scenario for the Eicherscheid flood retention basin. Assumptions: Breach at maximum storage level and HQ100 in the waterways; breach across the full width of the dam down to the dam toe."
   flood_depth:
     layer_title: "HRB Eicherscheid – water depth (time series)"
-    layer_description: "Simulated flood scenario (base breach, HQ100) for the Eicherscheid flood retention basin. The displayed water depth [m] corresponds to the time selected via the time slider."
+    layer_description: "Simulated flooding scenario for the Eicherscheid flood retention basin. Assumptions: Breach at maximum storage level and HQ100 in the waterways; breach across the full width of the dam down to the dam toe. The displayed water depth [m] corresponds to the point in time after the breach selected using the time slider."
     load_error: "Could not load water depth"
   flow_velocity:
     layer_title: "HRB Eicherscheid – flow velocity (time series)"
-    layer_description: "Simulated flood scenario (base breach, HQ100) for the Eicherscheid flood retention basin. The displayed flow velocity [m/s] corresponds to the time selected via the time slider."
+    layer_description: "Simulated flooding scenario for the Eicherscheid flood retention basin. Assumptions: Breach at maximum storage level and HQ100 in the waterways; breach across the full width of the dam down to the dam toe. The displayed flow velocity [m/s] corresponds to the point in time after the breach selected using the time slider."
     load_error: "Could not load flow velocity"
   flood_depth_max:
     layer_title: "HRB Eicherscheid – maximum water depth"
-    layer_description: "Maximum simulated water depth [m] over the entire simulation period (base breach, HQ100) for the Eicherscheid flood retention basin."
+    layer_description: "Simulated flooding scenario for the Eicherscheid flood retention basin. Assumptions: Breach at maximum storage level and HQ100 in the waterways; breach across the full width of the dam down to the dam toe. Maximum simulated water depth [m] over the entire simulation period."
   flow_velocity_max:
     layer_title: "HRB Eicherscheid – maximum flow velocity"
-    layer_description: "Maximum simulated flow velocity [m/s] over the entire simulation period (base breach, HQ100) for the Eicherscheid flood retention basin."
+    layer_description: "Simulated flooding scenario for the Eicherscheid flood retention basin. Assumptions: Breach at maximum storage level and HQ100 in the waterways; breach across the full width of the dam down to the dam toe. Maximum simulated flow velocity [m/s] over the entire simulation period."
   legends:
     water_depth:
       extraordinary: "Heavy rain - water depth (extraordinary)"
