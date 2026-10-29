@@ -178,8 +178,8 @@ catalogs:
       specifier: ^4.7.9
       version: 4.7.9
     happy-dom:
-      specifier: ^20.10.6
-      version: 20.14.5
+      specifier: ^21.0.4
+      version: 21.0.4
     highcharts:
       specifier: ^12.1.2
       version: 12.6.2
@@ -375,7 +375,7 @@ importers:
         version: 4.7.9
       happy-dom:
         specifier: 'catalog:'
-        version: 20.14.5
+        version: 21.0.4
       husky:
         specifier: 'catalog:'
         version: 9.1.7
@@ -420,7 +420,7 @@ importers:
         version: 1.8.1(eslint@9.39.5)(vite@8.3.2(@types/node@20.19.43)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@types/node@20.19.43)(happy-dom@20.14.5)(jsdom@29.1.1)(vite@8.3.2(@types/node@20.19.43)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
+        version: 4.1.11(@types/node@20.19.43)(happy-dom@21.0.4)(jsdom@29.1.1)(vite@8.3.2(@types/node@20.19.43)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
 
   src/apps/landing/landing-app:
     dependencies:
@@ -3531,8 +3531,8 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
 
-  happy-dom@20.14.5:
-    resolution: {integrity: sha512-x/RzkpWO40bTjIoT30iQtt64FLLmH/iRcUCN2X//bLx7H3ifkdfPXyqsro/OYtqzIAhiLMMA7mmiOR9C3NOKjQ==}
+  happy-dom@21.0.4:
+    resolution: {integrity: sha512-tFm+GaLBgo6o0awHnvHaNoraVo27qJ+2tZEtZ+cIa08hXbeitrxAJajLI05hsUy/2/YTKcUjQYzHe5mCcraLBw==}
     engines: {node: '>=20.0.0'}
 
   has-bigints@1.1.0:
@@ -8379,7 +8379,7 @@ snapshots:
     optionalDependencies:
       uglify-js: 3.19.3
 
-  happy-dom@20.14.5:
+  happy-dom@21.0.4:
     dependencies:
       '@types/node': 20.19.43
       '@types/whatwg-mimetype': 3.0.2
@@ -9780,7 +9780,7 @@ snapshots:
     optionalDependencies:
       vite: 8.3.2(@types/node@20.19.43)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1)
 
-  vitest@4.1.11(@types/node@20.19.43)(happy-dom@20.14.5)(jsdom@29.1.1)(vite@8.3.2(@types/node@20.19.43)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1)):
+  vitest@4.1.11(@types/node@20.19.43)(happy-dom@21.0.4)(jsdom@29.1.1)(vite@8.3.2(@types/node@20.19.43)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1)):
     dependencies:
       '@vitest/expect': 4.1.11
       '@vitest/mocker': 4.1.11(vite@8.3.2(@types/node@20.19.43)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
@@ -9804,7 +9804,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.19.43
-      happy-dom: 20.14.5
+      happy-dom: 21.0.4
       jsdom: 29.1.1
     transitivePeerDependencies:
       - msw
