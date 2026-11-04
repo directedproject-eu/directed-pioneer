@@ -6,9 +6,9 @@ packages:
 # Shared version expressions (yaml anchors).
 # This is a yaml feature and is not interpreted by pnpm directly.
 __versions:
-  - &react_version ^19.2.6
-  - &core_packages_version ^4.8.0
-  - &ol_base_packages_version ^1.3.0
+  - &react_version ^19.3.1
+  - &core_packages_version ^4.9.0
+  - &ol_base_packages_version ^1.6.0
 
 # https://pnpm.io/catalogs
 catalog:
@@ -51,8 +51,8 @@ catalog:
 
   # Other dependencies
   "@chakra-ui/react": ^3.35.0
-  "@conterra/reactivity-core": ^0.8.6
-  "@conterra/reactivity-events": ^0.8.6
+  "@conterra/reactivity-core": ^0.8.9
+  "@conterra/reactivity-events": ^0.8.9
   "@emotion/cache": ^11.14.0
   "@emotion/react": ^11.14.0
   "@emotion/styled": ^11.14.1
@@ -109,7 +109,7 @@ catalog:
   rimraf: ^6.1.3
   sass: ^1.101.0
   tsx: ^4.22.4
-  typedoc: ^0.28.19
+  typedoc: ^0.28.20
   typescript: ^6.0.3
   vite: ^8.3.3
   vite-plugin-eslint: ^1.8.1
