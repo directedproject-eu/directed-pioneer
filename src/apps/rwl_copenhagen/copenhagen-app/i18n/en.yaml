@@ -122,6 +122,17 @@ messages:
       keyword2: "coastal"
       description2: "flood model outputs. To view these layers in the map, make sure the checkmark next to the desired model is 
                       visible in the Operational Layers."
+  welcome_window:
+    header: "Welcome to the Copenhagen app of the DIRECTED Data Fabric!"
+    body1:
+      "The Copenhagen app is part of the Data Fabric which is developed within the EU-funded DIRECTED project.
+      Goal of the app is to support stakeholders in disaster risk reduction and climate change adaptation."
+    body2:
+      "Please keep in mind that this Data Fabric serves as a digital representation of the real world and
+      cannot capture every individual dimension or aspect. Although the data is curated to the best of our
+      knowledge, potential gaps may still exist that could result in harmful biases or negative discrimination.
+      We encourage you to remain mindful of these limitations and uphold human dignity when making decisions
+      based on the information provided."
   # layers: 
   #   groundwater: 
   #     meanChangeNearSurface2071-2100_desc: "Mean change in near-surface groundwater in the future for the period 2071-2100. Data via Dataforsyningen",

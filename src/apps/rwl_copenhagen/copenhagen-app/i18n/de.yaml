@@ -118,6 +118,16 @@ messages:
       keyword2: "Küstenüberschwemmungen."
       description2: "Um diese Layer auf der Karte anzuzeigen, stellen Sie sicher, 
                     dass das Häkchen neben dem gewünschten Modell in den Operational Layers sichtbar ist."
+  welcome_window:
+    header: "Willkommen in der Copenhagen App des DIRECTED Data Fabric!"
+    body1:
+      "Die Copenhagen App ist Teil der Data Fabric, welche im Rahmen des EU-geförderten DIRECTED Projekts entwickelt wird.
+      Ziel ist die Unterstützung von Interessensvertretern bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel."
+    body2: 
+      "Bitte beachten Sie, dass diese Data Fabric als digitale Darstellung der realen Welt dient und nicht jede einzelne Dimension oder
+      jeden Aspekt erfassen kann. Obwohl die Daten nach bestem Wissen und Gewissen zusammengestellt wurden, können dennoch Lücken bestehen,
+      die zu schädlichen Verzerrungen oder negativer Diskriminierung führen könnten. Wir bitten Sie, diese Einschränkungen stets im Blick zu
+      behalten und die Menschenwürde zu wahren, wenn Sie auf der Grundlage der bereitgestellten Informationen Entscheidungen treffen."
   ariaLabel:
     header: "Kopfzeile"
     footer: "Fußleiste mit Maßstabsinformationen, räumlichem Bezugssystem und Koordinatenanzeige"

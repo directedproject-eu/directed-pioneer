@@ -30,6 +30,16 @@ messages:
         start: "Start:"
         end: "Ende:"
         selected_time: "Gewählter Zeitpunkt:"
+  welcome_window:
+    header: "Willkommen in der Rhine-Erft App des DIRECTED Data Fabric!"
+    body1:
+      "Die Rhine-Erft App ist Teil der Data Fabric, welche im Rahmen des EU-geförderten DIRECTED Projekts entwickelt wird.
+      Ziel ist die Unterstützung von Interessensvertretern bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel."
+    body2: 
+      "Bitte beachten Sie, dass diese Data Fabric als digitale Darstellung der realen Welt dient und nicht jede einzelne Dimension oder
+      jeden Aspekt erfassen kann. Obwohl die Daten nach bestem Wissen und Gewissen zusammengestellt wurden, können dennoch Lücken bestehen,
+      die zu schädlichen Verzerrungen oder negativer Diskriminierung führen könnten. Wir bitten Sie, diese Einschränkungen stets im Blick zu
+      behalten und die Menschenwürde zu wahren, wenn Sie auf der Grundlage der bereitgestellten Informationen Entscheidungen treffen."
   layer_swipe:
     title: "Layer zum Vergleichen auswählen"
     description: "Nur Layer, die in den Operational Layers ausgewählt wurden, sind für den Vergleich sichtbar."

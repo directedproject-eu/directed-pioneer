@@ -191,12 +191,15 @@ messages:
       explanation1: "Ez a grafikon az erdészeti adatokat és a releváns mutatókat jeleníti meg a kiválasztott régióban."
   welcome_window:
     header: "Üdvözöljük a DIRECTED Data Fabric Duna-alkalmazásában!"
-    body:
+    body1:
       "A Duna alkalmazás az EU által finanszírozott DIRECTED projekt keretében fejlesztett Data Fabric része.
       Az alkalmazás célja, hogy támogassa a a különböző érdekcsoportokat a katasztrófakockázat-csökkentés és az
       éghajlatváltozáshoz való alkalmazkodás terén. Az alkalmazás mindenki számára elérhető nyilvános adatokat tartalmaz.
-      További, hozzáféréssel korlátozott adatok a bejelentkezés után jelennek meg (használja a jobb felső sarokban található bejelentkezés gombot).
-      Felhívjuk figyelmét, hogy az alkalmazás még fejlesztés alatt áll."
+      További, hozzáféréssel korlátozott adatok a bejelentkezés után jelennek meg (használja a jobb felső sarokban található bejelentkezés gombot)."
+    body2: "Kérjük, vegye figyelembe, hogy ez a Data Fabric a valós világ digitális ábrázolásaként szolgál, és nem képes minden egyes dimenziót vagy szempontot lefedni.
+      Noha az adatokat a legjobb tudásunk szerint válogattuk össze, előfordulhatnak olyan hiányosságok, amelyek káros elfogultsághoz vagy negatív diszkriminációhoz
+      vezethetnek. Arra buzdítjuk Önt, hogy tartsa szem előtt ezeket a korlátokat, és tartsa tiszteletben az emberi méltóságot, amikor a rendelkezésre álló
+      információk alapján döntéseket hoz."
   zoom_buttons:
     title: "Nagyítás"
     vienna: "Nagyítás Bécsre"

@@ -16,11 +16,11 @@ import {
     Button,
     Flex,
     Text,
-    useDisclosure,
     Dialog,
     NativeSelect,
     Field,
-    HoverCard
+    HoverCard,
+    useDisclosure
 } from "@chakra-ui/react";
 import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
@@ -396,7 +396,11 @@ export function MapApp() {
                                         <Dialog.Body pb={6}>
                                             <Text as="b">
                                                 {intl.formatMessage({
-                                                    id: "welcome_window.body"
+                                                    id: "welcome_window.body1"
+                                                })}
+                                                <br /> <br />
+                                                {intl.formatMessage({
+                                                    id: "welcome_window.body2"
                                                 })}
                                             </Text>
                                         </Dialog.Body>

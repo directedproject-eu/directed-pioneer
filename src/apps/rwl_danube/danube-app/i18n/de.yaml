@@ -166,10 +166,14 @@ messages:
       explanation1: "Dieser Graph zeigt Forstdaten und relevante Metriken für die ausgewählte Region."
   welcome_window:
     header: "Willkommen in der Danube App des DIRECTED Data Fabric!"
-    body:
+    body1:
       "Die Danube App ist Teil der Data Fabric, welche im Rahmen des EU-geförderten DIRECTED Projekts entwickelt wird.
-      Ziel ist die Unterstützung Interessenvertreters bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel.
-      Bitte beachten Sie, dass die App noch in der Entwicklung ist."
+      Ziel ist die Unterstützung von Interessensvertretern bei der Reduzierung von Katastrophenrisikos und der Anpassung an den Klimawandel."
+    body2: 
+      "Bitte beachten Sie, dass diese Data Fabric als digitale Darstellung der realen Welt dient und nicht jede einzelne Dimension oder
+      jeden Aspekt erfassen kann. Obwohl die Daten nach bestem Wissen und Gewissen zusammengestellt wurden, können dennoch Lücken bestehen,
+      die zu schädlichen Verzerrungen oder negativer Diskriminierung führen könnten. Wir bitten Sie, diese Einschränkungen stets im Blick zu
+      behalten und die Menschenwürde zu wahren, wenn Sie auf der Grundlage der bereitgestellten Informationen Entscheidungen treffen."
   zoom_buttons:
     title: "Zoom auf"
     vienna: "Zoom auf Wien"

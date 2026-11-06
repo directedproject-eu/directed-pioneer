@@ -3,18 +3,21 @@
 import {
     Box,
     Button,
+    ChakraProvider,
+    Dialog,
     Flex,
     Text,
     Spacer,
     Link,
-    Select
+    Select,
+    useDisclosure
 } from "@chakra-ui/react";
 import { DefaultMapProvider, MapAnchor, MapContainer, useMapModel } from "@open-pioneer/map";
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl } from "open-pioneer:react-hooks";
+import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
-import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { ToolButton } from "@open-pioneer/map-ui-components";
 import { ScaleViewer } from "@open-pioneer/scale-viewer";
 import { Geolocation } from "@open-pioneer/geolocation";
@@ -38,7 +41,6 @@ import { ModelClient } from "mcdm";
 import { FloodSelector } from "./controls/FloodSelector";
 import { FloodHandler } from "./services/FloodHandler";
 import { FloodSlider } from "./controls/FloodSlider";
-import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "theme";
 import { useEffect } from "react";
 
@@ -51,7 +53,7 @@ export function MapApp() {
     const zoomService = useService<LayerZoom>("app.LayerZoom"); //municipal layer zoom service
     const [activeLayerIds, setActiveLayerIds] = useState<string[]>([]); //feature info
     const [activeKeyword, setActiveKeyword] = useState<string | null>(null); //taxonomy
-    const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider 
+    const prepSrvc = useService<FloodHandler>("app.FloodHandler"); // Rainfall + Coastal Slider
     const [windowClosed, setWindowClosed] = useState<boolean>(false); //for testing window component
     const [zoomMenuOpen, setZoomMenuOpen] = useState<boolean>(false);
 
@@ -85,6 +87,8 @@ export function MapApp() {
         setModelClientIsActive(!modelClientIsActive);
     }
 
+    const { open, onClose } = useDisclosure({ defaultOpen: true });
+
     return (
         <Flex height="100%" direction="column" overflow="hidden">
             <Navbar />
@@ -92,6 +96,43 @@ export function MapApp() {
             {map && (
                 <DefaultMapProvider map={map}>
                     <Flex flex="1" direction="column" position="relative">
+                        <Dialog.Root
+                            closeOnInteractOutside={false}
+                            open={open}
+                            onOpenChange={onClose}
+                            size={"xl"}
+                            placement={"center"}
+                        >
+                            <Dialog.Backdrop />
+                            <Dialog.Positioner>
+                                <Dialog.Content>
+                                    <Dialog.Header>
+                                        <Dialog.Title>
+                                            {intl.formatMessage({
+                                                id: "welcome_window.header"
+                                            })}
+                                        </Dialog.Title>
+                                    </Dialog.Header>
+                                    <Dialog.CloseTrigger asChild>
+                                        <CloseButton size="sm" />
+                                    </Dialog.CloseTrigger>
+                                    <Dialog.Body pb={6}>
+                                        <Text as="b">
+                                            {intl.formatMessage({
+                                                id: "welcome_window.body1"
+                                            })}
+                                            <br /> <br />
+                                            {intl.formatMessage({
+                                                id: "welcome_window.body2"
+                                            })}
+                                        </Text>
+                                    </Dialog.Body>
+                                    <Dialog.Footer>
+                                        <Button onClick={onClose}>Close</Button>
+                                    </Dialog.Footer>
+                                </Dialog.Content>
+                            </Dialog.Positioner>
+                        </Dialog.Root>
                         <MapContainer
                             role="main"
                             aria-label={intl.formatMessage({ id: "ariaLabel.map" })}
@@ -126,7 +167,6 @@ export function MapApp() {
                                             initiallyCollapsed={true}
                                             showBasemapSwitcher={false}
                                         />
-
                                     </ChakraProvider>
                                     <Select.Root>
                                         <Select.Label mt={2}>
@@ -134,9 +174,7 @@ export function MapApp() {
                                                 {intl.formatMessage({ id: "basemapLabel" })}
                                             </Text>
                                         </Select.Label>
-                                        <BasemapSwitcher
-                                            allowSelectingEmptyBasemap={true}
-                                        />
+                                        <BasemapSwitcher allowSelectingEmptyBasemap={true} />
                                     </Select.Root>
                                 </Box>
                                 <Box
@@ -208,7 +246,9 @@ export function MapApp() {
                                             <Button
                                                 size="sm"
                                                 flexShrink={0}
-                                                onClick={() => zoomService.zoomToFrederikssund(map!)}
+                                                onClick={() =>
+                                                    zoomService.zoomToFrederikssund(map!)
+                                                }
                                             >
                                                 {intl.formatMessage({
                                                     id: "zoom_buttons.frederikssund"
@@ -219,7 +259,9 @@ export function MapApp() {
                                                 flexShrink={0}
                                                 onClick={() => zoomService.zoomToHalsnaes(map!)}
                                             >
-                                                {intl.formatMessage({ id: "zoom_buttons.halsnaes" })}
+                                                {intl.formatMessage({
+                                                    id: "zoom_buttons.halsnaes"
+                                                })}
                                             </Button>
                                             <Button
                                                 size="sm"
@@ -233,7 +275,9 @@ export function MapApp() {
                                                 flexShrink={0}
                                                 onClick={() => zoomService.zoomToRoskilde(map!)}
                                             >
-                                                {intl.formatMessage({ id: "zoom_buttons.roskilde" })}
+                                                {intl.formatMessage({
+                                                    id: "zoom_buttons.roskilde"
+                                                })}
                                             </Button>
                                         </>
                                     )}

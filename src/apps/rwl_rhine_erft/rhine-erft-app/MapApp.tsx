@@ -7,10 +7,10 @@ import {
     Field,
     Text,
     NativeSelect,
-    useDisclosure,
     Dialog,
     HoverCard,
-    ChakraProvider
+    ChakraProvider,
+    useDisclosure
 } from "@chakra-ui/react";
 import {
     MapAnchor,
@@ -22,6 +22,7 @@ import {
 import { ScaleBar } from "@open-pioneer/scale-bar";
 import { InitialExtent, ZoomIn, ZoomOut } from "@open-pioneer/map-navigation";
 import { useIntl, useService } from "open-pioneer:react-hooks";
+import { CloseButton } from "@open-pioneer/chakra-snippets/close-button";
 import { CoordinateViewer } from "@open-pioneer/coordinate-viewer";
 import { SectionHeading, TitledSection } from "@open-pioneer/react-utils";
 import { ToolButton } from "@open-pioneer/map-ui-components";
@@ -97,6 +98,8 @@ export function MapApp() {
     function toggleDownload() {
         setDownloadIsActive(!downloadIsActive);
     }
+
+    const { open, onClose } = useDisclosure({ defaultOpen: true });
 
     //////////////////
     /// LayerSwipe ///
@@ -201,6 +204,43 @@ export function MapApp() {
             {mapModel.map && (
                 <DefaultMapProvider map={mapModel.map}>
                     <Flex flex="1" direction="column" position="relative">
+                        <Dialog.Root
+                            closeOnInteractOutside={false}
+                            open={open}
+                            onOpenChange={onClose}
+                            size={"xl"}
+                            placement={"center"}
+                        >
+                            <Dialog.Backdrop />
+                            <Dialog.Positioner>
+                                <Dialog.Content>
+                                    <Dialog.Header>
+                                        <Dialog.Title>
+                                            {intl.formatMessage({
+                                                id: "welcome_window.header"
+                                            })}
+                                        </Dialog.Title>
+                                    </Dialog.Header>
+                                    <Dialog.CloseTrigger asChild>
+                                        <CloseButton size="sm" />
+                                    </Dialog.CloseTrigger>
+                                    <Dialog.Body pb={6}>
+                                        <Text as="b">
+                                            {intl.formatMessage({
+                                                id: "welcome_window.body1"
+                                            })}
+                                            <br /> <br />
+                                            {intl.formatMessage({
+                                                id: "welcome_window.body2"
+                                            })}
+                                        </Text>
+                                    </Dialog.Body>
+                                    <Dialog.Footer>
+                                        <Button onClick={onClose}>Close</Button>
+                                    </Dialog.Footer>
+                                </Dialog.Content>
+                            </Dialog.Positioner>
+                        </Dialog.Root>
                         <MapContainer
                             map={mapModel.map}
                             role="main"

@@ -151,6 +151,16 @@ messages:
       description2: "For at kunne se disse lag på kortet skal du sikre dig, at afkrydsningsfeltet ved siden 
                     af den ønskede model er synligt under »Operative lag«."
       description: 
+  welcome_window:
+    header: "Velkommen til Copenhagen-appen i DIRECTED Data Fabric!"
+    body1:
+      "Copenhagen-appen er en del af Data Fabric, der er udviklet inden for rammerne af det EU-finansierede DIRECTED-projekt.
+      Formålet med appen er at støtte interessenter i arbejdet med at mindske katastroferisici og tilpasse sig klimaforandringerne."
+    body2:
+      "Vær opmærksom på, at denne Data Fabric fungerer som en digital repræsentation af den virkelige verden og ikke kan indfange hver
+      eneste dimension eller hvert eneste aspekt. Selvom dataene er udvalgt efter vores bedste overbevisning, kan der stadig forekomme
+      potentielle mangler, som kan føre til skadelige fordomme eller negativ diskrimination. Vi opfordrer dig til at være opmærksom på
+      disse begrænsninger og respektere den menneskelige værdighed, når du træffer beslutninger på baggrund af de givne oplysninger."
   ariaLabel:
     header: "Topbjælke"
     footer: "Basisbjælke med skalaoplysninger, koordinatsystem og koordinatvisning"
