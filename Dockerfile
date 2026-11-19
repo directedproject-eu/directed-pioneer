@@ -19,7 +19,7 @@ RUN pnpm install
 # RUN pnpm install --frozen-lockfile
 RUN pnpm build --base ${BASE_PATH}
 
-FROM nginxinc/nginx-unprivileged:1.31.9-alpine-slim
+FROM nginx/nginx-unprivileged:1.31.9-alpine-slim
 
 # copy application from build stage to run stage
 COPY --from=build /app/dist/www /usr/share/nginx/html
